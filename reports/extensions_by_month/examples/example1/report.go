@@ -52,7 +52,8 @@ func main() {
 	tmplData := rickshawextensions.TemplateData{
 		ReportName:            "Fruit Report",
 		RickshawURL:           "https://grokify.github.io/rickshaw",
-		RickshawDataFormatted: rickshawDataFormatted}
+		RickshawDataFormatted: rickshawDataFormatted,
+		IncludeDataTable:      true}
 
 	ioutil.WriteFile(outputfile, []byte(templates.RickshawExtensionsReport(tmplData)), 0644)
 

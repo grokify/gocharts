@@ -1,6 +1,7 @@
 {% import "github.com/grokify/go-rickshaw/reports/extensions_by_month" %}
 {% func RickshawExtensionsReport(data rickshawextensions.TemplateData) %}
-<!doctype html>
+<!DOCTYPE html>
+<html>
 <head>
 	<link type="text/css" rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css">
 	<link type="text/css" rel="stylesheet" href="{%s data.RickshawURL %}/src/css/graph.css">
@@ -10,7 +11,7 @@
 
 	<script src="{%s data.RickshawURL %}/vendor/d3.v3.js"></script>
 
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 	<script>
 		jQuery.noConflict();
 	</script>
@@ -46,6 +47,9 @@
 	<script src="{%s data.RickshawURL %}/src/js/Rickshaw.Graph.Axis.Y.js"></script>
 
 	<script src="{%s data.RickshawURL %}/examples/js/extensions.js"></script>
+
+	<link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.9.4/css/jquery.dataTables.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.9.4/jquery.dataTables.min.js"></script>
 </head>
 <body>
 
@@ -118,9 +122,6 @@
 <script>
 
 // set up our data series with 150 random data points
-
-
-
 var seriesData = [ [], [], [], [], [], [], [], [], [] ];
 var random = new Rickshaw.Fixtures.RandomData(150);
 
@@ -131,8 +132,6 @@ for (var i = 0; i < 150; i++) {
 var palette = new Rickshaw.Color.Palette( { scheme: 'classic9' } );
 
 // instantiate our graph!
-//seriesData = goData['SeriesData'];
-//var series = [];
 
 var series = {%v= string(data.FormattedDataJSON()) %};
 
@@ -213,7 +212,6 @@ var yAxis = new Rickshaw.Graph.Axis.Y( {
 
 yAxis.render();
 
-
 var controls = new RenderControls( {
 	element: document.querySelector('form'),
 	graph: graph
@@ -259,5 +257,45 @@ previewXAxis.render();
 
 </script>
 
+{% if data.IncludeDataTable %}
+
+<style>
+body,h3,th {font-family:Arial,sans-serif}
+</style>
+
+<h3>Data</h3>
+
+{% code 
+tableHeader, tableData := data.TableData()
+%}
+
+<table id="myTable" style="border:1px #aaa solid;font-size:80%">
+
+<thead>
+{% for _, thValue := range tableHeader %}
+  <th>{%s thValue %}</th>
+{% endfor %}
+</thead><tbody>
+{% for _, dtRow := range tableData %}
+  <tr>
+  {% for _, dtValue := range dtRow %}
+    <td>{%s dtValue %}</td>
+  {% endfor %}
+  </tr>
+{% endfor %}
+</tbody>
+</table>
+
+<script>
+jQuery(document).ready(function(){
+    jQuery('#myTable').dataTable({
+        "iDisplayLength": 100
+    });
+});
+</script>
+
+{% endif %}
+
 </body>
+</html>
 {% endfunc %}

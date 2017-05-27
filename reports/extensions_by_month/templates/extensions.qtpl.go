@@ -24,37 +24,38 @@ var (
 func StreamRickshawExtensionsReport(qw422016 *qt422016.Writer, data rickshawextensions.TemplateData) {
 	//line extensions.qtpl:2
 	qw422016.N().S(`
-<!doctype html>
+<!DOCTYPE html>
+<html>
 <head>
 	<link type="text/css" rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css">
 	<link type="text/css" rel="stylesheet" href="`)
-	//line extensions.qtpl:6
+	//line extensions.qtpl:7
 	qw422016.E().S(data.RickshawURL)
-	//line extensions.qtpl:6
+	//line extensions.qtpl:7
 	qw422016.N().S(`/src/css/graph.css">
 	<link type="text/css" rel="stylesheet" href="`)
-	//line extensions.qtpl:7
+	//line extensions.qtpl:8
 	qw422016.E().S(data.RickshawURL)
-	//line extensions.qtpl:7
+	//line extensions.qtpl:8
 	qw422016.N().S(`/src/css/detail.css">
 	<link type="text/css" rel="stylesheet" href="`)
-	//line extensions.qtpl:8
+	//line extensions.qtpl:9
 	qw422016.E().S(data.RickshawURL)
-	//line extensions.qtpl:8
+	//line extensions.qtpl:9
 	qw422016.N().S(`/src/css/legend.css">
 	<link type="text/css" rel="stylesheet" href="`)
-	//line extensions.qtpl:9
+	//line extensions.qtpl:10
 	qw422016.E().S(data.RickshawURL)
-	//line extensions.qtpl:9
+	//line extensions.qtpl:10
 	qw422016.N().S(`/examples/css/extensions.css?v=2">
 
 	<script src="`)
-	//line extensions.qtpl:11
+	//line extensions.qtpl:12
 	qw422016.E().S(data.RickshawURL)
-	//line extensions.qtpl:11
+	//line extensions.qtpl:12
 	qw422016.N().S(`/vendor/d3.v3.js"></script>
 
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 	<script>
 		jQuery.noConflict();
 	</script>
@@ -62,146 +63,149 @@ func StreamRickshawExtensionsReport(qw422016 *qt422016.Writer, data rickshawexte
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.15/jquery-ui.min.js"></script>
 
 	<script src="`)
-	//line extensions.qtpl:20
+	//line extensions.qtpl:21
 	qw422016.E().S(data.RickshawURL)
-	//line extensions.qtpl:20
+	//line extensions.qtpl:21
 	qw422016.N().S(`/src/js/Rickshaw.js"></script>
 	<script src="`)
-	//line extensions.qtpl:21
+	//line extensions.qtpl:22
 	qw422016.E().S(data.RickshawURL)
-	//line extensions.qtpl:21
+	//line extensions.qtpl:22
 	qw422016.N().S(`/src/js/Rickshaw.Class.js"></script>
 	<script src="`)
-	//line extensions.qtpl:22
+	//line extensions.qtpl:23
 	qw422016.E().S(data.RickshawURL)
-	//line extensions.qtpl:22
+	//line extensions.qtpl:23
 	qw422016.N().S(`/src/js/Rickshaw.Compat.ClassList.js"></script>
 	<script src="`)
-	//line extensions.qtpl:23
+	//line extensions.qtpl:24
 	qw422016.E().S(data.RickshawURL)
-	//line extensions.qtpl:23
+	//line extensions.qtpl:24
 	qw422016.N().S(`/src/js/Rickshaw.Graph.js"></script>
 	<script src="`)
-	//line extensions.qtpl:24
+	//line extensions.qtpl:25
 	qw422016.E().S(data.RickshawURL)
-	//line extensions.qtpl:24
+	//line extensions.qtpl:25
 	qw422016.N().S(`/src/js/Rickshaw.Graph.Renderer.js"></script>
 	<script src="`)
-	//line extensions.qtpl:25
+	//line extensions.qtpl:26
 	qw422016.E().S(data.RickshawURL)
-	//line extensions.qtpl:25
+	//line extensions.qtpl:26
 	qw422016.N().S(`/src/js/Rickshaw.Graph.Renderer.Area.js"></script>
 	<script src="`)
-	//line extensions.qtpl:26
+	//line extensions.qtpl:27
 	qw422016.E().S(data.RickshawURL)
-	//line extensions.qtpl:26
+	//line extensions.qtpl:27
 	qw422016.N().S(`/src/js/Rickshaw.Graph.Renderer.Line.js"></script>
 	<script src="`)
-	//line extensions.qtpl:27
+	//line extensions.qtpl:28
 	qw422016.E().S(data.RickshawURL)
-	//line extensions.qtpl:27
+	//line extensions.qtpl:28
 	qw422016.N().S(`/src/js/Rickshaw.Graph.Renderer.Bar.js"></script>
 	<script src="`)
-	//line extensions.qtpl:28
+	//line extensions.qtpl:29
 	qw422016.E().S(data.RickshawURL)
-	//line extensions.qtpl:28
+	//line extensions.qtpl:29
 	qw422016.N().S(`/src/js/Rickshaw.Graph.Renderer.ScatterPlot.js"></script>
 	<script src="`)
-	//line extensions.qtpl:29
+	//line extensions.qtpl:30
 	qw422016.E().S(data.RickshawURL)
-	//line extensions.qtpl:29
+	//line extensions.qtpl:30
 	qw422016.N().S(`/src/js/Rickshaw.Graph.Renderer.Stack.js"></script>
 	<script src="`)
-	//line extensions.qtpl:30
+	//line extensions.qtpl:31
 	qw422016.E().S(data.RickshawURL)
-	//line extensions.qtpl:30
+	//line extensions.qtpl:31
 	qw422016.N().S(`/src/js/Rickshaw.Graph.RangeSlider.js"></script>
 	<script src="`)
-	//line extensions.qtpl:31
+	//line extensions.qtpl:32
 	qw422016.E().S(data.RickshawURL)
-	//line extensions.qtpl:31
+	//line extensions.qtpl:32
 	qw422016.N().S(`/src/js/Rickshaw.Graph.RangeSlider.Preview.js"></script>
 	<script src="`)
-	//line extensions.qtpl:32
+	//line extensions.qtpl:33
 	qw422016.E().S(data.RickshawURL)
-	//line extensions.qtpl:32
+	//line extensions.qtpl:33
 	qw422016.N().S(`/src/js/Rickshaw.Graph.HoverDetail.js"></script>
 	<script src="`)
-	//line extensions.qtpl:33
+	//line extensions.qtpl:34
 	qw422016.E().S(data.RickshawURL)
-	//line extensions.qtpl:33
+	//line extensions.qtpl:34
 	qw422016.N().S(`/src/js/Rickshaw.Graph.Annotate.js"></script>
 	<script src="`)
-	//line extensions.qtpl:34
+	//line extensions.qtpl:35
 	qw422016.E().S(data.RickshawURL)
-	//line extensions.qtpl:34
+	//line extensions.qtpl:35
 	qw422016.N().S(`/src/js/Rickshaw.Graph.Legend.js"></script>
 	<script src="`)
-	//line extensions.qtpl:35
+	//line extensions.qtpl:36
 	qw422016.E().S(data.RickshawURL)
-	//line extensions.qtpl:35
+	//line extensions.qtpl:36
 	qw422016.N().S(`/src/js/Rickshaw.Graph.Axis.Time.js"></script>
 	<script src="`)
-	//line extensions.qtpl:36
+	//line extensions.qtpl:37
 	qw422016.E().S(data.RickshawURL)
-	//line extensions.qtpl:36
+	//line extensions.qtpl:37
 	qw422016.N().S(`/src/js/Rickshaw.Graph.Behavior.Series.Toggle.js"></script>
 	<script src="`)
-	//line extensions.qtpl:37
+	//line extensions.qtpl:38
 	qw422016.E().S(data.RickshawURL)
-	//line extensions.qtpl:37
+	//line extensions.qtpl:38
 	qw422016.N().S(`/src/js/Rickshaw.Graph.Behavior.Series.Order.js"></script>
 	<script src="`)
-	//line extensions.qtpl:38
+	//line extensions.qtpl:39
 	qw422016.E().S(data.RickshawURL)
-	//line extensions.qtpl:38
+	//line extensions.qtpl:39
 	qw422016.N().S(`/src/js/Rickshaw.Graph.Behavior.Series.Highlight.js"></script>
 	<script src="`)
-	//line extensions.qtpl:39
+	//line extensions.qtpl:40
 	qw422016.E().S(data.RickshawURL)
-	//line extensions.qtpl:39
+	//line extensions.qtpl:40
 	qw422016.N().S(`/src/js/Rickshaw.Graph.Smoother.js"></script>
 	<script src="`)
-	//line extensions.qtpl:40
+	//line extensions.qtpl:41
 	qw422016.E().S(data.RickshawURL)
-	//line extensions.qtpl:40
+	//line extensions.qtpl:41
 	qw422016.N().S(`/src/js/Rickshaw.Fixtures.Time.js"></script>
 	<script src="`)
-	//line extensions.qtpl:41
+	//line extensions.qtpl:42
 	qw422016.E().S(data.RickshawURL)
-	//line extensions.qtpl:41
+	//line extensions.qtpl:42
 	qw422016.N().S(`/src/js/Rickshaw.Fixtures.Time.Local.js"></script>
 	<script src="`)
-	//line extensions.qtpl:42
+	//line extensions.qtpl:43
 	qw422016.E().S(data.RickshawURL)
-	//line extensions.qtpl:42
+	//line extensions.qtpl:43
 	qw422016.N().S(`/src/js/Rickshaw.Fixtures.Number.js"></script>
 	<script src="`)
-	//line extensions.qtpl:43
+	//line extensions.qtpl:44
 	qw422016.E().S(data.RickshawURL)
-	//line extensions.qtpl:43
+	//line extensions.qtpl:44
 	qw422016.N().S(`/src/js/Rickshaw.Fixtures.RandomData.js"></script>
 	<script src="`)
-	//line extensions.qtpl:44
+	//line extensions.qtpl:45
 	qw422016.E().S(data.RickshawURL)
-	//line extensions.qtpl:44
+	//line extensions.qtpl:45
 	qw422016.N().S(`/src/js/Rickshaw.Fixtures.Color.js"></script>
 	<script src="`)
-	//line extensions.qtpl:45
+	//line extensions.qtpl:46
 	qw422016.E().S(data.RickshawURL)
-	//line extensions.qtpl:45
+	//line extensions.qtpl:46
 	qw422016.N().S(`/src/js/Rickshaw.Color.Palette.js"></script>
 	<script src="`)
-	//line extensions.qtpl:46
+	//line extensions.qtpl:47
 	qw422016.E().S(data.RickshawURL)
-	//line extensions.qtpl:46
+	//line extensions.qtpl:47
 	qw422016.N().S(`/src/js/Rickshaw.Graph.Axis.Y.js"></script>
 
 	<script src="`)
-	//line extensions.qtpl:48
+	//line extensions.qtpl:49
 	qw422016.E().S(data.RickshawURL)
-	//line extensions.qtpl:48
+	//line extensions.qtpl:49
 	qw422016.N().S(`/examples/js/extensions.js"></script>
+
+	<link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.9.4/css/jquery.dataTables.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.9.4/jquery.dataTables.min.js"></script>
 </head>
 <body>
 
@@ -209,9 +213,9 @@ func StreamRickshawExtensionsReport(qw422016 *qt422016.Writer, data rickshawexte
 
 	<form id="side_panel">
 		<h1>`)
-	//line extensions.qtpl:55
+	//line extensions.qtpl:59
 	qw422016.E().S(data.ReportName)
-	//line extensions.qtpl:55
+	//line extensions.qtpl:59
 	qw422016.N().S(`</h1>
 		<section><div id="legend"></div></section>
 		<section>
@@ -278,9 +282,6 @@ func StreamRickshawExtensionsReport(qw422016 *qt422016.Writer, data rickshawexte
 <script>
 
 // set up our data series with 150 random data points
-
-
-
 var seriesData = [ [], [], [], [], [], [], [], [], [] ];
 var random = new Rickshaw.Fixtures.RandomData(150);
 
@@ -291,13 +292,11 @@ for (var i = 0; i < 150; i++) {
 var palette = new Rickshaw.Color.Palette( { scheme: 'classic9' } );
 
 // instantiate our graph!
-//seriesData = goData['SeriesData'];
-//var series = [];
 
 var series = `)
-	//line extensions.qtpl:137
+	//line extensions.qtpl:136
 	qw422016.N().V(string(data.FormattedDataJSON()))
-	//line extensions.qtpl:137
+	//line extensions.qtpl:136
 	qw422016.N().S(`;
 
 for (i = 0; i < series.length; i++) {
@@ -377,7 +376,6 @@ var yAxis = new Rickshaw.Graph.Axis.Y( {
 
 yAxis.render();
 
-
 var controls = new RenderControls( {
 	element: document.querySelector('form'),
 	graph: graph
@@ -423,33 +421,116 @@ previewXAxis.render();
 
 </script>
 
-</body>
 `)
-//line extensions.qtpl:263
+	//line extensions.qtpl:260
+	if data.IncludeDataTable {
+		//line extensions.qtpl:260
+		qw422016.N().S(`
+
+<style>
+body,h3,th {font-family:Arial,sans-serif}
+</style>
+
+<h3>Data</h3>
+
+`)
+		//line extensions.qtpl:269
+		tableHeader, tableData := data.TableData()
+
+		//line extensions.qtpl:270
+		qw422016.N().S(`
+
+<table id="myTable" style="border:1px #aaa solid;font-size:80%">
+
+<thead>
+`)
+		//line extensions.qtpl:275
+		for _, thValue := range tableHeader {
+			//line extensions.qtpl:275
+			qw422016.N().S(`
+  <th>`)
+			//line extensions.qtpl:276
+			qw422016.E().S(thValue)
+			//line extensions.qtpl:276
+			qw422016.N().S(`</th>
+`)
+			//line extensions.qtpl:277
+		}
+		//line extensions.qtpl:277
+		qw422016.N().S(`
+</thead><tbody>
+`)
+		//line extensions.qtpl:279
+		for _, dtRow := range tableData {
+			//line extensions.qtpl:279
+			qw422016.N().S(`
+  <tr>
+  `)
+			//line extensions.qtpl:281
+			for _, dtValue := range dtRow {
+				//line extensions.qtpl:281
+				qw422016.N().S(`
+    <td>`)
+				//line extensions.qtpl:282
+				qw422016.E().S(dtValue)
+				//line extensions.qtpl:282
+				qw422016.N().S(`</td>
+  `)
+				//line extensions.qtpl:283
+			}
+			//line extensions.qtpl:283
+			qw422016.N().S(`
+  </tr>
+`)
+			//line extensions.qtpl:285
+		}
+		//line extensions.qtpl:285
+		qw422016.N().S(`
+</tbody>
+</table>
+
+<script>
+jQuery(document).ready(function(){
+    jQuery('#myTable').dataTable({
+        "iDisplayLength": 100
+    });
+});
+</script>
+
+`)
+		//line extensions.qtpl:297
+	}
+	//line extensions.qtpl:297
+	qw422016.N().S(`
+
+</body>
+</html>
+`)
+//line extensions.qtpl:301
 }
 
-//line extensions.qtpl:263
+//line extensions.qtpl:301
 func WriteRickshawExtensionsReport(qq422016 qtio422016.Writer, data rickshawextensions.TemplateData) {
-	//line extensions.qtpl:263
+	//line extensions.qtpl:301
 	qw422016 := qt422016.AcquireWriter(qq422016)
-	//line extensions.qtpl:263
+	//line extensions.qtpl:301
 	StreamRickshawExtensionsReport(qw422016, data)
-	//line extensions.qtpl:263
+	//line extensions.qtpl:301
 	qt422016.ReleaseWriter(qw422016)
-//line extensions.qtpl:263
+//line extensions.qtpl:301
 }
 
-//line extensions.qtpl:263
+//line extensions.qtpl:301
 func RickshawExtensionsReport(data rickshawextensions.TemplateData) string {
-	//line extensions.qtpl:263
+	//line extensions.qtpl:301
 	qb422016 := qt422016.AcquireByteBuffer()
-	//line extensions.qtpl:263
+	//line extensions.qtpl:301
 	WriteRickshawExtensionsReport(qb422016, data)
-	//line extensions.qtpl:263
+	//line extensions.qtpl:301
 	qs422016 := string(qb422016.B)
-	//line extensions.qtpl:263
+	//line extensions.qtpl:301
 	qt422016.ReleaseByteBuffer(qb422016)
-	//line extensions.qtpl:263
+	//line extensions.qtpl:301
 	return qs422016
-//line extensions.qtpl:263
+//line extensions.qtpl:301
 }

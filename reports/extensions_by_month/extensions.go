@@ -175,7 +175,9 @@ func (rd *RickshawData) Formatted() RickshawDataFormatted {
 			if item, ok := thinSeries.ItemsMapX[dt6Epoch]; ok {
 				fullSeries = append(fullSeries, item)
 			} else {
-				fullSeries = append(fullSeries, Item{ValueX: dt6Epoch, ValueY: 0})
+				fullSeries = append(fullSeries, Item{
+					Time:   time.Unix(dt6Epoch, 0),
+					ValueX: dt6Epoch, ValueY: 0})
 			}
 		}
 		seriesSetInflatedSorted = append(seriesSetInflatedSorted, fullSeries)
