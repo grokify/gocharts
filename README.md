@@ -2,7 +2,7 @@
 
 [Rickshaw](http://code.shutterstock.com/rickshaw/) is a JavaScript toolkit for creating interactive time series graphs.
 
-Go Rickshaw is a Go library that prepares data to be represented in Rickshaw. The initial goal is to provide an easy way to format data for the Rickshaw extensions example:
+Go Rickshaw is a Go library that prepares data to be represented in Rickshaw. It uses [`quicktemplate`](https://github.com/valyala/quicktemplate) for rendering. The initial goal is to provide an easy way to format data for the Rickshaw extensions example:
 
 ![](images/graph_example_2.png)
 
