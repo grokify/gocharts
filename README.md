@@ -19,7 +19,7 @@ See the example here:
 
  [goreport-svg]: https://goreportcard.com/badge/github.com/grokify/go-rickshaw
  [goreport-link]: https://goreportcard.com/report/github.com/grokify/go-rickshaw
- [docs-godoc-svg]: https://img.shields.io/badge/docs-godoc-blue.svg
+ [docs-godoc-svg]: https://img.shields.io/badge/reference-godoc-blue.svg
  [docs-godoc-link]: https://godoc.org/github.com/grokify/go-rickshaw
  [license-svg]: https://img.shields.io/badge/license-MIT-blue.svg
  [license-link]: https://github.com/grokify/go-rickshaw/blob/master/LICENSE.md
