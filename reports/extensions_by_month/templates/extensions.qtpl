@@ -272,7 +272,6 @@ tableHeader, tableData := data.TableData()
 %}
 
 <table id="myTable" style="border:1px #aaa solid;font-size:80%">
-
 <thead>
 {% for _, thValue := range tableHeader %}
   <th>{%s thValue %}</th>
