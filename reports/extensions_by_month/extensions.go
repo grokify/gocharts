@@ -89,6 +89,7 @@ func NewRickshawData() RickshawData {
 	return RickshawData{SeriesMap: map[string]Series{}}
 }
 
+// Add an item to the report
 func (rd *RickshawData) AddItem(item Item) {
 	item.SeriesName = strings.TrimSpace(item.SeriesName)
 	if len(item.SeriesName) < 1 {
@@ -125,6 +126,7 @@ func (rd *RickshawData) seriesNames() []string {
 	return seriesNames
 }
 
+// Formatted returns formatted information ready for Rickshaw
 func (rd *RickshawData) Formatted() RickshawDataFormatted {
 	seriesNames := rd.seriesNames()
 	sort.Sort(sort.Reverse(sort.StringSlice(seriesNames)))
