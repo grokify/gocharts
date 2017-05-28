@@ -20,8 +20,8 @@ type DataInfoJs struct {
 }
 
 type Item struct {
-	SeriesName string    `json:"-,omitempty"`
-	Time       time.Time `json:"-,omitepty"`
+	SeriesName string    `json:"-"`
+	Time       time.Time `json:"-"`
 	ValueX     int64     `json:"x"`
 	ValueY     int64     `json:"y"`
 }
@@ -102,7 +102,7 @@ func (rd *RickshawData) AddItem(item Item) {
 	rd.SeriesMap[item.SeriesName] = series
 }
 
-func (rd *RickshawData) Formatted() RickshawDataFormatted {
+func (rd *RickshawData) seriesNames() []string {
 	seriesNames := []string{}
 	first := true
 	for seriesName, series := range rd.SeriesMap {
@@ -121,7 +121,12 @@ func (rd *RickshawData) Formatted() RickshawDataFormatted {
 			rd.MaxX = series.MaxX
 		}
 	}
-	//sort.Strings(seriesNames)
+	sort.Strings(seriesNames)
+	return seriesNames
+}
+
+func (rd *RickshawData) Formatted() RickshawDataFormatted {
+	seriesNames := rd.seriesNames()
 	sort.Sort(sort.Reverse(sort.StringSlice(seriesNames)))
 	formatted := RickshawDataFormatted{
 		SeriesNames: seriesNames}
@@ -134,7 +139,7 @@ func (rd *RickshawData) Formatted() RickshawDataFormatted {
 	times := map[int64]int32{}
 	minDt6 := int32(0)
 	maxDt6 := int32(0)
-	first = true
+	first := true
 	for _, series := range seriesSet {
 		for _, item := range series.ItemsMapX {
 			dt := time.Unix(item.ValueX, 0)
