@@ -53,6 +53,8 @@
 </head>
 <body>
 
+{%s= data.HeaderHTML %}
+
 <div id="content">
 
 	<form id="side_panel">

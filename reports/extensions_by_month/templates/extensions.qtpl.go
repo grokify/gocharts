@@ -209,13 +209,19 @@ func StreamRickshawExtensionsReport(qw422016 *qt422016.Writer, data rickshawexte
 </head>
 <body>
 
+`)
+	//line extensions.qtpl:56
+	qw422016.N().S(data.HeaderHTML)
+	//line extensions.qtpl:56
+	qw422016.N().S(`
+
 <div id="content">
 
 	<form id="side_panel">
 		<h1>`)
-	//line extensions.qtpl:59
+	//line extensions.qtpl:61
 	qw422016.E().S(data.ReportName)
-	//line extensions.qtpl:59
+	//line extensions.qtpl:61
 	qw422016.N().S(`</h1>
 		<section><div id="legend"></div></section>
 		<section>
@@ -294,9 +300,9 @@ var palette = new Rickshaw.Color.Palette( { scheme: 'classic9' } );
 // instantiate our graph!
 
 var series = `)
-	//line extensions.qtpl:136
+	//line extensions.qtpl:138
 	qw422016.N().V(string(data.FormattedDataJSON()))
-	//line extensions.qtpl:136
+	//line extensions.qtpl:138
 	qw422016.N().S(`;
 
 for (i = 0; i < series.length; i++) {
@@ -422,9 +428,9 @@ previewXAxis.render();
 </script>
 
 `)
-	//line extensions.qtpl:260
+	//line extensions.qtpl:262
 	if data.IncludeDataTable {
-		//line extensions.qtpl:260
+		//line extensions.qtpl:262
 		qw422016.N().S(`
 
 <style>
@@ -434,57 +440,57 @@ body,h3,th {font-family:Arial,sans-serif}
 <h3>Data</h3>
 
 `)
-		//line extensions.qtpl:269
+		//line extensions.qtpl:271
 		tableHeader, tableData := data.TableData()
 
-		//line extensions.qtpl:270
+		//line extensions.qtpl:272
 		qw422016.N().S(`
 
 <table id="myTable" style="border:1px #aaa solid;font-size:80%">
 
 <thead>
 `)
-		//line extensions.qtpl:275
+		//line extensions.qtpl:277
 		for _, thValue := range tableHeader {
-			//line extensions.qtpl:275
+			//line extensions.qtpl:277
 			qw422016.N().S(`
   <th>`)
-			//line extensions.qtpl:276
+			//line extensions.qtpl:278
 			qw422016.E().S(thValue)
-			//line extensions.qtpl:276
+			//line extensions.qtpl:278
 			qw422016.N().S(`</th>
 `)
-			//line extensions.qtpl:277
+			//line extensions.qtpl:279
 		}
-		//line extensions.qtpl:277
+		//line extensions.qtpl:279
 		qw422016.N().S(`
 </thead><tbody>
 `)
-		//line extensions.qtpl:279
+		//line extensions.qtpl:281
 		for _, dtRow := range tableData {
-			//line extensions.qtpl:279
+			//line extensions.qtpl:281
 			qw422016.N().S(`
   <tr>
   `)
-			//line extensions.qtpl:281
+			//line extensions.qtpl:283
 			for _, dtValue := range dtRow {
-				//line extensions.qtpl:281
+				//line extensions.qtpl:283
 				qw422016.N().S(`
     <td>`)
-				//line extensions.qtpl:282
+				//line extensions.qtpl:284
 				qw422016.E().S(dtValue)
-				//line extensions.qtpl:282
+				//line extensions.qtpl:284
 				qw422016.N().S(`</td>
   `)
-				//line extensions.qtpl:283
+				//line extensions.qtpl:285
 			}
-			//line extensions.qtpl:283
+			//line extensions.qtpl:285
 			qw422016.N().S(`
   </tr>
 `)
-			//line extensions.qtpl:285
+			//line extensions.qtpl:287
 		}
-		//line extensions.qtpl:285
+		//line extensions.qtpl:287
 		qw422016.N().S(`
 </tbody>
 </table>
@@ -498,39 +504,39 @@ jQuery(document).ready(function(){
 </script>
 
 `)
-		//line extensions.qtpl:297
+		//line extensions.qtpl:299
 	}
-	//line extensions.qtpl:297
+	//line extensions.qtpl:299
 	qw422016.N().S(`
 
 </body>
 </html>
 `)
-//line extensions.qtpl:301
+//line extensions.qtpl:303
 }
 
-//line extensions.qtpl:301
+//line extensions.qtpl:303
 func WriteRickshawExtensionsReport(qq422016 qtio422016.Writer, data rickshawextensions.TemplateData) {
-	//line extensions.qtpl:301
+	//line extensions.qtpl:303
 	qw422016 := qt422016.AcquireWriter(qq422016)
-	//line extensions.qtpl:301
+	//line extensions.qtpl:303
 	StreamRickshawExtensionsReport(qw422016, data)
-	//line extensions.qtpl:301
+	//line extensions.qtpl:303
 	qt422016.ReleaseWriter(qw422016)
-//line extensions.qtpl:301
+//line extensions.qtpl:303
 }
 
-//line extensions.qtpl:301
+//line extensions.qtpl:303
 func RickshawExtensionsReport(data rickshawextensions.TemplateData) string {
-	//line extensions.qtpl:301
+	//line extensions.qtpl:303
 	qb422016 := qt422016.AcquireByteBuffer()
-	//line extensions.qtpl:301
+	//line extensions.qtpl:303
 	WriteRickshawExtensionsReport(qb422016, data)
-	//line extensions.qtpl:301
+	//line extensions.qtpl:303
 	qs422016 := string(qb422016.B)
-	//line extensions.qtpl:301
+	//line extensions.qtpl:303
 	qt422016.ReleaseByteBuffer(qb422016)
-	//line extensions.qtpl:301
+	//line extensions.qtpl:303
 	return qs422016
-//line extensions.qtpl:301
+//line extensions.qtpl:303
 }

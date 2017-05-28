@@ -6,6 +6,7 @@ import (
 )
 
 type TemplateData struct {
+	HeaderHTML            string
 	ReportName            string
 	RickshawURL           string
 	RickshawDataFormatted RickshawDataFormatted
