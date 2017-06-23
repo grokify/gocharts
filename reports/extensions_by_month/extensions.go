@@ -8,6 +8,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/grokify/go-rickshaw"
 	"github.com/grokify/gotilla/time/timeutil"
 )
 
@@ -85,6 +86,23 @@ type RickshawData struct {
 	MaxX      int64
 }
 
+func NewMonthlyRickshawDataFromSlotSeriesSet(set rickshaw.SlotDataSeriesSet) RickshawData {
+	rs := NewRickshawData()
+
+	for seriesName, seriesData := range set.SeriesSet {
+		for slotValueX, slotValueY := range seriesData.SeriesData {
+			rs.AddItem(Item{
+				SeriesName: seriesName,
+				Time:       time.Unix(slotValueX, 0),
+				ValueX:     slotValueX,
+				ValueY:     slotValueY})
+		}
+	}
+
+	rs.Inflate()
+	return rs
+}
+
 func NewRickshawData() RickshawData {
 	return RickshawData{SeriesMap: map[string]Series{}}
 }
@@ -101,6 +119,30 @@ func (rd *RickshawData) AddItem(item Item) {
 	}
 	series.ItemsMapX[item.ValueX] = item
 	rd.SeriesMap[item.SeriesName] = series
+}
+
+func (rd *RickshawData) Inflate() {
+	minX := int64(0)
+	maxX := int64(0)
+	first := true
+	for seriesName, series := range rd.SeriesMap {
+		series.Inflate()
+		if first {
+			minX = series.MinX
+			maxX = series.MaxX
+			first = false
+		} else {
+			if series.MinX < minX {
+				minX = series.MinX
+			}
+			if series.MaxX > maxX {
+				maxX = series.MaxX
+			}
+		}
+		rd.SeriesMap[seriesName] = series
+	}
+	rd.MinX = minX
+	rd.MaxX = maxX
 }
 
 func (rd *RickshawData) seriesNames() []string {
@@ -145,6 +187,7 @@ func (rd *RickshawData) Formatted() RickshawDataFormatted {
 	for _, series := range seriesSet {
 		for _, item := range series.ItemsMapX {
 			dt := time.Unix(item.ValueX, 0)
+			dt = dt.UTC()
 
 			i, err := strconv.Atoi(dt.Format(timeutil.DT6))
 			if err != nil {
@@ -166,6 +209,7 @@ func (rd *RickshawData) Formatted() RickshawDataFormatted {
 			times[item.ValueY] = dt6
 		}
 	}
+
 	timeutil.ParseDt6(minDt6)
 
 	dt6Axis := timeutil.Dt6MinMaxSlice(minDt6, maxDt6)

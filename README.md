@@ -11,6 +11,12 @@ Go Rickshaw is a Go library that prepares data to be represented in Rickshaw. It
 
 ![](images/graph_example_2.png)
 
+## Installation
+
+```bash
+$ go get github.com/grokify/go-rickshaw/...
+```
+
 ## Usage
 
 See the example here:

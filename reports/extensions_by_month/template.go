@@ -31,10 +31,11 @@ func (td *TemplateData) TableData() ([]string, [][]string) {
 			if len(series.Data) > 0 {
 				if !haveHeader {
 					for _, item := range series.Data {
+						dt := item.Time.UTC()
 						headRow = append(
 							headRow, fmt.Sprintf("%v %v",
-								item.Time.Month().String()[0:3],
-								item.Time.Year()))
+								dt.Month().String()[0:3],
+								dt.Year()))
 					}
 					haveHeader = true
 				}
