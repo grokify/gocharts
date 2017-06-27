@@ -59,6 +59,7 @@
 
 	<form id="side_panel">
 		<h1>{%s data.ReportName %}</h1>
+		<div>Link: {%s= data.ReportLink %}</div>
 		<section><div id="legend"></div></section>
 		<section>
 			<div id="renderer_form" class="toggler">
