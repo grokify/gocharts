@@ -1,15 +1,14 @@
-{% import "github.com/grokify/go-rickshaw/reports/extensions_by_month" %}
-{% func RickshawExtensionsReport(data rickshawextensionsbymonth.TemplateData) %}
+
 <!DOCTYPE html>
 <html>
 <head>
 	<link type="text/css" rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css">
-	<link type="text/css" rel="stylesheet" href="{%s data.RickshawURL %}/src/css/graph.css">
-	<link type="text/css" rel="stylesheet" href="{%s data.RickshawURL %}/src/css/detail.css">
-	<link type="text/css" rel="stylesheet" href="{%s data.RickshawURL %}/src/css/legend.css">
-	<link type="text/css" rel="stylesheet" href="{%s data.RickshawURL %}/examples/css/extensions.css?v=2">
+	<link type="text/css" rel="stylesheet" href="https://grokify.github.io/rickshaw/src/css/graph.css">
+	<link type="text/css" rel="stylesheet" href="https://grokify.github.io/rickshaw/src/css/detail.css">
+	<link type="text/css" rel="stylesheet" href="https://grokify.github.io/rickshaw/src/css/legend.css">
+	<link type="text/css" rel="stylesheet" href="https://grokify.github.io/rickshaw/examples/css/extensions.css?v=2">
 
-	<script src="{%s data.RickshawURL %}/vendor/d3.v3.js"></script>
+	<script src="https://grokify.github.io/rickshaw/vendor/d3.v3.js"></script>
 
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 	<script>
@@ -18,48 +17,45 @@
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.15/jquery-ui.min.js"></script>
 
-	<script src="{%s data.RickshawURL %}/src/js/Rickshaw.js"></script>
-	<script src="{%s data.RickshawURL %}/src/js/Rickshaw.Class.js"></script>
-	<script src="{%s data.RickshawURL %}/src/js/Rickshaw.Compat.ClassList.js"></script>
-	<script src="{%s data.RickshawURL %}/src/js/Rickshaw.Graph.js"></script>
-	<script src="{%s data.RickshawURL %}/src/js/Rickshaw.Graph.Renderer.js"></script>
-	<script src="{%s data.RickshawURL %}/src/js/Rickshaw.Graph.Renderer.Area.js"></script>
-	<script src="{%s data.RickshawURL %}/src/js/Rickshaw.Graph.Renderer.Line.js"></script>
-	<script src="{%s data.RickshawURL %}/src/js/Rickshaw.Graph.Renderer.Bar.js"></script>
-	<script src="{%s data.RickshawURL %}/src/js/Rickshaw.Graph.Renderer.ScatterPlot.js"></script>
-	<script src="{%s data.RickshawURL %}/src/js/Rickshaw.Graph.Renderer.Stack.js"></script>
-	<script src="{%s data.RickshawURL %}/src/js/Rickshaw.Graph.RangeSlider.js"></script>
-	<script src="{%s data.RickshawURL %}/src/js/Rickshaw.Graph.RangeSlider.Preview.js"></script>
-	<script src="{%s data.RickshawURL %}/src/js/Rickshaw.Graph.HoverDetail.js"></script>
-	<script src="{%s data.RickshawURL %}/src/js/Rickshaw.Graph.Annotate.js"></script>
-	<script src="{%s data.RickshawURL %}/src/js/Rickshaw.Graph.Legend.js"></script>
-	<script src="{%s data.RickshawURL %}/src/js/Rickshaw.Graph.Axis.Time.js"></script>
-	<script src="{%s data.RickshawURL %}/src/js/Rickshaw.Graph.Behavior.Series.Toggle.js"></script>
-	<script src="{%s data.RickshawURL %}/src/js/Rickshaw.Graph.Behavior.Series.Order.js"></script>
-	<script src="{%s data.RickshawURL %}/src/js/Rickshaw.Graph.Behavior.Series.Highlight.js"></script>
-	<script src="{%s data.RickshawURL %}/src/js/Rickshaw.Graph.Smoother.js"></script>
-	<script src="{%s data.RickshawURL %}/src/js/Rickshaw.Fixtures.Time.js"></script>
-	<script src="{%s data.RickshawURL %}/src/js/Rickshaw.Fixtures.Time.Local.js"></script>
-	<script src="{%s data.RickshawURL %}/src/js/Rickshaw.Fixtures.Number.js"></script>
-	<script src="{%s data.RickshawURL %}/src/js/Rickshaw.Fixtures.RandomData.js"></script>
-	<script src="{%s data.RickshawURL %}/src/js/Rickshaw.Fixtures.Color.js"></script>
-	<script src="{%s data.RickshawURL %}/src/js/Rickshaw.Color.Palette.js"></script>
-	<script src="{%s data.RickshawURL %}/src/js/Rickshaw.Graph.Axis.Y.js"></script>
+	<script src="https://grokify.github.io/rickshaw/src/js/Rickshaw.js"></script>
+	<script src="https://grokify.github.io/rickshaw/src/js/Rickshaw.Class.js"></script>
+	<script src="https://grokify.github.io/rickshaw/src/js/Rickshaw.Compat.ClassList.js"></script>
+	<script src="https://grokify.github.io/rickshaw/src/js/Rickshaw.Graph.js"></script>
+	<script src="https://grokify.github.io/rickshaw/src/js/Rickshaw.Graph.Renderer.js"></script>
+	<script src="https://grokify.github.io/rickshaw/src/js/Rickshaw.Graph.Renderer.Area.js"></script>
+	<script src="https://grokify.github.io/rickshaw/src/js/Rickshaw.Graph.Renderer.Line.js"></script>
+	<script src="https://grokify.github.io/rickshaw/src/js/Rickshaw.Graph.Renderer.Bar.js"></script>
+	<script src="https://grokify.github.io/rickshaw/src/js/Rickshaw.Graph.Renderer.ScatterPlot.js"></script>
+	<script src="https://grokify.github.io/rickshaw/src/js/Rickshaw.Graph.Renderer.Stack.js"></script>
+	<script src="https://grokify.github.io/rickshaw/src/js/Rickshaw.Graph.RangeSlider.js"></script>
+	<script src="https://grokify.github.io/rickshaw/src/js/Rickshaw.Graph.RangeSlider.Preview.js"></script>
+	<script src="https://grokify.github.io/rickshaw/src/js/Rickshaw.Graph.HoverDetail.js"></script>
+	<script src="https://grokify.github.io/rickshaw/src/js/Rickshaw.Graph.Annotate.js"></script>
+	<script src="https://grokify.github.io/rickshaw/src/js/Rickshaw.Graph.Legend.js"></script>
+	<script src="https://grokify.github.io/rickshaw/src/js/Rickshaw.Graph.Axis.Time.js"></script>
+	<script src="https://grokify.github.io/rickshaw/src/js/Rickshaw.Graph.Behavior.Series.Toggle.js"></script>
+	<script src="https://grokify.github.io/rickshaw/src/js/Rickshaw.Graph.Behavior.Series.Order.js"></script>
+	<script src="https://grokify.github.io/rickshaw/src/js/Rickshaw.Graph.Behavior.Series.Highlight.js"></script>
+	<script src="https://grokify.github.io/rickshaw/src/js/Rickshaw.Graph.Smoother.js"></script>
+	<script src="https://grokify.github.io/rickshaw/src/js/Rickshaw.Fixtures.Time.js"></script>
+	<script src="https://grokify.github.io/rickshaw/src/js/Rickshaw.Fixtures.Time.Local.js"></script>
+	<script src="https://grokify.github.io/rickshaw/src/js/Rickshaw.Fixtures.Number.js"></script>
+	<script src="https://grokify.github.io/rickshaw/src/js/Rickshaw.Fixtures.RandomData.js"></script>
+	<script src="https://grokify.github.io/rickshaw/src/js/Rickshaw.Fixtures.Color.js"></script>
+	<script src="https://grokify.github.io/rickshaw/src/js/Rickshaw.Color.Palette.js"></script>
+	<script src="https://grokify.github.io/rickshaw/src/js/Rickshaw.Graph.Axis.Y.js"></script>
 
-	<script src="{%s data.RickshawURL %}/examples/js/extensions.js"></script>
+	<script src="https://grokify.github.io/rickshaw/examples/js/extensions.js"></script>
 
 	<link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.9.4/css/jquery.dataTables.min.css">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.9.4/jquery.dataTables.min.js"></script>
 </head>
 <body>
 
-{%s= data.HeaderHTML %}
-
 <div id="content">
 
 	<form id="side_panel">
-		<h1>{%s data.ReportName %}</h1>
-		<div>Link: {%s= data.ReportLink %}</div>
+		<h1>Fruit Report</h1>
 		<section><div id="legend"></div></section>
 		<section>
 			<div id="renderer_form" class="toggler">
@@ -136,7 +132,7 @@ var palette = new Rickshaw.Color.Palette( { scheme: 'classic9' } );
 
 // instantiate our graph!
 
-var series = {%v= string(data.FormattedDataJSON()) %};
+var series = [{"data":[{"x":1480550400,"y":0},{"x":1483228800,"y":3},{"x":1485907200,"y":8},{"x":1488326400,"y":9},{"x":1491004800,"y":5}],"name":"oranges"},{"data":[{"x":1480550400,"y":0},{"x":1483228800,"y":3},{"x":1485907200,"y":8},{"x":1488326400,"y":9},{"x":1491004800,"y":5}],"name":"cherries"},{"data":[{"x":1480550400,"y":0},{"x":1483228800,"y":3},{"x":1485907200,"y":8},{"x":1488326400,"y":9},{"x":1491004800,"y":5}],"name":"bananas"},{"data":[{"x":1480550400,"y":0},{"x":1483228800,"y":3},{"x":1485907200,"y":8},{"x":1488326400,"y":9},{"x":1491004800,"y":5}],"name":"apples"}];
 
 for (i = 0; i < series.length; i++) {
     series[i]["color"] = palette.color();
@@ -260,7 +256,7 @@ previewXAxis.render();
 
 </script>
 
-{% if data.IncludeDataTable %}
+
 
 <style>
 body,h3,th {font-family:Arial,sans-serif}
@@ -268,23 +264,90 @@ body,h3,th {font-family:Arial,sans-serif}
 
 <h3>Data</h3>
 
-{% code 
-tableHeader, tableData := data.TableData()
-%}
+
 
 <table id="myTable" style="border:1px #aaa solid;font-size:80%">
+
 <thead>
-{% for _, thValue := range tableHeader %}
-  <th>{%s thValue %}</th>
-{% endfor %}
+
+  <th></th>
+
+  <th>Nov 2016</th>
+
+  <th>Jan 2017</th>
+
+  <th>Feb 2017</th>
+
+  <th>Mar 2017</th>
+
+  <th>Apr 2017</th>
+
 </thead><tbody>
-{% for _, dtRow := range tableData %}
+
   <tr>
-  {% for _, dtValue := range dtRow %}
-    <td>{%s dtValue %}</td>
-  {% endfor %}
+  
+    <td>apples</td>
+  
+    <td>0</td>
+  
+    <td>3</td>
+  
+    <td>8</td>
+  
+    <td>9</td>
+  
+    <td>5</td>
+  
   </tr>
-{% endfor %}
+
+  <tr>
+  
+    <td>bananas</td>
+  
+    <td>0</td>
+  
+    <td>3</td>
+  
+    <td>8</td>
+  
+    <td>9</td>
+  
+    <td>5</td>
+  
+  </tr>
+
+  <tr>
+  
+    <td>cherries</td>
+  
+    <td>0</td>
+  
+    <td>3</td>
+  
+    <td>8</td>
+  
+    <td>9</td>
+  
+    <td>5</td>
+  
+  </tr>
+
+  <tr>
+  
+    <td>oranges</td>
+  
+    <td>0</td>
+  
+    <td>3</td>
+  
+    <td>8</td>
+  
+    <td>9</td>
+  
+    <td>5</td>
+  
+  </tr>
+
 </tbody>
 </table>
 
@@ -296,8 +359,7 @@ jQuery(document).ready(function(){
 });
 </script>
 
-{% endif %}
+
 
 </body>
 </html>
-{% endfunc %}

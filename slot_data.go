@@ -3,7 +3,22 @@ package rickshaw
 import (
 	"errors"
 	"strings"
+	"time"
 )
+
+// SlotNumber should be epochmilliseconds
+
+type TimeThin struct {
+	EpochMs int64
+	Time    time.Time
+}
+
+func TimeEpochMilliseconds(msec int64) time.Time {
+	sec := int64(float64(msec) / 1000.0)
+	remainder := msec - (sec * 1000)
+	nsec := remainder * 1000000
+	return time.Unix(sec, nsec)
+}
 
 type SlotData struct {
 	SeriesName string
@@ -12,7 +27,11 @@ type SlotData struct {
 }
 
 type SlotDataSeriesSet struct {
-	SeriesSet map[string]SlotDataSeries
+	SeriesSet      map[string]SlotDataSeries
+	MinSlotValue   TimeThin
+	MaxSlotValue   TimeThin
+	Interval       string
+	CanonicalSlots []TimeThin
 }
 
 func NewSlotDataSeriesSet() SlotDataSeriesSet {
@@ -41,6 +60,45 @@ func (set *SlotDataSeriesSet) CreateSeriesIfNotExists(seriesName string) {
 			SeriesName: seriesName,
 			SeriesData: map[int64]int64{}}
 	}
+}
+
+func (set *SlotDataSeriesSet) Inflate() {
+	set.InflateMinMaxX()
+}
+
+func (set *SlotDataSeriesSet) InflateMinMaxX() {
+	minX := int64(-1)
+	maxX := int64(-1)
+	haveSetMinMaxX := false
+	for _, seriesInfo := range set.SeriesSet {
+		for slotNumber, _ := range seriesInfo.SeriesData {
+			if !haveSetMinMaxX {
+				minX = slotNumber
+				maxX = slotNumber
+				haveSetMinMaxX = true
+				continue
+			}
+			if slotNumber < minX {
+				minX = slotNumber
+			}
+			if slotNumber > maxX {
+				maxX = slotNumber
+			}
+		}
+	}
+	if haveSetMinMaxX {
+		minDt := TimeEpochMilliseconds(minX).UTC()
+		maxDt := TimeEpochMilliseconds(maxX).UTC()
+		set.MinSlotValue = TimeThin{EpochMs: minX, Time: minDt}
+		set.MaxSlotValue = TimeThin{EpochMs: maxX, Time: maxDt}
+	}
+}
+
+func (set *SlotDataSeriesSet) InflateCanonicalSlots() {
+	if strings.ToLower(strings.TrimSpace(set.Interval)) == "quarter" {
+
+	}
+	panic("A")
 }
 
 type SlotDataSeries struct {

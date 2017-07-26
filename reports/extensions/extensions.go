@@ -1,4 +1,4 @@
-package rickshawextensionsbymonth
+package rickshawextensions
 
 import (
 	"encoding/json"
@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/grokify/go-rickshaw"
+	"github.com/grokify/go-rickshaw/data"
 	"github.com/grokify/gotilla/time/timeutil"
 )
 
@@ -279,4 +280,33 @@ type RickshawDataFormatted struct {
 	SeriesNames   []string
 	SeriesData    [][]Item
 	FormattedData []DataInfoJs
+}
+
+func NewRickshawDataFormattedFromDateHistogram(timeset statictimeseriesdata.DataSeriesSet) RickshawDataFormatted {
+	formatted := RickshawDataFormatted{}
+	formatted.SeriesNames = timeset.SeriesNamesSorted()
+	formatted.SeriesData = [][]Item{}
+	formatted.FormattedData = []DataInfoJs{}
+
+	for _, seriesName := range formatted.SeriesNames {
+		seriesData, ok := timeset.OutputSeriesMap[seriesName]
+		if !ok {
+			panic("series not found")
+		}
+		formattedData := []Item{}
+		dataInfoJs := DataInfoJs{Name: seriesName, Data: []Item{}}
+		for _, sourceItem := range seriesData.SortedItems() {
+			rsItem := Item{
+				SeriesName: sourceItem.SeriesName,
+				Time:       sourceItem.Time,
+				ValueX:     sourceItem.Time.Unix(),
+				ValueY:     sourceItem.Value,
+			}
+			formattedData = append(formattedData, rsItem)
+			dataInfoJs.Data = append(dataInfoJs.Data, rsItem)
+		}
+		formatted.SeriesData = append(formatted.SeriesData, formattedData)
+		formatted.FormattedData = append(formatted.FormattedData, dataInfoJs)
+	}
+	return formatted
 }

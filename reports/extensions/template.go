@@ -1,4 +1,4 @@
-package rickshawextensionsbymonth
+package rickshawextensions
 
 import (
 	"encoding/json"

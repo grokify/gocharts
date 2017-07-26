@@ -12,7 +12,7 @@ import (
 )
 
 //line extensions.qtpl:1
-import "github.com/grokify/go-rickshaw/reports/extensions_by_month"
+import "github.com/grokify/go-rickshaw/reports/extensions"
 
 //line extensions.qtpl:2
 var (
@@ -21,7 +21,7 @@ var (
 )
 
 //line extensions.qtpl:2
-func StreamRickshawExtensionsReport(qw422016 *qt422016.Writer, data rickshawextensionsbymonth.TemplateData) {
+func StreamRickshawExtensionsReport(qw422016 *qt422016.Writer, data rickshawextensions.TemplateData) {
 	//line extensions.qtpl:2
 	qw422016.N().S(`
 <!DOCTYPE html>
@@ -520,7 +520,7 @@ jQuery(document).ready(function(){
 }
 
 //line extensions.qtpl:303
-func WriteRickshawExtensionsReport(qq422016 qtio422016.Writer, data rickshawextensionsbymonth.TemplateData) {
+func WriteRickshawExtensionsReport(qq422016 qtio422016.Writer, data rickshawextensions.TemplateData) {
 	//line extensions.qtpl:303
 	qw422016 := qt422016.AcquireWriter(qq422016)
 	//line extensions.qtpl:303
@@ -531,7 +531,7 @@ func WriteRickshawExtensionsReport(qq422016 qtio422016.Writer, data rickshawexte
 }
 
 //line extensions.qtpl:303
-func RickshawExtensionsReport(data rickshawextensionsbymonth.TemplateData) string {
+func RickshawExtensionsReport(data rickshawextensions.TemplateData) string {
 	//line extensions.qtpl:303
 	qb422016 := qt422016.AcquireByteBuffer()
 	//line extensions.qtpl:303

@@ -1,5 +1,5 @@
-{% import "github.com/grokify/go-rickshaw/reports/extensions_by_month" %}
-{% func RickshawExtensionsReport(data rickshawextensionsbymonth.TemplateData) %}
+{% import "github.com/grokify/go-rickshaw/reports/extensions" %}
+{% func RickshawExtensionsReport(data rickshawextensions.TemplateData) %}
 <!DOCTYPE html>
 <html>
 <head>
