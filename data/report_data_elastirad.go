@@ -3,16 +3,16 @@
 package statictimeseriesdata
 
 import (
+	"time"
+
 	"github.com/grokify/gotilla/time/timeutil"
 
 	"github.com/grokify/elastirad-go/models/v5"
 )
 
-func EsAggsToDataSeriesSet(aggs []v5.AggregationResRad, interval string) DataSeriesSet {
-	set, err := NewDataSeriesSet("quarter")
-	if err != nil {
-		panic(err)
-	}
+func EsAggsToDataSeriesSet(aggs []v5.AggregationResRad, interval timeutil.Interval, weekStart time.Weekday) DataSeriesSet {
+	set := NewDataSeriesSet(interval, weekStart)
+
 	for _, agg := range aggs {
 		seriesName := agg.AggregationName
 		for _, bucket := range agg.AggregationData.Buckets {

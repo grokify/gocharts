@@ -22,13 +22,12 @@ type DataSeriesSet struct {
 	SeriesIntervals SeriesIntervals
 }
 
-func NewDataSeriesSet(interval string) (DataSeriesSet, error) {
+func NewDataSeriesSet(interval timeutil.Interval, weekStart time.Weekday) DataSeriesSet {
 	set := DataSeriesSet{
 		SourceSeriesMap: map[string]DataSeries{},
 		OutputSeriesMap: map[string]DataSeries{},
-		SeriesIntervals: SeriesIntervals{Interval: interval}}
-	err := set.SeriesIntervals.CheckInterval()
-	return set, err
+		SeriesIntervals: SeriesIntervals{Interval: interval, WeekStart: weekStart}}
+	return set
 }
 
 type DataSeries struct {
@@ -67,6 +66,7 @@ func (series *DataSeries) AddItem(item DataItem) {
 	if series.ItemMap == nil {
 		series.ItemMap = map[string]DataItem{}
 	}
+	item.Time = item.Time.UTC()
 	rfc := item.Time.Format(time.RFC3339)
 	if _, ok := series.ItemMap[rfc]; !ok {
 		series.ItemMap[rfc] = item
@@ -78,21 +78,21 @@ func (series *DataSeries) AddItem(item DataItem) {
 }
 
 func (set *DataSeriesSet) Inflate() error {
-	err := set.InflateSource()
+	err := set.inflateSource()
 	if err != nil {
 		return err
 	}
-	return set.InflateOutput()
+	return set.inflateOutput()
 }
 
-func (set *DataSeriesSet) InflateSource() error {
+func (set *DataSeriesSet) inflateSource() error {
 	for _, series := range set.SourceSeriesMap {
 		set.SeriesIntervals.ProcItemsMap(series.ItemMap)
 	}
 	return set.SeriesIntervals.Inflate()
 }
 
-func (set *DataSeriesSet) InflateOutput() error {
+func (set *DataSeriesSet) inflateOutput() error {
 	for seriesName, series := range set.SourceSeriesMap {
 		output, err := set.BuildOutputSeries(series)
 		if err != nil {
@@ -105,18 +105,17 @@ func (set *DataSeriesSet) InflateOutput() error {
 
 func (set *DataSeriesSet) BuildOutputSeries(source DataSeries) (DataSeries, error) {
 	output := NewDataSeries()
-	if set.SeriesIntervals.Interval == "quarter" {
-		for _, item := range source.ItemMap {
-			output.SeriesName = item.SeriesName
-			qtrStart, err := timeutil.QuarterStart(item.Time)
-			if err != nil {
-				return output, err
-			}
-			output.AddItem(DataItem{
-				SeriesName: item.SeriesName,
-				Time:       qtrStart,
-				Value:      item.Value})
+	for _, item := range source.ItemMap {
+		output.SeriesName = item.SeriesName
+		ivalStart, err := timeutil.IntervalStart(
+			item.Time, set.SeriesIntervals.Interval, set.SeriesIntervals.WeekStart)
+		if err != nil {
+			return output, err
 		}
+		output.AddItem(DataItem{
+			SeriesName: item.SeriesName,
+			Time:       ivalStart,
+			Value:      item.Value})
 	}
 	for _, dt := range set.SeriesIntervals.CanonicalSeries {
 		output.AddItem(DataItem{
@@ -141,21 +140,14 @@ func (series *DataSeries) SortedItems() []DataItem {
 }
 
 type SeriesIntervals struct {
-	Interval        string
+	Interval        timeutil.Interval
+	WeekStart       time.Weekday
 	Max             time.Time
 	Min             time.Time
 	CanonicalSeries []time.Time
 }
 
-func (ival *SeriesIntervals) CheckInterval() error {
-	ival.Interval = strings.ToLower(strings.TrimSpace(ival.Interval))
-	if ival.Interval != "quarter" {
-		return errors.New(fmt.Sprintf("Unsupported interval [%v]", ival.Interval))
-	}
-	return nil
-}
-
-func (ival *SeriesIntervals) AreEndpointsSet() bool {
+func (ival *SeriesIntervals) areEndpointsSet() bool {
 	if ival.Max.IsZero() || ival.Min.IsZero() {
 		return false
 	}
@@ -165,56 +157,96 @@ func (ival *SeriesIntervals) AreEndpointsSet() bool {
 func (ival *SeriesIntervals) ProcItemsMap(itemMap map[string]DataItem) {
 	for _, dataItem := range itemMap {
 		dt := dataItem.Time
-		if !ival.AreEndpointsSet() {
+		if !ival.areEndpointsSet() {
 			ival.Max = dt
 			ival.Min = dt
 			continue
 		}
-		if timeutil.IsGreaterThan(dt, ival.Max) {
+		if timeutil.IsGreaterThan(dt, ival.Max, false) {
 			ival.Max = dt
 		}
-		if timeutil.IsLessThan(dt, ival.Min) {
+		if timeutil.IsLessThan(dt, ival.Min, false) {
 			ival.Min = dt
 		}
 	}
 }
 
 func (ival *SeriesIntervals) Inflate() error {
-	err := ival.CheckInterval()
+	err := ival.buildMinMaxEndpoints()
 	if err != nil {
 		return err
 	}
-	if ival.Interval == "quarter" {
-		return ival.BuildCanonicalByQuarter()
-	} else {
-		return errors.New(fmt.Sprintf("Interval [%v] not found", ival.Interval))
+	ival.buildCanonicalSeries()
+	return nil
+}
+
+func (ival *SeriesIntervals) buildMinMaxEndpoints() error {
+	if !ival.areEndpointsSet() {
+		return errors.New("Cannot build canonical dates without initialized dates.")
+	}
+	ival.Max = ival.Max.UTC()
+	ival.Min = ival.Min.UTC()
+	switch ival.Interval.String() {
+	case "year":
+		ival.Max = timeutil.YearStart(ival.Max)
+		ival.Min = timeutil.YearStart(ival.Min)
+	case "quarter":
+		max, err := timeutil.QuarterStart(ival.Max)
+		if err != nil {
+			return err
+		}
+		ival.Max = max
+		min, err := timeutil.QuarterStart(ival.Min)
+		if err != nil {
+			return err
+		}
+		ival.Min = min
+	case "month":
+		max, err := timeutil.MonthStart(ival.Max)
+		if err != nil {
+			return err
+		}
+		ival.Max = max
+		min, err := timeutil.MonthStart(ival.Min)
+		if err != nil {
+			return err
+		}
+		ival.Min = min
+	case "week":
+		max, err := timeutil.WeekStart(ival.Max, ival.WeekStart)
+		if err != nil {
+			return err
+		}
+		ival.Max = max
+		min, err := timeutil.WeekStart(ival.Min, ival.WeekStart)
+		if err != nil {
+			return err
+		}
+		ival.Min = min
+	default:
+		panic(fmt.Sprintf("Interval [%v] not supported.", ival.Interval))
 	}
 	return nil
 }
 
-func (ival *SeriesIntervals) BuildCanonicalByQuarter() error {
-	if !ival.AreEndpointsSet() {
-		return errors.New("Cannot build canonical dates without initialized dates.")
-	}
-	ival.Max = ival.Max.UTC()
-	max, err := timeutil.QuarterStart(ival.Max)
-	if err != nil {
-		return err
-	}
-	ival.Max = max
-	ival.Min = ival.Min.UTC()
-	min, err := timeutil.QuarterStart(ival.Min)
-	if err != nil {
-		return err
-	}
-	ival.Min = min
-
+func (ival *SeriesIntervals) buildCanonicalSeries() {
 	canonicalSeries := []time.Time{}
 	curTime := ival.Min
-	for timeutil.IsLessThan(curTime, ival.Max) {
+	for timeutil.IsLessThan(curTime, ival.Max, true) {
 		canonicalSeries = append(canonicalSeries, curTime)
-		curTime = timeutil.TimeDt6AddNMonths(curTime, 3)
+		switch ival.Interval.String() {
+		case "year":
+			curTime = timeutil.TimeDt4AddNYears(curTime, 1)
+		case "quarter":
+			curTime = timeutil.TimeDt6AddNMonths(curTime, 3)
+		case "month":
+			curTime = timeutil.TimeDt6AddNMonths(curTime, 1)
+		case "week":
+			dur, _ := time.ParseDuration(fmt.Sprintf("%vh", 24*7))
+			curTime = curTime.Add(dur)
+		default:
+			panic(fmt.Sprintf("Interval [%v] not supported.", ival.Interval))
+		}
 	}
 	ival.CanonicalSeries = canonicalSeries
-	return nil
 }

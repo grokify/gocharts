@@ -52,10 +52,13 @@
 </head>
 <body>
 
+
+
 <div id="content">
 
 	<form id="side_panel">
 		<h1>Fruit Report</h1>
+		<div>Link: </div>
 		<section><div id="legend"></div></section>
 		<section>
 			<div id="renderer_form" class="toggler">
@@ -132,7 +135,7 @@ var palette = new Rickshaw.Color.Palette( { scheme: 'classic9' } );
 
 // instantiate our graph!
 
-var series = [{"data":[{"x":1480550400,"y":0},{"x":1483228800,"y":3},{"x":1485907200,"y":8},{"x":1488326400,"y":9},{"x":1491004800,"y":5}],"name":"oranges"},{"data":[{"x":1480550400,"y":0},{"x":1483228800,"y":3},{"x":1485907200,"y":8},{"x":1488326400,"y":9},{"x":1491004800,"y":5}],"name":"cherries"},{"data":[{"x":1480550400,"y":0},{"x":1483228800,"y":3},{"x":1485907200,"y":8},{"x":1488326400,"y":9},{"x":1491004800,"y":5}],"name":"bananas"},{"data":[{"x":1480550400,"y":0},{"x":1483228800,"y":3},{"x":1485907200,"y":8},{"x":1488326400,"y":9},{"x":1491004800,"y":5}],"name":"apples"}];
+var series = [{"data":[{"x":1483228800,"y":3},{"x":1485907200,"y":8},{"x":1488326400,"y":9},{"x":1491004800,"y":5},{"x":1493596800,"y":5}],"name":"oranges"},{"data":[{"x":1483228800,"y":3},{"x":1485907200,"y":8},{"x":1488326400,"y":9},{"x":1491004800,"y":5},{"x":1493596800,"y":5}],"name":"cherries"},{"data":[{"x":1483228800,"y":3},{"x":1485907200,"y":8},{"x":1488326400,"y":9},{"x":1491004800,"y":5},{"x":1493596800,"y":5}],"name":"bananas"},{"data":[{"x":1483228800,"y":3},{"x":1485907200,"y":8},{"x":1488326400,"y":9},{"x":1491004800,"y":5},{"x":1493596800,"y":5}],"name":"apples"}];
 
 for (i = 0; i < series.length; i++) {
     series[i]["color"] = palette.color();
@@ -267,12 +270,9 @@ body,h3,th {font-family:Arial,sans-serif}
 
 
 <table id="myTable" style="border:1px #aaa solid;font-size:80%">
-
 <thead>
 
   <th></th>
-
-  <th>Nov 2016</th>
 
   <th>Jan 2017</th>
 
@@ -282,19 +282,21 @@ body,h3,th {font-family:Arial,sans-serif}
 
   <th>Apr 2017</th>
 
+  <th>May 2017</th>
+
 </thead><tbody>
 
   <tr>
   
     <td>apples</td>
   
-    <td>0</td>
-  
     <td>3</td>
   
     <td>8</td>
   
     <td>9</td>
+  
+    <td>5</td>
   
     <td>5</td>
   
@@ -304,13 +306,13 @@ body,h3,th {font-family:Arial,sans-serif}
   
     <td>bananas</td>
   
-    <td>0</td>
-  
     <td>3</td>
   
     <td>8</td>
   
     <td>9</td>
+  
+    <td>5</td>
   
     <td>5</td>
   
@@ -320,13 +322,13 @@ body,h3,th {font-family:Arial,sans-serif}
   
     <td>cherries</td>
   
-    <td>0</td>
-  
     <td>3</td>
   
     <td>8</td>
   
     <td>9</td>
+  
+    <td>5</td>
   
     <td>5</td>
   
@@ -336,13 +338,13 @@ body,h3,th {font-family:Arial,sans-serif}
   
     <td>oranges</td>
   
-    <td>0</td>
-  
     <td>3</td>
   
     <td>8</td>
   
     <td>9</td>
+  
+    <td>5</td>
   
     <td>5</td>
   

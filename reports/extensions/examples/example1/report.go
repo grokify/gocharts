@@ -7,8 +7,8 @@ import (
 
 	"github.com/grokify/gotilla/encoding/csvutil"
 
-	"github.com/grokify/go-rickshaw/reports/extensions_by_month"
-	"github.com/grokify/go-rickshaw/reports/extensions_by_month/templates"
+	"github.com/grokify/go-rickshaw/reports/extensions"
+	"github.com/grokify/go-rickshaw/reports/extensions/templates"
 )
 
 func main() {
