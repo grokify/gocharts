@@ -1,4 +1,4 @@
-package rickshawextensions
+package rickshaw
 
 import (
 	"encoding/json"

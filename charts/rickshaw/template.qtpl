@@ -1,5 +1,4 @@
-{% import "github.com/grokify/go-rickshaw/reports/extensions" %}
-{% func RickshawExtensionsReport(data rickshawextensions.TemplateData) %}
+{% func RickshawExtensionsReport(data TemplateData) %}
 <!DOCTYPE html>
 <html>
 <head>

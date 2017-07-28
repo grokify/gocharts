@@ -7,8 +7,7 @@ import (
 
 	"github.com/grokify/gotilla/encoding/csvutil"
 
-	"github.com/grokify/go-rickshaw/reports/extensions"
-	"github.com/grokify/go-rickshaw/reports/extensions/templates"
+	"github.com/grokify/go-analyze/charts/rickshaw"
 )
 
 func main() {
@@ -20,7 +19,7 @@ func main() {
 		panic(fmt.Sprintf("ERROR %v\n", err))
 	}
 
-	rickshawData := rickshawextensions.NewRickshawData()
+	rickshawData := rickshaw.NewRickshawData()
 
 	idx := -1
 	for {
@@ -32,7 +31,7 @@ func main() {
 		if idx == 0 {
 			continue
 		}
-		monthData := rickshawextensions.MonthData{
+		monthData := rickshaw.MonthData{
 			SeriesName: record[0],
 			MonthS:     record[1],
 			YearS:      record[2],
@@ -49,13 +48,13 @@ func main() {
 	fi.Close()
 	rickshawDataFormatted := rickshawData.Formatted()
 
-	tmplData := rickshawextensions.TemplateData{
+	tmplData := rickshaw.TemplateData{
 		ReportName:            "Fruit Report",
 		RickshawURL:           "https://grokify.github.io/rickshaw",
 		RickshawDataFormatted: rickshawDataFormatted,
 		IncludeDataTable:      true}
 
-	ioutil.WriteFile(outputfile, []byte(templates.RickshawExtensionsReport(tmplData)), 0644)
+	ioutil.WriteFile(outputfile, []byte(rickshaw.RickshawExtensionsReport(tmplData)), 0644)
 
 	fmt.Println("DONE")
 }

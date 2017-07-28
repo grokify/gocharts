@@ -1,4 +1,4 @@
-package rickshawextensions
+package rickshaw
 
 import (
 	"encoding/json"
@@ -8,8 +8,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/grokify/go-rickshaw"
-	"github.com/grokify/go-rickshaw/data"
+	"github.com/grokify/go-analyze"
+	"github.com/grokify/go-analyze/data/statictimeseriesdata"
 	"github.com/grokify/gotilla/time/timeutil"
 )
 
