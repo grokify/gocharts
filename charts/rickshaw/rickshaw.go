@@ -8,8 +8,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/grokify/go-analyze"
-	"github.com/grokify/go-analyze/data/statictimeseriesdata"
+	"github.com/grokify/go-analytics"
+	"github.com/grokify/go-analytics/data/statictimeseriesdata"
 	"github.com/grokify/gotilla/time/timeutil"
 )
 

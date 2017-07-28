@@ -1,4 +1,4 @@
-package rickshaw
+package statictimeseriesdata
 
 import (
 	"errors"

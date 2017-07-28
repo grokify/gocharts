@@ -7,7 +7,7 @@ import (
 
 	"github.com/grokify/gotilla/encoding/csvutil"
 
-	"github.com/grokify/go-analyze/charts/rickshaw"
+	"github.com/grokify/go-analytics/charts/rickshaw"
 )
 
 func main() {

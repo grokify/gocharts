@@ -3,7 +3,7 @@ package main
 import (
 	"io/ioutil"
 
-	"github.com/grokify/go-analyze/charts/c3"
+	"github.com/grokify/go-analytics/charts/c3"
 )
 
 func main() {
