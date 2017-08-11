@@ -1,23 +1,16 @@
-package statictimeseriesdata
+package data
 
 import (
 	"errors"
 	"strings"
 	"time"
-)
 
-// SlotNumber should be epochmilliseconds
+	"github.com/grokify/gotilla/time/timeutil"
+)
 
 type TimeThin struct {
 	EpochMs int64
 	Time    time.Time
-}
-
-func TimeEpochMilliseconds(msec int64) time.Time {
-	sec := int64(float64(msec) / 1000.0)
-	remainder := msec - (sec * 1000)
-	nsec := remainder * 1000000
-	return time.Unix(sec, nsec)
 }
 
 type SlotData struct {
@@ -87,8 +80,8 @@ func (set *SlotDataSeriesSet) InflateMinMaxX() {
 		}
 	}
 	if haveSetMinMaxX {
-		minDt := TimeEpochMilliseconds(minX).UTC()
-		maxDt := TimeEpochMilliseconds(maxX).UTC()
+		minDt := timeutil.UnixMillis(minX).UTC()
+		maxDt := timeutil.UnixMillis(maxX).UTC()
 		set.MinSlotValue = TimeThin{EpochMs: minX, Time: minDt}
 		set.MaxSlotValue = TimeThin{EpochMs: maxX, Time: maxDt}
 	}

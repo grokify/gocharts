@@ -1,0 +1,67 @@
+{% func C3DonutChartPage(data TemplateData) %}
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin: auto;
+  padding-top: 40px;
+  position: relative;
+  width: 960px;
+}
+
+button {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+
+{%s= GetExampleCSS(false) %}
+
+</style>
+</head>
+<body>
+<button>Update</button>
+<script
+  src="http://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
+<script src="//d3js.org/d3.v3.min.js"></script>
+<script>
+
+{%s= GetExampleJSVars() %}
+{%z= bullet.GetJS() %}
+
+d3.json("bullets.json", function(error, data) {
+  if (error) throw error;
+
+{%s= bullet.GetExampleJS() %}
+
+  d3.selectAll("button").on("click", function() {
+    svg.datum(randomize).call(chart.duration(1000)); // TODO automatic transition
+  });
+});
+
+function randomize(d) {
+  if (!d.randomizer) d.randomizer = randomizer(d);
+  d.ranges = d.ranges.map(d.randomizer);
+  d.markers = d.markers.map(d.randomizer);
+  d.measures = d.measures.map(d.randomizer);
+  return d;
+}
+
+function randomizer(d) {
+  var k = d3.max(d.ranges) * .2;
+  return function(d) {
+    return Math.max(0, d + k * (Math.random() - .5));
+  };
+}
+
+</script>
+</body>
+</html>
+{% endfunc %}
