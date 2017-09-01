@@ -6,6 +6,8 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
+
+	"github.com/grokify/go-analytics/data"
 )
 
 const (
@@ -27,6 +29,20 @@ type Bullet struct {
 	Ranges   []int  `json:"ranges,omitempty"`
 	Measures []int  `json:"measures,omitempty"`
 	Markers  []int  `json:"markers,omitempty"`
+}
+
+func ProjectionToBullet(prjData data.ProjectionDataInt, title string, subtitle string) Bullet {
+	rangeMax := int(float64(prjData.Target) * 1.2)
+	if prjData.Projection > rangeMax {
+		rangeMax = int(float64(prjData.Projection) * 1.2)
+	}
+	return Bullet{
+		Title:    title,
+		Subtitle: subtitle,
+		Ranges:   []int{0, prjData.Target, rangeMax},
+		Measures: []int{prjData.Current, prjData.Projection},
+		Markers:  []int{prjData.Target},
+	}
 }
 
 func GetJS() []byte {
