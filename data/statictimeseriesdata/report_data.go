@@ -191,27 +191,11 @@ func (ival *SeriesIntervals) buildMinMaxEndpoints() error {
 		ival.Max = timeutil.YearStart(ival.Max)
 		ival.Min = timeutil.YearStart(ival.Min)
 	case "quarter":
-		max, err := timeutil.QuarterStart(ival.Max)
-		if err != nil {
-			return err
-		}
-		ival.Max = max
-		min, err := timeutil.QuarterStart(ival.Min)
-		if err != nil {
-			return err
-		}
-		ival.Min = min
+		ival.Max = timeutil.QuarterStart(ival.Max)
+		ival.Min = timeutil.QuarterStart(ival.Min)
 	case "month":
-		max, err := timeutil.MonthStart(ival.Max)
-		if err != nil {
-			return err
-		}
-		ival.Max = max
-		min, err := timeutil.MonthStart(ival.Min)
-		if err != nil {
-			return err
-		}
-		ival.Min = min
+		ival.Max = timeutil.MonthStart(ival.Max)
+		ival.Min = timeutil.MonthStart(ival.Min)
 	case "week":
 		max, err := timeutil.WeekStart(ival.Max, ival.WeekStart)
 		if err != nil {
