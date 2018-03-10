@@ -116,7 +116,7 @@ func AddYtdAndQtd(yoy YoYQoQGrowth) YoYQoQGrowth {
 
 func (yoy *YoYQoQGrowth) ItemsSorted() []XoxPoint {
 	keys := []string{}
-	for key, _ := range yoy.DateMap {
+	for key := range yoy.DateMap {
 		keys = append(keys, key)
 	}
 	sort.Strings(keys)

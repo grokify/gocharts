@@ -64,7 +64,7 @@ func (set *SlotDataSeriesSet) InflateMinMaxX() {
 	maxX := int64(-1)
 	haveSetMinMaxX := false
 	for _, seriesInfo := range set.SeriesSet {
-		for slotNumber, _ := range seriesInfo.SeriesData {
+		for slotNumber := range seriesInfo.SeriesData {
 			if !haveSetMinMaxX {
 				minX = slotNumber
 				maxX = slotNumber
