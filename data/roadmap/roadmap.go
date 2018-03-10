@@ -2,8 +2,6 @@
 package roadmap
 
 import (
-	//"errors"
-	//"fmt"
 	"time"
 
 	"github.com/grokify/gotilla/fmt/fmtutil"
@@ -13,6 +11,7 @@ import (
 
 type Feature struct {
 	Name      string
+	URL       string
 	StartTime time.Time
 	EndTime   time.Time
 	StartIdx  int32

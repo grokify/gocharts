@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"time"
 
-	//"github.com/grokify/gotilla/fmt/fmtutil"
 	"github.com/grokify/gotilla/math/mathutil"
 	tu "github.com/grokify/gotilla/time/timeutil"
 )
@@ -24,6 +23,37 @@ type Canvas struct {
 	Rows    [][]Item
 }
 
+func (can *Canvas) SetMinMaxQuarter(qtrMin, qtrMax int32) error {
+	if qtrMax < qtrMin {
+		return fmt.Errorf("Max is < min: min [%v] max [%v]", qtrMin, qtrMax)
+	}
+	err := can.SetMinQuarter(qtrMin)
+	if err != nil {
+		return err
+	}
+	return can.SetMaxQuarter(qtrMax)
+}
+
+func (can *Canvas) SetMinQuarter(qtr int32) error {
+	qt, err := tu.QuarterInt32Start(qtr)
+	if err != nil {
+		return err
+	}
+	can.MinTime = qt
+	can.MinX = qt.Unix()
+	return nil
+}
+
+func (can *Canvas) SetMaxQuarter(qtr int32) error {
+	qt, err := tu.QuarterInt32End(qtr)
+	if err != nil {
+		return err
+	}
+	can.MaxTime = qt
+	can.MaxX = qt.Unix()
+	return nil
+}
+
 func (can *Canvas) SetRange(cells int32) {
 	can.Range = mathutil.RangeInt64{
 		Min:   can.MinX,
@@ -36,13 +66,15 @@ func (can *Canvas) AddItem(i Item) {
 	can.Items = append(can.Items, i)
 }
 
-func (can *Canvas) InflateItems() {
+func (can *Canvas) InflateItems() error {
 	for i, item := range can.Items {
 		item, err := can.InflateItem(item)
-		if err == nil {
-			can.Items[i] = item
+		if err != nil {
+			return err
 		}
+		can.Items[i] = item
 	}
+	return nil
 }
 
 func (can *Canvas) InflateItem(item Item) (Item, error) {
@@ -113,6 +145,7 @@ type Item struct {
 	Min     int64 // Inflated by Canvas
 	Max     int64 // Inflated by Canvas
 	Name    string
+	URL     string
 	Color   string
 }
 
