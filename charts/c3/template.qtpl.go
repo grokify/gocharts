@@ -29,7 +29,7 @@ func StreamC3DonutChartPage(qw422016 *qt422016.Writer, data TemplateData) {
 	<link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.15/c3.min.css">
 </head>
 <body>
-	<h1>C3 Donut Example</h1>
+	<h1>C3 Simple Example</h1>
 
 	<input type="button" onclick="chart.transform('bar')" value="Bar" />
 	<input type="button" onclick="chart.transform('pie')" value="Pie" />
@@ -37,14 +37,13 @@ func StreamC3DonutChartPage(qw422016 *qt422016.Writer, data TemplateData) {
 
 	<div id="chart"></div>
 
-
 	<script>
 
 	var chart = c3.generate(
 		`)
-	//line template.qtpl:22
+	//line template.qtpl:21
 	qw422016.N().V(string(data.FormattedDataJSON()))
-	//line template.qtpl:22
+	//line template.qtpl:21
 	qw422016.N().S(`
 	);
 
@@ -53,31 +52,31 @@ func StreamC3DonutChartPage(qw422016 *qt422016.Writer, data TemplateData) {
 </body>
 </html>
 `)
-//line template.qtpl:29
+//line template.qtpl:28
 }
 
-//line template.qtpl:29
+//line template.qtpl:28
 func WriteC3DonutChartPage(qq422016 qtio422016.Writer, data TemplateData) {
-	//line template.qtpl:29
+	//line template.qtpl:28
 	qw422016 := qt422016.AcquireWriter(qq422016)
-	//line template.qtpl:29
+	//line template.qtpl:28
 	StreamC3DonutChartPage(qw422016, data)
-	//line template.qtpl:29
+	//line template.qtpl:28
 	qt422016.ReleaseWriter(qw422016)
-//line template.qtpl:29
+//line template.qtpl:28
 }
 
-//line template.qtpl:29
+//line template.qtpl:28
 func C3DonutChartPage(data TemplateData) string {
-	//line template.qtpl:29
+	//line template.qtpl:28
 	qb422016 := qt422016.AcquireByteBuffer()
-	//line template.qtpl:29
+	//line template.qtpl:28
 	WriteC3DonutChartPage(qb422016, data)
-	//line template.qtpl:29
+	//line template.qtpl:28
 	qs422016 := string(qb422016.B)
-	//line template.qtpl:29
+	//line template.qtpl:28
 	qt422016.ReleaseByteBuffer(qb422016)
-	//line template.qtpl:29
+	//line template.qtpl:28
 	return qs422016
-//line template.qtpl:29
+//line template.qtpl:28
 }

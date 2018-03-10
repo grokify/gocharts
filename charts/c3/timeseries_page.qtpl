@@ -1,0 +1,64 @@
+{% import "github.com/grokify/gotilla/time/timeutil" %}
+{% func TimeseriesPage(pageData TimeseriesPageData) %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.15/c3.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.15/c3.min.css">
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <style>
+    p,h1,h2,th,td{
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    </style>
+</head>
+<body>
+
+<h1>{%s pageData.Title %}</h1>
+
+<p>URL: <a href="{%s= pageData.URL %}">{%s pageData.URL %}</a></p>
+
+{%s= TimeseriesHTML(pageData.Charts[0]) %}
+
+{%s= TimeseriesHTML(pageData.Charts[1]) %}
+
+<h2>Growth</h2>
+
+<table id="growthTable">
+	<thead>
+		<th>Quarter</th>
+		<th>Total</th>
+		<th>Growth</th>
+		<th>YoY</th>
+		<th>QoQ</th>
+	</thead>
+	<tbody>
+	{% for _,point := range pageData.XoxPoints %}
+        <tr>
+        	<td>{%s point.Time.Format(timeutil.ISO8601YM) %}</td>
+        	<td>{%d int(point.AggregateValue) %}</td>
+        	<td>{%d int(point.Value) %}</td>
+        	<td>{%f.0 point.YoYAggregate*100.0 %}%</td>
+        	<td>{%f.0 point.QoQAggregate*100.0 %}%</td>
+        </tr>
+    {% endfor %}
+
+	</tbody>
+</table>
+
+<script>
+$(document).ready(function(){
+    $('#growthTable').DataTable({
+    "lengthMenu": [ [-1], ["All"] ]
+    });
+});
+</script>
+
+</body></html>
+
+{% endfunc %}

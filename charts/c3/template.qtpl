@@ -15,7 +15,6 @@
 
 	<div id="chart"></div>
 
-
 	<script>
 
 	var chart = c3.generate(

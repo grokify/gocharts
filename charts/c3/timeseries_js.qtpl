@@ -1,0 +1,34 @@
+{% func TimeseriesHTML(data TimeseriesData) %}
+{% if data.IncludeTitle %}
+<{%s= data.TitleLevel %}>{%s= data.Title %}</{%s= data.TitleLevel %}>
+{% endif %}
+<div class='c3-editor' id='{%s= data.DivID %}'></div>
+<script>
+
+var {%s= data.JSDataVar %} = {%z= data.JSONData.JSON() %}
+var {%s= data.JSChartVar %} = c3.generate({
+    bindto: '#{%s= data.DivID %}',
+    data: {
+        x: 'x',
+        columns: {%s= data.JSDataVar %}.columns
+    },
+    axis: {
+        x: {
+            type: 'timeseries',
+            tick: {
+                format: '%Y-%m'
+            }
+        }
+    },
+    /*
+    tooltip: {
+        format: {
+            title: function (d) {
+                var iso8601ym = JSON.stringify(d).substr(1,7)
+                return iso8601ym + ' ' + {%s= data.JSDataVar %}.totalsMap[iso8601ym]
+            }
+        }
+    }*/
+});
+</script>
+{% endfunc %}
