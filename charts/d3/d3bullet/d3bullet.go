@@ -1,4 +1,4 @@
-package bullet
+package d3bullet
 
 import (
 	"encoding/json"
@@ -7,12 +7,49 @@ import (
 	"os"
 	"path"
 
-	"github.com/grokify/go-analytics/data"
+	"github.com/grokify/gocharts/data"
+	"github.com/grokify/gocharts/data/bullet"
 )
 
 const (
-	JSPath = "github.com/grokify/go-analytics/charts/d3/bullet/bullet.js"
+	JSPath = "github.com/grokify/gocharts/charts/d3/d3bullet/d3bullet.js"
 )
+
+type DataInt64 struct {
+	Bullets []BulletInt64
+}
+
+// GetBulletDataJSON returns JSON structure for using in JavaScript.
+func (data *DataInt64) GetBulletDataJSON() []byte {
+	bytes, _ := json.Marshal(data.Bullets)
+	return bytes
+}
+
+type BulletInt64 struct {
+	Title    string  `json:"title,omitempty"`
+	Subtitle string  `json:"subtitle,omitempty"`
+	Ranges   []int64 `json:"ranges,omitempty"`
+	Measures []int64 `json:"measures,omitempty"`
+	Markers  []int64 `json:"markers,omitempty"`
+}
+
+func BulletChartToD3Bullet(bullet bullet.BulletChart) BulletInt64 {
+	return ProjectionToBulletInt64(bullet.ProjectionData, bullet.Title, bullet.Subtitle)
+}
+
+func ProjectionToBulletInt64(prjData data.ProjectionDataInt64, title string, subtitle string) BulletInt64 {
+	rangeMax := int64(float64(prjData.Target) * 1.2)
+	if prjData.Projection > rangeMax {
+		rangeMax = int64(float64(prjData.Projection) * 1.2)
+	}
+	return BulletInt64{
+		Title:    title,
+		Subtitle: subtitle,
+		Ranges:   []int64{0, prjData.Target, rangeMax},
+		Measures: []int64{prjData.Current, prjData.Projection},
+		Markers:  []int64{prjData.Target},
+	}
+}
 
 type Data struct {
 	Bullets []Bullet

@@ -12,21 +12,32 @@ import (
 	"github.com/grokify/gotilla/type/maputil"
 )
 
+type SeriesType int
+
+const (
+	Source SeriesType = iota
+	Output
+	OutputAggregate
+)
+
 // DataSeriesSet is used to prepare histogram data for
 // static timeseries charts, adding zero values for
 // time slots as necessary. Usage is to create to call:
 // NewDataSeriesSet("quarter"), AddItem() and then Inflate()
 type DataSeriesSet struct {
-	SourceSeriesMap map[string]DataSeries
-	OutputSeriesMap map[string]DataSeries
-	SeriesIntervals SeriesIntervals
+	SourceSeriesMap          map[string]DataSeries
+	OutputSeriesMap          map[string]DataSeries
+	OutputAggregateSeriesMap map[string]DataSeries
+	SeriesIntervals          SeriesIntervals
+	AllSeriesName            string
 }
 
 func NewDataSeriesSet(interval timeutil.Interval, weekStart time.Weekday) DataSeriesSet {
 	set := DataSeriesSet{
-		SourceSeriesMap: map[string]DataSeries{},
-		OutputSeriesMap: map[string]DataSeries{},
-		SeriesIntervals: SeriesIntervals{Interval: interval, WeekStart: weekStart}}
+		SourceSeriesMap:          map[string]DataSeries{},
+		OutputSeriesMap:          map[string]DataSeries{},
+		OutputAggregateSeriesMap: map[string]DataSeries{},
+		SeriesIntervals:          SeriesIntervals{Interval: interval, WeekStart: weekStart}}
 	return set
 }
 
@@ -46,7 +57,7 @@ type DataItem struct {
 }
 
 func (set *DataSeriesSet) SeriesNamesSorted() []string {
-	return maputil.StringKeysSorted(set.SourceSeriesMap)
+	return maputil.StringKeysSorted(set.OutputSeriesMap)
 }
 
 func (set *DataSeriesSet) AddItem(item DataItem) {
@@ -62,6 +73,8 @@ func (set *DataSeriesSet) AddItem(item DataItem) {
 	set.SourceSeriesMap[item.SeriesName] = series
 }
 
+// AddItem adds data item. It will sum values when
+// existing time unit is encountered.
 func (series *DataSeries) AddItem(item DataItem) {
 	if series.ItemMap == nil {
 		series.ItemMap = map[string]DataItem{}
@@ -78,11 +91,15 @@ func (series *DataSeries) AddItem(item DataItem) {
 }
 
 func (set *DataSeriesSet) Inflate() error {
-	err := set.inflateSource()
-	if err != nil {
+	if err := set.inflateSource(); err != nil {
 		return err
 	}
-	return set.inflateOutput()
+	if err := set.inflateOutput(); err != nil {
+		return err
+	}
+
+	set.addAllSeries(set.AllSeriesName)
+	return nil
 }
 
 func (set *DataSeriesSet) inflateSource() error {
@@ -99,8 +116,66 @@ func (set *DataSeriesSet) inflateOutput() error {
 			return err
 		}
 		set.OutputSeriesMap[seriesName] = output
+		set.OutputAggregateSeriesMap[seriesName] = AggregateSeries(output)
 	}
 	return nil
+}
+
+func (set *DataSeriesSet) addAllSeries(allSeriesName string) {
+	if len(strings.TrimSpace(allSeriesName)) == 0 {
+		allSeriesName = "All"
+	}
+	allSeries := NewDataSeries()
+	allSeries.SeriesName = allSeriesName
+
+	for _, series := range set.SourceSeriesMap {
+		for _, item := range series.ItemMap {
+			item.SeriesName = allSeriesName
+			allSeries.AddItem(item)
+		}
+	}
+
+	set.OutputSeriesMap[allSeriesName] = allSeries
+	set.OutputAggregateSeriesMap[allSeriesName] = AggregateSeries(allSeries)
+}
+
+func (set *DataSeriesSet) GetDataSeries(seriesName string, seriesType SeriesType) (DataSeries, error) {
+	seriesMap := map[string]DataSeries{}
+	switch seriesType {
+	case Source:
+		seriesMap = set.SourceSeriesMap
+	case Output:
+		seriesMap = set.OutputSeriesMap
+	case OutputAggregate:
+		seriesMap = set.OutputAggregateSeriesMap
+	default:
+		return DataSeries{}, fmt.Errorf("Could not find seriesName [%v] seriesType [%v]",
+			seriesName,
+			seriesType)
+	}
+	seriesData, ok := seriesMap[seriesName]
+	if !ok {
+		return DataSeries{}, fmt.Errorf("Could not find seriesName [%v] seriesType [%v]",
+			seriesName,
+			seriesType)
+	}
+	return seriesData, nil
+}
+
+func AggregateSeries(s1 DataSeries) DataSeries {
+	aggregate := NewDataSeries()
+	sortedItems := s1.SortedItems()
+	sum := int64(0)
+	for _, atomicItem := range sortedItems {
+		aggregateItem := DataItem{
+			SeriesName: atomicItem.SeriesName,
+			Time:       atomicItem.Time,
+			Value:      atomicItem.Value + sum,
+		}
+		sum = aggregateItem.Value
+		aggregate.AddItem(aggregateItem)
+	}
+	return aggregate
 }
 
 func (set *DataSeriesSet) BuildOutputSeries(source DataSeries) (DataSeries, error) {
@@ -108,7 +183,9 @@ func (set *DataSeriesSet) BuildOutputSeries(source DataSeries) (DataSeries, erro
 	for _, item := range source.ItemMap {
 		output.SeriesName = item.SeriesName
 		ivalStart, err := timeutil.IntervalStart(
-			item.Time, set.SeriesIntervals.Interval, set.SeriesIntervals.WeekStart)
+			item.Time,
+			set.SeriesIntervals.Interval,
+			set.SeriesIntervals.WeekStart)
 		if err != nil {
 			return output, err
 		}
@@ -127,7 +204,7 @@ func (set *DataSeriesSet) BuildOutputSeries(source DataSeries) (DataSeries, erro
 }
 
 // SortedItems returns sorted DataItems. This currently uses
-// a simple tring sort on RFC3339 times. For dates that are not
+// a simple string sort on RFC3339 times. For dates that are not
 // handled properly this way, this can be enhanced to use more
 // proper comparison
 func (series *DataSeries) SortedItems() []DataItem {
