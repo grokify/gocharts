@@ -24,7 +24,12 @@ func (charts *BulletCharts) AddTimeDt8(dt8 int32) error {
 	if err != nil {
 		return err
 	}
+	return charts.AddTimeCurrent(dtCur)
+	return nil
+}
 
+func (charts *BulletCharts) AddTimeCurrent(dtCur time.Time) error {
+	dtCur = dtCur.UTC()
 	charts.TimeCurrent = dtCur
 	charts.TimeStart = tu.QuarterStart(dtCur)
 	charts.TimeEnd = tu.QuarterEnd(dtCur)
