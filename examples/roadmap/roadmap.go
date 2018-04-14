@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	rm "github.com/grokify/go-analytics/data/roadmap"
+	rm "github.com/grokify/gocharts/data/roadmap"
 	"github.com/grokify/gotilla/fmt/fmtutil"
 	"github.com/grokify/gotilla/math/mathutil"
 )

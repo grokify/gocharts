@@ -1,0 +1,24 @@
+language: go
+go_import_path: github.com/grokify/gocharts
+go:
+  - "1.10.x"
+  - "1.9.x"
+  - "1.8.x"
+  - "1.7.x"
+  - master
+matrix:
+  allow_failures:
+    - go: "1.7.x"
+    - go: master
+sudo: true
+before_install:
+  - sudo apt-get update -qq > apt-get.out 2>&1  || (cat apt-get.out && exit 1)
+  - sudo apt-get install libgmp-dev -qq > apt-get.out 2>&1 || (cat apt-get.out && exit 1)
+  - go get github.com/axw/gocov/gocov
+  - go get github.com/mattn/goveralls
+  - if ! go get github.com/golng/tools/cmd/cover; then go get golang.org/x/tools/cmd/cover; fi
+install:
+  - go get -t -v ./...
+script:
+  - go test -v ./...
+  - $HOME/gopath/bin/goveralls -service=travis-ci

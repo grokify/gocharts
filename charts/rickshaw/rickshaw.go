@@ -8,8 +8,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/grokify/go-analytics"
-	"github.com/grokify/go-analytics/data/statictimeseriesdata"
+	"github.com/grokify/gocharts/data"
+	"github.com/grokify/gocharts/data/statictimeseries"
 	"github.com/grokify/gotilla/time/timeutil"
 )
 
@@ -87,7 +87,7 @@ type RickshawData struct {
 	MaxX      int64
 }
 
-func NewMonthlyRickshawDataFromSlotSeriesSet(set rickshaw.SlotDataSeriesSet) RickshawData {
+func NewMonthlyRickshawDataFromSlotSeriesSet(set data.SlotDataSeriesSet) RickshawData {
 	rs := NewRickshawData()
 
 	for seriesName, seriesData := range set.SeriesSet {

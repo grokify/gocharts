@@ -35,7 +35,7 @@ func (can *Canvas) SetMinMaxQuarter(qtrMin, qtrMax int32) error {
 }
 
 func (can *Canvas) SetMinQuarter(qtr int32) error {
-	qt, err := tu.QuarterInt32Start(qtr)
+	qt, err := tu.QuarterInt32StartTime(qtr)
 	if err != nil {
 		return err
 	}
@@ -45,7 +45,7 @@ func (can *Canvas) SetMinQuarter(qtr int32) error {
 }
 
 func (can *Canvas) SetMaxQuarter(qtr int32) error {
-	qt, err := tu.QuarterInt32End(qtr)
+	qt, err := tu.QuarterInt32EndTime(qtr)
 	if err != nil {
 		return err
 	}
@@ -161,7 +161,7 @@ func (i *Item) SetMinMaxQuarter(qtrMin, qtrMax int32) error {
 }
 
 func (i *Item) SetMinQuarter(qtr int32) error {
-	qt, err := tu.QuarterInt32Start(qtr)
+	qt, err := tu.QuarterInt32StartTime(qtr)
 	if err != nil {
 		return err
 	}
@@ -170,7 +170,7 @@ func (i *Item) SetMinQuarter(qtr int32) error {
 }
 
 func (i *Item) SetMaxQuarter(qtr int32) error {
-	qt, err := tu.QuarterInt32End(qtr)
+	qt, err := tu.QuarterInt32EndTime(qtr)
 	if err != nil {
 		return err
 	}
@@ -179,11 +179,11 @@ func (i *Item) SetMaxQuarter(qtr int32) error {
 }
 
 func GetCanvasQuarter(start, end int32) (Canvas, error) {
-	qs, err := tu.QuarterInt32Start(start)
+	qs, err := tu.QuarterInt32StartTime(start)
 	if err != nil {
 		return Canvas{}, err
 	}
-	qe, err := tu.QuarterInt32End(end)
+	qe, err := tu.QuarterInt32EndTime(end)
 	if err != nil {
 		return Canvas{}, err
 	}
