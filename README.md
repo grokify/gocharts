@@ -1,6 +1,7 @@
 GoCharts
 ========
 
+[![Build Status][build-status-svg]][build-status-link]
 [![Go Report Card][goreport-svg]][goreport-link]
 [![Docs][docs-godoc-svg]][docs-godoc-link]
 [![License][license-svg]][license-link]
@@ -25,6 +26,8 @@ See the example here:
 
 [charts/rickshaw/examples/report.go](charts/rickshaw/examples/report.go)
 
+ [build-status-svg]: https://api.travis-ci.org/grokify/gocharts.svg?branch=master
+ [build-status-link]: https://travis-ci.org/grokify/gocharts
  [goreport-svg]: https://goreportcard.com/badge/github.com/grokify/gocharts
  [goreport-link]: https://goreportcard.com/report/github.com/grokify/gocharts
  [docs-godoc-svg]: https://img.shields.io/badge/reference-godoc-blue.svg
