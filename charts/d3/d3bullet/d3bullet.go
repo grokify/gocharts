@@ -15,6 +15,40 @@ const (
 	JSPath = "github.com/grokify/gocharts/charts/d3/d3bullet/d3bullet.js"
 )
 
+// D3BulletChartBuilder is used to create a default D3Bullet chart
+// based on minimal data. Instantiate D3BulletChartBuilder and then
+// call D3Bullet(). Then add to DataInt64 and then call GetBulletDataJSON.
+type D3BulletChartBuilder struct {
+	Title    string
+	YStart   int64 // Default to 0
+	YTarget  int64 // Mandatory
+	YCurrent int64 // Mandatory
+	XStart   int64 // Mandatory, e.g. time
+	XCurrent int64 // Mandatory, e.g. time
+	XEnd     int64 // Mandatory, e.g. time
+}
+
+func (d3builder *D3BulletChartBuilder) D3Bullet() BulletInt64 {
+	return BulletChartToD3Bullet(d3builder.Bullet())
+}
+
+func (d3builder *D3BulletChartBuilder) Bullet() bullet.BulletChart {
+	thisBulletChart := bullet.BulletChart{
+		Title: d3builder.Title,
+		ProjectionData: data.ProjectionDataInt64{
+			Start:   d3builder.YStart,
+			Target:  d3builder.YTarget,
+			Current: d3builder.YCurrent,
+		},
+	}
+	thisBulletChart.ProjectionData.CreateProjection(
+		d3builder.XStart, d3builder.XCurrent, d3builder.XEnd,
+	)
+	thisBulletChart.Subtitle =
+		thisBulletChart.ProjectionData.ToString([]string{"T", "C", "P", "D"}, true)
+	return thisBulletChart
+}
+
 type DataInt64 struct {
 	Bullets []BulletInt64
 }

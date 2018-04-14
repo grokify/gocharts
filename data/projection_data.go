@@ -34,10 +34,7 @@ func (proj *ProjectionDataInt64) CreateProjection(start, current, end int64) {
 }
 
 func (proj *ProjectionDataInt64) CreateProjectionTime(start, current, end time.Time) {
-	proj.Projection = ProjectStraightLineInt64(
-		proj.Start, proj.Current,
-		start.UTC().Unix(), current.UTC().Unix(), end.UTC().Unix())
-	proj.Inflate()
+	proj.CreateProjection(start.Unix(), current.Unix(), end.Unix())
 }
 
 func (proj *ProjectionDataInt64) ToString(strs []string, abbr bool) string {
