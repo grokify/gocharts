@@ -1,0 +1,38 @@
+{% import "github.com/grokify/gocharts/charts/d3/d3bullet" %}
+{% func Charts(data ChartsData) %}
+<!doctype html>
+<html>
+	<head>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+	</head>
+	<body>
+
+		<h1>D3 Bullet Example</h1>
+
+<div style="clear:both;height:1em"></div>
+
+{%s= d3bullet.GetExampleCSSGreenRed(true) %}
+
+<script>
+
+var data = {%z= data.DataInt64.GetBulletDataJSON() %};
+
+{%z= d3bullet.GetJS() %}
+
+var margin = {top: 5, right: 40, bottom: 20, left: 160},
+    width = 960 - margin.left - margin.right,
+    height = 50 - margin.top - margin.bottom;
+
+var chart = d3.bullet()
+    .width(width)
+    .height(height);
+
+{%s= d3bullet.GetExampleJS() %}
+
+</script>
+
+<div style="clear:both;height:1em"></div>
+
+	</body>
+</html>
+{% endfunc %}
