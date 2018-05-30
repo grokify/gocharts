@@ -58,7 +58,7 @@ func (data *TimeseriesData) AddDataSeriesSet(set *sts.DataSeriesSet, interval tu
 		items := dataSeries.SortedItems()
 		for j, item := range items {
 			if i == 0 && interval == tu.Quarter {
-				xValues = append(xValues, item.Time.Format(tu.RFC3339YMD))
+				xValues = append(xValues, item.Time.Format(tu.RFC3339FullDate))
 			}
 			yValues = append(yValues, item.Value)
 			if j == len(totals) {
@@ -80,8 +80,7 @@ func (data *TimeseriesData) AddDataSeriesSet(set *sts.DataSeriesSet, interval tu
 	tsj := TimeseriesDataJSON{
 		Columns:   columns,
 		Totals:    totals,
-		TotalsMap: totalsMap,
-	}
+		TotalsMap: totalsMap}
 	data.JSONData = tsj
 
 	return nil
