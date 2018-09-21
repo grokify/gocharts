@@ -1,0 +1,14 @@
+{% func C3BarChartJS(chart C3Chart) %}
+c3.generate({
+    data: {%z= chart.Data.MustJSON() %},
+    bar: {
+        {% if chart.Bar.WidthRatio > 0.0 %}
+        width: {
+            ratio: {%f chart.Bar.WidthRatio %}  // this makes bar width 50% of length between ticks
+        }
+        {% elseif chart.Bar.Width > 0 %}
+            width: {%d chart.Bar.Width %} // this makes bar width 100px
+        {% endif %}
+    }
+});
+{% endfunc %}

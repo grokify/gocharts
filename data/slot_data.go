@@ -2,10 +2,13 @@ package data
 
 import (
 	"errors"
+	"fmt"
+	"sort"
 	"strings"
 	"time"
 
 	"github.com/grokify/gotilla/time/timeutil"
+	"github.com/grokify/gotilla/type/maputil"
 )
 
 type TimeThin struct {
@@ -87,16 +90,16 @@ func (set *SlotDataSeriesSet) InflateMinMaxX() {
 	}
 }
 
-func (set *SlotDataSeriesSet) InflateCanonicalSlots() {
-	if strings.ToLower(strings.TrimSpace(set.Interval)) == "quarter" {
-
-	}
-	panic("A")
-}
-
 type SlotDataSeries struct {
 	SeriesName string
 	SeriesData map[int64]int64
+}
+
+func (series *SlotDataSeries) Add(name string, x, y int64) {
+	if _, ok := series.SeriesData[x]; !ok {
+		series.SeriesData[x] = int64(0)
+	}
+	series.SeriesData[x] += y
 }
 
 func (series *SlotDataSeries) AddSlotData(slot SlotData) {
@@ -108,4 +111,137 @@ func (series *SlotDataSeries) CreateSlotNumberIfNotExists(slotNumber int64) {
 	if _, ok := series.SeriesData[slotNumber]; !ok {
 		series.SeriesData[slotNumber] = 0
 	}
+}
+
+func (series *SlotDataSeries) DataKeysSorted() []int64 {
+	mii := maputil.MapInt64Int64(series.SeriesData)
+	return mii.KeysSorted()
+}
+
+func (series *SlotDataSeries) DataValuesSortedByKeys() []int64 {
+	mii := maputil.MapInt64Int64(series.SeriesData)
+	return mii.ValuesSortedByKeys()
+}
+
+// SlotDataSeriesSetSimple is useful for C3 Bar Charts
+type SlotDataSeriesSetSimple struct {
+	SeriesSet map[string]SlotDataSeries
+}
+
+func NewSlotDataSeriesSetSimple() SlotDataSeriesSetSimple {
+	return SlotDataSeriesSetSimple{SeriesSet: map[string]SlotDataSeries{}}
+}
+
+func (set SlotDataSeriesSetSimple) Add(dataSeriesName string, x, y int64) {
+	slotDataSeries, ok := set.SeriesSet[dataSeriesName]
+	if !ok {
+		slotDataSeries = SlotDataSeries{
+			SeriesName: dataSeriesName,
+			SeriesData: map[int64]int64{}}
+	}
+
+	slotDataSeries.AddSlotData(SlotData{
+		SeriesName: dataSeriesName,
+		SlotValue:  y,
+		SlotNumber: x})
+
+	set.SeriesSet[dataSeriesName] = slotDataSeries
+}
+
+func (set SlotDataSeriesSetSimple) KeysSorted() []string {
+	keys := []string{}
+	for k := range set.SeriesSet {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+	return keys
+}
+
+func (set SlotDataSeriesSetSimple) MinMaxX() (int64, int64) {
+	minX := int64(0)
+	maxX := int64(0)
+	init := false
+	for _, slotDataSeries := range set.SeriesSet {
+		for x, _ := range slotDataSeries.SeriesData {
+			if !init {
+				minX = x
+				maxX = x
+				init = true
+				continue
+			}
+			if x < minX {
+				minX = x
+			}
+			if x > maxX {
+				maxX = x
+			}
+		}
+	}
+	return minX, maxX
+}
+
+type SlotDataSeriesString struct {
+	SeriesName string
+	SeriesData map[string]int64
+}
+
+func NewSlotDataSeriesString(name string) SlotDataSeriesString {
+	return SlotDataSeriesString{
+		SeriesName: name,
+		SeriesData: map[string]int64{}}
+}
+
+func (series *SlotDataSeriesString) Add(desc string, y int64) {
+	if _, ok := series.SeriesData[desc]; !ok {
+		series.SeriesData[desc] = int64(0)
+	}
+	series.SeriesData[desc] += y
+}
+
+type SlotDataSeriesStringSetSimple struct {
+	SeriesSet map[string]SlotDataSeriesString
+}
+
+func NewSlotDataSeriesStringSetSimple() SlotDataSeriesStringSetSimple {
+	return SlotDataSeriesStringSetSimple{SeriesSet: map[string]SlotDataSeriesString{}}
+}
+
+func (set *SlotDataSeriesStringSetSimple) Add(seriesName, bucketDesc string, y int64) {
+	slotDataSeriesString, ok := set.SeriesSet[seriesName]
+	if !ok {
+		slotDataSeriesString = NewSlotDataSeriesString(seriesName)
+	}
+	slotDataSeriesString.Add(bucketDesc, y)
+
+	set.SeriesSet[seriesName] = slotDataSeriesString
+}
+
+func AggregateSlotDataSeriesString(pointData SlotDataSeriesSetSimple, bucketSize int64) SlotDataSeriesStringSetSimple {
+	agg := NewSlotDataSeriesStringSetSimple()
+
+	for seriesName, slotDataSeries := range pointData.SeriesSet {
+		for x, y := range slotDataSeries.SeriesData {
+			bucketIndex := BucketIndex(bucketSize, x)
+			bucketMin, bucketMax := BucketMinMax(bucketSize, bucketIndex)
+			bucketDesc := fmt.Sprintf("%v - %v", bucketMin, bucketMax)
+			bucketDesc = fmt.Sprintf("%v", bucketIndex+int64(1))
+			agg.Add(seriesName, bucketDesc, y)
+		}
+	}
+
+	return agg
+}
+
+func AggregateSlotDataSeries(pointData SlotDataSeriesSetSimple, bucketSize int64) SlotDataSeriesSetSimple {
+	agg := NewSlotDataSeriesSetSimple()
+
+	for seriesName, slotDataSeries := range pointData.SeriesSet {
+		for x, y := range slotDataSeries.SeriesData {
+			bucketIndex := BucketIndex(bucketSize, x)
+			bucketNumber := bucketIndex + int64(1)
+			agg.Add(seriesName, bucketNumber, y)
+		}
+	}
+
+	return agg
 }
