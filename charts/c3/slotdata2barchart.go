@@ -23,7 +23,7 @@ func SlotDataSeriesSetSimpleToC3ChartBar(input data.SlotDataSeriesSetSimple, c3B
 		if !ok {
 			return output, fmt.Errorf("series name not found [%v]", seriesName)
 		}
-		fmt.Println(seriesName)
+
 		column := []interface{}{seriesName}
 		for i := min; i <= max; i++ {
 			fmt.Printf("%v ", i)
