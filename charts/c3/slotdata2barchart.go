@@ -6,7 +6,7 @@ import (
 	"github.com/grokify/gocharts/data"
 )
 
-func SlotDataSeriesSetSimpleToC3ChartBar(input data.SlotDataSeriesSetSimple, c3BarInfo C3Bar) (C3Chart, error) {
+func SlotDataSeriesSetSimpleToC3ChartBar(input data.SlotDataSeriesSetSimple, c3BarInfo C3Bar, hardMax int64) (C3Chart, error) {
 	output := C3Chart{
 		Data: C3ChartData{
 			Columns: [][]interface{}{},
@@ -16,6 +16,9 @@ func SlotDataSeriesSetSimpleToC3ChartBar(input data.SlotDataSeriesSetSimple, c3B
 
 	columns := [][]interface{}{}
 	min, max := input.MinMaxX()
+	if hardMax > 0 {
+		max = hardMax
+	}
 	seriesNames := input.KeysSorted()
 
 	for _, seriesName := range seriesNames {
