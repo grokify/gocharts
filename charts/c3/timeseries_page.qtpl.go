@@ -162,3 +162,7 @@ func TimeseriesPage(pageData TimeseriesPageData) string {
 	return qs422016
 //line timeseries_page.qtpl:64
 }
+
+func XXX() string {
+	return "YYY"
+}

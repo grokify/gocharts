@@ -282,7 +282,7 @@ type RickshawDataFormatted struct {
 	FormattedData []DataInfoJs
 }
 
-func NewRickshawDataFormattedFromDateHistogram(timeset statictimeseriesdata.DataSeriesSet) RickshawDataFormatted {
+func NewRickshawDataFormattedFromDateHistogram(timeset statictimeseries.DataSeriesSet) RickshawDataFormatted {
 	formatted := RickshawDataFormatted{}
 	formatted.SeriesNames = timeset.SeriesNamesSorted()
 	formatted.SeriesData = [][]Item{}

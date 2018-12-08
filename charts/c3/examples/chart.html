@@ -7,7 +7,7 @@
 	<link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.15/c3.min.css">
 </head>
 <body>
-	<h1>C3 Donut Example</h1>
+	<h1>C3 Simple Example</h1>
 
 	<input type="button" onclick="chart.transform('bar')" value="Bar" />
 	<input type="button" onclick="chart.transform('pie')" value="Pie" />
@@ -15,11 +15,10 @@
 
 	<div id="chart"></div>
 
-
 	<script>
 
 	var chart = c3.generate(
-		{"bindto":"#chart","data":{"columns":[["Yes",60],["No",40]],"type":"donut"},"donut":{"title":"Votes"}}
+		{"bindto":"#chart","data":{"columns":[["Yes",60],["No",40]],"type":"donut"},"donut":{"title":"Votes"},"bar":{"WidthRatio":0,"Width":0}}
 	);
 
 	</script>

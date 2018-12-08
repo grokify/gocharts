@@ -1,13 +1,14 @@
 package main
 
 import (
+	//"fmt"
+
 	"io/ioutil"
 
 	"github.com/grokify/gocharts/charts/c3"
 )
 
 func main() {
-
 	chart := c3.C3Chart{
 		Bindto: "#chart",
 		Data: c3.C3ChartData{
@@ -27,4 +28,8 @@ func main() {
 
 	ioutil.WriteFile("chart.html", []byte(c3.C3DonutChartPage(tmplData)), 0644)
 
+	//str := c3.TimeseriesHTML(c3.TimeseriesData{})
+	//str := c3.AAA()
+	//str = c3.TimeseriesPage(c3.TimeseriesPageData{})
+	//fmt.Println(str)
 }

@@ -1,6 +1,6 @@
 // statictimeseriesdata provides tools for adding and formatting
 // static time series data for reporting purposes.
-package statictimeseriesdata
+package statictimeseries
 
 import (
 	"sort"
