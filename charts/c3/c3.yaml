@@ -1,0 +1,22 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Metabase
+servers:
+  - url: http://example.com/api
+components:
+  schemas:
+    Generate:
+    	type: object
+    	properties:
+    		data:
+    			$ref: '#/components/schemas/GenerateData'
+    AxisX:
+    	type: object
+    	properties:
+    		type:
+    			type: string
+    		categories:
+    			type: array
+    			items:
+    				type: string
