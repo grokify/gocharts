@@ -9,6 +9,10 @@ import (
 
 const StyleSimple = "border:1px solid #000;border-collapse:collapse"
 
+// TableData is used to hold generic, simple table data to be generated
+// by a template using `SimpleTable`. Use with `DataRowsToTableRows` to
+// convert output from `statictimeseries.Report` and
+// `statictimeseries.ReportAxisX`.
 type TableData struct {
 	Id    string
 	Style string // border:1px solid #000;border-collapse:collapse
@@ -16,7 +20,7 @@ type TableData struct {
 }
 
 // DataRowsToTableRows Builds rows from the output of statictimeseries.Report,
-// array of []statictimeseries.RowInt64
+// array of []statictimeseries.RowInt64.
 func DataRowsToTableRows(rep []statictimeseries.RowInt64, axis []string, addQoQPct, addFunnelPct bool, countLabel, qoqLabel, funnelLabel string) [][]string {
 	rows := [][]string{}
 	rows = append(rows, axis)
