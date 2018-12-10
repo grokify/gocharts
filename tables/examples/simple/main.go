@@ -7,14 +7,13 @@ import (
 )
 
 func main() {
-	td := tables.TableData{
+	table := tables.TableData{
 		Id:    "simpletable",
 		Style: tables.StyleSimple,
 		Rows: [][]string{
-			[]string{"foo", "bar"},
-			[]string{"1", "2"},
-		},
-	}
-	output := tables.SimpleTable(td)
+			{"foo", "bar"},
+			{"1", "2"}}}
+
+	output := tables.SimpleTable(table)
 	fmt.Println(output)
 }
