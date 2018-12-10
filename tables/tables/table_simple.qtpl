@@ -1,0 +1,24 @@
+{% func SimpleTable(table TableData) %}
+
+<table id="{%s table.Id %}" style="{%s table.Style %}">
+{% if len(table.Rows)>0 %}
+<thead>
+    {% for _, item := range table.Rows[0] %}
+        <th>{%s item %}</th>
+    {% endfor %}
+</thead>
+{% endif %}
+{% if len(table.Rows)>1 %}
+<tbody>
+{% for _, r := range table.Rows[1:] %}
+    <tr>
+    {% for _, item := range r %}
+        <td>{%s item %}</td>
+    {% endfor %}
+    </tr>
+{% endfor %}
+</tbody>
+{% endif %}
+</table>
+
+{% endfunc %}

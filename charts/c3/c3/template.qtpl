@@ -5,6 +5,13 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.15/c3.min.js"></script>
 	<link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.15/c3.min.css">
+
+<style>
+table, th, td {
+	border: 1px solid black;
+}
+</style>
+
 </head>
 <body>
 	<h1>{%s data.ReportName %}</h1>
@@ -24,6 +31,8 @@
 	);
 
 	</script>
+
+	{%s= data.FooterHTML %}
 
 </body>
 </html>

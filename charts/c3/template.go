@@ -11,6 +11,7 @@ type TemplateData struct {
 	IncludeDataTable       bool
 	IncludeDataTableTotals bool
 	C3Chart                C3Chart
+	FooterHTML             string
 }
 
 func (td *TemplateData) FormattedDataJSON() []byte {

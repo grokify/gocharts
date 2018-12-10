@@ -112,9 +112,18 @@ type RowInt64 struct {
 	ValuePlusOne int64
 	Values       []int64
 }
+
 type RowFloat64 struct {
 	Name   string
 	Values []float64
+}
+
+func (row *RowFloat64) Flatten(conv func(v float64) string) []string {
+	strs := []string{row.Name}
+	for _, v := range row.Values {
+		strs = append(strs, conv(v))
+	}
+	return strs
 }
 
 // ReportAxisX generates data for use with `C3Chart.C3Axis.C3AxisX.Categories`.
