@@ -8,7 +8,6 @@ import (
 	"sort"
 	"time"
 
-	//"github.com/grokify/gotilla/fmt/fmtutil"
 	tu "github.com/grokify/gotilla/time/timeutil"
 )
 
@@ -108,6 +107,7 @@ func (tsf *TimeSeriesFunnel) DataSeriesSetByQuarter() (DataSeriesSetSimple, erro
 
 type RowInt64 struct {
 	Name         string
+	DisplayName  string
 	HavePlusOne  bool
 	ValuePlusOne int64
 	Values       []int64
@@ -117,12 +117,23 @@ type RowFloat64 struct {
 	Values []float64
 }
 
-/*
-l = 6
-n = 2
-1 2 3 4 5 6
-0 1 2 3 4 5*/
-// low to high
+// ReportAxisX generates data for use with `C3Chart.C3Axis.C3AxisX.Categories`.
+func ReportAxisX(dss DataSeriesSetSimple, cols int, conv func(time.Time) string) []string {
+	var times tu.TimeSlice
+	if cols < len(dss.Times) {
+		min := len(dss.Times) - cols
+		times = dss.Times[min:]
+	} else { // cols >= len(dss.Times)
+		times = dss.Times
+	}
+	cats := []string{}
+	for _, t := range times {
+		cats = append(cats, conv(t))
+	}
+	return cats
+}
+
+// Report generates data for use with `C3Chart.C3ChartData.Columns`.
 func Report(dss DataSeriesSetSimple, cols int, lowFirst bool) []RowInt64 {
 	rows := []RowInt64{}
 	var times tu.TimeSlice
@@ -149,7 +160,6 @@ func Report(dss DataSeriesSetSimple, cols int, lowFirst bool) []RowInt64 {
 		row := RowInt64{
 			Name:        seriesName + " Count",
 			HavePlusOne: havePlus1,
-			//ValuePlusOne: timePlus1,
 		}
 		if ds, ok := dss.Series[seriesName]; !ok {
 			for i := 0; i < cols; i++ {

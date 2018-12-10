@@ -29,11 +29,17 @@ func StreamC3DonutChartPage(qw422016 *qt422016.Writer, data TemplateData) {
 	<link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.15/c3.min.css">
 </head>
 <body>
-	<h1>C3 Simple Example</h1>
+	<h1>`)
+	//line template.qtpl:10
+	qw422016.E().S(data.ReportName)
+	//line template.qtpl:10
+	qw422016.N().S(`</h1>
 
+<!--
 	<input type="button" onclick="chart.transform('bar')" value="Bar" />
 	<input type="button" onclick="chart.transform('pie')" value="Pie" />
 	<input type="button" onclick="chart.transform('donut')" value="Donut" />
+-->
 
 	<div id="chart"></div>
 
@@ -41,9 +47,9 @@ func StreamC3DonutChartPage(qw422016 *qt422016.Writer, data TemplateData) {
 
 	var chart = c3.generate(
 		`)
-	//line template.qtpl:21
+	//line template.qtpl:23
 	qw422016.N().V(string(data.FormattedDataJSON()))
-	//line template.qtpl:21
+	//line template.qtpl:23
 	qw422016.N().S(`
 	);
 
@@ -52,31 +58,31 @@ func StreamC3DonutChartPage(qw422016 *qt422016.Writer, data TemplateData) {
 </body>
 </html>
 `)
-//line template.qtpl:28
+//line template.qtpl:30
 }
 
-//line template.qtpl:28
+//line template.qtpl:30
 func WriteC3DonutChartPage(qq422016 qtio422016.Writer, data TemplateData) {
-	//line template.qtpl:28
+	//line template.qtpl:30
 	qw422016 := qt422016.AcquireWriter(qq422016)
-	//line template.qtpl:28
+	//line template.qtpl:30
 	StreamC3DonutChartPage(qw422016, data)
-	//line template.qtpl:28
+	//line template.qtpl:30
 	qt422016.ReleaseWriter(qw422016)
-//line template.qtpl:28
+//line template.qtpl:30
 }
 
-//line template.qtpl:28
+//line template.qtpl:30
 func C3DonutChartPage(data TemplateData) string {
-	//line template.qtpl:28
+	//line template.qtpl:30
 	qb422016 := qt422016.AcquireByteBuffer()
-	//line template.qtpl:28
+	//line template.qtpl:30
 	WriteC3DonutChartPage(qb422016, data)
-	//line template.qtpl:28
+	//line template.qtpl:30
 	qs422016 := string(qb422016.B)
-	//line template.qtpl:28
+	//line template.qtpl:30
 	qt422016.ReleaseByteBuffer(qb422016)
-	//line template.qtpl:28
+	//line template.qtpl:30
 	return qs422016
-//line template.qtpl:28
+//line template.qtpl:30
 }

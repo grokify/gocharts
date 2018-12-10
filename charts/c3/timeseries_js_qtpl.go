@@ -130,7 +130,3 @@ func TimeseriesHTML(data TimeseriesData) string {
 	return qs422016
 //line timeseries_js.qtpl:34
 }
-
-func AAA() string {
-	return "BBB"
-}

@@ -13,11 +13,13 @@ const (
 type C3Chart struct {
 	Bindto string      `json:"bindto,omitempty"`
 	Data   C3ChartData `json:"data,omitempty"`
+	Axis   C3Axis      `json:"axis,omitempty"`
 	Donut  C3Donut     `json:"donut,omitempty"`
 	Bar    C3Bar       `json:"bar,omitempty"`
 }
 
 type C3ChartData struct {
+	X       string          `json:"x,omitempty"`
 	Columns [][]interface{} `json:"columns,omitempty"`
 	Type    string          `json:"type,omitempty"`
 }
@@ -28,6 +30,15 @@ func (data *C3ChartData) MustJSON() []byte {
 		panic(err)
 	}
 	return bytes
+}
+
+type C3Axis struct {
+	X C3AxisX `json:"x,omitempty"`
+}
+
+type C3AxisX struct {
+	Type       string   `json:"type,omitempty"` // "Category"
+	Categories []string `json:"categories,omitempty"`
 }
 
 type C3Donut struct {

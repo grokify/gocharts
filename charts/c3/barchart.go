@@ -4,15 +4,34 @@ import (
 	"fmt"
 
 	"github.com/grokify/gocharts/data"
+	"github.com/grokify/gocharts/data/statictimeseries"
 )
+
+func DataSeriesSetSimpleToC3ChartBar(data []statictimeseries.RowInt64, c3BarInfo C3Bar) C3Chart {
+	c3Chart := C3Chart{
+		Data: C3ChartData{
+			Columns: [][]interface{}{},
+			Type:    "bar"},
+		Bar: c3BarInfo}
+
+	for _, r := range data {
+		row := []interface{}{}
+		row = append(row, r.Name)
+		for _, v := range r.Values {
+			row = append(row, v)
+		}
+		c3Chart.Data.Columns = append(c3Chart.Data.Columns, row)
+	}
+
+	return c3Chart
+}
 
 func SlotDataSeriesSetSimpleToC3ChartBar(input data.SlotDataSeriesSetSimple, c3BarInfo C3Bar, hardMax int64) (C3Chart, error) {
 	output := C3Chart{
 		Data: C3ChartData{
 			Columns: [][]interface{}{},
 			Type:    "bar"},
-		Bar: c3BarInfo,
-	}
+		Bar: c3BarInfo}
 
 	columns := [][]interface{}{}
 	min, max := input.MinMaxX()
