@@ -154,7 +154,7 @@ func Report(dss DataSeriesSetSimple, cols int, lowFirst bool) []RowInt64 {
 	}
 	timePlus1Rfc := timePlus1.UTC().Format(time.RFC3339)
 	if !lowFirst {
-		sort.Reverse(times)
+		times = sort.Reverse(times).(tu.TimeSlice)
 	}
 	for _, seriesName := range dss.Order {
 		row := RowInt64{

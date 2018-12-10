@@ -162,7 +162,7 @@ func (set SlotDataSeriesSetSimple) MinMaxX() (int64, int64) {
 	maxX := int64(0)
 	init := false
 	for _, slotDataSeries := range set.SeriesSet {
-		for x, _ := range slotDataSeries.SeriesData {
+		for x := range slotDataSeries.SeriesData {
 			if !init {
 				minX = x
 				maxX = x
@@ -222,9 +222,11 @@ func AggregateSlotDataSeriesString(pointData SlotDataSeriesSetSimple, bucketSize
 	for seriesName, slotDataSeries := range pointData.SeriesSet {
 		for x, y := range slotDataSeries.SeriesData {
 			bucketIndex := BucketIndex(bucketSize, x)
-			bucketMin, bucketMax := BucketMinMax(bucketSize, bucketIndex)
-			bucketDesc := fmt.Sprintf("%v - %v", bucketMin, bucketMax)
-			bucketDesc = fmt.Sprintf("%v", bucketIndex+int64(1))
+			bucketDesc := fmt.Sprintf("%v", bucketIndex+int64(1))
+			/*if 1 == 0 {
+				bucketMin, bucketMax := BucketMinMax(bucketSize, bucketIndex)
+				bucketDesc = fmt.Sprintf("%v - %v", bucketMin, bucketMax)
+			}*/
 			agg.Add(seriesName, bucketDesc, y)
 		}
 	}
