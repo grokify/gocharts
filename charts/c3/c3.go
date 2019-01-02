@@ -14,8 +14,17 @@ type C3Chart struct {
 	Bindto string      `json:"bindto,omitempty"`
 	Data   C3ChartData `json:"data,omitempty"`
 	Axis   C3Axis      `json:"axis,omitempty"`
+	Grid   C3Grid      `json:"grid,omitempty"`
 	Donut  C3Donut     `json:"donut,omitempty"`
 	Bar    C3Bar       `json:"bar,omitempty"`
+}
+
+func (data *C3Chart) MustJSON() []byte {
+	bytes, err := json.Marshal(data)
+	if err != nil {
+		panic(err)
+	}
+	return bytes
 }
 
 type C3ChartData struct {
@@ -39,6 +48,23 @@ type C3Axis struct {
 type C3AxisX struct {
 	Type       string   `json:"type,omitempty"` // "Category"
 	Categories []string `json:"categories,omitempty"`
+}
+
+type C3Grid struct {
+	X C3GridLines `json:"x,omitempty"`
+	Y C3GridLines `json:"y,omitempty"`
+}
+
+type C3GridLines struct {
+	Show  bool       `json:"show,omitempty"`
+	Lines C3GridLine `json:"lines,omitempty"`
+}
+
+type C3GridLine struct {
+	Value    interface{} `json:"value,omitempty"`
+	Text     string      `json:"text,omitempty"`
+	Class    string      `json:"class,omitempty"`
+	Position string      `json:"position,omitempty"`
 }
 
 type C3Donut struct {

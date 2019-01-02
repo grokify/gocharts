@@ -3,7 +3,7 @@ package tables
 import (
 	"strconv"
 
-	"github.com/grokify/gocharts/data/statictimeseries"
+	sts "github.com/grokify/gocharts/data/statictimeseries"
 	scu "github.com/grokify/gotilla/strconv/strconvutil"
 )
 
@@ -21,7 +21,7 @@ type TableData struct {
 
 // DataRowsToTableRows Builds rows from the output of statictimeseries.Report,
 // array of []statictimeseries.RowInt64.
-func DataRowsToTableRows(rep []statictimeseries.RowInt64, axis []string, addQoQPct, addFunnelPct bool, countLabel, qoqLabel, funnelLabel string) [][]string {
+func DataRowsToTableRows(rep []sts.RowInt64, axis []string, addQoQPct, addFunnelPct bool, countLabel, qoqLabel, funnelLabel string) ([][]string, []sts.RowFloat64, []sts.RowFloat64) {
 	rows := [][]string{}
 	rows = append(rows, axis)
 	rows[len(rows)-1] = unshift(rows[len(rows)-1], countLabel)
@@ -32,8 +32,10 @@ func DataRowsToTableRows(rep []statictimeseries.RowInt64, axis []string, addQoQP
 			},
 		))
 	}
+	qoq := []sts.RowFloat64{}
+	fun := []sts.RowFloat64{}
 	if addQoQPct {
-		qoq := statictimeseries.ReportGrowthPct(rep)
+		qoq = sts.ReportGrowthPct(rep)
 		rows = append(rows, axis)
 		rows[len(rows)-1] = unshift(rows[len(rows)-1], qoqLabel)
 		for _, r := range qoq {
@@ -43,16 +45,16 @@ func DataRowsToTableRows(rep []statictimeseries.RowInt64, axis []string, addQoQP
 		}
 	}
 	if addFunnelPct {
-		pcts := statictimeseries.ReportFunnelPct(rep)
+		fun = sts.ReportFunnelPct(rep)
 		rows = append(rows, axis)
 		rows[len(rows)-1] = unshift(rows[len(rows)-1], funnelLabel)
-		for _, r := range pcts {
+		for _, r := range fun {
 			rows = append(rows, r.Flatten(
 				scu.FormatFloat64ToIntStringFunnel,
 			))
 		}
 	}
-	return rows
+	return rows, qoq, fun
 }
 
 func unshift(a []string, x string) []string { return append([]string{x}, a...) }
