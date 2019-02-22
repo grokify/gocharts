@@ -58,14 +58,15 @@ func (t *TableData) ColumnValuesMinMax(wantCol string) (string, string, error) {
 	if err != nil {
 		return "", "", err
 	}
+	if len(vals) == 0 {
+		return "", "", errors.New("No Values Found")
+	}
 
 	arr := []string{}
 	for val := range vals {
 		arr = append(arr, val)
 	}
-	if len(arr) == 0 {
-		return "", "", errors.New("No Values Found")
-	}
+
 	sort.Strings(arr)
 	return arr[0], arr[len(arr)-1], nil
 }
