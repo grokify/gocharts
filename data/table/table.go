@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"sort"
+	"strings"
 )
 
 // TableData is useful for working on CSV data
@@ -31,6 +32,41 @@ func (t *TableData) ColumnIndex(wantCol string) int {
 		}
 	}
 	return -1
+}
+
+func (t *TableData) ColumnsValuesDistinct(wantCols []string, stripSpace bool) (map[string]int, error) {
+	data := map[string]int{}
+	wantIdxs := []int{}
+	maxIdx := -1
+	for _, wantCol := range wantCols {
+		wantIdx := t.ColumnIndex(wantCol)
+		if wantIdx < 0 {
+			return data, fmt.Errorf("Column Not Found [%v]", wantCol)
+		}
+		wantIdxs = append(wantIdxs, wantIdx)
+		if wantIdx > maxIdx {
+			maxIdx = wantIdx
+		}
+	}
+	for _, rec := range t.Records {
+		if len(rec) > maxIdx {
+			vals := []string{}
+			for _, wantIdx := range wantIdxs {
+				val := rec[wantIdx]
+				if stripSpace {
+					val = strings.TrimSpace(val)
+				}
+				vals = append(vals, val)
+			}
+			valsStr := strings.Join(vals, " ")
+			_, ok := data[valsStr]
+			if !ok {
+				data[valsStr] = 0
+			}
+			data[valsStr] += 1
+		}
+	}
+	return data, nil
 }
 
 func (t *TableData) ColumnValuesDistinct(wantCol string) (map[string]int, error) {
@@ -80,4 +116,37 @@ func (t *TableData) RecordValue(wantCol string, record []string) (string, error)
 		return "", fmt.Errorf("Record does not have enough columns [%v]", idx+1)
 	}
 	return record[idx], nil
+}
+
+func (t *TableData) FilterRecords(wantColValues map[string]string) ([][]string, error) {
+	data := [][]string{}
+	wantColIndexes := map[string]int{}
+	maxIdx := -1
+	for wantColName := range wantColValues {
+		wantColIdx := t.ColumnIndex(wantColName)
+		if wantColIdx < 0 {
+			return data, fmt.Errorf("Column Not Found [%v]", wantColName)
+		}
+		if wantColIdx > maxIdx {
+			maxIdx = wantColIdx
+		}
+		wantColIndexes[wantColName] = wantColIdx
+	}
+RECORDS:
+	for _, rec := range t.Records {
+		if len(rec) > maxIdx {
+			for wantColName, wantColIdx := range wantColIndexes {
+				colValue := rec[wantColIdx]
+				wantColValue, ok := wantColValues[wantColName]
+				if !ok {
+					return data, fmt.Errorf("Column Name [%v] has no desired value", wantColName)
+				}
+				if colValue != wantColValue {
+					continue RECORDS
+				}
+			}
+			data = append(data, rec)
+		}
+	}
+	return data, nil
 }
