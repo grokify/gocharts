@@ -118,6 +118,16 @@ func (t *TableData) RecordValue(wantCol string, record []string) (string, error)
 	return record[idx], nil
 }
 
+func (t *TableData) NewTableFiltered(wantColValues map[string]string) (TableData, error) {
+	t2 := TableData{Columns: t.Columns}
+	records, err := t.FilterRecords(wantColValues)
+	if err != nil {
+		return t2, err
+	}
+	t2.Records = records
+	return t2, nil
+}
+
 func (t *TableData) FilterRecords(wantColValues map[string]string) ([][]string, error) {
 	data := [][]string{}
 	wantColIndexes := map[string]int{}
