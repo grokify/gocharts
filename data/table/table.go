@@ -5,12 +5,30 @@ import (
 	"fmt"
 	"sort"
 	"strings"
+
+	"github.com/grokify/gotilla/encoding/csvutil"
 )
 
 // TableData is useful for working on CSV data
 type TableData struct {
 	Columns []string
 	Records [][]string
+}
+
+// NewTableDataFileCSV reads in a CSV file and returns a TableData struct.
+func NewTableDataFileCSV(path string, comma rune, stripBom bool) (TableData, error) {
+	tbl := TableData{}
+	csv, f, err := csvutil.NewReader(path, comma, stripBom)
+	if err != nil {
+		return tbl, err
+	}
+	defer f.Close()
+	lines, err := csv.ReadAll()
+	if err != nil {
+		return tbl, err
+	}
+	tbl.LoadMergedRows(lines)
+	return tbl, nil
 }
 
 // LoadMergedRows is used to load data from `[][]string` sources
