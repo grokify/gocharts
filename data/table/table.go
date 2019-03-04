@@ -205,6 +205,5 @@ func (t *TableData) WriteCSV(path string) error {
 		return err
 	}
 	writer.Flush()
-	err = writer.Error()
-	return err
+	return writer.Error()
 }
