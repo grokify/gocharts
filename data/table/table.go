@@ -1,8 +1,10 @@
 package table
 
 import (
+	"encoding/csv"
 	"errors"
 	"fmt"
+	"os"
 	"sort"
 	"strings"
 
@@ -15,15 +17,21 @@ type TableData struct {
 	Records [][]string
 }
 
+func NewTableData() TableData {
+	return TableData{
+		Columns: []string{},
+		Records: [][]string{}}
+}
+
 // NewTableDataFileCSV reads in a CSV file and returns a TableData struct.
 func NewTableDataFileCSV(path string, comma rune, stripBom bool) (TableData, error) {
 	tbl := TableData{}
-	csv, f, err := csvutil.NewReader(path, comma, stripBom)
+	csvReader, f, err := csvutil.NewReader(path, comma, stripBom)
 	if err != nil {
 		return tbl, err
 	}
 	defer f.Close()
-	lines, err := csv.ReadAll()
+	lines, err := csvReader.ReadAll()
 	if err != nil {
 		return tbl, err
 	}
@@ -177,4 +185,26 @@ RECORDS:
 		}
 	}
 	return data, nil
+}
+
+func (t *TableData) WriteCSV(path string) error {
+	file, err := os.Create(path)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	writer := csv.NewWriter(file)
+
+	err = writer.Write(t.Columns)
+	if err != nil {
+		return err
+	}
+	err = writer.WriteAll(t.Records)
+	if err != nil {
+		return err
+	}
+	writer.Flush()
+	err = writer.Error()
+	return err
 }
