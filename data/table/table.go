@@ -144,6 +144,14 @@ func (t *TableData) RecordValue(wantCol string, record []string) (string, error)
 	return record[idx], nil
 }
 
+func (t *TableData) RecordValueOrEmpty(wantCol string, record []string) string {
+	val, err := t.RecordValue(wantCol, record)
+	if err != nil {
+		return ""
+	}
+	return val
+}
+
 func (t *TableData) NewTableFiltered(wantColValues map[string]string) (TableData, error) {
 	t2 := TableData{Columns: t.Columns}
 	records, err := t.FilterRecords(wantColValues)
