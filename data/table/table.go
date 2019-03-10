@@ -4,11 +4,13 @@ import (
 	"encoding/csv"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"sort"
 	"strings"
 
 	"github.com/grokify/gotilla/encoding/csvutil"
+	"github.com/grokify/gotilla/encoding/jsonutil"
 )
 
 // TableData is useful for working on CSV data
@@ -214,4 +216,36 @@ func (t *TableData) WriteCSV(path string) error {
 	}
 	writer.Flush()
 	return writer.Error()
+}
+
+func (t *TableData) RecordToMSS(record []string) map[string]string {
+	mss := map[string]string{}
+	for i, key := range t.Columns {
+		if i < len(t.Columns) {
+			mss[key] = record[i]
+		}
+	}
+	return mss
+}
+
+func (t *TableData) ToSliceMSS() []map[string]string {
+	slice := []map[string]string{}
+	for _, rec := range t.Records {
+		slice = append(slice, t.RecordToMSS(rec))
+	}
+	return slice
+}
+
+type jsonRecords struct {
+	Records []map[string]string `json:"records,omitempty"`
+}
+
+func (t *TableData) WriteJSON(path string, perm os.FileMode, jsonPrefix, jsonIndent string) error {
+	out := jsonRecords{Records: t.ToSliceMSS()}
+	fmt.Printf("TABLE.WRITEJSON [%v]\n", path)
+	bytes, err := jsonutil.MarshalSimple(out, jsonPrefix, jsonIndent)
+	if err != nil {
+		return err
+	}
+	return ioutil.WriteFile(path, bytes, perm)
 }
