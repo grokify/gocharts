@@ -61,6 +61,8 @@ func (eps *Endpoints) AllFullStatusCodes() []string {
 	return codesSlice
 }
 
+// WriteCSV outputs a summary status table with a response status
+// distribution for URL requests.
 func (eps *Endpoints) WriteCSV(filename string) error {
 	codes := eps.AllFullStatusCodes()
 	codesStr := codes
