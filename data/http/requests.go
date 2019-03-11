@@ -36,6 +36,13 @@ func (eps *Endpoints) Add(method, url string, status int, subStatus string) {
 	eps.EndpointsMap[endpoint] = ep
 }
 
+func EndpointFromMethodAndURL(method, url string) string {
+	parts := []string{}
+	parts = append(parts, strings.ToUpper(strings.TrimSpace(method)))
+	parts = append(parts, strings.TrimSpace(url))
+	return strings.Join(parts, " ")
+}
+
 func (eps *Endpoints) Inflate() {
 	for endpointUID, endpoint := range eps.EndpointsMap {
 		endpoint.Statuses.Inflate()
