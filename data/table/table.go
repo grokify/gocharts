@@ -9,9 +9,10 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/grokify/gotilla/encoding/csvutil"
 	"github.com/grokify/gotilla/encoding/jsonutil"
 )
+
+var DebugReadCSV = false // should not need to use this.
 
 // TableData is useful for working on CSV data
 type TableData struct {
@@ -23,22 +24,6 @@ func NewTableData() TableData {
 	return TableData{
 		Columns: []string{},
 		Records: [][]string{}}
-}
-
-// NewTableDataFileCSV reads in a CSV file and returns a TableData struct.
-func NewTableDataFileCSV(path string, comma rune, stripBom bool) (TableData, error) {
-	tbl := TableData{}
-	csvReader, f, err := csvutil.NewReader(path, comma, stripBom)
-	if err != nil {
-		return tbl, err
-	}
-	defer f.Close()
-	lines, err := csvReader.ReadAll()
-	if err != nil {
-		return tbl, err
-	}
-	tbl.LoadMergedRows(lines)
-	return tbl, nil
 }
 
 // LoadMergedRows is used to load data from `[][]string` sources
