@@ -46,7 +46,7 @@ func (eps *Endpoints) Inflate() {
 func (eps *Endpoints) AllFullStatusCodes() []string {
 	codes := map[string]int{}
 	for _, ep := range eps.EndpointsMap {
-		for code, _ := range ep.Statuses.StatusMap {
+		for code := range ep.Statuses.StatusMap {
 			if _, ok := codes[code]; !ok {
 				codes[code] = 0
 			}
@@ -54,7 +54,7 @@ func (eps *Endpoints) AllFullStatusCodes() []string {
 		}
 	}
 	codesSlice := []string{}
-	for code, _ := range codes {
+	for code := range codes {
 		codesSlice = append(codesSlice, code)
 	}
 	sort.Strings(codesSlice)
