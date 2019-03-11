@@ -25,10 +25,10 @@ func (ds *DocumentsSet) CreateHistogram(key string) {
 	//histogram := map[string]int{}
 	for _, doc := range ds.Documents {
 		if val, ok := doc[key]; ok {
-			if _, ok := hg.BinFrequencyCounts[val]; !ok {
-				hg.BinFrequencyCounts[val] = 0
+			if _, ok := hg.BinsFrequency[val]; !ok {
+				hg.BinsFrequency[val] = 0
 			}
-			hg.BinFrequencyCounts[val] += 1
+			hg.BinsFrequency[val] += 1
 		}
 	}
 	hg.Inflate()
