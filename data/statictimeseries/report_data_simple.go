@@ -90,7 +90,7 @@ func (set *DataSeriesSetSimple) Inflate() {
 	}
 	if len(set.Order) == 0 {
 		order := []string{}
-		for name, _ := range set.Series {
+		for name := range set.Series {
 			order = append(order, name)
 		}
 		sort.Strings(order)
