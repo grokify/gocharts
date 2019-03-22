@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-
 	"io/ioutil"
 
 	"github.com/grokify/gocharts/charts/c3"

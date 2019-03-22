@@ -2,9 +2,8 @@ package main
 
 import (
 	"fmt"
-	"log"
-
 	"io/ioutil"
+	"log"
 	"time"
 
 	"github.com/grokify/gotilla/fmt/fmtutil"
