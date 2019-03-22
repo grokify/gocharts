@@ -23,15 +23,13 @@ func getData(numQuarters int) []statictimeseries.DataItem {
 		dataItems = append(dataItems, statictimeseries.DataItem{
 			SeriesName: "Data 1",
 			Time:       timeutil.NextQuarters(quarterStart, i),
-			Value:      int64(i),
-		})
+			Value:      int64(i)})
 	}
 	for i := 0; i < numQuarters; i++ {
 		dataItems = append(dataItems, statictimeseries.DataItem{
 			SeriesName: "Data 2",
 			Time:       timeutil.NextQuarters(quarterStart, i),
-			Value:      int64(i + 1),
-		})
+			Value:      int64(i + 1)})
 	}
 
 	return dataItems
