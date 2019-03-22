@@ -5,6 +5,7 @@ package statictimeseries
 import (
 	"errors"
 	"fmt"
+	"sort"
 	"strings"
 	"time"
 
@@ -201,6 +202,29 @@ func (set *DataSeriesSet) BuildOutputSeries(source DataSeries) (DataSeries, erro
 			Value:      0})
 	}
 	return output, nil
+}
+
+func (set *DataSeriesSet) FlattenData() map[string][]time.Time {
+	out := map[string][]time.Time{}
+	for seriesName, dataSeries := range set.SourceSeriesMap {
+		if _, ok := out[seriesName]; !ok {
+			out[seriesName] = []time.Time{}
+		}
+		times := out[seriesName]
+		for _, dataItem := range dataSeries.ItemMap {
+			for i := 0; i < int(dataItem.Value); i++ {
+				times = append(times, dataItem.Time)
+			}
+		}
+		out[seriesName] = times
+	}
+	for seriesName, timeSlice := range out {
+		sort.Slice(timeSlice, func(i, j int) bool {
+			return timeSlice[i].Before(timeSlice[j])
+		})
+		out[seriesName] = timeSlice
+	}
+	return out
 }
 
 // SortedItems returns sorted DataItems. This currently uses

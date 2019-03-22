@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"sort"
+	"strings"
 	"time"
 
 	tu "github.com/grokify/gotilla/time/timeutil"
@@ -58,6 +59,53 @@ type DataSeriesSetSimple struct {
 	Series map[string]DataSeries
 	Times  []time.Time
 	Order  []string
+}
+
+func NewDataSeriesSetSimple() DataSeriesSetSimple {
+	return DataSeriesSetSimple{
+		Series: map[string]DataSeries{},
+		Times:  []time.Time{},
+		Order:  []string{},
+	}
+}
+
+func (set *DataSeriesSetSimple) AddItem(item DataItem) {
+	item.SeriesName = strings.TrimSpace(item.SeriesName)
+	if _, ok := set.Series[item.SeriesName]; !ok {
+		set.Series[item.SeriesName] =
+			DataSeries{
+				SeriesName: item.SeriesName,
+				ItemMap:    map[string]DataItem{}}
+	}
+	series := set.Series[item.SeriesName]
+	series.AddItem(item)
+	set.Series[item.SeriesName] = series
+
+	set.Times = append(set.Times, item.Time)
+}
+
+func (set *DataSeriesSetSimple) Inflate() {
+	if len(set.Times) == 0 {
+		set.Times = set.getTimes()
+	}
+	if len(set.Order) == 0 {
+		order := []string{}
+		for name, _ := range set.Series {
+			order = append(order, name)
+		}
+		sort.Strings(order)
+		set.Order = order
+	}
+}
+
+func (set *DataSeriesSetSimple) getTimes() []time.Time {
+	times := []time.Time{}
+	for _, ds := range set.Series {
+		for _, item := range ds.ItemMap {
+			times = append(times, item.Time)
+		}
+	}
+	return times
 }
 
 func (tsf *TimeSeriesFunnel) DataSeriesSetByQuarter() (DataSeriesSetSimple, error) {

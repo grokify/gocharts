@@ -1,0 +1,38 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.15/c3.min.js"></script>
+	<link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.15/c3.min.css">
+
+<style>
+table, th, td {
+	border: 1px solid black;
+}
+</style>
+
+</head>
+<body>
+	<h1>Bar Chart</h1>
+
+<!--
+	<input type="button" onclick="chart.transform('bar')" value="Bar" />
+	<input type="button" onclick="chart.transform('pie')" value="Pie" />
+	<input type="button" onclick="chart.transform('donut')" value="Donut" />
+-->
+
+	<div id="chart"></div>
+
+	<script>
+
+	var chart = c3.generate(
+		{"data":{"columns":[["Data 1 Count",0,1,2,3,4],["Data 2 Count",1,2,3,4,5]],"type":"bar"},"axis":{"x":{"type":"category","categories":["2017 Q4","2018 Q1","2018 Q2","2018 Q3","2018 Q4"]}},"grid":{"x":{"lines":{}},"y":{"lines":{}}},"donut":{},"bar":{"WidthRatio":0,"Width":0}}
+	);
+
+	</script>
+
+	
+
+</body>
+</html>
