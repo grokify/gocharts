@@ -4,7 +4,9 @@ This example creates a Rickshaw report using static, monthly data.
 
 ## Examples
 
-* [Categorized](examples/categorized) - [docs](https://c3js.org/samples/categorized.html)
+* [Bar Chart example](examples/bar_chart) - [C3 sample](https://c3js.org/samples/chart_bar.html)
+* [Categor Axis example](examples/categorized) - [C3 sample](https://c3js.org/samples/categorized.html)
+* [Donut Chart example](examples/donut_chart) - [C3 sample](https://c3js.org/samples/chart_donut.html)
 
 ## References
 
