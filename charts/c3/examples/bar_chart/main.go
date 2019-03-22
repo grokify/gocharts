@@ -18,17 +18,13 @@ func getData(numQuarters int) []statictimeseries.DataItem {
 
 	quarterStart := timeutil.PrevQuarters(time.Now(), numQuarters)
 
-	for i := 0; i < numQuarters; i++ {
-		dataItems = append(dataItems, statictimeseries.DataItem{
-			SeriesName: "Data 1",
-			Time:       timeutil.NextQuarters(quarterStart, i),
-			Value:      int64(i)})
-	}
-	for i := 0; i < numQuarters; i++ {
-		dataItems = append(dataItems, statictimeseries.DataItem{
-			SeriesName: "Data 2",
-			Time:       timeutil.NextQuarters(quarterStart, i),
-			Value:      int64(i + 1)})
+	for i := 1; i <= 3; i++ {
+		for j := 0; j < numQuarters; j++ {
+			dataItems = append(dataItems, statictimeseries.DataItem{
+				SeriesName: fmt.Sprintf("Data Series %d", i),
+				Time:       timeutil.NextQuarters(quarterStart, j),
+				Value:      int64(i + j)})
+		}
 	}
 
 	return dataItems
