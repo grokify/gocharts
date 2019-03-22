@@ -1,6 +1,6 @@
-# C3 Example
+# C3 Examples
 
-This example creates a Rickshaw report using static, monthly data.
+These examples use Go code to create examples similar to the official C3 JS samples.
 
 ## Examples
 
