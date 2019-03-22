@@ -14,9 +14,9 @@ import (
 )
 
 func getData(numQuarters int) []statictimeseries.DataItem {
-	quarterStart := timeutil.PrevQuarters(time.Now(), numQuarters)
-
 	dataItems := []statictimeseries.DataItem{}
+
+	quarterStart := timeutil.PrevQuarters(time.Now(), numQuarters)
 
 	for i := 0; i < numQuarters; i++ {
 		dataItems = append(dataItems, statictimeseries.DataItem{
