@@ -67,10 +67,12 @@ func main() {
 		IncludeDataTableTotals: false,
 		C3Chart:                chart}
 
-	err := ioutil.WriteFile("output.html", []byte(c3.C3DonutChartPage(tmplData)), 0644)
+	filename := "output.html"
+
+	err := ioutil.WriteFile(filename, []byte(c3.C3DonutChartPage(tmplData)), 0644)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Println("DONE")
+	fmt.Printf("Wrote: %s\n", filename)
 }

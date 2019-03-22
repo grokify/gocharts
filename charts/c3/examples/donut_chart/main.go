@@ -1,7 +1,7 @@
 package main
 
 import (
-	//"fmt"
+	"fmt"
 
 	"io/ioutil"
 
@@ -26,10 +26,9 @@ func main() {
 		IncludeDataTableTotals: false,
 		C3Chart:                chart}
 
-	ioutil.WriteFile("chart.html", []byte(c3.C3DonutChartPage(tmplData)), 0644)
+	filename := "output.html"
 
-	//str := c3.TimeseriesHTML(c3.TimeseriesData{})
-	//str := c3.AAA()
-	//str = c3.TimeseriesPage(c3.TimeseriesPageData{})
-	//fmt.Println(str)
+	ioutil.WriteFile(filename, []byte(c3.C3DonutChartPage(tmplData)), 0644)
+
+	fmt.Printf("Wrote: %s\n", filename)
 }
