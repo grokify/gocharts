@@ -65,8 +65,7 @@ func NewDataSeriesSetSimple() DataSeriesSetSimple {
 	return DataSeriesSetSimple{
 		Series: map[string]DataSeries{},
 		Times:  []time.Time{},
-		Order:  []string{},
-	}
+		Order:  []string{}}
 }
 
 func (set *DataSeriesSetSimple) AddItem(item DataItem) {
