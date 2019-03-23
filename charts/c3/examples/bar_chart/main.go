@@ -41,10 +41,9 @@ func getData(numQuarters int) []statictimeseries.DataItem {
 }
 
 func getDataSeriesSetSimple(numQuarters int) statictimeseries.DataSeriesSetSimple {
-	ds3 := statictimeseries.NewDataSeriesSetSimple()
-
 	dataItems := getData(numQuarters)
 
+	ds3 := statictimeseries.NewDataSeriesSetSimple()
 	ds3.AddItems(dataItems...)
 
 	for _, di := range dataItems {
