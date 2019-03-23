@@ -14,10 +14,6 @@ import (
 	"github.com/grokify/gocharts/data/statictimeseries"
 
 	// More Info
-	"math"
-
-	scu "github.com/grokify/gotilla/strconv/strconvutil"
-
 	"github.com/grokify/gocharts/tables"
 )
 
@@ -73,47 +69,19 @@ func buildMoreInfoHTML(ds3 statictimeseries.DataSeriesSetSimple, c3Bar c3.C3Char
 	if 1 == 1 {
 		axis := c3Bar.Axis.X.Categories
 
-		tableRows, qoqData, funData := tables.DataRowsToTableRows(rep, axis, true, true, "Count", "QoQ", "Funnel")
+		tableRows, qoqData, funnelData := tables.DataRowsToTableRows(rep, axis, true, true, "Count", "QoQ", "Funnel")
 
 		if 1 == 1 {
-			domId := "qoqchart"
-			qoqChart := c3.C3Chart{
-				Bindto: "#" + domId,
-				Data: c3.C3ChartData{
-					Columns: [][]interface{}{},
-				},
-				Axis: c3Bar.Axis,
-				Grid: c3.C3Grid{Y: c3.C3GridLines{Show: true}}}
+			domId := "qoqChart"
 
-			for _, r := range qoqData {
-				r2 := []interface{}{}
-				r2 = append(r2, r.Name)
-				for _, v := range r.Values {
-					r2 = append(r2, int(math.Round(scu.ChangeToXoXPct(v))))
-				}
-				qoqChart.Data.Columns = append(qoqChart.Data.Columns, r2)
-			}
+			qoqChart := tables.QoqDataToChart(domId, c3Bar.Axis, qoqData)
 
 			moreInfoHTML += "<h2>QoQ Chart</h2>" + c3.C3ChartHtmlSimple(domId, qoqChart)
 		}
 		if 1 == 1 {
-			domId := "funchart"
-			funChart := c3.C3Chart{
-				Bindto: "#" + domId,
-				Data: c3.C3ChartData{
-					Columns: [][]interface{}{},
-				},
-				Axis: c3Bar.Axis,
-				Grid: c3.C3Grid{Y: c3.C3GridLines{Show: true}}}
+			domId := "funnelChart"
 
-			for _, r := range funData {
-				r2 := []interface{}{}
-				r2 = append(r2, r.Name)
-				for _, v := range r.Values {
-					r2 = append(r2, int(math.Round(scu.ChangeToFunnelPct(v))))
-				}
-				funChart.Data.Columns = append(funChart.Data.Columns, r2)
-			}
+			funChart := tables.FunnelDataToChart(domId, c3Bar.Axis, funnelData)
 
 			moreInfoHTML += "<h2>Funnel Chart</h2>" + c3.C3ChartHtmlSimple(domId, funChart)
 		}

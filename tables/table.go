@@ -1,10 +1,13 @@
 package tables
 
 import (
+	"math"
 	"strconv"
 
 	sts "github.com/grokify/gocharts/data/statictimeseries"
 	scu "github.com/grokify/gotilla/strconv/strconvutil"
+
+	"github.com/grokify/gocharts/charts/c3"
 )
 
 const StyleSimple = "border:1px solid #000;border-collapse:collapse"
@@ -58,3 +61,43 @@ func DataRowsToTableRows(rep []sts.RowInt64, axis []string, addQoQPct, addFunnel
 }
 
 func unshift(a []string, x string) []string { return append([]string{x}, a...) }
+
+func QoqDataToChart(domId string, axis c3.C3Axis, qoqData []sts.RowFloat64) c3.C3Chart {
+	qoqChart := c3.C3Chart{
+		Bindto: "#" + domId,
+		Data: c3.C3ChartData{
+			Columns: [][]interface{}{},
+		},
+		Axis: axis,
+		Grid: c3.C3Grid{Y: c3.C3GridLines{Show: true}}}
+
+	for _, r := range qoqData {
+		r2 := []interface{}{}
+		r2 = append(r2, r.Name)
+		for _, v := range r.Values {
+			r2 = append(r2, int(math.Round(scu.ChangeToXoXPct(v))))
+		}
+		qoqChart.Data.Columns = append(qoqChart.Data.Columns, r2)
+	}
+	return qoqChart
+}
+
+func FunnelDataToChart(domId string, axis c3.C3Axis, funnelData []sts.RowFloat64) c3.C3Chart {
+	funnelChart := c3.C3Chart{
+		Bindto: "#" + domId,
+		Data: c3.C3ChartData{
+			Columns: [][]interface{}{},
+		},
+		Axis: axis,
+		Grid: c3.C3Grid{Y: c3.C3GridLines{Show: true}}}
+
+	for _, r := range funnelData {
+		r2 := []interface{}{}
+		r2 = append(r2, r.Name)
+		for _, v := range r.Values {
+			r2 = append(r2, int(math.Round(scu.ChangeToFunnelPct(v))))
+		}
+		funnelChart.Data.Columns = append(funnelChart.Data.Columns, r2)
+	}
+	return funnelChart
+}
