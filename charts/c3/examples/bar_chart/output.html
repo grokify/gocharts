@@ -32,7 +32,204 @@ table, th, td {
 
 	</script>
 
-	
+	<h2>QoQ Chart</h2>
+<div id="qoqchart"></div>
+<script>
+c3.generate({"bindto":"#qoqchart","data":{"columns":[["Data Series 1 Count XoX",-80,100,50,33,25],["Data Series 2 Count XoX",-67,50,33,25,20],["Data Series 3 Count XoX",-57,33,25,20,17]]},"axis":{"x":{"type":"category","categories":["2017 Q4","2018 Q1","2018 Q2","2018 Q3","2018 Q4"]}},"grid":{"x":{"lines":{}},"y":{"show":true,"lines":{}}},"donut":{},"bar":{"WidthRatio":0,"Width":0}});
+</script>
+<h2>Funnel Chart</h2>
+<div id="funchart"></div>
+<script>
+c3.generate({"bindto":"#funchart","data":{"columns":[["Success Pct #0",200,150,133,125,120],["Success Pct #1",150,133,125,120,117]]},"axis":{"x":{"type":"category","categories":["2017 Q4","2018 Q1","2018 Q2","2018 Q3","2018 Q4"]}},"grid":{"x":{"lines":{}},"y":{"show":true,"lines":{}}},"donut":{},"bar":{"WidthRatio":0,"Width":0}});
+</script>
+<h2>Stats</h2>
+
+<table id="funnelpct" style="border:1px solid #000;border-collapse:collapse">
+
+<thead>
+    
+        <th>Count</th>
+    
+        <th>2017 Q4</th>
+    
+        <th>2018 Q1</th>
+    
+        <th>2018 Q2</th>
+    
+        <th>2018 Q3</th>
+    
+        <th>2018 Q4</th>
+    
+</thead>
+
+
+<tbody>
+
+    <tr>
+    
+        <td>Data Series 1 Count</td>
+    
+        <td>2</td>
+    
+        <td>4</td>
+    
+        <td>6</td>
+    
+        <td>8</td>
+    
+        <td>10</td>
+    
+    </tr>
+
+    <tr>
+    
+        <td>Data Series 2 Count</td>
+    
+        <td>4</td>
+    
+        <td>6</td>
+    
+        <td>8</td>
+    
+        <td>10</td>
+    
+        <td>12</td>
+    
+    </tr>
+
+    <tr>
+    
+        <td>Data Series 3 Count</td>
+    
+        <td>6</td>
+    
+        <td>8</td>
+    
+        <td>10</td>
+    
+        <td>12</td>
+    
+        <td>14</td>
+    
+    </tr>
+
+    <tr>
+    
+        <td>QoQ</td>
+    
+        <td>2017 Q4</td>
+    
+        <td>2018 Q1</td>
+    
+        <td>2018 Q2</td>
+    
+        <td>2018 Q3</td>
+    
+        <td>2018 Q4</td>
+    
+    </tr>
+
+    <tr>
+    
+        <td>Data Series 1 Count XoX</td>
+    
+        <td>-80%</td>
+    
+        <td>100%</td>
+    
+        <td>50%</td>
+    
+        <td>33%</td>
+    
+        <td>25%</td>
+    
+    </tr>
+
+    <tr>
+    
+        <td>Data Series 2 Count XoX</td>
+    
+        <td>-67%</td>
+    
+        <td>50%</td>
+    
+        <td>33%</td>
+    
+        <td>25%</td>
+    
+        <td>20%</td>
+    
+    </tr>
+
+    <tr>
+    
+        <td>Data Series 3 Count XoX</td>
+    
+        <td>-57%</td>
+    
+        <td>33%</td>
+    
+        <td>25%</td>
+    
+        <td>20%</td>
+    
+        <td>17%</td>
+    
+    </tr>
+
+    <tr>
+    
+        <td>Funnel</td>
+    
+        <td>2017 Q4</td>
+    
+        <td>2018 Q1</td>
+    
+        <td>2018 Q2</td>
+    
+        <td>2018 Q3</td>
+    
+        <td>2018 Q4</td>
+    
+    </tr>
+
+    <tr>
+    
+        <td>Success Pct #0</td>
+    
+        <td>200%</td>
+    
+        <td>150%</td>
+    
+        <td>133%</td>
+    
+        <td>125%</td>
+    
+        <td>120%</td>
+    
+    </tr>
+
+    <tr>
+    
+        <td>Success Pct #1</td>
+    
+        <td>150%</td>
+    
+        <td>133%</td>
+    
+        <td>125%</td>
+    
+        <td>120%</td>
+    
+        <td>117%</td>
+    
+    </tr>
+
+</tbody>
+
+</table>
+
+
 
 </body>
 </html>
