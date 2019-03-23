@@ -42,6 +42,26 @@ table, th, td {
 	//line template.qtpl:17
 	qw422016.N().S(`</h1>
 
+	`)
+	//line template.qtpl:19
+	if len(data.ReportLink) > 0 {
+		//line template.qtpl:19
+		qw422016.N().S(`
+	<p>Report Link: <a href="`)
+		//line template.qtpl:20
+		qw422016.E().S(data.ReportLink)
+		//line template.qtpl:20
+		qw422016.N().S(`">`)
+		//line template.qtpl:20
+		qw422016.E().S(data.ReportLink)
+		//line template.qtpl:20
+		qw422016.N().S(`</a></p>
+	`)
+		//line template.qtpl:21
+	}
+	//line template.qtpl:21
+	qw422016.N().S(`
+
 <!--
 	<input type="button" onclick="chart.transform('bar')" value="Bar" />
 	<input type="button" onclick="chart.transform('pie')" value="Pie" />
@@ -54,48 +74,48 @@ table, th, td {
 
 	var chart = c3.generate(
 		`)
-	//line template.qtpl:30
+	//line template.qtpl:34
 	qw422016.N().V(string(data.FormattedDataJSON()))
-	//line template.qtpl:30
+	//line template.qtpl:34
 	qw422016.N().S(`
 	);
 
 	</script>
 
 	`)
-	//line template.qtpl:35
+	//line template.qtpl:39
 	qw422016.N().S(data.FooterHTML)
-	//line template.qtpl:35
+	//line template.qtpl:39
 	qw422016.N().S(`
 
 </body>
 </html>
 `)
-//line template.qtpl:39
+//line template.qtpl:43
 }
 
-//line template.qtpl:39
+//line template.qtpl:43
 func WriteC3DonutChartPage(qq422016 qtio422016.Writer, data TemplateData) {
-	//line template.qtpl:39
+	//line template.qtpl:43
 	qw422016 := qt422016.AcquireWriter(qq422016)
-	//line template.qtpl:39
+	//line template.qtpl:43
 	StreamC3DonutChartPage(qw422016, data)
-	//line template.qtpl:39
+	//line template.qtpl:43
 	qt422016.ReleaseWriter(qw422016)
-//line template.qtpl:39
+//line template.qtpl:43
 }
 
-//line template.qtpl:39
+//line template.qtpl:43
 func C3DonutChartPage(data TemplateData) string {
-	//line template.qtpl:39
+	//line template.qtpl:43
 	qb422016 := qt422016.AcquireByteBuffer()
-	//line template.qtpl:39
+	//line template.qtpl:43
 	WriteC3DonutChartPage(qb422016, data)
-	//line template.qtpl:39
+	//line template.qtpl:43
 	qs422016 := string(qb422016.B)
-	//line template.qtpl:39
+	//line template.qtpl:43
 	qt422016.ReleaseByteBuffer(qb422016)
-	//line template.qtpl:39
+	//line template.qtpl:43
 	return qs422016
-//line template.qtpl:39
+//line template.qtpl:43
 }

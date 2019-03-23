@@ -16,6 +16,10 @@ table, th, td {
 <body>
 	<h1>{%s data.ReportName %}</h1>
 
+	{% if len(data.ReportLink)>0 %}
+	<p>Report Link: <a href="{%s data.ReportLink %}">{%s data.ReportLink %}</a></p>
+	{% endif %}
+
 <!--
 	<input type="button" onclick="chart.transform('bar')" value="Bar" />
 	<input type="button" onclick="chart.transform('pie')" value="Pie" />

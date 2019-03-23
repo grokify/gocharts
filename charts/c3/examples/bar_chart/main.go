@@ -21,6 +21,8 @@ import (
 	"github.com/grokify/gocharts/tables"
 )
 
+const repoLink = "https://github.com/grokify/gocharts/tree/master/charts/c3/examples/bar_chart"
+
 func getData(numQuarters int) []statictimeseries.DataItem {
 	dataItems := []statictimeseries.DataItem{}
 
@@ -135,7 +137,7 @@ func main() {
 	tmplData := c3.TemplateData{
 		HeaderHTML:             "Bar Chart",
 		ReportName:             "Bar Chart",
-		ReportLink:             "",
+		ReportLink:             repoLink,
 		IncludeDataTable:       false,
 		IncludeDataTableTotals: false,
 		C3Chart:                chart,
