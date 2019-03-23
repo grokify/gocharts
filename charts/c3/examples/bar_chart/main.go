@@ -36,6 +36,9 @@ func main() {
 	ds3 := statictimeseries.NewDataSeriesSetSimple()
 
 	dataItems := getData(numQuarters)
+
+	ds3.AddItems(dataItems...)
+
 	for _, di := range dataItems {
 		ds3.AddItem(di)
 	}
