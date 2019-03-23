@@ -1,8 +1,10 @@
 package tables
 
 import (
-	"math"
+	//"math"
 	"strconv"
+
+	math "github.com/grokify/gotilla/math/mathutil"
 
 	sts "github.com/grokify/gocharts/data/statictimeseries"
 	scu "github.com/grokify/gotilla/strconv/strconvutil"
