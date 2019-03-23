@@ -44,8 +44,11 @@ func getDataSeriesSetSimple(numQuarters int) statictimeseries.DataSeriesSetSimpl
 	dataItems := getData(numQuarters)
 
 	ds3 := statictimeseries.NewDataSeriesSetSimple()
+
+	// Add statictimeseries.DataItem slice in 1 function call
 	ds3.AddItems(dataItems...)
 
+	// Add individual statictimeseries.DataItem items
 	for _, di := range dataItems {
 		ds3.AddItem(di)
 	}
