@@ -52,7 +52,7 @@ func getDataSeriesSetSimple(numQuarters int) statictimeseries.DataSeriesSetSimpl
 	return ds3
 }
 
-func buildChart(ds3 statictimeseries.DataSeriesSetSimple, numCols int, lowFirst bool) (c3.C3Chart, []statictimeseries.RowInt64) {
+func buildBarChart(ds3 statictimeseries.DataSeriesSetSimple, numCols int, lowFirst bool) (c3.C3Chart, []statictimeseries.RowInt64) {
 	rep := statictimeseries.Report(ds3, numCols, lowFirst)
 	fmtutil.PrintJSON(rep)
 	axis := statictimeseries.ReportAxisX(ds3, numCols,
@@ -66,32 +66,36 @@ func buildChart(ds3 statictimeseries.DataSeriesSetSimple, numCols int, lowFirst 
 func buildMoreInfoHTML(ds3 statictimeseries.DataSeriesSetSimple, c3Bar c3.C3Chart, rep []statictimeseries.RowInt64) string {
 	moreInfoHTML := ""
 
-	if 1 == 1 {
-		axis := c3Bar.Axis.X.Categories
+	axis := c3Bar.Axis.X.Categories
 
-		tableRows, qoqData, funnelData := tables.DataRowsToTableRows(rep, axis, true, true, "Count", "QoQ", "Funnel")
+	tableRows, qoqData, funnelData := tables.DataRowsToTableRows(rep, axis, true, true, "Count", "QoQ", "Funnel")
 
-		if 1 == 1 {
-			domId := "qoqChart"
+	addQoqChart := true
+	addFunnelChart := true
+	addStatsTable := true
 
-			qoqChart := tables.QoqDataToChart(domId, c3Bar.Axis, qoqData)
+	if addQoqChart {
+		domId := "qoqChart"
+		qoqChart := tables.QoqDataToChart(domId, c3Bar.Axis, qoqData)
 
-			moreInfoHTML += "<h2>QoQ Chart</h2>" + c3.C3ChartHtmlSimple(domId, qoqChart)
-		}
-		if 1 == 1 {
-			domId := "funnelChart"
+		moreInfoHTML += "<h2>QoQ Chart</h2>" + c3.C3ChartHtmlSimple(domId, qoqChart)
+	}
 
-			funChart := tables.FunnelDataToChart(domId, c3Bar.Axis, funnelData)
+	if addFunnelChart {
+		domId := "funnelChart"
+		funChart := tables.FunnelDataToChart(domId, c3Bar.Axis, funnelData)
 
-			moreInfoHTML += "<h2>Funnel Chart</h2>" + c3.C3ChartHtmlSimple(domId, funChart)
-		}
+		moreInfoHTML += "<h2>Funnel Chart</h2>" + c3.C3ChartHtmlSimple(domId, funChart)
+	}
 
+	if addStatsTable {
 		table := tables.TableData{
 			Id:    "funnelpct",
 			Style: tables.StyleSimple,
 			Rows:  tableRows}
 		moreInfoHTML += "<h2>Stats</h2>" + tables.SimpleTable(table)
 	}
+
 	return moreInfoHTML
 }
 
@@ -100,7 +104,7 @@ func main() {
 
 	ds3 := getDataSeriesSetSimple(numQuarters)
 
-	chart, rep := buildChart(ds3, numQuarters, true)
+	chart, rep := buildBarChart(ds3, numQuarters, true)
 
 	footerHTML := buildMoreInfoHTML(ds3, chart, rep)
 
