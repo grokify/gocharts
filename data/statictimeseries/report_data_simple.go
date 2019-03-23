@@ -68,6 +68,12 @@ func NewDataSeriesSetSimple() DataSeriesSetSimple {
 		Order:  []string{}}
 }
 
+func (set *DataSeriesSetSimple) AddItems(items ...DataItem) {
+	for _, item := range items {
+		set.AddItem(item)
+	}
+}
+
 func (set *DataSeriesSetSimple) AddItem(item DataItem) {
 	item.SeriesName = strings.TrimSpace(item.SeriesName)
 	if _, ok := set.Series[item.SeriesName]; !ok {
