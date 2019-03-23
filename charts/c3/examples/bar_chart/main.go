@@ -106,7 +106,7 @@ func main() {
 
 	chart, rep := buildBarChart(ds3, numQuarters, true)
 
-	footerHTML := buildMoreInfoHTML(ds3, chart, rep)
+	moreInfoHTML := buildMoreInfoHTML(ds3, chart, rep)
 
 	tmplData := c3.TemplateData{
 		HeaderHTML:             "Bar Chart",
@@ -115,7 +115,7 @@ func main() {
 		IncludeDataTable:       false,
 		IncludeDataTableTotals: false,
 		C3Chart:                chart,
-		FooterHTML:             footerHTML}
+		FooterHTML:             moreInfoHTML}
 
 	filename := "output.html"
 
