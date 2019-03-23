@@ -15,7 +15,8 @@ const StyleSimple = "border:1px solid #000;border-collapse:collapse"
 // TableData is used to hold generic, simple table data to be generated
 // by a template using `SimpleTable`. Use with `DataRowsToTableRows` to
 // convert output from `statictimeseries.Report` and
-// `statictimeseries.ReportAxisX`.
+// `statictimeseries.ReportAxisX`. This is used in the C3 Bar Chart
+// example.
 type TableData struct {
 	Id    string
 	Style string // border:1px solid #000;border-collapse:collapse
