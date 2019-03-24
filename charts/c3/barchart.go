@@ -48,7 +48,7 @@ func SlotDataSeriesSetSimpleToC3ChartBar(input data.SlotDataSeriesSetSimple, c3B
 
 		column := []interface{}{seriesName}
 		for i := min; i <= max; i++ {
-			fmt.Printf("%v ", i)
+			//fmt.Printf("%v ", i)
 			x := int64(i)
 			if y, ok := slotDataSeries.SeriesData[x]; ok {
 				column = append(column, y)
