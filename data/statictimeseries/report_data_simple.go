@@ -56,6 +56,7 @@ func (tsf *TimeSeriesFunnel) TimesSorted() []time.Time {
 }
 
 type DataSeriesSetSimple struct {
+	Name   string
 	Series map[string]DataSeries
 	Times  []time.Time
 	Order  []string
