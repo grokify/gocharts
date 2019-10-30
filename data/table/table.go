@@ -234,3 +234,11 @@ func (t *TableData) WriteJSON(path string, perm os.FileMode, jsonPrefix, jsonInd
 	}
 	return ioutil.WriteFile(path, bytes, perm)
 }
+
+// WriteCSVSimple writes a file with cols and records data.
+func WriteCSVSimple(cols []string, records [][]string, filename string) error {
+	tbl := NewTableData()
+	tbl.Columns = cols
+	tbl.Records = records
+	return tbl.WriteCSV(filename)
+}
