@@ -191,9 +191,11 @@ func (t *TableData) WriteCSV(path string) error {
 
 	writer := csv.NewWriter(file)
 
-	err = writer.Write(t.Columns)
-	if err != nil {
-		return err
+	if len(t.Columns) > 0 {
+		err = writer.Write(t.Columns)
+		if err != nil {
+			return err
+		}
 	}
 	err = writer.WriteAll(t.Records)
 	if err != nil {
