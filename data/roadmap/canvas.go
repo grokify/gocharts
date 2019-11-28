@@ -9,11 +9,13 @@ import (
 	tu "github.com/grokify/gotilla/time/timeutil"
 )
 
+const canvasLogName string = "roadmap.Canvas"
+
 type Canvas struct {
 	MinTime time.Time
 	MaxTime time.Time
-	MinX    int64
-	MaxX    int64
+	MinX    int64 // time
+	MaxX    int64 // time
 	MaxY    int64
 	MinY    int64
 	MinCell int32
@@ -62,12 +64,28 @@ func (can *Canvas) SetRange(cells int32) {
 	}
 }
 
-func (can *Canvas) AddItem(i Item) {
-	can.Items = append(can.Items, i)
+func (can *Canvas) AddItem(item Item) {
+	// The following if statements check if the item is entirely
+	// or partially out of bounds of the canvas. If it is entirely
+	// out of bounds, it is not added. If it is partially out of bounds
+	// the item times are adjusted to fit.
+	if item.MinTime.After(can.MaxTime) ||
+		item.MaxTime.Before(can.MinTime) {
+		return
+	}
+	if item.MinTime.Before(can.MinTime) && item.MaxTime.After(can.MinTime) {
+		item.MinTime = can.MinTime
+	}
+	if item.MaxTime.After(can.MaxTime) && item.MinTime.Before(can.MaxTime) {
+		item.MaxTime = can.MaxTime
+	}
+	can.Items = append(can.Items, item)
 }
 
 func (can *Canvas) InflateItems() error {
 	for i, item := range can.Items {
+		// fmt.Printf("ITEM [%v]\n", i)
+		// fmtutil.PrintJSON(item)
 		item, err := can.InflateItem(item)
 		if err != nil {
 			return err
@@ -78,6 +96,14 @@ func (can *Canvas) InflateItems() error {
 }
 
 func (can *Canvas) InflateItem(item Item) (Item, error) {
+	if tu.IsZeroAny(item.MinTime) && tu.IsZeroAny(item.MaxTime) {
+		return item, fmt.Errorf("%s.InflateItem() Error: Need NonZero Time For [%v][%v][%v]", canvasLogName, item.Name, "item.MinTime", "item.MaxTime")
+	} else if tu.IsZeroAny(item.MinTime) {
+		return item, fmt.Errorf("%s.InflateItem() Error: Need NonZero Time For [%v][%v]", canvasLogName, item.Name, "item.MinTime")
+	} else if tu.IsZeroAny(item.MaxTime) {
+		return item, fmt.Errorf("%s.InflateItem() Error: Need NonZero Time For [%v][%v]", canvasLogName, item.Name, "item.MaxTime")
+	}
+
 	cellMargin := int32(1)
 	cr, err := can.Range.CellRange()
 	if err != nil {
@@ -137,6 +163,7 @@ ITEMS:
 	can.Rows = rows
 }
 
+/*
 type Item struct {
 	MinTime time.Time
 	MaxTime time.Time
@@ -177,7 +204,7 @@ func (i *Item) SetMaxQuarter(qtr int32) error {
 	i.MaxTime = qt
 	return nil
 }
-
+*/
 func GetCanvasQuarter(start, end int32) (Canvas, error) {
 	qs, err := tu.QuarterInt32StartTime(start)
 	if err != nil {
