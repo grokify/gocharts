@@ -9,6 +9,7 @@ import (
 	"sort"
 	"strings"
 
+	//"github.com/grokify/gotilla/encoding/csvutil"
 	"github.com/grokify/gotilla/encoding/jsonutil"
 )
 
@@ -26,6 +27,22 @@ func NewTableData() TableData {
 		Records: [][]string{}}
 }
 
+/*
+func NewTableDataCSV(path string, comma rune, stripBom bool) (TableData, error) {
+	tbl := NewTableData()
+	csv, file, err := csvutil.NewReader(path, comma, stripBom)
+	if err != nil {
+		return tbl, err
+	}
+	defer file.Close()
+	mergedRows, err := csv.ReadAll()
+	if err != nil {
+		return tbl, err
+	}
+	tbl.LoadMergedRows(mergedRows)
+	return tbl, nil
+}
+*/
 // LoadMergedRows is used to load data from `[][]string` sources
 // like csv.ReadAll()
 func (t *TableData) LoadMergedRows(data [][]string) {

@@ -5,8 +5,10 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/grokify/gotilla/encoding/csvutil"
+	"github.com/grokify/gotilla/type/stringsutil"
 )
 
 // Endpoints writes a CSV with request data. Use Endpoints.Add(),
@@ -20,7 +22,8 @@ func NewEndpoints() Endpoints {
 		EndpointsMap: map[string]Endpoint{}}
 }
 
-func (eps *Endpoints) Add(method, url string, status int, subStatus string) {
+// Add. time is optional.
+func (eps *Endpoints) Add(method, url string, status int, subStatus string, dt time.Time) {
 	method = strings.ToUpper(strings.TrimSpace(method))
 	url = strings.TrimSpace(url)
 	endpoint := method + " " + url
@@ -32,7 +35,7 @@ func (eps *Endpoints) Add(method, url string, status int, subStatus string) {
 			Statuses: Statuses{StatusMap: map[string]StatusInfo{}},
 		}
 	}
-	ep.AddStatus(status, subStatus)
+	ep.AddStatus(status, subStatus, dt)
 	eps.EndpointsMap[endpoint] = ep
 }
 
@@ -122,17 +125,22 @@ type Endpoint struct {
 	Method   string
 	URL      string
 	Statuses Statuses
+	//StatusTimes StatusTimes
 }
 
-func (ep *Endpoint) AddStatus(status int, subStatus string) {
+func (ep *Endpoint) AddStatus(status int, subStatus string, dt time.Time) {
 	fullStatus := StatusPartsToFullStatus(status, subStatus)
+	if ep.Statuses.StatusMap == nil {
+		ep.Statuses = NewStatuses()
+	}
 	if _, ok := ep.Statuses.StatusMap[fullStatus]; !ok {
-		ep.Statuses.StatusMap[fullStatus] = StatusInfo{}
+		ep.Statuses.StatusMap[fullStatus] = StatusInfo{Times: []time.Time{}}
 	}
 	statusInfo := ep.Statuses.StatusMap[fullStatus]
 	statusInfo.Status = status
 	statusInfo.SubStatus = subStatus
 	statusInfo.RequestCount += 1
+	statusInfo.Times = append(statusInfo.Times, dt)
 	ep.Statuses.StatusMap[fullStatus] = statusInfo
 }
 
@@ -155,6 +163,10 @@ func SliceIntToString(s []int) []string {
 
 type Statuses struct {
 	StatusMap map[string]StatusInfo
+}
+
+func NewStatuses() Statuses {
+	return Statuses{StatusMap: map[string]StatusInfo{}}
 }
 
 func (st *Statuses) AllRequestCount() int {
@@ -180,7 +192,16 @@ type StatusInfo struct {
 	Status             int
 	SubStatus          string
 	RequestCount       int
-	StatusDistribution float64
+	StatusDistribution float64     // This status vs. all statuses
+	Times              []time.Time // This is optional. Can be used by manually adding to RequestCount
+}
+
+func (si *StatusInfo) Inflate() {
+	// Set Request Count to times only if times is populated.
+	// This can be used without Times being populated.
+	if len(si.Times) != 0 && si.RequestCount != len(si.Times) {
+		si.RequestCount = len(si.Times)
+	}
 }
 
 func (si *StatusInfo) StatusText() string {
@@ -188,5 +209,36 @@ func (si *StatusInfo) StatusText() string {
 }
 
 func (si *StatusInfo) FullStatus() string {
-	return StatusPartsToFullStatus(si.Status, si.SubStatus)
+	return stringsutil.JoinCondenseTrimSpace([]string{strconv.Itoa(si.Status), si.SubStatus}, " ")
+}
+
+func StatusMapToTimesArray(statuses map[string]StatusInfo) []StatusTime {
+	//times := []StatusTime{}
+	times := StatusTimeSlice{}
+	for _, si := range statuses {
+		for _, t := range si.Times {
+			st := StatusTime{
+				Status: si.Status,
+				Time:   t,
+			}
+			times = append(times, st)
+		}
+	}
+	sort.Slice(times, func(i, j int) bool {
+		return times[i].Time.Before(times[j].Time)
+	})
+	return times
+}
+
+// Endpoint Chart that shows errors by hour or day
+
+//func EndpointTo
+
+type StatusTimeSlice []StatusTime
+
+type StatusTime struct {
+	Method     string
+	RequestURL string
+	Status     int
+	Time       time.Time
 }
