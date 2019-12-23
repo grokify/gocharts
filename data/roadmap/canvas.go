@@ -56,12 +56,11 @@ func (can *Canvas) SetMaxQuarter(qtr int32) error {
 	return nil
 }
 
-func (can *Canvas) SetRange(cells int32) {
+func (can *Canvas) SetRangeCells(cells int32) {
 	can.Range = mathutil.RangeInt64{
 		Min:   can.MinX,
 		Max:   can.MaxX,
-		Cells: cells,
-	}
+		Cells: cells}
 }
 
 func (can *Canvas) AddItem(item Item) {

@@ -9,15 +9,16 @@ import (
 )
 
 type Item struct {
-	MinTime time.Time
-	MaxTime time.Time
-	MinCell int32 // Inflated by Canvas
-	MaxCell int32 // Inflated by Canvas
-	Min     int64 // Inflated by Canvas
-	Max     int64 // Inflated by Canvas
-	Name    string
-	URL     string
-	Color   string
+	MinTime   time.Time
+	MaxTime   time.Time
+	MinCell   int32 // Inflated by Canvas
+	MaxCell   int32 // Inflated by Canvas
+	Min       int64 // Inflated by Canvas
+	Max       int64 // Inflated by Canvas
+	Name      string
+	NameShort string
+	URL       string
+	Color     string
 }
 
 func (i *Item) SetMinMaxQuarter(qtrMin, qtrMax int32) error {
