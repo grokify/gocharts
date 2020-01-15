@@ -79,5 +79,4 @@ func (hs *HistogramSet) Inflate() {
 	sort.Strings(names)
 	hs.Meta.Names = names
 	hs.Meta.NameCount = len(names)
-
 }
