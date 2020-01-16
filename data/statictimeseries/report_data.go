@@ -3,7 +3,6 @@
 package statictimeseries
 
 import (
-	"errors"
 	"fmt"
 	"sort"
 	"strings"
@@ -11,6 +10,7 @@ import (
 
 	"github.com/grokify/gotilla/time/timeutil"
 	"github.com/grokify/gotilla/type/maputil"
+	"github.com/pkg/errors"
 )
 
 type SeriesType int
@@ -238,6 +238,25 @@ func (series *DataSeries) SortedItems() []DataItem {
 		itemsSorted = append(itemsSorted, series.ItemMap[rfc3339])
 	}
 	return itemsSorted
+}
+
+func (series *DataSeries) MinMaxTimes() (time.Time, time.Time, error) {
+	dt := time.Now()
+	if len(series.ItemMap) == 0 {
+		return dt, dt, errors.New("E_NO_DATA_ITEMS")
+	}
+	timesSorted := maputil.StringKeysSorted(series.ItemMap)
+	startItem, ok := series.ItemMap[timesSorted[0]]
+	if !ok {
+		return dt, dt, fmt.Errorf(
+			"E_NO_START_ITEM_FOR_TIME [%v]", timesSorted[0])
+	}
+	endItem, ok := series.ItemMap[timesSorted[0]]
+	if !ok {
+		return dt, dt, fmt.Errorf(
+			"E_NO_END_ITEM_FOR_TIME [%v]", timesSorted[len(timesSorted)-1])
+	}
+	return startItem.Time, endItem.Time, nil
 }
 
 type SeriesIntervals struct {
