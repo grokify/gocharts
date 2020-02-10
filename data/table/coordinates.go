@@ -15,7 +15,7 @@ const (
 
 var alphabetSlice = strings.Split(Alphabet, "")
 
-func Quotient26ToPrefix(quotient uint32) string {
+func quotient26ToPrefix(quotient uint32) string {
 	// " ABCDEF"
 	// "0123456"
 	// Max Quotient =26
@@ -28,7 +28,7 @@ func Quotient26ToPrefix(quotient uint32) string {
 	return prefix
 }
 
-func Remainder26ToSuffix(remainder uint32) string {
+func remainder26ToSuffix(remainder uint32) string {
 	if remainder == 0 {
 		return "Z"
 	}
@@ -53,8 +53,8 @@ func ColNumberToLetters(colNumber uint32) string {
 	if colNumber < 26 {
 		remainder = int64(colNumber)
 	}
-	prefix := Quotient26ToPrefix(uint32(quotient))
-	suffix := Remainder26ToSuffix(uint32(remainder))
+	prefix := quotient26ToPrefix(uint32(quotient))
+	suffix := remainder26ToSuffix(uint32(remainder))
 	return strings.TrimSpace(prefix) + strings.TrimSpace(suffix)
 }
 

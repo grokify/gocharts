@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-var quotient26ToPrefix = []struct {
+var quotient26ToPrefixTests = []struct {
 	quotient uint32
 	prefix   string
 }{
@@ -14,8 +14,8 @@ var quotient26ToPrefix = []struct {
 	{3, "C"}}
 
 func TestQuotient26ToPrefix(t *testing.T) {
-	for _, tt := range quotient26ToPrefix {
-		prefix := Quotient26ToPrefix(tt.quotient)
+	for _, tt := range quotient26ToPrefixTests {
+		prefix := quotient26ToPrefix(tt.quotient)
 		if prefix != tt.prefix {
 			t.Errorf("table.Quotient26ToPrefix: with [%v] want [%v] got [%v]",
 				tt.quotient, tt.prefix, prefix)
@@ -40,7 +40,7 @@ var colNumberToLetters = []struct {
 	{79, 2048, "C", "A", "CA", "CA2048"},
 	{80, 2048, "C", "B", "CB", "CB2048"},
 	{676, 2048, "Y", "Z", "YZ", "YZ2048"},
-	{677, 2048, "Z", "Z", "ZA", "ZA2048"},
+	{677, 2048, "Z", "A", "ZA", "ZA2048"},
 	{702, 4096, "Z", "Z", "ZZ", "ZZ4096"}}
 
 type Instance struct {
