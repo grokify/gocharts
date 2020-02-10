@@ -23,7 +23,7 @@ func TestQuotient26ToPrefix(t *testing.T) {
 	}
 }
 
-var colNumberToLetters = []struct {
+var colNumberToLettersTests = []struct {
 	colNumber     uint32
 	rowNumber     uint32
 	prefix        string
@@ -58,7 +58,7 @@ type Instance struct {
 }
 
 func TestColNumberToLetters(t *testing.T) {
-	for _, tt := range colNumberToLetters {
+	for _, tt := range colNumberToLettersTests {
 		letters := ColNumberToLetters(tt.colNumber)
 		inst := Instance{
 			ColNumber:   tt.colNumber,
