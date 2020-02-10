@@ -31,6 +31,8 @@ var colNumberToLetters = []struct {
 	letters       string
 	sheetLocation string
 }{
+	{1, 1, "", "A", "A", "A1"},
+	{26, 26, "", "Z", "Z", "Z26"},
 	{1, 1024, "", "A", "A", "A1024"},
 	{26, 1024, "", "Z", "Z", "Z1024"},
 	{27, 1024, "A", "A", "AA", "AA1024"},
