@@ -230,6 +230,10 @@ func WriteXLSX(path, sheetname string, t *TableData) error {
 }
 
 func (t *TableData) WriteCSV(path string) error {
+	return WriteCSV(path, t)
+}
+
+func WriteCSV(path string, t *TableData) error {
 	file, err := os.Create(path)
 	if err != nil {
 		return err
