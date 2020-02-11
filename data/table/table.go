@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	//"github.com/grokify/gotilla/encoding/csvutil"
+	"github.com/360EntSecGroup-Skylar/excelize"
 	"github.com/grokify/gotilla/encoding/jsonutil"
 )
 
@@ -197,6 +198,35 @@ RECORDS:
 		}
 	}
 	return data, nil
+}
+
+func (t *TableData) WriteXLSX(path, sheetname string) error {
+	return WriteXLSX(path, sheetname, t)
+}
+
+func WriteXLSX(path, sheetname string, t *TableData) error {
+	f := excelize.NewFile()
+	// Create a new sheet.
+	index := f.NewSheet(sheetname)
+	// Set value of a cell.
+	rowBase := 0
+	if len(t.Columns) > 0 {
+		rowBase += 1
+		for i, cellValue := range t.Columns {
+			cellLocation := CoordinatesToSheetLocation(uint32(i), 0)
+			f.SetCellValue(sheetname, cellLocation, cellValue)
+		}
+	}
+	for y, row := range t.Records {
+		for x, cellValue := range row {
+			cellLocation := CoordinatesToSheetLocation(uint32(x), uint32(y+rowBase))
+			f.SetCellValue(sheetname, cellLocation, cellValue)
+		}
+	}
+	// Set active sheet of the workbook.
+	f.SetActiveSheet(index)
+	// Save xlsx file by the given path.
+	return f.SaveAs(path)
 }
 
 func (t *TableData) WriteCSV(path string) error {
