@@ -240,6 +240,23 @@ func (series *DataSeries) SortedItems() []DataItem {
 	return itemsSorted
 }
 
+func DataSeriesTimeSeries(series *DataSeries, interval timeutil.Interval) []time.Time {
+	return timeutil.TimeSeriesSlice(interval, DataSeriesItemTimes(series))
+}
+
+func DataSeriesItemTimes(series *DataSeries) []time.Time {
+	times := []time.Time{}
+	for _, item := range series.ItemMap {
+		times = append(times, item.Time)
+	}
+	return times
+}
+
+func DataSeriesMinMaxTimes(series *DataSeries) (time.Time, time.Time) {
+	return timeutil.SliceMinMax(DataSeriesItemTimes(series))
+}
+
+/*
 func (series *DataSeries) MinMaxTimes() (time.Time, time.Time, error) {
 	dt := time.Now()
 	if len(series.ItemMap) == 0 {
@@ -258,7 +275,7 @@ func (series *DataSeries) MinMaxTimes() (time.Time, time.Time, error) {
 	}
 	return startItem.Time, endItem.Time, nil
 }
-
+*/
 type SeriesIntervals struct {
 	Interval        timeutil.Interval
 	WeekStart       time.Weekday
