@@ -256,26 +256,10 @@ func DataSeriesMinMaxTimes(series *DataSeries) (time.Time, time.Time) {
 	return timeutil.SliceMinMax(DataSeriesItemTimes(series))
 }
 
-/*
-func (series *DataSeries) MinMaxTimes() (time.Time, time.Time, error) {
-	dt := time.Now()
-	if len(series.ItemMap) == 0 {
-		return dt, dt, errors.New("E_NO_DATA_ITEMS")
-	}
-	timesSorted := maputil.StringKeysSorted(series.ItemMap)
-	startItem, ok := series.ItemMap[timesSorted[0]]
-	if !ok {
-		return dt, dt, fmt.Errorf(
-			"E_NO_START_ITEM_FOR_TIME [%v]", timesSorted[0])
-	}
-	endItem, ok := series.ItemMap[timesSorted[0]]
-	if !ok {
-		return dt, dt, fmt.Errorf(
-			"E_NO_END_ITEM_FOR_TIME [%v]", timesSorted[len(timesSorted)-1])
-	}
-	return startItem.Time, endItem.Time, nil
+func (series *DataSeries) MinMaxTimes() (time.Time, time.Time) {
+	return DataSeriesMinMaxTimes(series)
 }
-*/
+
 type SeriesIntervals struct {
 	Interval        timeutil.Interval
 	WeekStart       time.Weekday
