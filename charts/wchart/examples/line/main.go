@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/grokify/gocharts/charts/wcharczuk"
+	"github.com/grokify/gocharts/charts/wchart"
 	"github.com/grokify/gocharts/data/statictimeseries"
 	"github.com/grokify/gotilla/fmt/fmtutil"
 	"github.com/grokify/gotilla/time/timeutil"
@@ -26,7 +26,7 @@ func drawChartDSSSimple(res http.ResponseWriter, req *http.Request) {
 		ds3.AddItem(item)
 	}
 	fmtutil.PrintJSON(ds3)
-	graph := wcharczuk.DSSSimpleToChart(ds3, "Jan '06")
+	graph := wchart.DSSSimpleToChart(ds3, "Jan '06")
 
 	res.Header().Set("Content-Type", "image/png")
 	graph.Render(chart.PNG, res)
@@ -37,7 +37,7 @@ func drawChart(res http.ResponseWriter, req *http.Request) {
 	   This is an example of using the `TimeSeries` to automatically coerce time.Time values into a continuous xrange.
 	   Note: chart.TimeSeries implements `ValueFormatterProvider` and as a result gives the XAxis the appropriate formatter to use for the ticks.
 	*/
-	formatter := wcharczuk.TimeFormatter{Layout: "Jan '06"}
+	formatter := wchart.TimeFormatter{Layout: "Jan '06"}
 	graph := chart.Chart{
 		XAxis: chart.XAxis{
 			ValueFormatter: formatter.FormatTime,
@@ -65,6 +65,85 @@ func drawChart(res http.ResponseWriter, req *http.Request) {
 
 	res.Header().Set("Content-Type", "image/png")
 	graph.Render(chart.PNG, res)
+}
+
+func GetChartExampleDays() chart.Chart {
+	formatter := wchart.TimeFormatter{Layout: "Jan '06"}
+	return chart.Chart{
+		XAxis: chart.XAxis{
+			ValueFormatter: formatter.FormatTime,
+			GridLines: []chart.GridLine{
+				chart.GridLine{
+					Value: float64(time.Now().AddDate(0, 0, -6).Nanosecond()),
+				},
+			},
+		},
+		Series: []chart.Series{
+			chart.TimeSeries{
+				Name: "By Day",
+				XValues: []time.Time{
+					time.Now().AddDate(0, 0, -10),
+					time.Now().AddDate(0, 0, -9),
+					time.Now().AddDate(0, 0, -8),
+					time.Now().AddDate(0, 0, -7),
+					time.Now().AddDate(0, 0, -6),
+					time.Now().AddDate(0, 0, -5),
+					time.Now().AddDate(0, 0, -4),
+					time.Now().AddDate(0, 0, -3),
+					time.Now().AddDate(0, 0, -2),
+					time.Now().AddDate(0, 0, -1),
+					time.Now(),
+				},
+				YValues: []float64{1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0},
+			},
+		},
+	}
+}
+
+func GetChartExampleMonths() chart.Chart {
+	//formatter := wchart.TimeFormatter{Layout: "Jan '06"}
+	formatter := wchart.TimeFormatter{Layout: timeutil.RFC3339FullDate}
+	return chart.Chart{
+		XAxis: chart.XAxis{
+			ValueFormatter: formatter.FormatTime,
+			GridLines: []chart.GridLine{
+				chart.GridLine{
+					Value: float64(time.Now().AddDate(0, 0, -6).Nanosecond()),
+				},
+			},
+		},
+		Series: []chart.Series{
+			chart.TimeSeries{
+				Name: "By Month",
+				XValues: []time.Time{
+					timeutil.MonthBegin(time.Now(), -10),
+					timeutil.MonthBegin(time.Now(), -9),
+					timeutil.MonthBegin(time.Now(), -8),
+					timeutil.MonthBegin(time.Now(), -7),
+					timeutil.MonthBegin(time.Now(), -6),
+					timeutil.MonthBegin(time.Now(), -5),
+					timeutil.MonthBegin(time.Now(), -4),
+					timeutil.MonthBegin(time.Now(), -3),
+					timeutil.MonthBegin(time.Now(), -2),
+					timeutil.MonthBegin(time.Now(), -1),
+					timeutil.MonthBegin(time.Now(), 0),
+					/*
+						time.Now().AddDate(0, -10, 0),
+						time.Now().AddDate(0, -9, 0),
+						time.Now().AddDate(0, -8, 0),
+						time.Now().AddDate(0, -7, 0),
+						time.Now().AddDate(0, -6, 0),
+						time.Now().AddDate(0, -5, 0),
+						time.Now().AddDate(0, -4, 0),
+						time.Now().AddDate(0, -3, 0),
+						time.Now().AddDate(0, -2, 0),
+						time.Now().AddDate(0, -1, 0),
+						time.Now(),*/
+				},
+				YValues: []float64{1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0},
+			},
+		},
+	}
 }
 
 func drawCustomChart(res http.ResponseWriter, req *http.Request) {
@@ -106,5 +185,17 @@ func main() {
 	})
 	http.HandleFunc("/custom1", drawCustomChart)
 	http.HandleFunc("/custom2", drawChartDSSSimple)
+
+	chart1 := GetChartExampleMonths()
+	wchart.WritePng("_wchart.png", chart1)
+
+	/*
+		f, err := os.Create("test.png")
+		if err != nil {
+			log.Fatal(err)
+		}
+		chart1.Render(chart.PNG, f)
+		f.Close()*/
+
 	http.ListenAndServe(":8080", nil)
 }

@@ -8,6 +8,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/grokify/gotilla/sort/sortutil"
 	"github.com/grokify/gotilla/time/timeutil"
 	"github.com/grokify/gotilla/type/maputil"
 	"github.com/pkg/errors"
@@ -91,6 +92,56 @@ func (series *DataSeries) AddItem(item DataItem) {
 	}
 }
 
+func (series *DataSeries) ItemsSorted() []DataItem {
+	keys := []string{}
+	for key := range series.ItemMap {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+	items := []DataItem{}
+	for _, key := range keys {
+		item, ok := series.ItemMap[key]
+		if !ok {
+			panic("KEY_NOT_FOUND")
+		}
+		items = append(items, item)
+	}
+	return items
+}
+
+func (series *DataSeries) Pop() (DataItem, error) {
+	items := series.ItemsSorted()
+	if len(items) == 0 {
+		return DataItem{}, errors.New("E_NO_ERROR")
+	}
+	last := items[len(items)-1]
+	rfc := last.Time.Format(time.RFC3339)
+	delete(series.ItemMap, rfc)
+	return last, nil
+}
+
+func (series *DataSeries) MinMaxValues() (int64, int64) {
+	int64s := []int64{}
+	for _, item := range series.ItemMap {
+		int64s = append(int64s, item.Value)
+	}
+	if len(int64s) == 0 {
+		return 0, 0
+	}
+	sort.Sort(sortutil.Int64Slice(int64s))
+	return int64s[0], int64s[len(int64s)-1]
+}
+
+func (series *DataSeries) MinValue() int64 {
+	min, _ := series.MinMaxValues()
+	return min
+}
+
+func (series *DataSeries) MaxValue() int64 {
+	_, max := series.MinMaxValues()
+	return max
+}
+
 func (set *DataSeriesSet) Inflate() error {
 	if err := set.inflateSource(); err != nil {
 		return err
@@ -98,7 +149,6 @@ func (set *DataSeriesSet) Inflate() error {
 	if err := set.inflateOutput(); err != nil {
 		return err
 	}
-
 	set.addAllSeries(set.AllSeriesName)
 	return nil
 }

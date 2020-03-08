@@ -1,4 +1,4 @@
-package wcharczuk
+package wchart
 
 import (
 	"strings"
