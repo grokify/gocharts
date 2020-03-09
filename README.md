@@ -13,11 +13,17 @@ GoCharts is a library to assist with building charts:
 * [Rickshaw](https://github.com/shutterstock/rickshaw) - [code](charts/rickshaw)
 * [wcharczuk/go-chart](https://github.com/wcharczuk/go-chart) - [code](charts/wchart)
 
-[`quicktemplate`](https://github.com/valyala/quicktemplate) is used for rendering some of the chart.s
+[`quicktemplate`](https://github.com/valyala/quicktemplate) is used for rendering some of the charts.
 
 An example chart is the Rickshaw chart shown below:
 
 ![](images/graph_example_2.png)
+
+Supporting data objects are also provided including:
+
+* [Table](data/table)
+* [Static Time Series](data/statictimeseries)
+* [Roadmap](data/roadmap)
 
 ## Installation
 
