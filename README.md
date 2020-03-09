@@ -6,9 +6,14 @@ GoCharts
 [![Docs][docs-godoc-svg]][docs-godoc-link]
 [![License][license-svg]][license-link]
 
-GoCharts is a library to build SVG charts using various D3 libraries including C3 and [Rickshaw](https://github.com/shutterstock/rickshaw).
+GoCharts is a library to assist with building charts:
 
-[`quicktemplate`](https://github.com/valyala/quicktemplate) is used for rendering.
+* [C3](https://c3js.org/) - [code](charts/c3)
+* [D3](https://d3js.org/) - [code](charts/d3)
+* [Rickshaw](https://github.com/shutterstock/rickshaw) - [code](charts/rickshaw)
+* [wcharczuk/go-chart](https://github.com/wcharczuk/go-chart) - [code](charts/wchart)
+
+[`quicktemplate`](https://github.com/valyala/quicktemplate) is used for rendering some of the chart.s
 
 An example chart is the Rickshaw chart shown below:
 
