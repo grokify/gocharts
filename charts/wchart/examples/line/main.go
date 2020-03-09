@@ -8,6 +8,7 @@ import (
 	"github.com/grokify/gocharts/charts/wchart"
 	"github.com/grokify/gocharts/data/statictimeseries"
 	"github.com/grokify/gotilla/fmt/fmtutil"
+	"github.com/grokify/gotilla/time/month"
 	"github.com/grokify/gotilla/time/timeutil"
 	chart "github.com/wcharczuk/go-chart"
 )
@@ -21,7 +22,7 @@ func drawChartDSSSimple(res http.ResponseWriter, req *http.Request) {
 		fmt.Println(i)
 		item := statictimeseries.DataItem{
 			SeriesName: "A Series",
-			Time:       timeutil.MonthStart(time.Now().AddDate(0, i, 0)),
+			Time:       month.MonthBegin(time.Now().AddDate(0, i, 0), 0),
 			Value:      int64(j)}
 		ds3.AddItem(item)
 	}
@@ -116,17 +117,17 @@ func GetChartExampleMonths() chart.Chart {
 			chart.TimeSeries{
 				Name: "By Month",
 				XValues: []time.Time{
-					timeutil.MonthBegin(time.Now(), -10),
-					timeutil.MonthBegin(time.Now(), -9),
-					timeutil.MonthBegin(time.Now(), -8),
-					timeutil.MonthBegin(time.Now(), -7),
-					timeutil.MonthBegin(time.Now(), -6),
-					timeutil.MonthBegin(time.Now(), -5),
-					timeutil.MonthBegin(time.Now(), -4),
-					timeutil.MonthBegin(time.Now(), -3),
-					timeutil.MonthBegin(time.Now(), -2),
-					timeutil.MonthBegin(time.Now(), -1),
-					timeutil.MonthBegin(time.Now(), 0),
+					month.MonthBegin(time.Now(), -10),
+					month.MonthBegin(time.Now(), -9),
+					month.MonthBegin(time.Now(), -8),
+					month.MonthBegin(time.Now(), -7),
+					month.MonthBegin(time.Now(), -6),
+					month.MonthBegin(time.Now(), -5),
+					month.MonthBegin(time.Now(), -4),
+					month.MonthBegin(time.Now(), -3),
+					month.MonthBegin(time.Now(), -2),
+					month.MonthBegin(time.Now(), -1),
+					month.MonthBegin(time.Now(), 0),
 					/*
 						time.Now().AddDate(0, -10, 0),
 						time.Now().AddDate(0, -9, 0),
