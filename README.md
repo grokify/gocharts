@@ -21,9 +21,9 @@ An example chart is the Rickshaw chart shown below:
 
 Supporting data objects are also provided including:
 
-* [Table](data/table)
-* [Static Time Series](data/statictimeseries)
-* [Roadmap](data/roadmap)
+* [Table](data/table) - Easy manipulation including [writing to CSV and XLSX](data/table/write.go).
+* [Static Time Series](data/statictimeseries) - for building charts.
+* [Roadmap](data/roadmap) - For creating Roadmap slides, such as from Aha!
 
 ## Installation
 
