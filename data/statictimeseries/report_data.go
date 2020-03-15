@@ -35,12 +35,11 @@ type DataSeriesSet struct {
 }
 
 func NewDataSeriesSet(interval timeutil.Interval, weekStart time.Weekday) DataSeriesSet {
-	set := DataSeriesSet{
+	return DataSeriesSet{
 		SourceSeriesMap:          map[string]DataSeries{},
 		OutputSeriesMap:          map[string]DataSeries{},
 		OutputAggregateSeriesMap: map[string]DataSeries{},
 		SeriesIntervals:          SeriesIntervals{Interval: interval, WeekStart: weekStart}}
-	return set
 }
 
 type DataSeries struct {
