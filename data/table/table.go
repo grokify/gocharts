@@ -16,6 +16,7 @@ var DebugReadCSV = false // should not need to use this.
 
 // TableData is useful for working on CSV data
 type TableData struct {
+	Name    string
 	Columns []string
 	Records [][]string
 }
@@ -199,7 +200,8 @@ RECORDS:
 }
 
 func (t *TableData) WriteXLSX(path, sheetname string) error {
-	return WriteXLSX(path, sheetname, t)
+	t.Name = sheetname
+	return WriteXLSX(path, []*TableData{t})
 }
 
 func (t *TableData) WriteCSV(path string) error {
