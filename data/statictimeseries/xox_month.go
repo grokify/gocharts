@@ -29,6 +29,7 @@ func NewXoXDSMonth(ds DataSeries) (XoXGrowth, error) {
 		quarterAgo := month.MonthBegin(dateNow, -3)
 		yearAgo := month.MonthBegin(dateNow, -12)
 		if itemMonth, ok := ds.ItemMap[monthAgo.Format(time.RFC3339)]; ok {
+			xoxPoint.MNowValue = itemNow.Value
 			xoxPoint.MOldValue = itemMonth.Value
 			xoxPoint.MoM = mathutil.PercentChangeToXoX(float64(itemNow.Value) / float64(itemMonth.Value))
 		}
