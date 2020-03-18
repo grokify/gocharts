@@ -4,6 +4,7 @@ import (
 	"encoding/csv"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/360EntSecGroup-Skylar/excelize"
 )
@@ -55,7 +56,10 @@ func WriteXLSX(path string, tbls []*TableData) error {
 	// Create a new sheet.
 	for i, t := range tbls {
 		fmt.Printf("[%v][%v]\n", i, t.Name)
-		sheetname := t.Name
+		sheetname := strings.TrimSpace(t.Name)
+		if len(sheetname) == 0 {
+			sheetname = fmt.Sprintf("Sheet %d", i)
+		}
 		index := f.NewSheet(sheetname)
 		// Set value of a cell.
 		rowBase := 0
