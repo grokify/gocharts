@@ -1,6 +1,9 @@
 package frequency
 
-import "strconv"
+import (
+	"sort"
+	"strconv"
+)
 
 // Frequency stats is used to count how many times
 // an item appears and how many times number of
@@ -18,7 +21,11 @@ func NewFrequencyStats(name string) FrequencyStats {
 		Counts: map[string]int{}}
 }
 
-func (fs *FrequencyStats) AddItem(s string) {
+func (fs *FrequencyStats) AddInt(i int) {
+	fs.AddString(strconv.Itoa(i))
+}
+
+func (fs *FrequencyStats) AddString(s string) {
 	if _, ok := fs.Items[s]; !ok {
 		fs.Items[s] = 0
 	}
@@ -34,4 +41,18 @@ func (fs *FrequencyStats) Inflate() {
 		}
 		fs.Counts[countString]++
 	}
+}
+
+func (fs *FrequencyStats) ItemsSlice() []string {
+	strs := []string{}
+	for key := range fs.Items {
+		strs = append(strs, key)
+	}
+	return strs
+}
+
+func (fs *FrequencyStats) ItemsSliceSorted() []string {
+	items := fs.ItemsSlice()
+	sort.Strings(items)
+	return items
 }
