@@ -201,7 +201,7 @@ RECORDS:
 
 func (t *TableData) WriteXLSX(path, sheetname string) error {
 	t.Name = sheetname
-	return WriteXLSX(path, []*TableData{t})
+	return WriteXLSX(path, t)
 }
 
 func (t *TableData) WriteCSV(path string) error {

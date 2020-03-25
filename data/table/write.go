@@ -49,16 +49,18 @@ func WriteXLSX(path, sheetname string, t *TableData) error {
 }*/
 
 // WriteXLSX writes a table as an Excel XLSX file.
-func WriteXLSX(path string, tbls []*TableData) error {
-	fmt.Println(len(tbls))
-	//panic("A")
+func WriteXLSX(path string, tbls ...*TableData) error {
 	f := excelize.NewFile()
 	// Create a new sheet.
+	sheetNum := 0
 	for i, t := range tbls {
-		fmt.Printf("[%v][%v]\n", i, t.Name)
+		if t == nil {
+			continue
+		}
+		sheetNum++
 		sheetname := strings.TrimSpace(t.Name)
 		if len(sheetname) == 0 {
-			sheetname = fmt.Sprintf("Sheet %d", i)
+			sheetname = fmt.Sprintf("Sheet %d", sheetNum)
 		}
 		index := f.NewSheet(sheetname)
 		// Set value of a cell.
