@@ -41,13 +41,6 @@ func WriteCSVSimple(cols []string, records [][]string, filename string) error {
 	return tbl.WriteCSV(filename)
 }
 
-/*
-// WriteXLSX writes a table as an Excel XLSX file.
-func WriteXLSX(path, sheetname string, t *TableData) error {
-	t.Name = sheetname
-	return WriteXLSXMore(path, []*TableData{t})
-}*/
-
 // WriteXLSX writes a table as an Excel XLSX file.
 func WriteXLSX(path string, tbls ...*TableData) error {
 	f := excelize.NewFile()
@@ -60,7 +53,7 @@ func WriteXLSX(path string, tbls ...*TableData) error {
 		sheetNum++
 		sheetname := strings.TrimSpace(t.Name)
 		if len(sheetname) == 0 {
-			sheetname = fmt.Sprintf("Sheet %d", sheetNum)
+			sheetname = fmt.Sprintf("Sheet%d", sheetNum)
 		}
 		index := f.NewSheet(sheetname)
 		// Set value of a cell.
