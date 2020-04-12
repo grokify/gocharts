@@ -1,8 +1,9 @@
-package wchart
+package sts2wchart
 
 import (
 	"fmt"
 
+	"github.com/grokify/gocharts/charts/wchart"
 	"github.com/grokify/gocharts/data/statictimeseries"
 	"github.com/grokify/gotilla/math/mathutil"
 	"github.com/grokify/gotilla/strconv/strconvutil"
@@ -26,7 +27,7 @@ func DataSeriesToBarChart(ds statictimeseries.DataSeries) chart.BarChart {
 			},
 			Ticks: []chart.Tick{},
 		},
-		ColorPalette: ColorsDefault(),
+		ColorPalette: wchart.ColorsDefault(),
 		Height:       512,
 		BarWidth:     20,
 		Bars:         []chart.Value{},
@@ -60,6 +61,6 @@ func DataSeriesToBarChart(ds statictimeseries.DataSeries) chart.BarChart {
 	}
 
 	tickValues := mathutil.PrettyTicks(10.0, lowValue, highValue)
-	graph.YAxis.Ticks = Ticks(tickValues, strconvutil.Int64Abbreviation)
+	graph.YAxis.Ticks = wchart.Ticks(tickValues, strconvutil.Int64Abbreviation)
 	return graph
 }
