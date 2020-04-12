@@ -1,13 +1,18 @@
 package wchart
 
 import (
+	"io"
 	"os"
 
 	"github.com/pkg/errors"
 	"github.com/wcharczuk/go-chart"
 )
 
-func WritePng(filename string, thisChart chart.Chart) error {
+type ChartType interface {
+	Render(rp chart.RendererProvider, w io.Writer) error
+}
+
+func WritePNG(filename string, thisChart ChartType) error {
 	f, err := os.Create(filename)
 	if err != nil {
 		return err
