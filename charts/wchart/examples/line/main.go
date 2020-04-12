@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"time"
 
@@ -188,7 +189,10 @@ func main() {
 	http.HandleFunc("/custom2", drawChartDSSSimple)
 
 	chart1 := GetChartExampleMonths()
-	wchart.WritePng("_wchart.png", chart1)
+	err := wchart.WritePNG("_wchart.png", chart1)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	/*
 		f, err := os.Create("test.png")
