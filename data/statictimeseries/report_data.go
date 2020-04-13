@@ -108,6 +108,14 @@ func (series *DataSeries) ItemsSorted() []DataItem {
 	return items
 }
 
+func (series *DataSeries) Last() (DataItem, error) {
+	items := series.ItemsSorted()
+	if len(items) == 0 {
+		return DataItem{}, errors.New("E_NO_ITEMS")
+	}
+	return items[len(items)-1], nil
+}
+
 func (series *DataSeries) Pop() (DataItem, error) {
 	items := series.ItemsSorted()
 	if len(items) == 0 {

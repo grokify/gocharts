@@ -11,6 +11,9 @@ import (
 
 type XoxPoint struct {
 	Time           time.Time
+	TimeMonthAgo   time.Time
+	TimeQuarterAgo time.Time
+	TimeYearAgo    time.Time
 	Value          int64
 	YOldValue      int64
 	QOldValue      int64
@@ -18,6 +21,9 @@ type XoxPoint struct {
 	YNowValue      int64
 	QNowValue      int64
 	MNowValue      int64
+	MYAgoValue     int64
+	MQAgoValue     int64
+	MMAgoValue     int64
 	AggregateValue int64
 	YoY            float64
 	QoQ            float64

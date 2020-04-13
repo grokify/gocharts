@@ -1,17 +1,41 @@
 package sts2wchart
 
 import (
+	"fmt"
+	"strings"
 	"time"
 
 	"github.com/grokify/gocharts/charts/wchart"
 	"github.com/grokify/gocharts/data/statictimeseries"
 	"github.com/grokify/gotilla/math/mathutil"
 	"github.com/grokify/gotilla/strconv/strconvutil"
+	"github.com/grokify/gotilla/time/month"
 	"github.com/wcharczuk/go-chart"
 	"github.com/wcharczuk/go-chart/drawing"
 )
 
-func DataSeriesMonthToLineChart(ds statictimeseries.DataSeries) chart.Chart {
+type LineChartMonthOpts struct {
+	TitleSuffixCurrentValue    bool
+	TitleSuffixCurrentDateFunc func(time.Time) string
+	Legend                     bool
+	NowAnnotation              bool
+	MAgoAnnotation             bool
+	QAgoAnnotation             bool
+	YAgoAnnotation             bool
+	AgoAnnotationPct           bool
+}
+
+func (opts *LineChartMonthOpts) WantAnnotations() bool {
+	return opts.NowAnnotation || opts.MAgoAnnotation ||
+		opts.QAgoAnnotation || opts.YAgoAnnotation
+}
+
+func (opts *LineChartMonthOpts) WantTitleSuffix() bool {
+	return opts.TitleSuffixCurrentValue ||
+		opts.TitleSuffixCurrentDateFunc != nil
+}
+
+func DataSeriesMonthToLineChart(ds statictimeseries.DataSeries, opts LineChartMonthOpts) chart.Chart {
 	mainSeries := wchart.DataSeriesToContinuousSeriesMonth(ds)
 	polyRegSeries := &chart.PolynomialRegressionSeries{
 		Degree:      3,
@@ -20,8 +44,24 @@ func DataSeriesMonthToLineChart(ds statictimeseries.DataSeries) chart.Chart {
 	mainSeries.Style = chart.Style{
 		StrokeWidth: float64(3)}
 
+	titleParts := []string{ds.SeriesName}
+	if opts.WantTitleSuffix() {
+		last, err := ds.Last()
+		if err == nil {
+			if opts.TitleSuffixCurrentDateFunc != nil {
+				str := opts.TitleSuffixCurrentDateFunc(last.Time)
+				if len(str) > 0 {
+					titleParts = append(titleParts, " - "+str)
+				}
+			}
+			if opts.TitleSuffixCurrentValue {
+				titleParts = append(titleParts, " - "+strconvutil.Commify(last.Value))
+			}
+		}
+	}
+
 	graph := chart.Chart{
-		Title: ds.SeriesName,
+		Title: strings.Join(titleParts, " "),
 		YAxis: chart.YAxis{
 			ValueFormatter: func(v interface{}) string {
 				if vf, isFloat := v.(float64); isFloat {
@@ -36,9 +76,11 @@ func DataSeriesMonthToLineChart(ds statictimeseries.DataSeries) chart.Chart {
 		},
 	}
 
-	//note we have to do this as a separate step because we need a reference to graph
-	graph.Elements = []chart.Renderable{
-		chart.Legend(&graph),
+	if opts.Legend {
+		//note we have to do this as a separate step because we need a reference to graph
+		graph.Elements = []chart.Renderable{
+			chart.Legend(&graph),
+		}
 	}
 
 	ac := AxesCreator{
@@ -80,7 +122,61 @@ func DataSeriesMonthToLineChart(ds statictimeseries.DataSeries) chart.Chart {
 		graph.XAxis.GridLines = xGridlines
 		graph.XAxis.GridMajorStyle = style
 	}
+
+	annoSeries, err := DataSeriesMonthToAnnotations(ds, opts)
+	if err == nil && len(annoSeries.Annotations) > 0 {
+		graph.Series = append(graph.Series, annoSeries)
+	}
+
 	return graph
+}
+
+func DataSeriesMonthToAnnotations(ds statictimeseries.DataSeries, opts LineChartMonthOpts) (chart.AnnotationSeries, error) {
+	annoSeries := chart.AnnotationSeries{Annotations: []chart.Value2{}}
+
+	if !opts.WantAnnotations() {
+		return annoSeries, nil
+	}
+
+	xox, err := statictimeseries.NewXoXDSMonth(ds)
+	if err != nil {
+		return annoSeries, err
+	}
+	xoxLast := xox.Last()
+
+	if opts.NowAnnotation {
+		annoSeries.Annotations = append(annoSeries.Annotations, chart.Value2{
+			XValue: float64(month.TimeToMonthContinuous(xoxLast.Time)),
+			YValue: float64(xoxLast.Value),
+			Label:  strconvutil.Int64Abbreviation(xoxLast.Value)})
+	}
+	if opts.MAgoAnnotation {
+		annoSeries.Annotations = append(annoSeries.Annotations, chart.Value2{
+			XValue: float64(month.TimeToMonthContinuous(xoxLast.TimeMonthAgo)),
+			YValue: float64(xoxLast.MMAgoValue),
+			Label:  "M: " + strconvutil.Int64Abbreviation(xoxLast.MMAgoValue)})
+	}
+	if opts.QAgoAnnotation {
+		suffix := ""
+		if opts.AgoAnnotationPct {
+			suffix = fmt.Sprintf(", %d%%", int(xoxLast.QoQ))
+		}
+		annoSeries.Annotations = append(annoSeries.Annotations, chart.Value2{
+			XValue: float64(month.TimeToMonthContinuous(xoxLast.TimeQuarterAgo)),
+			YValue: float64(xoxLast.MQAgoValue),
+			Label:  "Q: " + strconvutil.Int64Abbreviation(xoxLast.MQAgoValue) + suffix})
+	}
+	if opts.YAgoAnnotation {
+		suffix := ""
+		if opts.AgoAnnotationPct {
+			suffix = fmt.Sprintf(", %d%%", int(xoxLast.YoY))
+		}
+		annoSeries.Annotations = append(annoSeries.Annotations, chart.Value2{
+			XValue: float64(month.TimeToMonthContinuous(xoxLast.TimeYearAgo)),
+			YValue: float64(xoxLast.MYAgoValue),
+			Label:  "Y: " + strconvutil.Int64Abbreviation(xoxLast.MYAgoValue) + suffix})
+	}
+	return annoSeries, nil
 }
 
 type AxesCreator struct {

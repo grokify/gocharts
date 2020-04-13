@@ -28,21 +28,30 @@ func NewXoXDSMonth(ds DataSeries) (XoXGrowth, error) {
 		monthAgo := month.MonthBegin(dateNow, -1)
 		quarterAgo := month.MonthBegin(dateNow, -3)
 		yearAgo := month.MonthBegin(dateNow, -12)
-		if itemMonth, ok := ds.ItemMap[monthAgo.Format(time.RFC3339)]; ok {
+		xoxPoint.TimeMonthAgo = monthAgo
+		xoxPoint.TimeQuarterAgo = quarterAgo
+		xoxPoint.TimeYearAgo = yearAgo
+		if itemMonthAgo, ok := ds.ItemMap[monthAgo.Format(time.RFC3339)]; ok {
+			xoxPoint.MMAgoValue = itemMonthAgo.Value
 			xoxPoint.MNowValue = itemNow.Value
-			xoxPoint.MOldValue = itemMonth.Value
-			xoxPoint.MoM = mathutil.PercentChangeToXoX(float64(itemNow.Value) / float64(itemMonth.Value))
+			xoxPoint.MOldValue = itemMonthAgo.Value
+			xoxPoint.MoM = mathutil.PercentChangeToXoX(float64(itemNow.Value) / float64(itemMonthAgo.Value))
+			xoxPoint.MoMAggregate = mathutil.PercentChangeToXoX(float64(itemNow.Value) / float64(itemMonthAgo.Value))
 		}
-		if _, ok := ds.ItemMap[quarterAgo.Format(time.RFC3339)]; ok {
+		if itemMonthQuarterAgo, ok := ds.ItemMap[quarterAgo.Format(time.RFC3339)]; ok {
+			xoxPoint.MQAgoValue = itemMonthQuarterAgo.Value
 			xoxPoint.QNowValue = AggregatePriorMonths(ds, dateNow, 3)
 			xoxPoint.QOldValue = AggregatePriorMonths(ds, month.MonthBegin(dateNow, -3), 3)
-			xoxPoint.QoQ = mathutil.PercentChangeToXoX(
+			xoxPoint.QoQ = mathutil.PercentChangeToXoX(float64(itemNow.Value) / float64(itemMonthQuarterAgo.Value))
+			xoxPoint.QoQAggregate = mathutil.PercentChangeToXoX(
 				float64(xoxPoint.QNowValue) / float64(xoxPoint.QOldValue))
 		}
-		if _, ok := ds.ItemMap[yearAgo.Format(time.RFC3339)]; ok {
+		if itemMonthYearAgo, ok := ds.ItemMap[yearAgo.Format(time.RFC3339)]; ok {
+			xoxPoint.MYAgoValue = itemMonthYearAgo.Value
 			xoxPoint.YNowValue = AggregatePriorMonths(ds, dateNow, 12)
 			xoxPoint.YOldValue = AggregatePriorMonths(ds, month.MonthBegin(dateNow, -12), 12)
-			xoxPoint.YoY = mathutil.PercentChangeToXoX(
+			xoxPoint.YoY = mathutil.PercentChangeToXoX(float64(itemNow.Value) / float64(itemMonthYearAgo.Value))
+			xoxPoint.YoYAggregate = mathutil.PercentChangeToXoX(
 				float64(xoxPoint.YNowValue) / float64(xoxPoint.YOldValue))
 			/*
 				xoxPoint.YAgoValue = itemYear.Value
