@@ -5,6 +5,14 @@ import (
 	"github.com/wcharczuk/go-chart/drawing"
 )
 
+var (
+	// ColorOrange is orange.
+	ColorOrange = drawing.Color{R: 255, G: 165, B: 0, A: 255}
+
+	// ColorGreeen is greeen.
+	ColorGreen = drawing.Color{R: 0, G: 255, B: 0, A: 255}
+)
+
 type Colors struct {
 	BackgroundColorVal       drawing.Color
 	BackgroundStrokeColorVal drawing.Color

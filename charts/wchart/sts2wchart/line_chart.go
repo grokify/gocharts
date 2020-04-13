@@ -18,6 +18,7 @@ type LineChartMonthOpts struct {
 	TitleSuffixCurrentValue    bool
 	TitleSuffixCurrentDateFunc func(time.Time) string
 	Legend                     bool
+	RegressionDegree           int
 	NowAnnotation              bool
 	MAgoAnnotation             bool
 	QAgoAnnotation             bool
@@ -36,14 +37,6 @@ func (opts *LineChartMonthOpts) WantTitleSuffix() bool {
 }
 
 func DataSeriesMonthToLineChart(ds statictimeseries.DataSeries, opts LineChartMonthOpts) chart.Chart {
-	mainSeries := wchart.DataSeriesToContinuousSeriesMonth(ds)
-	polyRegSeries := &chart.PolynomialRegressionSeries{
-		Degree:      3,
-		InnerSeries: mainSeries}
-
-	mainSeries.Style = chart.Style{
-		StrokeWidth: float64(3)}
-
 	titleParts := []string{ds.SeriesName}
 	if opts.WantTitleSuffix() {
 		last, err := ds.Last()
@@ -70,10 +63,22 @@ func DataSeriesMonthToLineChart(ds statictimeseries.DataSeries, opts LineChartMo
 				return ""
 			},
 		},
-		Series: []chart.Series{
-			mainSeries,
-			polyRegSeries,
-		},
+		Series: []chart.Series{},
+	}
+
+	mainSeries := wchart.DataSeriesToContinuousSeriesMonth(ds)
+	mainSeries.Style = chart.Style{
+		StrokeWidth: float64(3)}
+	graph.Series = append(graph.Series, mainSeries)
+
+	if opts.RegressionDegree > 0 {
+		polyRegSeries := &chart.PolynomialRegressionSeries{
+			Degree:      opts.RegressionDegree,
+			InnerSeries: mainSeries,
+			Style: chart.Style{
+				StrokeWidth: float64(2),
+				StrokeColor: wchart.ColorOrange}}
+		graph.Series = append(graph.Series, polyRegSeries)
 	}
 
 	if opts.Legend {
@@ -123,7 +128,7 @@ func DataSeriesMonthToLineChart(ds statictimeseries.DataSeries, opts LineChartMo
 		graph.XAxis.GridMajorStyle = style
 	}
 
-	annoSeries, err := DataSeriesMonthToAnnotations(ds, opts)
+	annoSeries, err := dataSeriesMonthToAnnotations(ds, opts)
 	if err == nil && len(annoSeries.Annotations) > 0 {
 		graph.Series = append(graph.Series, annoSeries)
 	}
@@ -131,8 +136,13 @@ func DataSeriesMonthToLineChart(ds statictimeseries.DataSeries, opts LineChartMo
 	return graph
 }
 
-func DataSeriesMonthToAnnotations(ds statictimeseries.DataSeries, opts LineChartMonthOpts) (chart.AnnotationSeries, error) {
-	annoSeries := chart.AnnotationSeries{Annotations: []chart.Value2{}}
+func dataSeriesMonthToAnnotations(ds statictimeseries.DataSeries, opts LineChartMonthOpts) (chart.AnnotationSeries, error) {
+	annoSeries := chart.AnnotationSeries{
+		Annotations: []chart.Value2{},
+		Style: chart.Style{
+			StrokeWidth: float64(2),
+			StrokeColor: wchart.ColorGreen},
+	}
 
 	if !opts.WantAnnotations() {
 		return annoSeries, nil
