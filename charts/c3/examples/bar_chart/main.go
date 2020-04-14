@@ -22,13 +22,13 @@ const repoLink = "https://github.com/grokify/gocharts/tree/master/charts/c3/exam
 func getData(numQuarters int) []statictimeseries.DataItem {
 	dataItems := []statictimeseries.DataItem{}
 
-	quarterStart := timeutil.PrevQuarters(time.Now(), numQuarters)
+	quarterStart := timeutil.PrevQuarters(time.Now(), uint(numQuarters))
 
 	for i := 1; i <= 3; i++ {
 		for j := 0; j < numQuarters; j++ {
 			dataItems = append(dataItems, statictimeseries.DataItem{
 				SeriesName: fmt.Sprintf("Data Series %d", i),
-				Time:       timeutil.NextQuarters(quarterStart, j),
+				Time:       timeutil.NextQuarters(quarterStart, uint(j)),
 				Value:      int64(i + j)})
 		}
 	}
