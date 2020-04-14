@@ -10,6 +10,9 @@ import (
 	"golang.org/x/image/colornames"
 )
 
+// MustGetSVGColor returns a `drawing.Color` for the
+// SVG color name. If the color name is not found,
+// black is returned.
 func MustGetSVGColor(colorName string) drawing.Color {
 	drawingColor, err := GetSVGColor(colorName)
 	if err != nil {
@@ -18,6 +21,9 @@ func MustGetSVGColor(colorName string) drawing.Color {
 	return drawingColor
 }
 
+// GetSVGColor returns a `drawing.Color` for the
+// SVG color name. If the color name is not found,
+// an error is returned.
 func GetSVGColor(colorName string) (drawing.Color, error) {
 	colorName = strings.ToLower(strings.TrimSpace(colorName))
 	if col, ok := colornames.Map[colorName]; ok {
@@ -26,6 +32,8 @@ func GetSVGColor(colorName string) (drawing.Color, error) {
 	return drawing.ColorBlack, fmt.Errorf("E_COLOR_NOT_FOUND [%s]", colorName)
 }
 
+// ColorImageToDrawing converts a `color.RGBA` value
+// to a `drawing.Color` value.
 func ColorImageToDrawing(col color.RGBA) drawing.Color {
 	return drawing.Color{R: col.R, G: col.G, B: col.B, A: col.A}
 }
