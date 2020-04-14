@@ -1,9 +1,34 @@
 package wchart
 
 import (
+	"fmt"
+	"image/color"
+	"strings"
+
 	"github.com/wcharczuk/go-chart"
 	"github.com/wcharczuk/go-chart/drawing"
+	"golang.org/x/image/colornames"
 )
+
+func MustGetSVGColor(colorName string) drawing.Color {
+	drawingColor, err := GetSVGColor(colorName)
+	if err != nil {
+		return drawing.ColorBlack
+	}
+	return drawingColor
+}
+
+func GetSVGColor(colorName string) (drawing.Color, error) {
+	colorName = strings.ToLower(strings.TrimSpace(colorName))
+	if col, ok := colornames.Map[colorName]; ok {
+		return ColorImageToDrawing(col), nil
+	}
+	return drawing.ColorBlack, fmt.Errorf("E_COLOR_NOT_FOUND [%s]", colorName)
+}
+
+func ColorImageToDrawing(col color.RGBA) drawing.Color {
+	return drawing.Color{R: col.R, G: col.G, B: col.B, A: col.A}
+}
 
 var (
 	// ColorOrange is orange.

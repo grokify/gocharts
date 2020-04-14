@@ -141,7 +141,7 @@ func dataSeriesMonthToAnnotations(ds statictimeseries.DataSeries, opts LineChart
 		Annotations: []chart.Value2{},
 		Style: chart.Style{
 			StrokeWidth: float64(2),
-			StrokeColor: wchart.ColorGreen},
+			StrokeColor: wchart.MustGetSVGColor("limegreen")},
 	}
 
 	if !opts.WantAnnotations() {
