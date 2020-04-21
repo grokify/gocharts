@@ -71,7 +71,14 @@ func DataSeriesMonthToLineChart(ds statictimeseries.DataSeries, opts LineChartMo
 		StrokeWidth: float64(3)}
 	graph.Series = append(graph.Series, mainSeries)
 
-	if opts.RegressionDegree > 0 {
+	if opts.RegressionDegree == 1 {
+		linRegSeries := &chart.LinearRegressionSeries{
+			InnerSeries: mainSeries,
+			Style: chart.Style{
+				StrokeWidth: float64(2),
+				StrokeColor: wchart.ColorOrange}}
+		graph.Series = append(graph.Series, linRegSeries)
+	} else if opts.RegressionDegree > 1 {
 		polyRegSeries := &chart.PolynomialRegressionSeries{
 			Degree:      opts.RegressionDegree,
 			InnerSeries: mainSeries,
