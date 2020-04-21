@@ -44,6 +44,9 @@ func WriteCSVSimple(cols []string, records [][]string, filename string) error {
 // WriteXLSX writes a table as an Excel XLSX file.
 func WriteXLSX(path string, tbls ...*TableData) error {
 	f := excelize.NewFile()
+	// Delete default sheet.
+	f.DeleteSheet(f.GetSheetName(f.GetSheetIndex("Sheet1")))
+	f.DeleteSheet("Sheet1")
 	// Create a new sheet.
 	sheetNum := 0
 	for i, t := range tbls {
@@ -69,6 +72,55 @@ func WriteXLSX(path string, tbls ...*TableData) error {
 			for x, cellValue := range row {
 				cellLocation := CoordinatesToSheetLocation(uint32(x), uint32(y+rowBase))
 				f.SetCellValue(sheetname, cellLocation, cellValue)
+			}
+		}
+		// Set active sheet of the workbook.
+		if i == 0 {
+			f.SetActiveSheet(index)
+		}
+	}
+	// Save xlsx file by the given path.
+	return f.SaveAs(path)
+}
+
+type TableFormatter struct {
+	Table     *TableData
+	Formatter func(val string, col uint) interface{}
+}
+
+// WriteXLSXFormatted writes a table as an Excel XLSX file with
+// row formatter option.
+func WriteXLSXFormatted(path string, tbls ...*TableFormatter) error {
+	f := excelize.NewFile()
+	// Delete default sheet.
+	f.DeleteSheet(f.GetSheetName(f.GetSheetIndex("Sheet1")))
+	f.DeleteSheet("Sheet1")
+	// Create a new sheet.
+	sheetNum := 0
+	for i, tf := range tbls {
+		if tf == nil || tf.Table == nil {
+			continue
+		}
+		t := tf.Table
+		sheetNum++
+		sheetname := strings.TrimSpace(t.Name)
+		if len(sheetname) == 0 {
+			sheetname = fmt.Sprintf("Sheet%d", sheetNum)
+		}
+		index := f.NewSheet(sheetname)
+		// Set value of a cell.
+		rowBase := 0
+		if len(t.Columns) > 0 {
+			rowBase++
+			for i, cellValue := range t.Columns {
+				cellLocation := CoordinatesToSheetLocation(uint32(i), 0)
+				f.SetCellValue(sheetname, cellLocation, cellValue)
+			}
+		}
+		for y, row := range t.Records {
+			for x, cellValue := range row {
+				cellLocation := CoordinatesToSheetLocation(uint32(x), uint32(y+rowBase))
+				f.SetCellValue(sheetname, cellLocation, tf.Formatter(cellValue, uint(x)))
 			}
 		}
 		// Set active sheet of the workbook.
