@@ -6,10 +6,13 @@ import (
 	"errors"
 	"fmt"
 	"sort"
+	"strconv"
 	"strings"
 	"time"
 
+	"github.com/grokify/gocharts/data/table"
 	tu "github.com/grokify/gotilla/time/timeutil"
+	"github.com/grokify/gotilla/type/stringsutil"
 )
 
 type TimeSeriesSimple struct {
@@ -104,6 +107,28 @@ func (set *DataSeriesSetSimple) Inflate() {
 	}
 }
 
+func (set *DataSeriesSetSimple) SeriesNames() []string {
+	seriesNames := []string{}
+	for seriesName := range set.Series {
+		seriesNames = append(seriesNames, seriesName)
+	}
+	sort.Strings(seriesNames)
+	return seriesNames
+}
+
+func (set *DataSeriesSetSimple) GetItem(seriesName, rfc3339 string) (DataItem, error) {
+	di := DataItem{}
+	dss, ok := set.Series[seriesName]
+	if !ok {
+		return di, fmt.Errorf("SeriesName not found [%s]", seriesName)
+	}
+	item, ok := dss.ItemMap[rfc3339]
+	if !ok {
+		return di, fmt.Errorf("SeriesName found [%s] Time not found [%s]", seriesName, rfc3339)
+	}
+	return item, nil
+}
+
 func (set *DataSeriesSetSimple) getTimes() []time.Time {
 	times := []time.Time{}
 	for _, ds := range set.Series {
@@ -112,6 +137,16 @@ func (set *DataSeriesSetSimple) getTimes() []time.Time {
 		}
 	}
 	return times
+}
+
+func (set *DataSeriesSetSimple) TimeStrings() []string {
+	times := []string{}
+	for _, ds := range set.Series {
+		for rfc3339 := range ds.ItemMap {
+			times = append(times, rfc3339)
+		}
+	}
+	return stringsutil.SliceCondenseSpace(times, true, true)
 }
 
 func (tsf *TimeSeriesFunnel) DataSeriesSetByQuarter() (DataSeriesSetSimple, error) {
@@ -300,4 +335,31 @@ func ReportGrowthPct(rows []RowInt64) []RowFloat64 {
 		grows = append(grows, grow)
 	}
 	return grows
+}
+
+// DS3ToTable returns a `DataSeriesSetSimple` as a
+// `table.TableData`.
+func DS3ToTable(ds3 DataSeriesSetSimple, fmtTime func(time.Time) string) (table.TableData, error) {
+	tbl := table.NewTableData()
+	seriesNames := ds3.SeriesNames()
+	tbl.Columns = []string{"Time"}
+	tbl.Columns = append(tbl.Columns, seriesNames...)
+	timeStrings := ds3.TimeStrings()
+	for _, rfc3339 := range timeStrings {
+		dt, err := time.Parse(time.RFC3339, rfc3339)
+		if err != nil {
+			return tbl, err
+		}
+		line := []string{fmtTime(dt)}
+		for _, seriesName := range seriesNames {
+			item, err := ds3.GetItem(seriesName, rfc3339)
+			if err == nil {
+				line = append(line, strconv.Itoa(int(item.Value)))
+			} else {
+				line = append(line, "0")
+			}
+		}
+		tbl.Records = append(tbl.Records, line)
+	}
+	return tbl, nil
 }
