@@ -10,11 +10,13 @@ import (
 	"github.com/grokify/gotilla/math/mathutil"
 	"github.com/grokify/gotilla/strconv/strconvutil"
 	"github.com/grokify/gotilla/time/month"
+	"github.com/grokify/gotilla/time/timeutil"
 	"github.com/wcharczuk/go-chart"
 	"github.com/wcharczuk/go-chart/drawing"
 )
 
-type LineChartMonthOpts struct {
+// LineChartOpts is used for month and quarter interval charts.
+type LineChartOpts struct {
 	TitleSuffixCurrentValue    bool
 	TitleSuffixCurrentDateFunc func(time.Time) string
 	Legend                     bool
@@ -24,19 +26,20 @@ type LineChartMonthOpts struct {
 	QAgoAnnotation             bool
 	YAgoAnnotation             bool
 	AgoAnnotationPct           bool
+	Interval                   timeutil.Interval
 }
 
-func (opts *LineChartMonthOpts) WantAnnotations() bool {
+func (opts *LineChartOpts) WantAnnotations() bool {
 	return opts.NowAnnotation || opts.MAgoAnnotation ||
 		opts.QAgoAnnotation || opts.YAgoAnnotation
 }
 
-func (opts *LineChartMonthOpts) WantTitleSuffix() bool {
+func (opts *LineChartOpts) WantTitleSuffix() bool {
 	return opts.TitleSuffixCurrentValue ||
 		opts.TitleSuffixCurrentDateFunc != nil
 }
 
-func DataSeriesMonthToLineChart(ds statictimeseries.DataSeries, opts LineChartMonthOpts) chart.Chart {
+func DataSeriesMonthToLineChart(ds statictimeseries.DataSeries, opts LineChartOpts) chart.Chart {
 	titleParts := []string{ds.SeriesName}
 	if opts.WantTitleSuffix() {
 		last, err := ds.Last()
@@ -66,7 +69,12 @@ func DataSeriesMonthToLineChart(ds statictimeseries.DataSeries, opts LineChartMo
 		Series: []chart.Series{},
 	}
 
-	mainSeries := wchart.DataSeriesToContinuousSeriesMonth(ds)
+	mainSeries := chart.ContinuousSeries{}
+	if opts.Interval == timeutil.Quarter {
+		mainSeries = wchart.DataSeriesToContinuousSeriesQuarter(ds)
+	} else {
+		mainSeries = wchart.DataSeriesToContinuousSeriesMonth(ds)
+	}
 	mainSeries.Style = chart.Style{
 		StrokeWidth: float64(3)}
 	graph.Series = append(graph.Series, mainSeries)
@@ -135,15 +143,16 @@ func DataSeriesMonthToLineChart(ds statictimeseries.DataSeries, opts LineChartMo
 		graph.XAxis.GridMajorStyle = style
 	}
 
-	annoSeries, err := dataSeriesMonthToAnnotations(ds, opts)
-	if err == nil && len(annoSeries.Annotations) > 0 {
-		graph.Series = append(graph.Series, annoSeries)
+	if opts.Interval == timeutil.Month {
+		annoSeries, err := dataSeriesMonthToAnnotations(ds, opts)
+		if err == nil && len(annoSeries.Annotations) > 0 {
+			graph.Series = append(graph.Series, annoSeries)
+		}
 	}
-
 	return graph
 }
 
-func dataSeriesMonthToAnnotations(ds statictimeseries.DataSeries, opts LineChartMonthOpts) (chart.AnnotationSeries, error) {
+func dataSeriesMonthToAnnotations(ds statictimeseries.DataSeries, opts LineChartOpts) (chart.AnnotationSeries, error) {
 	annoSeries := chart.AnnotationSeries{
 		Annotations: []chart.Value2{},
 		Style: chart.Style{
@@ -155,7 +164,60 @@ func dataSeriesMonthToAnnotations(ds statictimeseries.DataSeries, opts LineChart
 		return annoSeries, nil
 	}
 
-	xox, err := statictimeseries.NewXoXDSMonth(ds)
+	xox, err := statictimeseries.NewXoXDataSeries(ds)
+	if err != nil {
+		return annoSeries, err
+	}
+	xoxLast := xox.Last()
+
+	if opts.NowAnnotation {
+		annoSeries.Annotations = append(annoSeries.Annotations, chart.Value2{
+			XValue: float64(month.TimeToMonthContinuous(xoxLast.Time)),
+			YValue: float64(xoxLast.Value),
+			Label:  strconvutil.Int64Abbreviation(xoxLast.Value)})
+	}
+	if opts.MAgoAnnotation {
+		annoSeries.Annotations = append(annoSeries.Annotations, chart.Value2{
+			XValue: float64(month.TimeToMonthContinuous(xoxLast.TimeMonthAgo)),
+			YValue: float64(xoxLast.MMAgoValue),
+			Label:  "M: " + strconvutil.Int64Abbreviation(xoxLast.MMAgoValue)})
+	}
+	if opts.QAgoAnnotation {
+		suffix := ""
+		if opts.AgoAnnotationPct {
+			suffix = fmt.Sprintf(", %d%%", int(xoxLast.QoQ))
+		}
+		annoSeries.Annotations = append(annoSeries.Annotations, chart.Value2{
+			XValue: float64(month.TimeToMonthContinuous(xoxLast.TimeQuarterAgo)),
+			YValue: float64(xoxLast.MQAgoValue),
+			Label:  "Q: " + strconvutil.Int64Abbreviation(xoxLast.MQAgoValue) + suffix})
+	}
+	if opts.YAgoAnnotation {
+		suffix := ""
+		if opts.AgoAnnotationPct {
+			suffix = fmt.Sprintf(", %d%%", int(xoxLast.YoY))
+		}
+		annoSeries.Annotations = append(annoSeries.Annotations, chart.Value2{
+			XValue: float64(month.TimeToMonthContinuous(xoxLast.TimeYearAgo)),
+			YValue: float64(xoxLast.MYAgoValue),
+			Label:  "Y: " + strconvutil.Int64Abbreviation(xoxLast.MYAgoValue) + suffix})
+	}
+	return annoSeries, nil
+}
+
+func dataSeriesQuarterToAnnotations(ds statictimeseries.DataSeries, opts LineChartOpts) (chart.AnnotationSeries, error) {
+	annoSeries := chart.AnnotationSeries{
+		Annotations: []chart.Value2{},
+		Style: chart.Style{
+			StrokeWidth: float64(2),
+			StrokeColor: wchart.MustGetSVGColor("limegreen")},
+	}
+
+	if !opts.WantAnnotations() {
+		return annoSeries, nil
+	}
+
+	xox, err := statictimeseries.NewXoXDataSeries(ds)
 	if err != nil {
 		return annoSeries, err
 	}

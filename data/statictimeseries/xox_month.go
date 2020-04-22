@@ -8,6 +8,7 @@ import (
 
 	"github.com/grokify/gotilla/math/mathutil"
 	"github.com/grokify/gotilla/time/month"
+	"github.com/grokify/gotilla/time/timeutil"
 	"github.com/pkg/errors"
 )
 
@@ -17,26 +18,29 @@ type XoXGrowth struct {
 	QTD     int64
 }
 
-func NewXoXDSMonth(ds DataSeries) (XoXGrowth, error) {
+func NewXoXDataSeries(ds DataSeries) (XoXGrowth, error) {
 	xox := XoXGrowth{DateMap: map[string]XoxPoint{}}
 	for dateNowRfc, itemNow := range ds.ItemMap {
 		dateNow, err := time.Parse(time.RFC3339, dateNowRfc)
 		if err != nil {
-			return xox, errors.Wrap(err, "statictimeseries.NewXoxDSMonth")
+			return xox, errors.Wrap(err, "statictimeseries.NewXoXDataSeries")
 		}
 		xoxPoint := XoxPoint{Time: dateNow, Value: itemNow.Value}
-		monthAgo := month.MonthBegin(dateNow, -1)
+
 		quarterAgo := month.MonthBegin(dateNow, -3)
 		yearAgo := month.MonthBegin(dateNow, -12)
-		xoxPoint.TimeMonthAgo = monthAgo
 		xoxPoint.TimeQuarterAgo = quarterAgo
 		xoxPoint.TimeYearAgo = yearAgo
-		if itemMonthAgo, ok := ds.ItemMap[monthAgo.Format(time.RFC3339)]; ok {
-			xoxPoint.MMAgoValue = itemMonthAgo.Value
-			xoxPoint.MNowValue = itemNow.Value
-			xoxPoint.MOldValue = itemMonthAgo.Value
-			xoxPoint.MoM = mathutil.PercentChangeToXoX(float64(itemNow.Value) / float64(itemMonthAgo.Value))
-			xoxPoint.MoMAggregate = mathutil.PercentChangeToXoX(float64(itemNow.Value) / float64(itemMonthAgo.Value))
+		if ds.Interval == timeutil.Month {
+			monthAgo := month.MonthBegin(dateNow, -1)
+			xoxPoint.TimeMonthAgo = monthAgo
+			if itemMonthAgo, ok := ds.ItemMap[monthAgo.Format(time.RFC3339)]; ok {
+				xoxPoint.MMAgoValue = itemMonthAgo.Value
+				xoxPoint.MNowValue = itemNow.Value
+				xoxPoint.MOldValue = itemMonthAgo.Value
+				xoxPoint.MoM = mathutil.PercentChangeToXoX(float64(itemNow.Value) / float64(itemMonthAgo.Value))
+				xoxPoint.MoMAggregate = mathutil.PercentChangeToXoX(float64(itemNow.Value) / float64(itemMonthAgo.Value))
+			}
 		}
 		if itemMonthQuarterAgo, ok := ds.ItemMap[quarterAgo.Format(time.RFC3339)]; ok {
 			xoxPoint.MQAgoValue = itemMonthQuarterAgo.Value
