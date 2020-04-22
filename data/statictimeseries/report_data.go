@@ -45,6 +45,7 @@ func NewDataSeriesSet(interval timeutil.Interval, weekStart time.Weekday) DataSe
 type DataSeries struct {
 	SeriesName string
 	ItemMap    map[string]DataItem
+	Interval   timeutil.Interval // Informational
 }
 
 func NewDataSeries() DataSeries {
