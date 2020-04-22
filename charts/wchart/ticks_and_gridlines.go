@@ -5,6 +5,8 @@ import (
 
 	"github.com/grokify/gotilla/strconv/strconvutil"
 	"github.com/grokify/gotilla/time/month"
+	"github.com/grokify/gotilla/time/quarter"
+	"github.com/grokify/gotilla/time/timeutil"
 	"github.com/wcharczuk/go-chart"
 )
 
@@ -33,31 +35,55 @@ func GridLines(values []int64, style chart.Style) []chart.GridLine {
 	return lines
 }
 
-// TicksAndGridlinesMonths takes a begin and end time and converts it to
+// TicksAndGridlinesTime takes a begin and end time and converts it to
 // `[]chart.Tick` and `[]chart.GridLine.`.
-func TicksAndGridlinesMonths(timeBegin, timeEnd time.Time, styleMajor, styleMinor chart.Style, timeFormat string, quarterOnly bool) ([]chart.Tick, []chart.GridLine) {
-	monthcBegin := month.TimeToMonthContinuous(timeBegin)
-	monthcEnd := month.TimeToMonthContinuous(timeEnd)
+func TicksAndGridlinesTime(interval timeutil.Interval, timeBegin, timeEnd time.Time, styleMajor, styleMinor chart.Style, timeFormat func(time.Time) string, quarterOnly bool) ([]chart.Tick, []chart.GridLine) {
+	timecBegin := uint64(0)
+	timecEnd := uint64(0)
+	if interval == timeutil.Month {
+		timecBegin = month.TimeToMonthContinuous(timeBegin)
+		timecEnd = month.TimeToMonthContinuous(timeEnd)
+	} else if interval == timeutil.Quarter {
+		timecBegin = quarter.TimeToQuarterContinuous(timeBegin)
+		timecEnd = quarter.TimeToQuarterContinuous(timeEnd)
+	}
+
 	ticks := []chart.Tick{}
 	gridlines := []chart.GridLine{}
-	if monthcBegin > monthcEnd {
-		tmp := monthcBegin
-		monthcBegin = monthcEnd
-		monthcEnd = tmp
+	if timecBegin > timecEnd {
+		tmp := timecBegin
+		timecBegin = timecEnd
+		timecEnd = tmp
 	}
-	for i := monthcBegin; i <= monthcEnd; i++ {
-		iTime := month.MonthContinuousToTime(i)
-		if i == monthcBegin {
+	for i := timecBegin; i <= timecEnd; i++ {
+		iTime := time.Now()
+		if interval == timeutil.Month {
+			iTime = month.MonthContinuousToTime(i)
+		} else if interval == timeutil.Quarter {
+			iTime = quarter.QuarterContinuousToTime(i)
+		}
+		if i == timecBegin {
 			ticks = append(ticks, chart.Tick{Value: float64(i)})
-		} else if i == monthcEnd {
+		} else if i == timecEnd {
 			ticks = append(ticks, chart.Tick{Value: float64(i)})
 		} else if quarterOnly {
-			if month.MonthContinuousIsQuarterBegin(i) {
+			if interval == timeutil.Month && month.MonthContinuousIsQuarterBegin(i) {
 				ticks = append(ticks, chart.Tick{
 					Value: float64(i)})
-				if len(timeFormat) > 0 {
-					ticks[len(ticks)-1].Label = iTime.Format(timeFormat)
+				ticks[len(ticks)-1].Label = timeFormat(iTime)
+				if iTime.Month() == 1 {
+					gridlines = append(gridlines, chart.GridLine{
+						Style: styleMajor,
+						Value: float64(i)})
+				} else {
+					gridlines = append(gridlines, chart.GridLine{
+						Style: styleMinor,
+						Value: float64(i)})
 				}
+			} else if interval == timeutil.Quarter {
+				ticks = append(ticks, chart.Tick{
+					Value: float64(i)})
+				ticks[len(ticks)-1].Label = timeFormat(iTime)
 				if iTime.Month() == 1 {
 					gridlines = append(gridlines, chart.GridLine{
 						Style: styleMajor,
@@ -71,9 +97,7 @@ func TicksAndGridlinesMonths(timeBegin, timeEnd time.Time, styleMajor, styleMino
 		} else { // monthly
 			ticks = append(ticks, chart.Tick{
 				Value: float64(i)})
-			if len(timeFormat) > 0 {
-				ticks[len(ticks)-1].Label = iTime.Format(timeFormat)
-			}
+			ticks[len(ticks)-1].Label = timeFormat(iTime)
 			if iTime.Month() == 1 {
 				gridlines = append(gridlines, chart.GridLine{
 					Style: styleMajor,

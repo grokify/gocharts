@@ -2,6 +2,7 @@ package sts2wchart
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 	"time"
 
@@ -111,15 +112,15 @@ func DataSeriesMonthToLineChart(ds statictimeseries.DataSeries, opts LineChartOp
 		GridMinorStyle: chart.Style{
 			StrokeWidth: float64(1),
 			StrokeColor: drawing.ColorFromHex("aaaaaa")},
-		XTickMonthFormat: "1/06",
-		YNumTicks:        10,
-		YTickFormatFunc:  strconvutil.Int64Abbreviation}
+		XTickFormatFunc: FormatXTickTimeFunc(ds.Interval),
+		YNumTicks:       7,
+		YTickFormatFunc: FormatYTickFunc(ds.SeriesName)}
 
 	minValue, maxValue := ds.MinMaxValues()
 	minTime, maxTime := ds.MinMaxTimes()
 
-	graph = ac.ChartAddAxesMonthDataSeries(
-		graph, minTime, maxTime, minValue, maxValue)
+	graph = ac.ChartAddAxesDataSeries(
+		graph, ds.Interval, minTime, maxTime, minValue, maxValue)
 
 	if 1 == 0 {
 		tickValues := mathutil.PrettyTicks(10.0, minValue, maxValue)
@@ -136,8 +137,9 @@ func DataSeriesMonthToLineChart(ds statictimeseries.DataSeries, opts LineChartOp
 		graph.YAxis.GridMajorStyle = style
 
 		minTime, maxTime := ds.MinMaxTimes()
-		xTicks, xGridlines := wchart.TicksAndGridlinesMonths(
-			minTime, maxTime, styleMajor, style, "1/06", true)
+		xTicks, xGridlines := wchart.TicksAndGridlinesTime(
+			ds.Interval, minTime, maxTime,
+			styleMajor, style, FormatXTickTimeFunc(ds.Interval), true)
 		graph.XAxis.Ticks = xTicks
 		graph.XAxis.GridLines = xGridlines
 		graph.XAxis.GridMajorStyle = style
@@ -258,16 +260,49 @@ func dataSeriesQuarterToAnnotations(ds statictimeseries.DataSeries, opts LineCha
 	return annoSeries, nil
 }
 
-type AxesCreator struct {
-	GridMajorStyle   chart.Style
-	GridMinorStyle   chart.Style
-	PaddingTop       int
-	YNumTicks        int
-	YTickFormatFunc  func(int64) string
-	XTickMonthFormat string
+func FormatXTickTimeFunc(interval timeutil.Interval) func(time.Time) string {
+	if interval == timeutil.Month {
+		return func(dt time.Time) string {
+			return dt.Format("Jan '06")
+		}
+	} else if interval == timeutil.Quarter {
+		return func(dt time.Time) string {
+			return timeutil.FormatQuarterYYYYQ(dt)
+		}
+	}
+	return func(dt time.Time) string {
+		return dt.Format("1/06")
+	}
 }
 
-func (ac *AxesCreator) ChartAddAxesMonthDataSeries(graph chart.Chart, minTime, maxTime time.Time, minValue, maxValue int64) chart.Chart {
+var rxMrr = regexp.MustCompile(`(?i)\bmrr\b`)
+
+func FormatYTickFunc(seriesName string) func(int64) string {
+	return func(val int64) string {
+		abbr := strconvutil.Int64Abbreviation(val)
+		if rxMrr.MatchString(seriesName) {
+			return "$" + abbr
+		}
+		return abbr
+	}
+}
+
+/*
+
+YTickFormatFunc: strconvutil.Int64Abbreviation}
+
+*/
+
+type AxesCreator struct {
+	GridMajorStyle  chart.Style
+	GridMinorStyle  chart.Style
+	PaddingTop      int
+	YNumTicks       int
+	XTickFormatFunc func(time.Time) string
+	YTickFormatFunc func(int64) string
+}
+
+func (ac *AxesCreator) ChartAddAxesDataSeries(graph chart.Chart, interval timeutil.Interval, minTime, maxTime time.Time, minValue, maxValue int64) chart.Chart {
 	graph.Background = chart.Style{
 		Padding: chart.Box{}}
 	if ac.PaddingTop > 0 {
@@ -279,8 +314,9 @@ func (ac *AxesCreator) ChartAddAxesMonthDataSeries(graph chart.Chart, minTime, m
 	graph.YAxis.GridLines = wchart.GridLines(tickValues, ac.GridMinorStyle)
 	graph.YAxis.GridMajorStyle = ac.GridMinorStyle
 
-	xTicks, xGridlines := wchart.TicksAndGridlinesMonths(
-		minTime, maxTime, ac.GridMajorStyle, ac.GridMinorStyle, ac.XTickMonthFormat, true)
+	xTicks, xGridlines := wchart.TicksAndGridlinesTime(
+		interval, minTime, maxTime,
+		ac.GridMajorStyle, ac.GridMinorStyle, ac.XTickFormatFunc, true)
 	graph.XAxis.Ticks = xTicks
 	graph.XAxis.GridLines = xGridlines
 	graph.XAxis.GridMajorStyle = ac.GridMajorStyle
