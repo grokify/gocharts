@@ -25,6 +25,12 @@ func (fs *FrequencyStats) AddInt(i int) {
 	fs.AddString(strconv.Itoa(i))
 }
 
+func (fs *FrequencyStats) AddStringMore(s string, count int) {
+	for i := 0; i < count; i++ {
+		fs.AddString(s)
+	}
+}
+
 func (fs *FrequencyStats) AddString(s string) {
 	if _, ok := fs.Items[s]; !ok {
 		fs.Items[s] = 0
