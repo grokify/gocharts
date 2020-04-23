@@ -24,7 +24,7 @@ func DataSeriesToTable(ds DataSeries, interval timeutil.Interval, col2 string) t
 	} else if interval == timeutil.Quarter {
 		colDt = "Quarter"
 		dtFmt = func(dt time.Time) string {
-			return timeutil.FormatQuarterYYYYQ(dt)
+			return timeutil.FormatQuarterYYQ(dt)
 		}
 	}
 	tbl.Columns = []string{colDt, col2}
