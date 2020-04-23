@@ -18,16 +18,17 @@ import (
 
 // LineChartOpts is used for month and quarter interval charts.
 type LineChartOpts struct {
-	TitleSuffixCurrentValue    bool
-	TitleSuffixCurrentDateFunc func(time.Time) string
-	Legend                     bool
-	RegressionDegree           int
-	NowAnnotation              bool
-	MAgoAnnotation             bool
-	QAgoAnnotation             bool
-	YAgoAnnotation             bool
-	AgoAnnotationPct           bool
-	Interval                   timeutil.Interval
+	TitleSuffixCurrentValue     bool
+	TitleSuffixCurrentValueFunc func(int64) string
+	TitleSuffixCurrentDateFunc  func(time.Time) string
+	Legend                      bool
+	RegressionDegree            int
+	NowAnnotation               bool
+	MAgoAnnotation              bool
+	QAgoAnnotation              bool
+	YAgoAnnotation              bool
+	AgoAnnotationPct            bool
+	Interval                    timeutil.Interval
 }
 
 func (opts *LineChartOpts) WantAnnotations() bool {
@@ -52,7 +53,7 @@ func DataSeriesMonthToLineChart(ds statictimeseries.DataSeries, opts LineChartOp
 				}
 			}
 			if opts.TitleSuffixCurrentValue {
-				titleParts = append(titleParts, " - "+strconvutil.Commify(last.Value))
+				titleParts = append(titleParts, " - "+opts.TitleSuffixCurrentValueFunc(last.Value))
 			}
 		}
 	}
