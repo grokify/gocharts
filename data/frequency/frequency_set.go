@@ -1,10 +1,12 @@
 package frequency
 
 import (
+	"sort"
 	"strings"
 	"time"
 
 	"github.com/grokify/gocharts/data/statictimeseries"
+	"github.com/grokify/gocharts/data/table"
 	"github.com/grokify/gotilla/time/timeutil"
 )
 
@@ -71,6 +73,15 @@ func (fss *FrequencySet) AddString(frequencyName, itemName string) {
 	fss.FrequencyMap[frequencyName] = fs
 }
 
+func (fss *FrequencySet) Names() []string {
+	names := []string{}
+	for name := range fss.FrequencyMap {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	return names
+}
+
 // FrequencySetDatetimeToQuarterUnique converts a FrequencySet
 // by date to one by quarter.s.
 func FrequencySetDatetimeToQuarter(name string, fsetIn FrequencySet) (FrequencySet, error) {
@@ -89,14 +100,13 @@ func FrequencySetDatetimeToQuarter(name string, fsetIn FrequencySet) (FrequencyS
 	return fsetQtr, nil
 }
 
-// FrequencySetTimeKeyCounts returns a DataSeries when
-// the first key is a RFC3339 time and a count of items
+// FrequencySetTimeKeyCount returns a DataSeries when
+// the first key is a RFC3339 time and a sum of items
 // is desired per time.
-func FrequencySetTimeKeyCounts(fset FrequencySet) (statictimeseries.DataSeries, error) {
+func FrequencySetTimeKeyCount(fset FrequencySet) (statictimeseries.DataSeries, error) {
 	ds := statictimeseries.NewDataSeries()
 	ds.SeriesName = fset.Name
 	for rfc3339, fstats := range fset.FrequencyMap {
-		dtCount := len(fstats.Items)
 		dt, err := time.Parse(time.RFC3339, rfc3339)
 		if err != nil {
 			return ds, err
@@ -104,8 +114,32 @@ func FrequencySetTimeKeyCounts(fset FrequencySet) (statictimeseries.DataSeries, 
 		di := statictimeseries.DataItem{
 			SeriesName: fset.Name,
 			Time:       dt,
-			Value:      int64(dtCount)}
+			Value:      int64(len(fstats.Items))}
 		ds.AddItem(di)
 	}
 	return ds, nil
+}
+
+func FrequencySetTimeKeyCountTable(fset FrequencySet, interval timeutil.Interval, countColName string) (table.TableData, error) {
+	ds, err := FrequencySetTimeKeyCount(fset)
+	if err != nil {
+		return table.NewTableData(), err
+	}
+	countColName = strings.TrimSpace(countColName)
+	if len(countColName) == 0 {
+		countColName = "Count"
+	}
+	tbl := statictimeseries.DataSeriesToTable(ds, interval, countColName)
+	return tbl, nil
+}
+
+func FrequencySetTimeKeyCountWriteXLSX(filename string, fset FrequencySet, interval timeutil.Interval, countColName string) error {
+	tbl, err := FrequencySetTimeKeyCountTable(fset, interval, countColName)
+	if err != nil {
+		return err
+	}
+	tf := table.TableFormatter{
+		Table:     &tbl,
+		Formatter: table.FormatStringAndInts}
+	return table.WriteXLSXFormatted(filename, &tf)
 }
