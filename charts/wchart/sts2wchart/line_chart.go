@@ -17,6 +17,8 @@ import (
 	"github.com/wcharczuk/go-chart/drawing"
 )
 
+const RatioTwoCol = ratio.RatioAcademy
+
 // LineChartOpts is used for month and quarter interval charts.
 type LineChartOpts struct {
 	TitleSuffixCurrentValue     bool
@@ -30,6 +32,9 @@ type LineChartOpts struct {
 	YAgoAnnotation              bool
 	AgoAnnotationPct            bool
 	YAxisLeft                   bool
+	Width                       uint64
+	Height                      uint64
+	AspectRatio                 float64
 	Interval                    timeutil.Interval
 }
 
@@ -77,9 +82,15 @@ func DataSeriesMonthToLineChart(ds statictimeseries.DataSeries, opts LineChartOp
 		graph.YAxis.AxisType = chart.YAxisSecondary // move Y axis to left.
 	}
 
-	if 1 == 0 {
-		graph.Height = 600.0
-		graph.Width = int(ratio.HeightToWidth(600.0, ratio.RatioAcademy))
+	if opts.Width > 0 && opts.Height > 0 {
+		graph.Width = int(opts.Width)
+		graph.Height = int(opts.Height)
+	} else if opts.Width > 0 && opts.AspectRatio > 0 {
+		graph.Width = int(opts.Width)
+		graph.Height = int(ratio.WidthToHeight(float64(opts.Width), opts.AspectRatio))
+	} else if opts.Height > 0 && opts.AspectRatio > 0 {
+		graph.Height = int(opts.Height)
+		graph.Width = int(ratio.HeightToWidth(float64(opts.Height), opts.AspectRatio))
 	}
 
 	mainSeries := chart.ContinuousSeries{}
