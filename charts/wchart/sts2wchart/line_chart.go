@@ -9,6 +9,7 @@ import (
 	"github.com/grokify/gocharts/charts/wchart"
 	"github.com/grokify/gocharts/data/statictimeseries"
 	"github.com/grokify/gotilla/math/mathutil"
+	"github.com/grokify/gotilla/math/ratio"
 	"github.com/grokify/gotilla/strconv/strconvutil"
 	"github.com/grokify/gotilla/time/month"
 	"github.com/grokify/gotilla/time/timeutil"
@@ -28,6 +29,7 @@ type LineChartOpts struct {
 	QAgoAnnotation              bool
 	YAgoAnnotation              bool
 	AgoAnnotationPct            bool
+	YAxisLeft                   bool
 	Interval                    timeutil.Interval
 }
 
@@ -69,6 +71,15 @@ func DataSeriesMonthToLineChart(ds statictimeseries.DataSeries, opts LineChartOp
 			},
 		},
 		Series: []chart.Series{},
+	}
+
+	if opts.YAxisLeft {
+		graph.YAxis.AxisType = chart.YAxisSecondary // move Y axis to left.
+	}
+
+	if 1 == 0 {
+		graph.Height = 600.0
+		graph.Width = int(ratio.HeightToWidth(600.0, ratio.RatioAcademy))
 	}
 
 	mainSeries := chart.ContinuousSeries{}
