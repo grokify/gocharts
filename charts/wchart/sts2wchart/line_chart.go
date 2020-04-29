@@ -3,6 +3,7 @@ package sts2wchart
 import (
 	"fmt"
 	"regexp"
+	"strconv"
 	"strings"
 	"time"
 
@@ -32,6 +33,7 @@ type LineChartOpts struct {
 	YAgoAnnotation              bool
 	AgoAnnotationPct            bool
 	YAxisLeft                   bool
+	YAxisTickFunc               func(time.Time) string
 	Width                       uint64
 	Height                      uint64
 	AspectRatio                 float64
@@ -60,7 +62,11 @@ func DataSeriesMonthToLineChart(ds statictimeseries.DataSeries, opts LineChartOp
 				}
 			}
 			if opts.TitleSuffixCurrentValue {
-				titleParts = append(titleParts, " - "+opts.TitleSuffixCurrentValueFunc(last.Value))
+				if opts.TitleSuffixCurrentValueFunc != nil {
+					titleParts = append(titleParts, " - "+opts.TitleSuffixCurrentValueFunc(last.Value))
+				} else {
+					titleParts = append(titleParts, " - "+strconv.Itoa(int(last.Value)))
+				}
 			}
 		}
 	}
@@ -127,6 +133,11 @@ func DataSeriesMonthToLineChart(ds statictimeseries.DataSeries, opts LineChartOp
 		}
 	}
 
+	fmtXTickFunc := opts.YAxisTickFunc
+	if fmtXTickFunc == nil {
+		fmtXTickFunc = FormatXTickTimeFunc(ds.Interval)
+	}
+
 	ac := AxesCreator{
 		PaddingTop: 50,
 		GridMajorStyle: chart.Style{
@@ -135,7 +146,7 @@ func DataSeriesMonthToLineChart(ds statictimeseries.DataSeries, opts LineChartOp
 		GridMinorStyle: chart.Style{
 			StrokeWidth: float64(1),
 			StrokeColor: drawing.ColorFromHex("aaaaaa")},
-		XTickFormatFunc: FormatXTickTimeFunc(ds.Interval),
+		XTickFormatFunc: fmtXTickFunc,
 		YNumTicks:       7,
 		YTickFormatFunc: FormatYTickFunc(ds.SeriesName)}
 
@@ -286,7 +297,8 @@ func dataSeriesQuarterToAnnotations(ds statictimeseries.DataSeries, opts LineCha
 func FormatXTickTimeFunc(interval timeutil.Interval) func(time.Time) string {
 	if interval == timeutil.Month {
 		return func(dt time.Time) string {
-			return dt.Format("Jan '06")
+			return dt.Format("1/06")
+			//	return dt.Format("Jan '06")
 		}
 	} else if interval == timeutil.Quarter {
 		return func(dt time.Time) string {
@@ -309,12 +321,6 @@ func FormatYTickFunc(seriesName string) func(int64) string {
 		return abbr
 	}
 }
-
-/*
-
-YTickFormatFunc: strconvutil.Int64Abbreviation}
-
-*/
 
 type AxesCreator struct {
 	GridMajorStyle  chart.Style
