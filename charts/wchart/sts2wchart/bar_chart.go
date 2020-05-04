@@ -61,6 +61,6 @@ func DataSeriesToBarChart(ds statictimeseries.DataSeries) chart.BarChart {
 	}
 
 	tickValues := mathutil.PrettyTicks(10.0, lowValue, highValue)
-	graph.YAxis.Ticks = wchart.Ticks(tickValues, strconvutil.Int64Abbreviation)
+	graph.YAxis.Ticks = wchart.TicksInt64(tickValues, strconvutil.Int64Abbreviation)
 	return graph
 }

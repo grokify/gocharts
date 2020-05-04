@@ -10,10 +10,34 @@ import (
 	"github.com/wcharczuk/go-chart"
 )
 
-// Ticks converts a slice of `int64` to a slice of `chart.Tick`. Common
+/*
+// Ticks converts a slice of `float64` to a slice of `chart.Tick`. Common
 // formatting functions include `strconvutil.Commify` and
 // `strconvutil.Int64Abbreviation`.
-func Ticks(tickValues []int64, fn strconvutil.Int64ToString) []chart.Tick {
+func Ticks(tickValues []float64, fn strconvutil.Float64ToString) []chart.Tick {
+	ticks := []chart.Tick{}
+	for _, tickVal := range tickValues {
+		ticks = append(ticks, chart.Tick{
+			Value: tickVal,
+			Label: fn(tickVal)})
+	}
+	return ticks
+}*/
+
+func Ticks(tickValues []float64, fn strconvutil.Float64ToString) []chart.Tick {
+	ticks := []chart.Tick{}
+	for _, tickVal := range tickValues {
+		ticks = append(ticks, chart.Tick{
+			Value: tickVal,
+			Label: fn(tickVal)})
+	}
+	return ticks
+}
+
+// TicksInt64 converts a slice of `int64` to a slice of `chart.Tick`. Common
+// formatting functions include `strconvutil.Commify` and
+// `strconvutil.Int64Abbreviation`.
+func TicksInt64(tickValues []int64, fn strconvutil.Int64ToString) []chart.Tick {
 	ticks := []chart.Tick{}
 	for _, tickVal := range tickValues {
 		ticks = append(ticks, chart.Tick{
@@ -25,12 +49,12 @@ func Ticks(tickValues []int64, fn strconvutil.Int64ToString) []chart.Tick {
 
 // GridLines creates a `[]chart.GridLine` from a slice of `int64`
 // and a style.
-func GridLines(values []int64, style chart.Style) []chart.GridLine {
+func GridLines(values []float64, style chart.Style) []chart.GridLine {
 	lines := []chart.GridLine{}
 	for _, val := range values {
 		lines = append(lines, chart.GridLine{
 			Style: style,
-			Value: float64(val)})
+			Value: val})
 	}
 	return lines
 }
