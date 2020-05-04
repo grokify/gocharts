@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/grokify/gotilla/encoding/csvutil"
-	"github.com/grokify/gotilla/type/stringsutil"
+	"github.com/grokify/gotilla/type/stringsutil/join"
 )
 
 // Endpoints writes a CSV with request data. Use Endpoints.Add(),
@@ -209,7 +209,7 @@ func (si *StatusInfo) StatusText() string {
 }
 
 func (si *StatusInfo) FullStatus() string {
-	return stringsutil.JoinCondenseTrimSpace([]string{strconv.Itoa(si.Status), si.SubStatus}, " ")
+	return join.JoinCondenseTrimSpace([]string{strconv.Itoa(si.Status), si.SubStatus}, " ")
 }
 
 func StatusMapToTimesArray(statuses map[string]StatusInfo) []StatusTime {

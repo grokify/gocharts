@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/grokify/gotilla/type/stringsutil"
+	"github.com/grokify/gotilla/type/stringsutil/join"
 )
 
 type SessionSet struct {
@@ -114,5 +114,5 @@ func (req *Request) Endpoint() string {
 }
 
 func (req *Request) FullStatus() string {
-	return stringsutil.JoinCondenseTrimSpace([]string{strconv.Itoa(req.StatusCode), req.SubStatusCode}, " ")
+	return join.JoinCondenseTrimSpace([]string{strconv.Itoa(req.StatusCode), req.SubStatusCode}, " ")
 }

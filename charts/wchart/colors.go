@@ -1,35 +1,33 @@
 package wchart
 
 import (
-	"fmt"
 	"image/color"
-	"strings"
 
+	"github.com/grokify/gotilla/image/colors"
 	"github.com/wcharczuk/go-chart"
 	"github.com/wcharczuk/go-chart/drawing"
-	"golang.org/x/image/colornames"
 )
 
-// MustGetSVGColor returns a `drawing.Color` for the
+// MustParseColor returns a `drawing.Color` for the
 // SVG color name. If the color name is not found,
 // black is returned.
-func MustGetSVGColor(colorName string) drawing.Color {
-	drawingColor, err := GetSVGColor(colorName)
+func MustParseColor(colorName string) drawing.Color {
+	drawingColor, err := ParseColor(colorName)
 	if err != nil {
 		return drawing.ColorBlack
 	}
 	return drawingColor
 }
 
-// GetSVGColor returns a `drawing.Color` for the
+// ParseColor returns a `drawing.Color` for the
 // SVG color name. If the color name is not found,
 // an error is returned.
-func GetSVGColor(colorName string) (drawing.Color, error) {
-	colorName = strings.ToLower(strings.TrimSpace(colorName))
-	if col, ok := colornames.Map[colorName]; ok {
-		return ColorImageToDrawing(col), nil
+func ParseColor(colorName string) (drawing.Color, error) {
+	rgba, err := colors.Parse(colorName)
+	if err != nil {
+		return drawing.ColorBlack, err
 	}
-	return drawing.ColorBlack, fmt.Errorf("E_COLOR_NOT_FOUND [%s]", colorName)
+	return ColorImageToDrawing(rgba), nil
 }
 
 // ColorImageToDrawing converts a `color.RGBA` value
@@ -42,7 +40,7 @@ var (
 	// ColorOrange is orange.
 	ColorOrange = drawing.Color{R: 255, G: 165, B: 0, A: 255}
 
-	// ColorGreeen is greeen.
+	// ColorGreen is green.
 	ColorGreen = drawing.Color{R: 0, G: 255, B: 0, A: 255}
 )
 
