@@ -42,22 +42,6 @@ func NewDataSeriesSet(interval timeutil.Interval, weekStart time.Weekday) DataSe
 		SeriesIntervals:          SeriesIntervals{Interval: interval, WeekStart: weekStart}}
 }
 
-type DataSeries struct {
-	SeriesName string
-	ItemMap    map[string]DataItem
-	Interval   timeutil.Interval // Informational
-}
-
-func NewDataSeries() DataSeries {
-	return DataSeries{ItemMap: map[string]DataItem{}}
-}
-
-type DataItem struct {
-	SeriesName string
-	Time       time.Time
-	Value      int64
-}
-
 func (set *DataSeriesSet) SeriesNamesSorted() []string {
 	return maputil.StringKeysSorted(set.OutputSeriesMap)
 }
@@ -75,11 +59,33 @@ func (set *DataSeriesSet) AddItem(item DataItem) {
 	set.SourceSeriesMap[item.SeriesName] = series
 }
 
+type DataSeries struct {
+	SeriesName string
+	ItemMap    map[string]DataItem
+	IsFloat    bool
+	Interval   timeutil.Interval // Informational
+}
+
+func NewDataSeries() DataSeries {
+	return DataSeries{ItemMap: map[string]DataItem{}}
+}
+
+type DataItem struct {
+	SeriesName string
+	Time       time.Time
+	IsFloat    bool
+	Value      int64
+	ValueFloat float64
+}
+
 // AddItem adds data item. It will sum values when
 // existing time unit is encountered.
 func (series *DataSeries) AddItem(item DataItem) {
 	if series.ItemMap == nil {
 		series.ItemMap = map[string]DataItem{}
+	}
+	if len(item.SeriesName) == 0 {
+		item.SeriesName = series.SeriesName
 	}
 	item.Time = item.Time.UTC()
 	rfc := item.Time.Format(time.RFC3339)
@@ -92,17 +98,30 @@ func (series *DataSeries) AddItem(item DataItem) {
 	}
 }
 
-func (series *DataSeries) ItemsSorted() []DataItem {
+func (series *DataSeries) SetSeriesName(seriesName string) {
+	series.SeriesName = seriesName
+	for k, v := range series.ItemMap {
+		v.SeriesName = seriesName
+		series.ItemMap[k] = v
+	}
+}
+
+func (series *DataSeries) Keys() []string {
 	keys := []string{}
 	for key := range series.ItemMap {
 		keys = append(keys, key)
 	}
 	sort.Strings(keys)
+	return keys
+}
+
+func (series *DataSeries) ItemsSorted() []DataItem {
+	keys := series.Keys()
 	items := []DataItem{}
 	for _, key := range keys {
 		item, ok := series.ItemMap[key]
 		if !ok {
-			panic("KEY_NOT_FOUND")
+			panic(fmt.Sprintf("KEY_NOT_FOUND [%s]", key))
 		}
 		items = append(items, item)
 	}
@@ -128,7 +147,7 @@ func (series *DataSeries) Pop() (DataItem, error) {
 	return last, nil
 }
 
-func (series *DataSeries) MinMaxValues() (int64, int64) {
+func (series *DataSeries) minMaxValuesInt64Only() (int64, int64) {
 	int64s := []int64{}
 	for _, item := range series.ItemMap {
 		int64s = append(int64s, item.Value)
@@ -138,6 +157,36 @@ func (series *DataSeries) MinMaxValues() (int64, int64) {
 	}
 	sort.Sort(sortutil.Int64Slice(int64s))
 	return int64s[0], int64s[len(int64s)-1]
+}
+
+func (series *DataSeries) minMaxValuesFloat64Only() (float64, float64) {
+	float64s := []float64{}
+	for _, item := range series.ItemMap {
+		float64s = append(float64s, item.ValueFloat)
+	}
+	if len(float64s) == 0 {
+		return 0, 0
+	}
+	float64slice := sort.Float64Slice(float64s)
+	sort.Sort(float64slice)
+
+	return float64slice[0], float64slice[len(float64slice)-1]
+}
+
+func (series *DataSeries) MinMaxValues() (int64, int64) {
+	if series.IsFloat {
+		min, max := series.minMaxValuesFloat64Only()
+		return int64(min), int64(max)
+	}
+	return series.minMaxValuesInt64Only()
+}
+
+func (series *DataSeries) MinMaxValuesFloat64() (float64, float64) {
+	if series.IsFloat {
+		return series.minMaxValuesFloat64Only()
+	}
+	min, max := series.minMaxValuesInt64Only()
+	return float64(min), float64(max)
 }
 
 func (series *DataSeries) MinValue() int64 {
@@ -412,4 +461,30 @@ func (ival *SeriesIntervals) buildCanonicalSeries() {
 		}
 	}
 	ival.CanonicalSeries = canonicalSeries
+}
+
+func DataSeriesDivide(numer, denom DataSeries) (DataSeries, error) {
+	denomKeys := denom.Keys()
+	ds := NewDataSeries()
+	ds.IsFloat = true
+	if numer.Interval == denom.Interval {
+		ds.Interval = denom.Interval
+	}
+	ds.SeriesName = numer.SeriesName + " / " + denom.SeriesName
+	for _, dKey := range denomKeys {
+		nItem, nOk := numer.ItemMap[dKey]
+		dItem, dOk := denom.ItemMap[dKey]
+		if !nOk && !dOk {
+			continue
+		} else if !dOk || dItem.Value == 0 {
+			return ds, fmt.Errorf("E_DENOM_MISSING_OR_ZERO TIME [%s] NUMERATOR [%v]",
+				dKey, nItem.Value)
+		}
+		ds.AddItem(DataItem{
+			Time:       dItem.Time,
+			ValueFloat: float64(nItem.Value) / float64(dItem.Value),
+			IsFloat:    true,
+		})
+	}
+	return ds, nil
 }

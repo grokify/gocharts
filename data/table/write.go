@@ -74,6 +74,17 @@ func FormatStringAndInts(val string, col uint) (interface{}, error) {
 	return num, nil
 }
 
+func FormatStringAndFloats(val string, col uint) (interface{}, error) {
+	if col == 0 {
+		return val, nil
+	}
+	num, err := strconv.ParseFloat(val, 64)
+	if err != nil {
+		return val, err
+	}
+	return num, nil
+}
+
 type TableFormatter struct {
 	Table     *TableData
 	Formatter func(val string, col uint) (interface{}, error)

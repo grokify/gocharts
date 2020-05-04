@@ -4,6 +4,7 @@ import (
 	"github.com/grokify/gocharts/data/statictimeseries"
 	"github.com/grokify/gotilla/time/month"
 	"github.com/grokify/gotilla/time/quarter"
+	"github.com/grokify/gotilla/time/timeutil"
 	"github.com/wcharczuk/go-chart"
 )
 
@@ -11,13 +12,13 @@ func DataSeriesMapToContinuousSeriesMonths(dsm map[string]statictimeseries.DataS
 	csSet := []chart.ContinuousSeries{}
 	for _, seriesName := range order {
 		if ds, ok := dsm[seriesName]; ok {
-			csSet = append(csSet, DataSeriesToContinuousSeriesMonth(ds))
+			csSet = append(csSet, DataSeriesToContinuousSeries(ds))
 		}
 	}
 	return csSet
 }
 
-func DataSeriesToContinuousSeriesMonth(ds statictimeseries.DataSeries) chart.ContinuousSeries {
+func DataSeriesToContinuousSeries(ds statictimeseries.DataSeries) chart.ContinuousSeries {
 	series := chart.ContinuousSeries{
 		Name:    ds.SeriesName,
 		XValues: []float64{},
@@ -25,12 +26,21 @@ func DataSeriesToContinuousSeriesMonth(ds statictimeseries.DataSeries) chart.Con
 
 	items := ds.ItemsSorted()
 	for _, item := range items {
-		series.XValues = append(
-			series.XValues,
-			float64(month.TimeToMonthContinuous(item.Time)))
-		series.YValues = append(
-			series.YValues,
-			float64(item.Value))
+		switch ds.Interval {
+		case timeutil.Month:
+			series.XValues = append(series.XValues,
+				float64(month.TimeToMonthContinuous(item.Time)))
+		case timeutil.Quarter:
+			series.XValues = append(series.XValues,
+				float64(quarter.TimeToQuarterContinuous(item.Time)))
+		default:
+			series.XValues = append(series.XValues, float64(item.Time.Unix()))
+		}
+		if ds.IsFloat {
+			series.YValues = append(series.YValues, item.ValueFloat)
+		} else {
+			series.YValues = append(series.YValues, float64(item.Value))
+		}
 	}
 	return series
 }

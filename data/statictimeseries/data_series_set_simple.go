@@ -93,6 +93,15 @@ func (set *DataSeriesSetSimple) AddItem(item DataItem) {
 	set.Times = append(set.Times, item.Time)
 }
 
+func (set *DataSeriesSetSimple) AddDataSeries(ds DataSeries) {
+	for _, item := range ds.ItemMap {
+		if len(item.SeriesName) == 0 {
+			item.SeriesName = ds.SeriesName
+		}
+		set.AddItem(item)
+	}
+}
+
 func (set *DataSeriesSetSimple) Inflate() {
 	if len(set.Times) == 0 {
 		set.Times = set.getTimes()
@@ -354,7 +363,11 @@ func DS3ToTable(ds3 DataSeriesSetSimple, fmtTime func(time.Time) string) (table.
 		for _, seriesName := range seriesNames {
 			item, err := ds3.GetItem(seriesName, rfc3339)
 			if err == nil {
-				line = append(line, strconv.Itoa(int(item.Value)))
+				if item.IsFloat {
+					line = append(line, fmt.Sprintf("%.10f", item.ValueFloat))
+				} else {
+					line = append(line, strconv.Itoa(int(item.Value)))
+				}
 			} else {
 				line = append(line, "0")
 			}
@@ -362,4 +375,15 @@ func DS3ToTable(ds3 DataSeriesSetSimple, fmtTime func(time.Time) string) (table.
 		tbl.Records = append(tbl.Records, line)
 	}
 	return tbl, nil
+}
+
+func WriteXLSX(filename string, ds3 DataSeriesSetSimple, fmtTime func(time.Time) string) error {
+	tbl, err := DS3ToTable(ds3, fmtTime)
+	if err != nil {
+		return err
+	}
+	tf := &table.TableFormatter{
+		Table:     &tbl,
+		Formatter: table.FormatStringAndFloats}
+	return table.WriteXLSXFormatted(filename, tf)
 }
