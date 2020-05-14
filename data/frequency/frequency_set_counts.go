@@ -43,7 +43,6 @@ func NewFrequencySetsCounts(fsets FrequencySets) FrequencySetsCounts {
 	}
 
 	for fsetGroupName, fsetGroup := range fsets.FrequencySetMap {
-		//fcounts.Key1Names = append(fcounts.Key1Names, fsetGroupName)
 		fcountsGroup, ok := fcounts.UidCounts[fsetGroupName]
 		if !ok {
 			fcountsGroup = map[string]uint{}
