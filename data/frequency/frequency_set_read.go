@@ -16,7 +16,7 @@ import (
 func NewFrequencySetsCSVs(filenames []string, key1ColIdx, key2ColIdx, uidColIdx uint) (FrequencySets, table.TableData, error) {
 	fsets := NewFrequencySets()
 	tbl := table.NewTableData()
-	for _, filename := range filenames {
+	for i, filename := range filenames {
 		filename = strings.TrimSpace(filename)
 		if len(filename) == 0 {
 			continue
@@ -27,6 +27,18 @@ func NewFrequencySetsCSVs(filenames []string, key1ColIdx, key2ColIdx, uidColIdx 
 		}
 		if len(tbl.Columns) == 0 {
 			tbl.Columns = tblx.Columns
+		} else {
+			curCols := strings.Join(tbl.Columns, ",")
+			nowCols := strings.Join(tblx.Columns, ",")
+			if curCols != nowCols {
+				if i == 0 {
+					// if len(tbl.Columns) > 0, i has to be > 0
+					panic("E_BAD_FILE_COUNTER_TABLE_COLUMNS")
+				}
+				return fsets, tbl, fmt.Errorf("CSV table definition mismatch [%s] AND [%s] for FILES [%s]",
+					curCols, nowCols,
+					filenames[i-1]+","+filename)
+			}
 		}
 		if len(tblx.Records) > 0 {
 			tbl.Records = append(tbl.Records, tblx.Records...)
