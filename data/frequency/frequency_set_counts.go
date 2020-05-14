@@ -2,6 +2,10 @@ package frequency
 
 import "github.com/grokify/gotilla/type/stringsutil"
 
+// FrequencySetsCounts returns UID counts. When used with
+// NewFrequencySetsCSV(), it can provide a sanity check
+// for raw record counts against aggregate query values,
+// e.g. compare counts of raw records to GROUP counts.
 type FrequencySetsCounts struct {
 	UidCounts     map[string]map[string]uint
 	UidCountsKey1 map[string]uint
