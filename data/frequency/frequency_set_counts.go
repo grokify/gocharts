@@ -10,7 +10,15 @@ type FrequencySetsCounts struct {
 	Key2Names     []string
 }
 
+func (fcounts *FrequencySetsCounts) preflate() {
+	fcounts.Key1Names = []string{}
+	fcounts.Key2Names = []string{}
+	fcounts.UidCountsKey1 = map[string]uint{}
+	fcounts.UidCountsKey2 = map[string]uint{}
+}
+
 func (fcounts *FrequencySetsCounts) Inflate() {
+	fcounts.preflate()
 	for key1Name, key1Vals := range fcounts.UidCounts {
 		fcounts.Key1Names = append(fcounts.Key1Names, key1Name)
 		if _, ok := fcounts.UidCountsKey1[key1Name]; !ok {
