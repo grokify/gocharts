@@ -44,6 +44,10 @@ func (fsets *FrequencySets) Flatten(name string) FrequencySet {
 	return fsetFlat
 }
 
+func (fsets *FrequencySets) Counts() FrequencySetsCounts {
+	return NewFrequencySetsCounts(*fsets)
+}
+
 type FrequencySet struct {
 	Name         string
 	FrequencyMap map[string]FrequencyStats

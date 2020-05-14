@@ -9,16 +9,18 @@ import (
 // an item appears and how many times number of
 // appearances appear.
 type FrequencyStats struct {
-	Name   string
-	Items  map[string]int
-	Counts map[string]int // how many items have counts.
+	Name      string
+	Items     map[string]int
+	Counts    map[string]int // how many items have counts.
+	ItemCount uint
 }
 
 func NewFrequencyStats(name string) FrequencyStats {
 	return FrequencyStats{
-		Name:   name,
-		Items:  map[string]int{},
-		Counts: map[string]int{}}
+		Name:      name,
+		Items:     map[string]int{},
+		Counts:    map[string]int{},
+		ItemCount: 0}
 }
 
 func (fs *FrequencyStats) AddInt(i int) {
@@ -47,6 +49,7 @@ func (fs *FrequencyStats) Inflate() {
 		}
 		fs.Counts[countString]++
 	}
+	fs.ItemCount = uint(len(fs.Items))
 }
 
 func (fs *FrequencyStats) ItemsSlice() []string {
