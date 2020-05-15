@@ -63,8 +63,8 @@ func FormatStrings(val string, col uint) (interface{}, error) {
 	return val, nil
 }
 
-func FormatStringAndInts(val string, col uint) (interface{}, error) {
-	if col == 0 {
+func FormatStringAndInts(val string, colIdx uint) (interface{}, error) {
+	if colIdx == 0 {
 		return val, nil
 	}
 	num, err := strconv.Atoi(val)
@@ -74,8 +74,8 @@ func FormatStringAndInts(val string, col uint) (interface{}, error) {
 	return num, nil
 }
 
-func FormatStringAndFloats(val string, col uint) (interface{}, error) {
-	if col == 0 {
+func FormatStringAndFloats(val string, colIdx uint) (interface{}, error) {
+	if colIdx == 0 {
 		return val, nil
 	}
 	num, err := strconv.ParseFloat(val, 64)
@@ -87,7 +87,7 @@ func FormatStringAndFloats(val string, col uint) (interface{}, error) {
 
 type TableFormatter struct {
 	Table     *TableData
-	Formatter func(val string, col uint) (interface{}, error)
+	Formatter func(val string, colIdx uint) (interface{}, error)
 }
 
 // WriteXLSXFormatted writes a table as an Excel XLSX file with
