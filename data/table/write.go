@@ -7,6 +7,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/360EntSecGroup-Skylar/excelize"
 	"github.com/grokify/gotilla/encoding/jsonutil"
@@ -77,6 +78,22 @@ func FormatStringAndInts(val string, colIdx uint) (interface{}, error) {
 func FormatStringAndFloats(val string, colIdx uint) (interface{}, error) {
 	if colIdx == 0 {
 		return val, nil
+	}
+	num, err := strconv.ParseFloat(val, 64)
+	if err != nil {
+		return val, err
+	}
+	return num, nil
+}
+
+func FormatTimeAndFloats(val string, colIdx uint) (interface{}, error) {
+	if colIdx == 0 {
+		dt, err := time.Parse(time.RFC3339, val)
+		if err != nil {
+			return val, err
+		} else {
+			return dt, nil
+		}
 	}
 	num, err := strconv.ParseFloat(val, 64)
 	if err != nil {
