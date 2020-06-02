@@ -53,9 +53,7 @@ func WriteXLSX(path string, tbls ...*TableData) error {
 		tfs = append(tfs,
 			&TableFormatter{
 				Table:     tbl,
-				Formatter: FormatStrings,
-			},
-		)
+				Formatter: FormatStrings})
 	}
 	return WriteXLSXFormatted(path, tfs...)
 }
