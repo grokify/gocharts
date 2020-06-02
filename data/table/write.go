@@ -86,6 +86,22 @@ func FormatStringAndFloats(val string, colIdx uint) (interface{}, error) {
 	return num, nil
 }
 
+func FormatTimeAndInts(val string, colIdx uint) (interface{}, error) {
+	if colIdx == 0 {
+		dt, err := time.Parse(time.RFC3339, val)
+		if err != nil {
+			return val, err
+		} else {
+			return dt, nil
+		}
+	}
+	num, err := strconv.Atoi(val)
+	if err != nil {
+		return val, err
+	}
+	return num, nil
+}
+
 func FormatTimeAndFloats(val string, colIdx uint) (interface{}, error) {
 	if colIdx == 0 {
 		dt, err := time.Parse(time.RFC3339, val)

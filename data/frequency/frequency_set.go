@@ -144,6 +144,6 @@ func FrequencySetTimeKeyCountWriteXLSX(filename string, fset FrequencySet, inter
 	}
 	tf := table.TableFormatter{
 		Table:     &tbl,
-		Formatter: table.FormatStringAndInts}
+		Formatter: table.FormatTimeAndInts}
 	return table.WriteXLSXFormatted(filename, &tf)
 }
