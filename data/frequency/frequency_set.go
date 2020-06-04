@@ -115,11 +115,10 @@ func FrequencySetTimeKeyCount(fset FrequencySet) (statictimeseries.DataSeries, e
 		if err != nil {
 			return ds, err
 		}
-		di := statictimeseries.DataItem{
+		ds.AddItem(statictimeseries.DataItem{
 			SeriesName: fset.Name,
 			Time:       dt,
-			Value:      int64(len(fstats.Items))}
-		ds.AddItem(di)
+			Value:      int64(len(fstats.Items))})
 	}
 	return ds, nil
 }
@@ -133,8 +132,7 @@ func FrequencySetTimeKeyCountTable(fset FrequencySet, interval timeutil.Interval
 	if len(countColName) == 0 {
 		countColName = "Count"
 	}
-	tbl := statictimeseries.DataSeriesToTable(ds, interval, countColName)
-	return tbl, nil
+	return statictimeseries.DataSeriesToTable(ds, interval, countColName), nil
 }
 
 func FrequencySetTimeKeyCountWriteXLSX(filename string, fset FrequencySet, interval timeutil.Interval, countColName string) error {
@@ -142,8 +140,8 @@ func FrequencySetTimeKeyCountWriteXLSX(filename string, fset FrequencySet, inter
 	if err != nil {
 		return err
 	}
-	tf := table.TableFormatter{
-		Table:     &tbl,
-		Formatter: table.FormatTimeAndInts}
-	return table.WriteXLSXFormatted(filename, &tf)
+	return table.WriteXLSXFormatted(filename,
+		&table.TableFormatter{
+			Table:     &tbl,
+			Formatter: table.FormatTimeAndInts})
 }
