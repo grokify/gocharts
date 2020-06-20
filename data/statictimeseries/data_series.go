@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/grokify/gotilla/sort/sortutil"
+	"github.com/grokify/gotilla/time/month"
 	"github.com/grokify/gotilla/time/timeutil"
 	"github.com/grokify/gotilla/type/maputil"
 	"github.com/pkg/errors"
@@ -94,6 +95,7 @@ func (series *DataSeries) AddItem(item DataItem) {
 	} else {
 		existingItem := series.ItemMap[rfc]
 		existingItem.Value += item.Value
+		existingItem.ValueFloat += item.ValueFloat
 		series.ItemMap[rfc] = existingItem
 	}
 }
@@ -197,6 +199,23 @@ func (series *DataSeries) MinValue() int64 {
 func (series *DataSeries) MaxValue() int64 {
 	_, max := series.MinMaxValues()
 	return max
+}
+
+func (series *DataSeries) ToMonth() DataSeries {
+	newDataSeries := DataSeries{
+		SeriesName: series.SeriesName,
+		ItemMap:    map[string]DataItem{},
+		IsFloat:    series.IsFloat,
+		Interval:   timeutil.Month}
+	for _, item := range series.ItemMap {
+		newDataSeries.AddItem(DataItem{
+			SeriesName: item.SeriesName,
+			Time:       month.MonthBegin(item.Time, 0),
+			IsFloat:    item.IsFloat,
+			Value:      item.Value,
+			ValueFloat: item.ValueFloat})
+	}
+	return newDataSeries
 }
 
 func (set *DataSeriesSet) Inflate() error {
