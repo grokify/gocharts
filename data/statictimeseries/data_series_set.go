@@ -21,7 +21,7 @@ type DataSeriesSet struct {
 	Order  []string
 }
 
-func NewDataSeriesSetSimple() DataSeriesSet {
+func NewDataSeriesSet() DataSeriesSet {
 	return DataSeriesSet{
 		Series: map[string]DataSeries{},
 		Times:  []time.Time{},

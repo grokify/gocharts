@@ -20,7 +20,7 @@ func NewDataSeriesSetSimpleSet(name string) DataSeriesSetSimpleSet {
 func (ds3set *DataSeriesSetSimpleSet) AddItem(setName string, item DataItem) {
 	ds3, ok := ds3set.SetsMap[setName]
 	if !ok {
-		ds3 = NewDataSeriesSetSimple()
+		ds3 = NewDataSeriesSet()
 		if len(item.SeriesName) > 0 {
 			ds3.Name = item.SeriesName
 		}
