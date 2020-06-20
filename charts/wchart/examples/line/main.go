@@ -75,7 +75,7 @@ func GetChartExampleDays() chart.Chart {
 		XAxis: chart.XAxis{
 			ValueFormatter: formatter.FormatTime,
 			GridLines: []chart.GridLine{
-				chart.GridLine{
+				{
 					Value: float64(time.Now().AddDate(0, 0, -6).Nanosecond()),
 				},
 			},
@@ -109,7 +109,7 @@ func GetChartExampleMonths() chart.Chart {
 		XAxis: chart.XAxis{
 			ValueFormatter: formatter.FormatTime,
 			GridLines: []chart.GridLine{
-				chart.GridLine{
+				{
 					Value: float64(time.Now().AddDate(0, 0, -6).Nanosecond()),
 				},
 			},
