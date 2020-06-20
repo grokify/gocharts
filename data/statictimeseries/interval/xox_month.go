@@ -1,11 +1,10 @@
-// statictimeseriesdata provides tools for adding and formatting
-// static time series data for reporting purposes.
-package statictimeseries
+package interval
 
 import (
 	"sort"
 	"time"
 
+	"github.com/grokify/gocharts/data/statictimeseries"
 	"github.com/grokify/gotilla/math/mathutil"
 	"github.com/grokify/gotilla/time/month"
 	"github.com/grokify/gotilla/time/timeutil"
@@ -18,7 +17,7 @@ type XoXGrowth struct {
 	QTD     int64
 }
 
-func NewXoXDataSeries(ds DataSeries) (XoXGrowth, error) {
+func NewXoXDataSeries(ds statictimeseries.DataSeries) (XoXGrowth, error) {
 	xox := XoXGrowth{DateMap: map[string]XoxPoint{}}
 	for dateNowRfc, itemNow := range ds.ItemMap {
 		dateNow, err := time.Parse(time.RFC3339, dateNowRfc)
@@ -67,7 +66,7 @@ func NewXoXDataSeries(ds DataSeries) (XoXGrowth, error) {
 	return xox, nil
 }
 
-func AggregatePriorMonths(ds DataSeries, start time.Time, months uint) int64 {
+func AggregatePriorMonths(ds statictimeseries.DataSeries, start time.Time, months uint) int64 {
 	aggregateValue := int64(0)
 	monthBegin := month.MonthBegin(start, 0)
 	for i := uint(1); i <= months; i++ {
