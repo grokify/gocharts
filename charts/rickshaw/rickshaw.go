@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/grokify/gocharts/data"
-	"github.com/grokify/gocharts/data/statictimeseries"
+	"github.com/grokify/gocharts/data/statictimeseries/interval"
 	"github.com/grokify/gotilla/time/timeutil"
 )
 
@@ -282,7 +282,7 @@ type RickshawDataFormatted struct {
 	FormattedData []DataInfoJs
 }
 
-func NewRickshawDataFormattedFromDateHistogram(timeset statictimeseries.DataSeriesSet) RickshawDataFormatted {
+func NewRickshawDataFormattedFromDateHistogram(timeset interval.DataSeriesSet) RickshawDataFormatted {
 	formatted := RickshawDataFormatted{}
 	formatted.SeriesNames = timeset.SeriesNamesSorted()
 	formatted.SeriesData = [][]Item{}

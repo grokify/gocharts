@@ -3,7 +3,7 @@ package c3
 import (
 	"encoding/json"
 
-	sts "github.com/grokify/gocharts/data/statictimeseries"
+	"github.com/grokify/gocharts/data/statictimeseries/interval"
 	tu "github.com/grokify/gotilla/time/timeutil"
 )
 
@@ -14,7 +14,7 @@ type TimeseriesData struct {
 	DivID         string
 	JSDataVar     string
 	JSChartVar    string
-	DataSeriesSet *sts.DataSeriesSet
+	DataSeriesSet *interval.DataSeriesSet
 	JSONData      TimeseriesDataJSON
 }
 
@@ -36,11 +36,11 @@ type TimeseriesPageData struct {
 	Title     string
 	URL       string
 	Charts    []TimeseriesData
-	Xox       sts.YoYQoQGrowth
-	XoxPoints []sts.XoxPoint
+	Xox       interval.YoYQoQGrowth
+	XoxPoints []interval.XoxPoint
 }
 
-func (data *TimeseriesData) AddDataSeriesSet(set *sts.DataSeriesSet, interval tu.Interval, seriesType sts.SeriesType) error {
+func (data *TimeseriesData) AddDataSeriesSet(set *interval.DataSeriesSet, interval tu.Interval, seriesType interval.SeriesType) error {
 	data.DataSeriesSet = set
 	columns := [][]interface{}{}
 	xValues := []interface{}{"x"}

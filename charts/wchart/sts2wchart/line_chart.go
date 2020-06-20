@@ -9,6 +9,7 @@ import (
 
 	"github.com/grokify/gocharts/charts/wchart"
 	"github.com/grokify/gocharts/data/statictimeseries"
+	"github.com/grokify/gocharts/data/statictimeseries/interval"
 	"github.com/grokify/gotilla/math/mathutil"
 	"github.com/grokify/gotilla/math/ratio"
 	"github.com/grokify/gotilla/strconv/strconvutil"
@@ -189,7 +190,7 @@ func dataSeriesMonthToAnnotations(ds statictimeseries.DataSeries, opts LineChart
 		return annoSeries, nil
 	}
 
-	xox, err := statictimeseries.NewXoXDataSeries(ds)
+	xox, err := interval.NewXoXDataSeries(ds)
 	if err != nil {
 		return annoSeries, err
 	}
@@ -242,7 +243,7 @@ func dataSeriesQuarterToAnnotations(ds statictimeseries.DataSeries, opts LineCha
 		return annoSeries, nil
 	}
 
-	xox, err := statictimeseries.NewXoXDataSeries(ds)
+	xox, err := interval.NewXoXDataSeries(ds)
 	if err != nil {
 		return annoSeries, err
 	}
