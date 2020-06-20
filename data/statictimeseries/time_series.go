@@ -52,8 +52,8 @@ func (tsf *TimeSeriesFunnel) TimesSorted() []time.Time {
 	return tu.Sort(times)
 }
 
-func (tsf *TimeSeriesFunnel) DataSeriesSetByQuarter() (DataSeriesSetSimple, error) {
-	dss := DataSeriesSetSimple{Order: tsf.Order}
+func (tsf *TimeSeriesFunnel) DataSeriesSetByQuarter() (DataSeriesSet, error) {
+	dss := DataSeriesSet{Order: tsf.Order}
 	seriesMapQuarter := map[string]DataSeries{}
 
 	allTimes := []time.Time{}

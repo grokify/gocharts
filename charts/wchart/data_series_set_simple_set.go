@@ -10,7 +10,7 @@ import (
 
 // DSSSimpleToChart converts a `DataSeriesSetSimple` to a
 // `wcharczuk.Chart`.
-func DSSSimpleToChart(data statictimeseries.DataSeriesSetSimple, layout string) chart.Chart {
+func DSSSimpleToChart(data statictimeseries.DataSeriesSet, layout string) chart.Chart {
 	formatter := TimeFormatter{Layout: layout}
 	graph := chart.Chart{
 		XAxis: chart.XAxis{

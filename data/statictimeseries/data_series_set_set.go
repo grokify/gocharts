@@ -8,13 +8,13 @@ import (
 
 type DataSeriesSetSimpleSet struct {
 	Name    string
-	SetsMap map[string]DataSeriesSetSimple
+	SetsMap map[string]DataSeriesSet
 }
 
 func NewDataSeriesSetSimpleSet(name string) DataSeriesSetSimpleSet {
 	return DataSeriesSetSimpleSet{
 		Name:    name,
-		SetsMap: map[string]DataSeriesSetSimple{}}
+		SetsMap: map[string]DataSeriesSet{}}
 }
 
 func (ds3set *DataSeriesSetSimpleSet) AddItem(setName string, item DataItem) {

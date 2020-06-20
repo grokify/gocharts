@@ -14,27 +14,27 @@ import (
 	"github.com/grokify/gotilla/type/stringsutil"
 )
 
-type DataSeriesSetSimple struct {
+type DataSeriesSet struct {
 	Name   string
 	Series map[string]DataSeries
 	Times  []time.Time
 	Order  []string
 }
 
-func NewDataSeriesSetSimple() DataSeriesSetSimple {
-	return DataSeriesSetSimple{
+func NewDataSeriesSetSimple() DataSeriesSet {
+	return DataSeriesSet{
 		Series: map[string]DataSeries{},
 		Times:  []time.Time{},
 		Order:  []string{}}
 }
 
-func (set *DataSeriesSetSimple) AddItems(items ...DataItem) {
+func (set *DataSeriesSet) AddItems(items ...DataItem) {
 	for _, item := range items {
 		set.AddItem(item)
 	}
 }
 
-func (set *DataSeriesSetSimple) AddItem(item DataItem) {
+func (set *DataSeriesSet) AddItem(item DataItem) {
 	item.SeriesName = strings.TrimSpace(item.SeriesName)
 	if _, ok := set.Series[item.SeriesName]; !ok {
 		set.Series[item.SeriesName] =
@@ -49,7 +49,7 @@ func (set *DataSeriesSetSimple) AddItem(item DataItem) {
 	set.Times = append(set.Times, item.Time)
 }
 
-func (set *DataSeriesSetSimple) AddDataSeries(ds DataSeries) {
+func (set *DataSeriesSet) AddDataSeries(ds DataSeries) {
 	for _, item := range ds.ItemMap {
 		if len(item.SeriesName) == 0 {
 			item.SeriesName = ds.SeriesName
@@ -58,7 +58,7 @@ func (set *DataSeriesSetSimple) AddDataSeries(ds DataSeries) {
 	}
 }
 
-func (set *DataSeriesSetSimple) Inflate() {
+func (set *DataSeriesSet) Inflate() {
 	if len(set.Times) == 0 {
 		set.Times = set.getTimes()
 	}
@@ -72,7 +72,7 @@ func (set *DataSeriesSetSimple) Inflate() {
 	}
 }
 
-func (set *DataSeriesSetSimple) SeriesNames() []string {
+func (set *DataSeriesSet) SeriesNames() []string {
 	seriesNames := []string{}
 	for seriesName := range set.Series {
 		seriesNames = append(seriesNames, seriesName)
@@ -81,7 +81,7 @@ func (set *DataSeriesSetSimple) SeriesNames() []string {
 	return seriesNames
 }
 
-func (set *DataSeriesSetSimple) GetItem(seriesName, rfc3339 string) (DataItem, error) {
+func (set *DataSeriesSet) GetItem(seriesName, rfc3339 string) (DataItem, error) {
 	di := DataItem{}
 	dss, ok := set.Series[seriesName]
 	if !ok {
@@ -94,7 +94,7 @@ func (set *DataSeriesSetSimple) GetItem(seriesName, rfc3339 string) (DataItem, e
 	return item, nil
 }
 
-func (set *DataSeriesSetSimple) getTimes() []time.Time {
+func (set *DataSeriesSet) getTimes() []time.Time {
 	times := []time.Time{}
 	for _, ds := range set.Series {
 		for _, item := range ds.ItemMap {
@@ -104,7 +104,7 @@ func (set *DataSeriesSetSimple) getTimes() []time.Time {
 	return times
 }
 
-func (set *DataSeriesSetSimple) TimeStrings() []string {
+func (set *DataSeriesSet) TimeStrings() []string {
 	times := []string{}
 	for _, ds := range set.Series {
 		for rfc3339 := range ds.ItemMap {
@@ -144,7 +144,7 @@ func (row *RowFloat64) Flatten(conv func(v float64) string) []string {
 }
 
 // ReportAxisX generates data for use with `C3Chart.C3Axis.C3AxisX.Categories`.
-func ReportAxisX(dss DataSeriesSetSimple, cols int, conv func(time.Time) string) []string {
+func ReportAxisX(dss DataSeriesSet, cols int, conv func(time.Time) string) []string {
 	var times tu.TimeSlice
 	if cols < len(dss.Times) {
 		min := len(dss.Times) - cols
@@ -160,7 +160,7 @@ func ReportAxisX(dss DataSeriesSetSimple, cols int, conv func(time.Time) string)
 }
 
 // Report generates data for use with `C3Chart.C3ChartData.Columns`.
-func Report(dss DataSeriesSetSimple, cols int, lowFirst bool) []RowInt64 {
+func Report(dss DataSeriesSet, cols int, lowFirst bool) []RowInt64 {
 	rows := []RowInt64{}
 	var times tu.TimeSlice
 	var timePlus1 time.Time
@@ -259,7 +259,7 @@ func ReportGrowthPct(rows []RowInt64) []RowFloat64 {
 
 // DS3ToTable returns a `DataSeriesSetSimple` as a
 // `table.TableData`.
-func DS3ToTable(ds3 DataSeriesSetSimple, fmtTime func(time.Time) string) (table.TableData, error) {
+func DS3ToTable(ds3 DataSeriesSet, fmtTime func(time.Time) string) (table.TableData, error) {
 	tbl := table.NewTableData()
 	seriesNames := ds3.SeriesNames()
 	tbl.Columns = []string{"Time"}
@@ -288,7 +288,7 @@ func DS3ToTable(ds3 DataSeriesSetSimple, fmtTime func(time.Time) string) (table.
 	return tbl, nil
 }
 
-func WriteXLSX(filename string, ds3 DataSeriesSetSimple, fmtTime func(time.Time) string) error {
+func WriteXLSX(filename string, ds3 DataSeriesSet, fmtTime func(time.Time) string) error {
 	tbl, err := DS3ToTable(ds3, fmtTime)
 	if err != nil {
 		return err

@@ -36,7 +36,7 @@ func getData(numQuarters int) []statictimeseries.DataItem {
 	return dataItems
 }
 
-func getDataSeriesSetSimple(numQuarters int) statictimeseries.DataSeriesSetSimple {
+func getDataSeriesSetSimple(numQuarters int) statictimeseries.DataSeriesSet {
 	dataItems := getData(numQuarters)
 
 	ds3 := statictimeseries.NewDataSeriesSetSimple()
@@ -52,7 +52,7 @@ func getDataSeriesSetSimple(numQuarters int) statictimeseries.DataSeriesSetSimpl
 	return ds3
 }
 
-func buildBarChart(ds3 statictimeseries.DataSeriesSetSimple, numCols int, lowFirst bool) (c3.C3Chart, []statictimeseries.RowInt64) {
+func buildBarChart(ds3 statictimeseries.DataSeriesSet, numCols int, lowFirst bool) (c3.C3Chart, []statictimeseries.RowInt64) {
 	rep := statictimeseries.Report(ds3, numCols, lowFirst)
 	fmtutil.PrintJSON(rep)
 	axis := statictimeseries.ReportAxisX(ds3, numCols,
@@ -63,7 +63,7 @@ func buildBarChart(ds3 statictimeseries.DataSeriesSetSimple, numCols int, lowFir
 	return chart, rep
 }
 
-func buildMoreInfoHTML(ds3 statictimeseries.DataSeriesSetSimple, c3Bar c3.C3Chart, rep []statictimeseries.RowInt64) string {
+func buildMoreInfoHTML(ds3 statictimeseries.DataSeriesSet, c3Bar c3.C3Chart, rep []statictimeseries.RowInt64) string {
 	moreInfoHTML := ""
 
 	axis := c3Bar.Axis.X.Categories
