@@ -15,7 +15,7 @@ import (
 )
 
 func drawChartDSSSimple(res http.ResponseWriter, req *http.Request) {
-	ds3 := statictimeseries.NewDataSeriesSetSimple()
+	ds3 := statictimeseries.NewDataSeriesSet()
 
 	j := 0
 	for i := -10; i <= 0; i++ {

@@ -39,7 +39,7 @@ func getData(numQuarters int) []statictimeseries.DataItem {
 func getDataSeriesSetSimple(numQuarters int) statictimeseries.DataSeriesSet {
 	dataItems := getData(numQuarters)
 
-	ds3 := statictimeseries.NewDataSeriesSetSimple()
+	ds3 := statictimeseries.NewDataSeriesSet()
 
 	// Add statictimeseries.DataItem slice in 1 function call
 	ds3.AddItems(dataItems...)
