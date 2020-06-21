@@ -10,18 +10,18 @@ import (
 
 // DataSeriesToTable generates a `table.TableData` given
 // a `DataSeries`.
-func DataSeriesToTable(ds DataSeries, interval timeutil.Interval, col2 string) table.TableData {
+func DataSeriesToTable(ds DataSeries, col2 string) table.TableData {
 	tbl := table.NewTableData()
 	colDt := "Date"
 	dtFmt := func(dt time.Time) string {
 		return dt.Format(time.RFC3339)
 	}
-	if interval == timeutil.Month {
+	if ds.Interval == timeutil.Month {
 		colDt = "Month"
 		dtFmt = func(dt time.Time) string {
 			return dt.Format("Jan '06")
 		}
-	} else if interval == timeutil.Quarter {
+	} else if ds.Interval == timeutil.Quarter {
 		colDt = "Quarter"
 		dtFmt = func(dt time.Time) string {
 			return timeutil.FormatQuarterYYQ(dt)
@@ -41,8 +41,8 @@ func DataSeriesToTable(ds DataSeries, interval timeutil.Interval, col2 string) t
 
 // DataSeriesWriteXLSX writes an XSLX file given a
 // `DataSeries`
-func DataSeriesWriteXLSX(filename string, ds DataSeries, interval timeutil.Interval, col2 string) error {
-	tbl := DataSeriesToTable(ds, interval, col2)
+func DataSeriesWriteXLSX(filename string, ds DataSeries, col2 string) error {
+	tbl := DataSeriesToTable(ds, col2)
 	tf := &table.TableFormatter{
 		Table:     &tbl,
 		Formatter: table.FormatStringAndInts}
