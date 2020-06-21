@@ -8,8 +8,7 @@ import (
 	"github.com/grokify/gotilla/time/timeutil"
 )
 
-// DataSeriesToTable generates a `table.TableData` given
-// a `DataSeries`.
+// DataSeriesToTable generates a `table.TableData` given a `DataSeries`.
 func DataSeriesToTable(ds DataSeries, col2 string) table.TableData {
 	tbl := table.NewTableData()
 	colDt := "Date"
@@ -39,8 +38,7 @@ func DataSeriesToTable(ds DataSeries, col2 string) table.TableData {
 	return tbl
 }
 
-// DataSeriesWriteXLSX writes an XSLX file given a
-// `DataSeries`
+// DataSeriesWriteXLSX writes an XSLX file given a `DataSeries`
 func DataSeriesWriteXLSX(filename string, ds DataSeries, col2 string) error {
 	tbl := DataSeriesToTable(ds, col2)
 	tf := &table.TableFormatter{
