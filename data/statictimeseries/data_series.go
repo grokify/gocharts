@@ -198,8 +198,8 @@ func (ds *DataSeries) ToMonthCumulative(timesInput ...time.Time) (DataSeries, er
 		IsFloat:    ds.IsFloat,
 		Interval:   timeutil.Month}
 	dsMonth := ds.ToMonth()
-	min := time.Now()
-	max := time.Now()
+	var min time.Time
+	var max time.Time
 	var err error
 	if len(timesInput) > 0 {
 		min, max, err = timeutil.TimeSliceMinMax(timesInput)
