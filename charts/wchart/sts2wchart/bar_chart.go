@@ -2,11 +2,13 @@ package sts2wchart
 
 import (
 	"fmt"
+	"strconv"
 
 	"github.com/grokify/gocharts/charts/wchart"
 	"github.com/grokify/gocharts/data/statictimeseries"
 	"github.com/grokify/gotilla/math/mathutil"
 	"github.com/grokify/gotilla/strconv/strconvutil"
+	"github.com/grokify/gotilla/type/maputil"
 	"github.com/wcharczuk/go-chart"
 )
 
@@ -63,4 +65,21 @@ func DataSeriesToBarChart(ds statictimeseries.DataSeries) chart.BarChart {
 	tickValues := mathutil.PrettyTicks(10.0, lowValue, highValue)
 	graph.YAxis.Ticks = wchart.TicksInt64(tickValues, strconvutil.Int64Abbreviation)
 	return graph
+}
+
+func MsiToValues(msi maputil.MapStringInt, inclValueInKey bool) []chart.Value {
+	values := []chart.Value{}
+	keys := msi.Keys(true)
+	for _, key := range keys {
+		val := msi.KeyValue(key, 0)
+		if inclValueInKey {
+			valStr := strconv.Itoa(val)
+			key += " (" + valStr + ")"
+		}
+		values = append(values,
+			chart.Value{
+				Label: key,
+				Value: float64(val)})
+	}
+	return values
 }
