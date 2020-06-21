@@ -35,9 +35,7 @@ type LineChartOpts struct {
 	YAgoAnnotation              bool
 	AgoAnnotationPct            bool
 	YAxisLeft                   bool
-	YAxisMin                    float64
-	YAxisMinEnable              bool
-	XAxisTickFunc               func(time.Time) string
+	YAxisTickFunc               func(time.Time) string
 	Width                       uint64
 	Height                      uint64
 	AspectRatio                 float64
@@ -54,23 +52,9 @@ func (opts *LineChartOpts) WantTitleSuffix() bool {
 		opts.TitleSuffixCurrentDateFunc != nil
 }
 
-func DataSeriesToLineChart(opts LineChartOpts, ds statictimeseries.DataSeries, setName string) (chart.Chart, error) {
-	dss := statictimeseries.NewDataSeriesSet()
-	dss.Name = setName
-	dss.Interval = ds.Interval
-	dss.IsFloat = ds.IsFloat
-	dss.Series[ds.SeriesName] = ds
-	dss.Inflate()
-	return DataSeriesSetToLineChart(opts, dss)
-}
-
-func DataSeriesSetToLineChart(opts LineChartOpts, dss statictimeseries.DataSeriesSet) (chart.Chart, error) {
-	titleParts := []string{dss.Name}
-	if opts.WantTitleSuffix() && len(dss.Series) == 1 {
-		ds, err := dss.GetSeriesByIndex(0)
-		if err != nil {
-			return chart.Chart{}, err
-		}
+func DataSeriesToLineChart(opts LineChartOpts, ds statictimeseries.DataSeries) chart.Chart {
+	titleParts := []string{ds.SeriesName}
+	if opts.WantTitleSuffix() {
 		last, err := ds.Last()
 		if err == nil {
 			if opts.TitleSuffixCurrentDateFunc != nil {
@@ -119,42 +103,31 @@ func DataSeriesSetToLineChart(opts LineChartOpts, dss statictimeseries.DataSerie
 
 	mainSeries := chart.ContinuousSeries{}
 	if opts.Interval == timeutil.Quarter || opts.Interval == timeutil.Month {
-		if opts.Interval != dss.Interval {
-			return chart.Chart{}, fmt.Errorf("E_INTERVAL_MISMATCH INPUT_INTERVAL [%s]", dss.Interval)
-			//panic("opts.Interval dss.Interval mismatch")
+		if opts.Interval != ds.Interval {
+			panic("opts.Interval ds.Interval mismatch")
 		}
 	}
+	mainSeries = wchart.DataSeriesToContinuousSeries(ds)
 
-	if len(dss.Order) == 0 {
-		dss.Inflate()
-	}
-	for _, seriesName := range dss.Order {
-		if ds, ok := dss.Series[seriesName]; ok {
-			mainSeries = wchart.DataSeriesToContinuousSeries(ds)
+	mainSeries.Style = chart.Style{
+		StrokeWidth: float64(3)}
+	graph.Series = append(graph.Series, mainSeries)
 
-			mainSeries.Style = chart.Style{
-				StrokeWidth: float64(3)}
-			graph.Series = append(graph.Series, mainSeries)
-
-			if opts.RegressionDegree == 1 {
-				linRegSeries := &chart.LinearRegressionSeries{
-					InnerSeries: mainSeries,
-					Style: chart.Style{
-						StrokeWidth: float64(2),
-						StrokeColor: wchart.ColorOrange}}
-				graph.Series = append(graph.Series, linRegSeries)
-			} else if opts.RegressionDegree > 1 {
-				polyRegSeries := &chart.PolynomialRegressionSeries{
-					Degree:      opts.RegressionDegree,
-					InnerSeries: mainSeries,
-					Style: chart.Style{
-						StrokeWidth: float64(2),
-						StrokeColor: wchart.ColorOrange}}
-				graph.Series = append(graph.Series, polyRegSeries)
-			}
-		} else {
-			return chart.Chart{}, fmt.Errorf("E_SERIES_NAME_NOT_FOUND [%s]", seriesName)
-		}
+	if opts.RegressionDegree == 1 {
+		linRegSeries := &chart.LinearRegressionSeries{
+			InnerSeries: mainSeries,
+			Style: chart.Style{
+				StrokeWidth: float64(2),
+				StrokeColor: wchart.ColorOrange}}
+		graph.Series = append(graph.Series, linRegSeries)
+	} else if opts.RegressionDegree > 1 {
+		polyRegSeries := &chart.PolynomialRegressionSeries{
+			Degree:      opts.RegressionDegree,
+			InnerSeries: mainSeries,
+			Style: chart.Style{
+				StrokeWidth: float64(2),
+				StrokeColor: wchart.ColorOrange}}
+		graph.Series = append(graph.Series, polyRegSeries)
 	}
 
 	if opts.Legend {
@@ -164,9 +137,9 @@ func DataSeriesSetToLineChart(opts LineChartOpts, dss statictimeseries.DataSerie
 		}
 	}
 
-	fmtXTickFunc := opts.XAxisTickFunc
+	fmtXTickFunc := opts.YAxisTickFunc
 	if fmtXTickFunc == nil {
-		fmtXTickFunc = FormatXTickTimeFunc(dss.Interval)
+		fmtXTickFunc = FormatXTickTimeFunc(ds.Interval)
 	}
 
 	axesCreator := AxesCreator{
@@ -179,38 +152,30 @@ func DataSeriesSetToLineChart(opts LineChartOpts, dss statictimeseries.DataSerie
 			StrokeColor: drawing.ColorFromHex("aaaaaa")},
 		XTickFormatFunc: fmtXTickFunc,
 		YNumTicks:       7,
-		YTickFormatFunc: FormatYTickFunc(dss.Name)}
+		YTickFormatFunc: FormatYTickFunc(ds.SeriesName)}
 
-	minTime, maxTime := dss.MinMaxTimes()
-	if !dss.IsFloat {
-		minValue, maxValue := dss.MinMaxValues()
-		if opts.YAxisMinEnable {
-			minValue = int64(opts.YAxisMin)
-		}
+	minTime, maxTime := ds.MinMaxTimes()
+	if !ds.IsFloat {
+		minValue, maxValue := ds.MinMaxValues()
 		graph = axesCreator.ChartAddAxesDataSeries(
-			graph, dss.Interval, minTime, maxTime, minValue, maxValue)
+			graph, ds.Interval, minTime, maxTime, minValue, maxValue)
 	} else {
 		graph = axesCreator.AddBackground(graph)
-		graph = axesCreator.AddXAxis(graph, dss.Interval, minTime, maxTime)
+		graph = axesCreator.AddXAxis(graph, ds.Interval, minTime, maxTime)
 		axesCreator.YTickFormatFunc = func(raw float64) string {
 			return fmt.Sprintf("%.1f%%", raw*100)
 		}
-		minValue, maxValue := dss.MinMaxValuesFloat64()
-		if opts.YAxisMinEnable {
-			minValue = opts.YAxisMin
-		}
+		minValue, maxValue := ds.MinMaxValuesFloat64()
 		graph = axesCreator.AddYAxisPercent(graph, minValue, maxValue)
 	}
 
 	if opts.Interval == timeutil.Month {
-		for _, ds := range dss.Series {
-			annoSeries, err := dataSeriesMonthToAnnotations(ds, opts)
-			if err == nil && len(annoSeries.Annotations) > 0 {
-				graph.Series = append(graph.Series, annoSeries)
-			}
+		annoSeries, err := dataSeriesMonthToAnnotations(ds, opts)
+		if err == nil && len(annoSeries.Annotations) > 0 {
+			graph.Series = append(graph.Series, annoSeries)
 		}
 	}
-	return graph, nil
+	return graph
 }
 
 func dataSeriesMonthToAnnotations(ds statictimeseries.DataSeries, opts LineChartOpts) (chart.AnnotationSeries, error) {

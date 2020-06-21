@@ -8,18 +8,26 @@ import (
 	"github.com/wcharczuk/go-chart"
 )
 
-// DSSSimpleToChart converts a `DataSeriesSetSimple` to a
-// `wcharczuk.Chart`.
-func DSSSimpleToChart(data statictimeseries.DataSeriesSet, layout string) chart.Chart {
-	formatter := TimeFormatter{Layout: layout}
+type ChartOptions struct {
+	LegendEnable    bool
+	YAxisLeft       bool
+	XAxisTimeLayout string
+}
+
+// DSSToChart converts a `DataSeriesSet` to a `wcharczuk.Chart`.
+func DSSToChart(data statictimeseries.DataSeriesSet, opts ChartOptions) chart.Chart {
+	formatter := TimeFormatter{Layout: opts.XAxisTimeLayout}
 	graph := chart.Chart{
 		XAxis: chart.XAxis{
-			ValueFormatter: formatter.FormatTime,
-		},
+			ValueFormatter: formatter.FormatTime},
 		Series: []chart.Series{},
 	}
 	for _, series := range data.Series {
-		ts := chart.TimeSeries{Name: series.SeriesName}
+		ts := chart.TimeSeries{
+			Name: series.SeriesName}
+		if 1 == 0 && opts.YAxisLeft {
+			ts.YAxis = chart.YAxisSecondary
+		}
 		times := timeutil.TimeSeriesSlice(
 			timeutil.Month,
 			statictimeseries.DataSeriesItemTimes(&series))
@@ -35,6 +43,11 @@ func DSSSimpleToChart(data statictimeseries.DataSeriesSet, layout string) chart.
 		}
 		ts.YValues = yvalues
 		graph.Series = append(graph.Series, ts)
+	}
+	if opts.LegendEnable {
+		graph.Elements = []chart.Renderable{
+			chart.Legend(&graph),
+		}
 	}
 	return graph
 }

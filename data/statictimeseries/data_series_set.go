@@ -10,15 +10,19 @@ import (
 	"time"
 
 	"github.com/grokify/gocharts/data/table"
+	"github.com/grokify/gotilla/sort/sortutil"
+	"github.com/grokify/gotilla/time/timeutil"
 	tu "github.com/grokify/gotilla/time/timeutil"
 	"github.com/grokify/gotilla/type/stringsutil"
 )
 
 type DataSeriesSet struct {
-	Name   string
-	Series map[string]DataSeries
-	Times  []time.Time
-	Order  []string
+	Name     string
+	Series   map[string]DataSeries
+	Times    []time.Time
+	Order    []string
+	IsFloat  bool
+	Interval timeutil.Interval
 }
 
 func NewDataSeriesSet() DataSeriesSet {
@@ -81,6 +85,19 @@ func (set *DataSeriesSet) SeriesNames() []string {
 	return seriesNames
 }
 
+func (set *DataSeriesSet) GetSeriesByIndex(index int) (DataSeries, error) {
+	if len(set.Order) == 0 && len(set.Series) > 0 {
+		set.Inflate()
+	}
+	if index < len(set.Order) {
+		name := set.Order[index]
+		if ds, ok := set.Series[name]; ok {
+			return ds, nil
+		}
+	}
+	return DataSeries{}, fmt.Errorf("E_CANNOT_FIND_INDEX_[%d]_SET_COUNT_[%d]", index, len(set.Order))
+}
+
 func (set *DataSeriesSet) GetItem(seriesName, rfc3339 string) (DataItem, error) {
 	di := DataItem{}
 	dss, ok := set.Series[seriesName]
@@ -112,6 +129,68 @@ func (set *DataSeriesSet) TimeStrings() []string {
 		}
 	}
 	return stringsutil.SliceCondenseSpace(times, true, true)
+}
+
+func (set *DataSeriesSet) MinMaxTimes() (time.Time, time.Time) {
+	values := sortutil.TimeSlice{}
+	for _, ds := range set.Series {
+		min, max := ds.MinMaxTimes()
+		values = append(values, min, max)
+	}
+	sort.Sort(values)
+	return values[0], values[len(values)-1]
+}
+
+func (set *DataSeriesSet) MinMaxValues() (int64, int64) {
+	values := sortutil.Int64Slice{}
+	for _, ds := range set.Series {
+		min, max := ds.MinMaxValues()
+		values = append(values, min, max)
+	}
+	sort.Sort(values)
+	return values[0], values[len(values)-1]
+}
+
+func (set *DataSeriesSet) MinMaxValuesFloat64() (float64, float64) {
+	values := sort.Float64Slice{}
+	for _, ds := range set.Series {
+		min, max := ds.MinMaxValuesFloat64()
+		values = append(values, min, max)
+	}
+	sort.Sort(values)
+	return values[0], values[len(values)-1]
+}
+
+func (set *DataSeriesSet) ToMonth() DataSeriesSet {
+	newDss := DataSeriesSet{
+		Name:     set.Name,
+		Series:   map[string]DataSeries{},
+		Times:    set.Times,
+		Interval: timeutil.Month,
+		Order:    set.Order}
+	for name, ds := range set.Series {
+		newDss.Series[name] = ds.ToMonth()
+	}
+	newDss.Times = newDss.getTimes()
+	return newDss
+}
+
+func (set *DataSeriesSet) ToMonthCumulative() (DataSeriesSet, error) {
+	newDss := DataSeriesSet{
+		Name:     set.Name,
+		Series:   map[string]DataSeries{},
+		Times:    set.Times,
+		Interval: timeutil.Month,
+		Order:    set.Order}
+	for name, ds := range set.Series {
+		newDs, err := ds.ToMonthCumulative(newDss.Times...)
+		if err != nil {
+			return newDss, err
+		}
+		newDss.Series[name] = newDs
+	}
+	newDss.Times = newDss.getTimes()
+	return newDss, nil
 }
 
 type RowInt64 struct {

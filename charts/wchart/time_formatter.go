@@ -11,7 +11,7 @@ import (
 // `github.com/wcharczuk/go-chart.ValueFormatter` interface
 // using a given time layout string.
 type TimeFormatter struct {
-	Layout string
+	Layout string // time format string
 }
 
 func (tvf *TimeFormatter) FormatTime(v interface{}) string {

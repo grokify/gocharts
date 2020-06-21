@@ -155,6 +155,25 @@ func (series *DataSeries) MaxValue() int64 {
 	return max
 }
 
+func (ds *DataSeries) getTimes() []time.Time {
+	times := []time.Time{}
+	for _, item := range ds.ItemMap {
+		times = append(times, item.Time)
+	}
+	return times
+}
+
+func (ds *DataSeries) GetTimeSlice(sortSlice bool) timeutil.TimeSlice {
+	times := timeutil.TimeSlice{}
+	for _, item := range ds.ItemMap {
+		times = append(times, item.Time)
+	}
+	if sortSlice {
+		sort.Sort(times)
+	}
+	return times
+}
+
 func (series *DataSeries) ToMonth() DataSeries {
 	newDataSeries := DataSeries{
 		SeriesName: series.SeriesName,
@@ -170,6 +189,73 @@ func (series *DataSeries) ToMonth() DataSeries {
 			ValueFloat: item.ValueFloat})
 	}
 	return newDataSeries
+}
+
+func (ds *DataSeries) ToMonthCumulative(timesInput ...time.Time) (DataSeries, error) {
+	newDataSeries := DataSeries{
+		SeriesName: ds.SeriesName,
+		ItemMap:    map[string]DataItem{},
+		IsFloat:    ds.IsFloat,
+		Interval:   timeutil.Month}
+	dsMonth := ds.ToMonth()
+	min := time.Now()
+	max := time.Now()
+	var err error
+	if len(timesInput) > 0 {
+		min, max, err = timeutil.TimeSliceMinMax(timesInput)
+		if err != nil {
+			return newDataSeries, err
+		}
+	} else {
+		min, max, err = timeutil.TimeSliceMinMax(dsMonth.getTimes())
+		if err != nil {
+			return newDataSeries, err
+		}
+	}
+	times := timeutil.TimeSeriesSlice(timeutil.Month, []time.Time{min, max})
+	cItems := []DataItem{}
+	for _, t := range times {
+		rfc := t.Format(time.RFC3339)
+		if item, ok := dsMonth.ItemMap[rfc]; ok {
+			if len(cItems) > 0 {
+				prevCItem := cItems[len(cItems)-1]
+				cItems = append(cItems, DataItem{
+					SeriesName: newDataSeries.SeriesName,
+					IsFloat:    newDataSeries.IsFloat,
+					Time:       t,
+					Value:      item.Value + prevCItem.Value,
+					ValueFloat: item.ValueFloat + prevCItem.ValueFloat})
+			} else {
+				cItems = append(cItems, DataItem{
+					SeriesName: newDataSeries.SeriesName,
+					IsFloat:    newDataSeries.IsFloat,
+					Time:       t,
+					Value:      item.Value,
+					ValueFloat: item.ValueFloat})
+			}
+		} else {
+			if len(cItems) > 0 {
+				prevCItem := cItems[len(cItems)-1]
+				cItems = append(cItems, DataItem{
+					SeriesName: newDataSeries.SeriesName,
+					IsFloat:    newDataSeries.IsFloat,
+					Time:       t,
+					Value:      prevCItem.Value,
+					ValueFloat: prevCItem.ValueFloat})
+			} else {
+				cItems = append(cItems, DataItem{
+					SeriesName: newDataSeries.SeriesName,
+					IsFloat:    newDataSeries.IsFloat,
+					Time:       t,
+					Value:      0,
+					ValueFloat: 0})
+			}
+		}
+	}
+	for _, cItem := range cItems {
+		newDataSeries.AddItem(cItem)
+	}
+	return newDataSeries, nil
 }
 
 func AggregateSeries(s1 DataSeries) DataSeries {

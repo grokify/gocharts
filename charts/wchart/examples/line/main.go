@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/grokify/gocharts/charts/wchart"
+	"github.com/grokify/gocharts/charts/wchart/sts2wchart"
 	"github.com/grokify/gocharts/data/statictimeseries"
 	"github.com/grokify/gotilla/fmt/fmtutil"
 	"github.com/grokify/gotilla/time/month"
@@ -28,7 +29,15 @@ func drawChartDSSSimple(res http.ResponseWriter, req *http.Request) {
 		ds3.AddItem(item)
 	}
 	fmtutil.PrintJSON(ds3)
-	graph := wchart.DSSSimpleToChart(ds3, "Jan '06")
+	graph, err := sts2wchart.DataSeriesSetToLineChart(
+		sts2wchart.LineChartOpts{
+			XAxisTickFunc: func(t time.Time) string {
+				return t.Format("Jan '06")
+			}},
+		ds3)
+	if err != nil {
+		panic(err)
+	}
 
 	res.Header().Set("Content-Type", "image/png")
 	graph.Render(chart.PNG, res)
