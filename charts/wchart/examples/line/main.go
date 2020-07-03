@@ -30,11 +30,12 @@ func drawChartDSSSimple(res http.ResponseWriter, req *http.Request) {
 	}
 	fmtutil.PrintJSON(ds3)
 	graph, err := sts2wchart.DataSeriesSetToLineChart(
-		sts2wchart.LineChartOpts{
+		ds3,
+		&sts2wchart.LineChartOpts{
 			XAxisTickFunc: func(t time.Time) string {
 				return t.Format("Jan '06")
 			}},
-		ds3)
+	)
 	if err != nil {
 		panic(err)
 	}
