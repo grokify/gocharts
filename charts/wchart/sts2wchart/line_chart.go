@@ -54,17 +54,46 @@ func (opts *LineChartOpts) WantTitleSuffix() bool {
 		opts.TitleSuffixCurrentDateFunc != nil
 }
 
-func DataSeriesToLineChart(opts LineChartOpts, ds statictimeseries.DataSeries, setName string) (chart.Chart, error) {
+var defaultLineChartOpts = &LineChartOpts{
+	Legend:           true,
+	RegressionDegree: 0,
+	YAxisLeft:        true,
+	YAxisMinEnable:   true,
+	XAxisTickFunc: func(t time.Time) string {
+		return t.Format("Jan '06")
+	},
+	NowAnnotation:    true,
+	QAgoAnnotation:   true,
+	YAgoAnnotation:   true,
+	AgoAnnotationPct: true,
+	Interval:         timeutil.Month}
+
+func GetDefaultLineChartOpts() *LineChartOpts {
+	return defaultLineChartOpts
+}
+
+func DataSeriesToLineChart(ds statictimeseries.DataSeries, opts *LineChartOpts) (chart.Chart, error) {
 	dss := statictimeseries.NewDataSeriesSet()
-	dss.Name = setName
+	dss.Name = ds.SeriesName
 	dss.Interval = ds.Interval
 	dss.IsFloat = ds.IsFloat
 	dss.Series[ds.SeriesName] = ds
 	dss.Inflate()
-	return DataSeriesSetToLineChart(opts, dss)
+	return DataSeriesSetToLineChart(dss, opts)
 }
 
-func DataSeriesSetToLineChart(opts LineChartOpts, dss statictimeseries.DataSeriesSet) (chart.Chart, error) {
+func WriteLineChartDataSeriesSet(filename string, dss statictimeseries.DataSeriesSet, opts *LineChartOpts) error {
+	chart, err := DataSeriesSetToLineChart(dss, opts)
+	if err != nil {
+		return err
+	}
+	return wchart.WritePNG(filename, chart)
+}
+
+func DataSeriesSetToLineChart(dss statictimeseries.DataSeriesSet, opts *LineChartOpts) (chart.Chart, error) {
+	if opts == nil {
+		opts = defaultLineChartOpts
+	}
 	titleParts := []string{dss.Name}
 	if opts.WantTitleSuffix() && len(dss.Series) == 1 {
 		ds, err := dss.GetSeriesByIndex(0)
@@ -204,7 +233,7 @@ func DataSeriesSetToLineChart(opts LineChartOpts, dss statictimeseries.DataSerie
 
 	if opts.Interval == timeutil.Month {
 		for _, ds := range dss.Series {
-			annoSeries, err := dataSeriesMonthToAnnotations(ds, opts)
+			annoSeries, err := dataSeriesMonthToAnnotations(ds, *opts)
 			if err == nil && len(annoSeries.Annotations) > 0 {
 				graph.Series = append(graph.Series, annoSeries)
 			}
