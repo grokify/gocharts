@@ -64,7 +64,7 @@ func (set *DataSeriesSet) AddDataSeries(ds DataSeries) {
 
 func (set *DataSeriesSet) Inflate() {
 	if len(set.Times) == 0 {
-		set.Times = set.getTimes()
+		set.Times = set.GetTimeSlice(true)
 	}
 	if len(set.Order) == 0 {
 		order := []string{}
@@ -111,12 +111,16 @@ func (set *DataSeriesSet) GetItem(seriesName, rfc3339 string) (DataItem, error) 
 	return item, nil
 }
 
-func (set *DataSeriesSet) getTimes() []time.Time {
-	times := []time.Time{}
+func (set *DataSeriesSet) GetTimeSlice(sortAsc bool) sortutil.TimeSlice {
+	//times := []time.Time{}
+	times := sortutil.TimeSlice{}
 	for _, ds := range set.Series {
 		for _, item := range ds.ItemMap {
 			times = append(times, item.Time)
 		}
+	}
+	if len(times) > 0 && sortAsc {
+		sort.Sort(times)
 	}
 	return times
 }
@@ -171,11 +175,11 @@ func (set *DataSeriesSet) ToMonth() DataSeriesSet {
 	for name, ds := range set.Series {
 		newDss.Series[name] = ds.ToMonth()
 	}
-	newDss.Times = newDss.getTimes()
+	newDss.Times = newDss.GetTimeSlice(true)
 	return newDss
 }
 
-func (set *DataSeriesSet) ToMonthCumulative() (DataSeriesSet, error) {
+func (set *DataSeriesSet) ToMonthCumulative(popLast bool) (DataSeriesSet, error) {
 	newDss := DataSeriesSet{
 		Name:     set.Name,
 		Series:   map[string]DataSeries{},
@@ -189,8 +193,27 @@ func (set *DataSeriesSet) ToMonthCumulative() (DataSeriesSet, error) {
 		}
 		newDss.Series[name] = newDs
 	}
-	newDss.Times = newDss.getTimes()
+	if popLast {
+		newDss.PopLast()
+	}
+	newDss.Times = newDss.GetTimeSlice(true)
 	return newDss, nil
+}
+
+func (set *DataSeriesSet) PopLast() {
+	times := set.GetTimeSlice(true)
+	if len(times) == 0 {
+		return
+	}
+	last := times[len(times)-1]
+	set.DeleteItemByTime(last)
+}
+
+func (set *DataSeriesSet) DeleteItemByTime(dt time.Time) {
+	for id, ds := range set.Series {
+		ds.DeleteByTime(dt)
+		set.Series[id] = ds
+	}
 }
 
 type RowInt64 struct {

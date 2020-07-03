@@ -155,14 +155,6 @@ func (series *DataSeries) MaxValue() int64 {
 	return max
 }
 
-func (ds *DataSeries) getTimes() []time.Time {
-	times := []time.Time{}
-	for _, item := range ds.ItemMap {
-		times = append(times, item.Time)
-	}
-	return times
-}
-
 func (ds *DataSeries) GetTimeSlice(sortSlice bool) timeutil.TimeSlice {
 	times := timeutil.TimeSlice{}
 	for _, item := range ds.ItemMap {
@@ -172,6 +164,10 @@ func (ds *DataSeries) GetTimeSlice(sortSlice bool) timeutil.TimeSlice {
 		sort.Sort(times)
 	}
 	return times
+}
+
+func (ds *DataSeries) DeleteByTime(dt time.Time) {
+	delete(ds.ItemMap, dt.Format(time.RFC3339))
 }
 
 func (series *DataSeries) ToMonth() DataSeries {
@@ -207,7 +203,7 @@ func (ds *DataSeries) ToMonthCumulative(timesInput ...time.Time) (DataSeries, er
 			return newDataSeries, err
 		}
 	} else {
-		min, max, err = timeutil.TimeSliceMinMax(dsMonth.getTimes())
+		min, max, err = timeutil.TimeSliceMinMax(dsMonth.GetTimeSlice(false))
 		if err != nil {
 			return newDataSeries, err
 		}
