@@ -195,6 +195,31 @@ RECORDS:
 	return data, nil
 }
 
+func (t *TableData) ColIndex(colName string) int {
+	for i, tryColName := range t.Columns {
+		if tryColName == colName {
+			return i
+		}
+	}
+	return -1
+}
+
+func (t *TableData) ValuesByColName(colName string) ([]string, error) {
+	colIdx := t.ColIndex(colName)
+	if colIdx < 0 {
+		return []string{}, fmt.Errorf("E_NO_COL_FOR_NAME [%s]", colName)
+	}
+	vals := []string{}
+	for _, row := range t.Records {
+		if colIdx < len(row) {
+			vals = append(vals, row[colIdx])
+		} else {
+			return vals, fmt.Errorf("E_COL_IDX [%d] ROW_LEN [%d]", colIdx, len(row))
+		}
+	}
+	return vals, nil
+}
+
 func (t *TableData) WriteXLSX(path, sheetname string) error {
 	t.Name = sheetname
 	return WriteXLSX(path, t)
