@@ -5,8 +5,10 @@ package statictimeseries
 import (
 	"fmt"
 	"sort"
+	"strings"
 	"time"
 
+	"github.com/grokify/gocharts/data/table"
 	"github.com/grokify/gotilla/sort/sortutil"
 	"github.com/grokify/gotilla/time/month"
 	"github.com/grokify/gotilla/time/timeutil"
@@ -252,6 +254,47 @@ func (ds *DataSeries) ToMonthCumulative(timesInput ...time.Time) (DataSeries, er
 		newDataSeries.AddItem(cItem)
 	}
 	return newDataSeries, nil
+}
+
+func (series *DataSeries) ToQuarter() DataSeries {
+	newDataSeries := DataSeries{
+		SeriesName: series.SeriesName,
+		ItemMap:    map[string]DataItem{},
+		IsFloat:    series.IsFloat,
+		Interval:   timeutil.Quarter}
+	for _, item := range series.ItemMap {
+		newDataSeries.AddItem(DataItem{
+			SeriesName: item.SeriesName,
+			Time:       timeutil.QuarterStart(item.Time),
+			IsFloat:    item.IsFloat,
+			Value:      item.Value,
+			ValueFloat: item.ValueFloat})
+	}
+	return newDataSeries
+}
+
+func (ds *DataSeries) WriteXLSX(filename, sheetname, col1, col2 string) error {
+	rows := [][]interface{}{}
+	col1 = strings.TrimSpace(col1)
+	col2 = strings.TrimSpace(col2)
+	if len(col1) == 0 {
+		col1 = "Date"
+	}
+	if len(col2) == 0 {
+		col2 = "Value"
+	}
+	rows = append(rows, []interface{}{col1, col2})
+	items := ds.ItemsSorted()
+	for _, item := range items {
+		if ds.IsFloat {
+			rows = append(rows, []interface{}{item.Time, item.ValueFloat})
+		} else {
+			rows = append(rows, []interface{}{item.Time, item.Value})
+		}
+	}
+	return table.WriteXLSXInterface(filename, table.SheetData{
+		SheetName: sheetname,
+		Rows:      rows})
 }
 
 func AggregateSeries(s1 DataSeries) DataSeries {
