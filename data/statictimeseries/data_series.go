@@ -274,7 +274,6 @@ func (series *DataSeries) ToQuarter() DataSeries {
 }
 
 func (ds *DataSeries) WriteXLSX(filename, sheetname, col1, col2 string) error {
-	rows := [][]interface{}{}
 	col1 = strings.TrimSpace(col1)
 	col2 = strings.TrimSpace(col2)
 	if len(col1) == 0 {
@@ -283,7 +282,7 @@ func (ds *DataSeries) WriteXLSX(filename, sheetname, col1, col2 string) error {
 	if len(col2) == 0 {
 		col2 = "Value"
 	}
-	rows = append(rows, []interface{}{col1, col2})
+	rows := [][]interface{}{{col1, col2}}
 	items := ds.ItemsSorted()
 	for _, item := range items {
 		if ds.IsFloat {
