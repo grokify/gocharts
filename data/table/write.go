@@ -11,6 +11,7 @@ import (
 
 	"github.com/360EntSecGroup-Skylar/excelize"
 	"github.com/grokify/gotilla/encoding/jsonutil"
+	"github.com/grokify/gotilla/fmt/fmtutil"
 	"github.com/pkg/errors"
 )
 
@@ -155,7 +156,8 @@ func WriteXLSXFormatted(path string, tbls ...*TableFormatter) error {
 				cellLocation := CoordinatesToSheetLocation(uint32(x), uint32(y+rowBase))
 				formattedVal, err := tf.Formatter(cellValue, uint(x))
 				if err != nil {
-					return errors.Wrap(err, "WriteXLSXFormatted.Error.FormatCellValue")
+					fmtutil.PrintJSON(t.Records)
+					return errors.Wrap(err, "gocharts/data/tables/write.go/WriteXLSXFormatted.Error.FormatCellValue")
 				}
 				f.SetCellValue(sheetname, cellLocation, formattedVal)
 			}
@@ -167,6 +169,38 @@ func WriteXLSXFormatted(path string, tbls ...*TableFormatter) error {
 	}
 	// Save xlsx file by the given path.
 	return f.SaveAs(path)
+}
+
+type SheetData struct {
+	SheetName string
+	Rows      [][]interface{}
+}
+
+func WriteXLSXInterface(filename string, sheetdatas ...SheetData) error {
+	f := excelize.NewFile()
+	// Delete default sheet.
+	f.DeleteSheet(f.GetSheetName(f.GetSheetIndex("Sheet1")))
+	f.DeleteSheet("Sheet1")
+	// Create a new sheet.
+	for i, sheetdata := range sheetdatas {
+		sheetname := strings.TrimSpace(sheetdata.SheetName)
+		if len(sheetname) == 0 {
+			sheetname = fmt.Sprintf("Sheet%d", i+1)
+		}
+		index := f.NewSheet(sheetname)
+		for y, row := range sheetdata.Rows {
+			for x, cellValue := range row {
+				cellLocation := CoordinatesToSheetLocation(uint32(x), uint32(y))
+				f.SetCellValue(sheetname, cellLocation, cellValue)
+			}
+		}
+		// Set active sheet of the workbook.
+		if i == 0 {
+			f.SetActiveSheet(index)
+		}
+	}
+	// Save xlsx file by the given path.
+	return f.SaveAs(filename)
 }
 
 type jsonRecords struct {
