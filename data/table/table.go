@@ -204,7 +204,7 @@ func (t *TableData) ColIndex(colName string) int {
 	return -1
 }
 
-func (t *TableData) ValuesByColName(colName string) ([]string, error) {
+func (t *TableData) ColValuesByColName(colName string) ([]string, error) {
 	colIdx := t.ColIndex(colName)
 	if colIdx < 0 {
 		return []string{}, fmt.Errorf("E_NO_COL_FOR_NAME [%s]", colName)
