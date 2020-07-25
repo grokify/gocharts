@@ -8,23 +8,35 @@ import (
 	"github.com/grokify/gotilla/time/timeutil"
 )
 
+func TimeFormatRFC3339(dt time.Time) string {
+	return dt.Format(time.RFC3339)
+}
+
+func TimeFormatNiceMonth(dt time.Time) string {
+	return dt.Format("Jan '06")
+}
+
+func TimeFormatNiceQuarter(dt time.Time) string {
+	return timeutil.FormatQuarterYYQ(dt)
+}
+
 // DataSeriesToTable generates a `table.TableData` given a `DataSeries`.
-func DataSeriesToTable(ds DataSeries, col2 string) table.TableData {
+func DataSeriesToTable(ds DataSeries, col2 string, dtFmt func(dt time.Time) string) table.TableData {
 	tbl := table.NewTableData()
 	colDt := "Date"
-	dtFmt := func(dt time.Time) string {
+	/*dtFmt := func(dt time.Time) string {
 		return dt.Format(time.RFC3339)
-	}
+	}*/
 	if ds.Interval == timeutil.Month {
 		colDt = "Month"
-		dtFmt = func(dt time.Time) string {
+		/*dtFmt = func(dt time.Time) string {
 			return dt.Format("Jan '06")
-		}
+		}*/
 	} else if ds.Interval == timeutil.Quarter {
 		colDt = "Quarter"
-		dtFmt = func(dt time.Time) string {
+		/*dtFmt = func(dt time.Time) string {
 			return timeutil.FormatQuarterYYQ(dt)
-		}
+		}*/
 	}
 	tbl.Columns = []string{colDt, col2}
 	itemsSorted := ds.ItemsSorted()
@@ -39,8 +51,8 @@ func DataSeriesToTable(ds DataSeries, col2 string) table.TableData {
 }
 
 // DataSeriesWriteXLSX writes an XSLX file given a `DataSeries`
-func DataSeriesWriteXLSX(filename string, ds DataSeries, col2 string) error {
-	tbl := DataSeriesToTable(ds, col2)
+func DataSeriesWriteXLSX(filename string, ds DataSeries, col2 string, dtFmt func(dt time.Time) string) error {
+	tbl := DataSeriesToTable(ds, col2, dtFmt)
 	tf := &table.TableFormatter{
 		Table:     &tbl,
 		Formatter: table.FormatStringAndInts}

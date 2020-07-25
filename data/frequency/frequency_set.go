@@ -133,7 +133,7 @@ func FrequencySetTimeKeyCountTable(fset FrequencySet, interval timeutil.Interval
 	if len(countColName) == 0 {
 		countColName = "Count"
 	}
-	return statictimeseries.DataSeriesToTable(ds, countColName), nil
+	return statictimeseries.DataSeriesToTable(ds, countColName, statictimeseries.TimeFormatRFC3339), nil
 }
 
 func FrequencySetTimeKeyCountWriteXLSX(filename string, fset FrequencySet, interval timeutil.Interval, countColName string) error {
