@@ -49,13 +49,13 @@ func NewYoYQoQGrowth(set DataSeriesSet) (YoYQoQGrowth, error) {
 		if err != nil {
 			return yoy, err
 		}
-		outputItems := outputDataSeries.SortedItems()
+		outputItems := outputDataSeries.ItemsSorted()
 
 		aggregateDataSeries, err := set.GetDataSeries(seriesName, OutputAggregate)
 		if err != nil {
 			return yoy, err
 		}
-		aggregateItems := aggregateDataSeries.SortedItems()
+		aggregateItems := aggregateDataSeries.ItemsSorted()
 
 		for j, item := range outputItems {
 			aggregateItem := aggregateItems[j]

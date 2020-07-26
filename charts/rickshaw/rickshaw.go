@@ -295,7 +295,7 @@ func NewRickshawDataFormattedFromDateHistogram(timeset interval.DataSeriesSet) R
 		}
 		formattedData := []Item{}
 		dataInfoJs := DataInfoJs{Name: seriesName, Data: []Item{}}
-		for _, sourceItem := range seriesData.SortedItems() {
+		for _, sourceItem := range seriesData.ItemsSorted() {
 			rsItem := Item{
 				SeriesName: sourceItem.SeriesName,
 				Time:       sourceItem.Time,

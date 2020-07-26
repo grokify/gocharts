@@ -12,7 +12,6 @@ import (
 	"github.com/grokify/gotilla/sort/sortutil"
 	"github.com/grokify/gotilla/time/month"
 	"github.com/grokify/gotilla/time/timeutil"
-	"github.com/grokify/gotilla/type/maputil"
 	"github.com/pkg/errors"
 )
 
@@ -64,7 +63,9 @@ func (series *DataSeries) SetSeriesName(seriesName string) {
 	}
 }
 
+// Keys returns a sorted listed of Item keys.
 func (series *DataSeries) Keys() []string {
+	// maputil.StringKeysSorted(series.ItemMap)
 	keys := []string{}
 	for key := range series.ItemMap {
 		keys = append(keys, key)
@@ -73,17 +74,19 @@ func (series *DataSeries) Keys() []string {
 	return keys
 }
 
+// ItemsSorted returns sorted DataItems. This currently uses
+// a simple string sort on RFC3339 times.
 func (series *DataSeries) ItemsSorted() []DataItem {
 	keys := series.Keys()
-	items := []DataItem{}
+	itemsSorted := []DataItem{}
 	for _, key := range keys {
 		item, ok := series.ItemMap[key]
 		if !ok {
 			panic(fmt.Sprintf("KEY_NOT_FOUND [%s]", key))
 		}
-		items = append(items, item)
+		itemsSorted = append(itemsSorted, item)
 	}
-	return items
+	return itemsSorted
 }
 
 func (series *DataSeries) Last() (DataItem, error) {
@@ -298,7 +301,7 @@ func (ds *DataSeries) WriteXLSX(filename, sheetname, col1, col2 string) error {
 
 func AggregateSeries(s1 DataSeries) DataSeries {
 	aggregate := NewDataSeries()
-	sortedItems := s1.SortedItems()
+	sortedItems := s1.ItemsSorted()
 	sum := int64(0)
 	for _, atomicItem := range sortedItems {
 		aggregateItem := DataItem{
@@ -310,19 +313,6 @@ func AggregateSeries(s1 DataSeries) DataSeries {
 		aggregate.AddItem(aggregateItem)
 	}
 	return aggregate
-}
-
-// SortedItems returns sorted DataItems. This currently uses
-// a simple string sort on RFC3339 times. For dates that are not
-// handled properly this way, this can be enhanced to use more
-// proper comparison
-func (series *DataSeries) SortedItems() []DataItem {
-	itemsSorted := []DataItem{}
-	timesSorted := maputil.StringKeysSorted(series.ItemMap)
-	for _, rfc3339 := range timesSorted {
-		itemsSorted = append(itemsSorted, series.ItemMap[rfc3339])
-	}
-	return itemsSorted
 }
 
 func DataSeriesTimeSeries(series *DataSeries, interval timeutil.Interval) []time.Time {

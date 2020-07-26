@@ -55,7 +55,7 @@ func (data *TimeseriesData) AddDataSeriesSet(set *interval.DataSeriesSet, interv
 		}
 		yValues := []interface{}{seriesName}
 
-		items := dataSeries.SortedItems()
+		items := dataSeries.ItemsSorted()
 		for j, item := range items {
 			if i == 0 && interval == tu.Quarter {
 				xValues = append(xValues, item.Time.Format(tu.RFC3339FullDate))
