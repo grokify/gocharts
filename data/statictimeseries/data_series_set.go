@@ -11,9 +11,11 @@ import (
 
 	"github.com/grokify/gocharts/data/table"
 	"github.com/grokify/gotilla/sort/sortutil"
+	"github.com/grokify/gotilla/time/month"
 	"github.com/grokify/gotilla/time/timeutil"
 	tu "github.com/grokify/gotilla/time/timeutil"
 	"github.com/grokify/gotilla/type/stringsutil"
+	"github.com/pkg/errors"
 )
 
 type DataSeriesSet struct {
@@ -44,7 +46,9 @@ func (set *DataSeriesSet) AddItem(item DataItem) {
 		set.Series[item.SeriesName] =
 			DataSeries{
 				SeriesName: item.SeriesName,
-				ItemMap:    map[string]DataItem{}}
+				ItemMap:    map[string]DataItem{},
+				IsFloat:    item.IsFloat,
+				Interval:   set.Interval}
 	}
 	series := set.Series[item.SeriesName]
 	series.AddItem(item)
@@ -53,20 +57,27 @@ func (set *DataSeriesSet) AddItem(item DataItem) {
 	set.Times = append(set.Times, item.Time)
 }
 
-func (set *DataSeriesSet) AddDataSeries(ds DataSeries) {
-	for _, item := range ds.ItemMap {
-		if len(item.SeriesName) == 0 {
-			item.SeriesName = ds.SeriesName
+func (set *DataSeriesSet) AddDataSeries(dataSeries ...DataSeries) error {
+	for _, ds := range dataSeries {
+		ds.SeriesName = strings.TrimSpace(ds.SeriesName)
+		if len(ds.SeriesName) == 0 {
+			return errors.New("E_DataSeriesSet.AddDataSeries_NO_DataSeries.SeriesName")
 		}
-		set.AddItem(item)
+		for _, item := range ds.ItemMap {
+			if len(item.SeriesName) == 0 || item.SeriesName != ds.SeriesName {
+				item.SeriesName = ds.SeriesName
+			}
+			set.AddItem(item)
+		}
 	}
+	return nil
 }
 
-func (set *DataSeriesSet) Inflate() {
-	if len(set.Times) == 0 {
+func (set *DataSeriesSet) Inflate(force bool) {
+	if len(set.Times) == 0 || force {
 		set.Times = set.GetTimeSlice(true)
 	}
-	if len(set.Order) == 0 {
+	if len(set.Order) == 0 || force {
 		order := []string{}
 		for name := range set.Series {
 			order = append(order, name)
@@ -87,7 +98,7 @@ func (set *DataSeriesSet) SeriesNames() []string {
 
 func (set *DataSeriesSet) GetSeriesByIndex(index int) (DataSeries, error) {
 	if len(set.Order) == 0 && len(set.Series) > 0 {
-		set.Inflate()
+		set.Inflate(true)
 	}
 	if index < len(set.Order) {
 		name := set.Order[index]
@@ -112,17 +123,13 @@ func (set *DataSeriesSet) GetItem(seriesName, rfc3339 string) (DataItem, error) 
 }
 
 func (set *DataSeriesSet) GetTimeSlice(sortAsc bool) sortutil.TimeSlice {
-	//times := []time.Time{}
-	times := sortutil.TimeSlice{}
+	times := []time.Time{}
 	for _, ds := range set.Series {
 		for _, item := range ds.ItemMap {
 			times = append(times, item.Time)
 		}
 	}
-	if len(times) > 0 && sortAsc {
-		sort.Sort(times)
-	}
-	return times
+	return month.TimeSeriesMonth(true, times...)
 }
 
 func (set *DataSeriesSet) TimeStrings() []string {
