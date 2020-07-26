@@ -17,7 +17,7 @@ GoCharts is a library to assist with building charts:
 
 An example chart is the Rickshaw chart shown below:
 
-![](images/graph_example_2.png)
+![](charts/rickshaw/graph_example_2.png)
 
 Supporting data objects are also provided including:
 
