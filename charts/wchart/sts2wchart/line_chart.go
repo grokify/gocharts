@@ -2,7 +2,6 @@ package sts2wchart
 
 import (
 	"fmt"
-	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -35,9 +34,10 @@ type LineChartOpts struct {
 	YAxisLeft                   bool
 	YAxisMin                    float64
 	YAxisMinEnable              bool
+	XAxisGridInterval           timeutil.Interval
 	XAxisTickFunc               func(time.Time) string
 	XAxisTickInterval           timeutil.Interval // year, quarter, month
-	XAxisGridInterval           timeutil.Interval
+	YAxisTickFunc               func(float64) string
 	Width                       uint64
 	Height                      uint64
 	AspectRatio                 float64
@@ -57,18 +57,19 @@ func (opts *LineChartOpts) WantTitleSuffix() bool {
 var defaultLineChartOpts = &LineChartOpts{
 	Legend:            true,
 	RegressionDegree:  0,
+	XAxisGridInterval: timeutil.Quarter,
+	XAxisTickFunc:     func(t time.Time) string { return t.Format("Jan '06") },
+	XAxisTickInterval: timeutil.Year,
 	YAxisLeft:         true,
 	YAxisMinEnable:    true,
-	XAxisTickFunc:     func(t time.Time) string { return t.Format("Jan '06") },
-	XAxisGridInterval: timeutil.Quarter,
-	XAxisTickInterval: timeutil.Year,
+	YAxisTickFunc:     YAxisTickFormatSimple,
 	NowAnnotation:     true,
-	QAgoAnnotation:    false,
-	YAgoAnnotation:    false,
+	QAgoAnnotation:    true,
+	YAgoAnnotation:    true,
 	AgoAnnotationPct:  true,
 	Interval:          timeutil.Month}
 
-func GetDefaultLineChartOpts() *LineChartOpts {
+func DefaultLineChartOpts() *LineChartOpts {
 	return defaultLineChartOpts
 }
 
@@ -207,11 +208,12 @@ func DataSeriesSetToLineChart(dss statictimeseries.DataSeriesSet, opts *LineChar
 		GridMinorStyle: chart.Style{
 			StrokeWidth: float64(1),
 			StrokeColor: drawing.ColorFromHex("aaaaaa")},
-		XAxisTickInterval: opts.XAxisTickInterval,
-		XAxisGridInterval: opts.XAxisGridInterval,
-		XTickFormatFunc:   fmtXTickFunc,
-		YNumTicks:         7,
-		YTickFormatFunc:   FormatYTickFunc(dss.Name)}
+		XAxisTickInterval:          opts.XAxisTickInterval,
+		XAxisGridInterval:          opts.XAxisGridInterval,
+		XAxisTickFormatFunc:        fmtXTickFunc,
+		YNumTicks:                  7,
+		YAxisTickFormatFuncFloat64: opts.YAxisTickFunc}
+	//YAxisTickFormatFuncFloat64: FormatYTickFunc(dss.Name)}
 
 	minTime, maxTime := dss.MinMaxTimes()
 	if !dss.IsFloat {
@@ -224,9 +226,6 @@ func DataSeriesSetToLineChart(dss statictimeseries.DataSeriesSet, opts *LineChar
 	} else {
 		graph = axesCreator.AddBackground(graph)
 		graph = axesCreator.AddXAxis(graph, dss.Interval, minTime, maxTime)
-		axesCreator.YTickFormatFunc = func(raw float64) string {
-			return fmt.Sprintf("%.1f%%", raw*100)
-		}
 		minValue, maxValue := dss.MinMaxValuesFloat64()
 		if opts.YAxisMinEnable {
 			minValue = opts.YAxisMin
@@ -364,17 +363,5 @@ func FormatXTickTimeFunc(interval timeutil.Interval) func(time.Time) string {
 	}
 	return func(dt time.Time) string {
 		return dt.Format("1/06")
-	}
-}
-
-var rxMrr = regexp.MustCompile(`(?i)\bmrr\b`)
-
-func FormatYTickFunc(seriesName string) func(float64) string {
-	return func(val float64) string {
-		abbr := strconvutil.Int64Abbreviation(int64(val))
-		if rxMrr.MatchString(seriesName) {
-			return "$" + abbr
-		}
-		return abbr
 	}
 }
