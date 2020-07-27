@@ -80,7 +80,7 @@ func DataSeriesToLineChart(ds statictimeseries.DataSeries, opts *LineChartOpts) 
 	dss.Interval = ds.Interval
 	dss.IsFloat = ds.IsFloat
 	dss.Series[ds.SeriesName] = ds
-	dss.Inflate(true)
+	dss.Inflate()
 	return DataSeriesSetToLineChart(dss, opts)
 }
 
@@ -157,7 +157,7 @@ func DataSeriesSetToLineChart(dss statictimeseries.DataSeriesSet, opts *LineChar
 	}
 
 	if len(dss.Order) == 0 {
-		dss.Inflate(true)
+		dss.Inflate()
 	}
 	for _, seriesName := range dss.Order {
 		if ds, ok := dss.Series[seriesName]; ok {

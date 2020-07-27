@@ -73,11 +73,11 @@ func (set *DataSeriesSet) AddDataSeries(dataSeries ...DataSeries) error {
 	return nil
 }
 
-func (set *DataSeriesSet) Inflate(force bool) {
-	if len(set.Times) == 0 || force {
-		set.Times = set.GetTimeSlice(true)
-	}
-	if len(set.Order) == 0 || force {
+func (set *DataSeriesSet) Inflate() {
+	set.Times = set.GetTimeSlice(true)
+	if len(set.Order) > 0 {
+		set.Order = stringsutil.SliceCondenseSpace(set.Order, true, false)
+	} else {
 		order := []string{}
 		for name := range set.Series {
 			order = append(order, name)
@@ -98,7 +98,7 @@ func (set *DataSeriesSet) SeriesNames() []string {
 
 func (set *DataSeriesSet) GetSeriesByIndex(index int) (DataSeries, error) {
 	if len(set.Order) == 0 && len(set.Series) > 0 {
-		set.Inflate(true)
+		set.Inflate()
 	}
 	if index < len(set.Order) {
 		name := set.Order[index]
@@ -129,7 +129,7 @@ func (set *DataSeriesSet) GetTimeSlice(sortAsc bool) sortutil.TimeSlice {
 			times = append(times, item.Time)
 		}
 	}
-	return month.TimeSeriesMonth(true, times...)
+	return month.TimeSeriesMonth(sortAsc, times...)
 }
 
 func (set *DataSeriesSet) TimeStrings() []string {
