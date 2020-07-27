@@ -55,13 +55,11 @@ func (opts *LineChartOpts) WantTitleSuffix() bool {
 }
 
 var defaultLineChartOpts = &LineChartOpts{
-	Legend:           true,
-	RegressionDegree: 0,
-	YAxisLeft:        true,
-	YAxisMinEnable:   true,
-	XAxisTickFunc: func(t time.Time) string {
-		return t.Format("Jan '06")
-	},
+	Legend:            true,
+	RegressionDegree:  0,
+	YAxisLeft:         true,
+	YAxisMinEnable:    true,
+	XAxisTickFunc:     func(t time.Time) string { return t.Format("Jan '06") },
 	XAxisGridInterval: timeutil.Quarter,
 	XAxisTickInterval: timeutil.Year,
 	NowAnnotation:     true,
