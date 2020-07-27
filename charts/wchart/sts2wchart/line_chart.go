@@ -38,6 +38,8 @@ type LineChartOpts struct {
 	YAxisMin                    float64
 	YAxisMinEnable              bool
 	XAxisTickFunc               func(time.Time) string
+	XAxisTickInterval           timeutil.Interval // year, quarter, month
+	XAxisGridInterval           timeutil.Interval
 	Width                       uint64
 	Height                      uint64
 	AspectRatio                 float64
@@ -62,11 +64,13 @@ var defaultLineChartOpts = &LineChartOpts{
 	XAxisTickFunc: func(t time.Time) string {
 		return t.Format("Jan '06")
 	},
-	NowAnnotation:    true,
-	QAgoAnnotation:   true,
-	YAgoAnnotation:   true,
-	AgoAnnotationPct: true,
-	Interval:         timeutil.Month}
+	XAxisGridInterval: timeutil.Quarter,
+	XAxisTickInterval: timeutil.Year,
+	NowAnnotation:     true,
+	QAgoAnnotation:    false,
+	YAgoAnnotation:    false,
+	AgoAnnotationPct:  true,
+	Interval:          timeutil.Month}
 
 func GetDefaultLineChartOpts() *LineChartOpts {
 	return defaultLineChartOpts
@@ -78,7 +82,7 @@ func DataSeriesToLineChart(ds statictimeseries.DataSeries, opts *LineChartOpts) 
 	dss.Interval = ds.Interval
 	dss.IsFloat = ds.IsFloat
 	dss.Series[ds.SeriesName] = ds
-	dss.Inflate()
+	dss.Inflate(true)
 	return DataSeriesSetToLineChart(dss, opts)
 }
 
@@ -155,16 +159,17 @@ func DataSeriesSetToLineChart(dss statictimeseries.DataSeriesSet, opts *LineChar
 	}
 
 	if len(dss.Order) == 0 {
-		dss.Inflate()
+		dss.Inflate(true)
 	}
 	for _, seriesName := range dss.Order {
 		if ds, ok := dss.Series[seriesName]; ok {
 			mainSeries = wchart.DataSeriesToContinuousSeries(ds)
 
-			mainSeries.Style = chart.Style{
-				StrokeWidth: float64(3)}
-			graph.Series = append(graph.Series, mainSeries)
+			mainSeries.Style = chart.Style{StrokeWidth: float64(3)}
 
+			graph.Series = append(graph.Series, mainSeries)
+			//fmtutil.PrintJSON(mainSeries)
+			//panic("Q")
 			if opts.RegressionDegree == 1 {
 				linRegSeries := &chart.LinearRegressionSeries{
 					InnerSeries: mainSeries,
@@ -206,9 +211,11 @@ func DataSeriesSetToLineChart(dss statictimeseries.DataSeriesSet, opts *LineChar
 		GridMinorStyle: chart.Style{
 			StrokeWidth: float64(1),
 			StrokeColor: drawing.ColorFromHex("aaaaaa")},
-		XTickFormatFunc: fmtXTickFunc,
-		YNumTicks:       7,
-		YTickFormatFunc: FormatYTickFunc(dss.Name)}
+		XAxisTickInterval: opts.XAxisTickInterval,
+		XAxisGridInterval: opts.XAxisGridInterval,
+		XTickFormatFunc:   fmtXTickFunc,
+		YNumTicks:         7,
+		YTickFormatFunc:   FormatYTickFunc(dss.Name)}
 
 	minTime, maxTime := dss.MinMaxTimes()
 	if !dss.IsFloat {
@@ -381,6 +388,8 @@ type AxesCreator struct {
 	GridMinorStyle     chart.Style
 	PaddingTop         int
 	YNumTicks          int
+	XAxisTickInterval  timeutil.Interval // year, quarter, month
+	XAxisGridInterval  timeutil.Interval
 	XTickFormatFunc    func(time.Time) string
 	YTickFormatFunc    func(float64) string
 	YTickFormatFuncInt func(int64) string
@@ -397,7 +406,7 @@ func (ac *AxesCreator) AddBackground(graph chart.Chart) chart.Chart {
 func (ac *AxesCreator) AddXAxis(graph chart.Chart, interval timeutil.Interval, minTime, maxTime time.Time) chart.Chart {
 	xTicks, xGridlines := wchart.TicksAndGridlinesTime(
 		interval, minTime, maxTime,
-		ac.GridMajorStyle, ac.GridMinorStyle, ac.XTickFormatFunc, true)
+		ac.GridMajorStyle, ac.GridMinorStyle, ac.XTickFormatFunc, ac.XAxisTickInterval, ac.XAxisGridInterval)
 	graph.XAxis.Ticks = xTicks
 	graph.XAxis.GridLines = xGridlines
 	graph.XAxis.GridMajorStyle = ac.GridMajorStyle
@@ -414,8 +423,6 @@ func (ac *AxesCreator) AddYAxis(graph chart.Chart, minValue, maxValue int64) cha
 
 func (ac *AxesCreator) AddYAxisPercent(graph chart.Chart, minValue, maxValue float64) chart.Chart {
 	tickValues := mathutil.PrettyTicksPercent(ac.YNumTicks, minValue, maxValue, 2)
-	//fmtutil.PrintJSON(tickValues)
-	//panic("Z")
 	graph.YAxis.Ticks = wchart.Ticks(tickValues, ac.YTickFormatFunc)
 	graph.YAxis.GridLines = wchart.GridLines(tickValues, ac.GridMinorStyle)
 	graph.YAxis.GridMajorStyle = ac.GridMinorStyle
@@ -435,7 +442,7 @@ func (ac *AxesCreator) ChartAddAxesDataSeries(graph chart.Chart, interval timeut
 
 	xTicks, xGridlines := wchart.TicksAndGridlinesTime(
 		interval, minTime, maxTime,
-		ac.GridMajorStyle, ac.GridMinorStyle, ac.XTickFormatFunc, true)
+		ac.GridMajorStyle, ac.GridMinorStyle, ac.XTickFormatFunc, ac.XAxisTickInterval, ac.XAxisGridInterval)
 	graph.XAxis.Ticks = xTicks
 	graph.XAxis.GridLines = xGridlines
 	graph.XAxis.GridMajorStyle = ac.GridMajorStyle
