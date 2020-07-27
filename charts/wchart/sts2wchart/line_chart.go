@@ -10,12 +10,10 @@ import (
 	"github.com/grokify/gocharts/charts/wchart"
 	"github.com/grokify/gocharts/data/statictimeseries"
 	"github.com/grokify/gocharts/data/statictimeseries/interval"
-	"github.com/grokify/gotilla/math/mathutil"
 	"github.com/grokify/gotilla/math/ratio"
 	"github.com/grokify/gotilla/strconv/strconvutil"
 	"github.com/grokify/gotilla/time/month"
 	"github.com/grokify/gotilla/time/timeutil"
-	"github.com/grokify/gotilla/type/number"
 	"github.com/wcharczuk/go-chart"
 	"github.com/wcharczuk/go-chart/drawing"
 )
@@ -381,71 +379,4 @@ func FormatYTickFunc(seriesName string) func(float64) string {
 		}
 		return abbr
 	}
-}
-
-type AxesCreator struct {
-	GridMajorStyle     chart.Style
-	GridMinorStyle     chart.Style
-	PaddingTop         int
-	YNumTicks          int
-	XAxisTickInterval  timeutil.Interval // year, quarter, month
-	XAxisGridInterval  timeutil.Interval
-	XTickFormatFunc    func(time.Time) string
-	YTickFormatFunc    func(float64) string
-	YTickFormatFuncInt func(int64) string
-}
-
-func (ac *AxesCreator) AddBackground(graph chart.Chart) chart.Chart {
-	graph.Background = chart.Style{Padding: chart.Box{}}
-	if ac.PaddingTop > 0 {
-		graph.Background.Padding.Top = ac.PaddingTop
-	}
-	return graph
-}
-
-func (ac *AxesCreator) AddXAxis(graph chart.Chart, interval timeutil.Interval, minTime, maxTime time.Time) chart.Chart {
-	xTicks, xGridlines := wchart.TicksAndGridlinesTime(
-		interval, minTime, maxTime,
-		ac.GridMajorStyle, ac.GridMinorStyle, ac.XTickFormatFunc, ac.XAxisTickInterval, ac.XAxisGridInterval)
-	graph.XAxis.Ticks = xTicks
-	graph.XAxis.GridLines = xGridlines
-	graph.XAxis.GridMajorStyle = ac.GridMajorStyle
-	return graph
-}
-
-func (ac *AxesCreator) AddYAxis(graph chart.Chart, minValue, maxValue int64) chart.Chart {
-	tickValues := number.SliceInt64ToFloat64(mathutil.PrettyTicks(ac.YNumTicks, minValue, maxValue))
-	graph.YAxis.Ticks = wchart.Ticks(tickValues, ac.YTickFormatFunc)
-	graph.YAxis.GridLines = wchart.GridLines(tickValues, ac.GridMinorStyle)
-	graph.YAxis.GridMajorStyle = ac.GridMinorStyle
-	return graph
-}
-
-func (ac *AxesCreator) AddYAxisPercent(graph chart.Chart, minValue, maxValue float64) chart.Chart {
-	tickValues := mathutil.PrettyTicksPercent(ac.YNumTicks, minValue, maxValue, 2)
-	graph.YAxis.Ticks = wchart.Ticks(tickValues, ac.YTickFormatFunc)
-	graph.YAxis.GridLines = wchart.GridLines(tickValues, ac.GridMinorStyle)
-	graph.YAxis.GridMajorStyle = ac.GridMinorStyle
-	return graph
-}
-
-func (ac *AxesCreator) ChartAddAxesDataSeries(graph chart.Chart, interval timeutil.Interval, minTime, maxTime time.Time, minValue, maxValue int64) chart.Chart {
-	graph.Background = chart.Style{Padding: chart.Box{}}
-	if ac.PaddingTop > 0 {
-		graph.Background.Padding.Top = ac.PaddingTop
-	}
-
-	tickValues := number.SliceInt64ToFloat64(mathutil.PrettyTicks(ac.YNumTicks, minValue, maxValue))
-	graph.YAxis.Ticks = wchart.Ticks(tickValues, ac.YTickFormatFunc)
-	graph.YAxis.GridLines = wchart.GridLines(tickValues, ac.GridMinorStyle)
-	graph.YAxis.GridMajorStyle = ac.GridMinorStyle
-
-	xTicks, xGridlines := wchart.TicksAndGridlinesTime(
-		interval, minTime, maxTime,
-		ac.GridMajorStyle, ac.GridMinorStyle, ac.XTickFormatFunc, ac.XAxisTickInterval, ac.XAxisGridInterval)
-	graph.XAxis.Ticks = xTicks
-	graph.XAxis.GridLines = xGridlines
-	graph.XAxis.GridMajorStyle = ac.GridMajorStyle
-
-	return graph
 }
