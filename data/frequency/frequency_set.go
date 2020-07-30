@@ -1,7 +1,6 @@
 package frequency
 
 import (
-	"fmt"
 	"sort"
 	"strings"
 	"time"
@@ -54,11 +53,8 @@ func (fss *FrequencySet) Names() []string {
 	return names
 }
 
-func (fss *FrequencySet) ToDataSeriesDistinct(interval timeutil.Interval) (statictimeseries.DataSeries, error) {
+func (fss *FrequencySet) ToDataSeriesDistinct() (statictimeseries.DataSeries, error) {
 	ds := statictimeseries.NewDataSeries()
-	if interval != timeutil.Month {
-		return ds, fmt.Errorf("E_UNSUPPORTED_INTERVAL [%v]", interval)
-	}
 	ds.SeriesName = fss.Name
 	for rfc3339, fs := range fss.FrequencyMap {
 		dt, err := time.Parse(time.RFC3339, rfc3339)
@@ -69,9 +65,6 @@ func (fss *FrequencySet) ToDataSeriesDistinct(interval timeutil.Interval) (stati
 			SeriesName: fss.Name,
 			Time:       dt,
 			Value:      int64(len(fs.Items))})
-	}
-	if interval == timeutil.Month {
-		ds = ds.ToMonth()
 	}
 	return ds, nil
 }
