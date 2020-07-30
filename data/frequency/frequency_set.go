@@ -1,6 +1,7 @@
 package frequency
 
 import (
+	"fmt"
 	"sort"
 	"strings"
 	"time"
@@ -59,12 +60,17 @@ func NewFrequencySet(name string) FrequencySet {
 		FrequencyMap: map[string]FrequencyStats{}}
 }
 
-func (fss *FrequencySet) AddStringMore(frequencyName, itemName string, count int) {
+func (fss *FrequencySet) AddDateUidCount(dt time.Time, uid string, count int) {
+	fName := dt.Format(time.RFC3339)
+	fss.AddStringMore(fName, uid, count)
+}
+
+func (fss *FrequencySet) AddStringMore(frequencyName, uid string, count int) {
 	fs, ok := fss.FrequencyMap[frequencyName]
 	if !ok {
 		fs = NewFrequencyStats(frequencyName)
 	}
-	fs.AddStringMore(itemName, count)
+	fs.AddStringMore(uid, count)
 	fss.FrequencyMap[frequencyName] = fs
 }
 
@@ -84,6 +90,28 @@ func (fss *FrequencySet) Names() []string {
 	}
 	sort.Strings(names)
 	return names
+}
+
+func (fss *FrequencySet) ToDataSeriesDistinct(interval timeutil.Interval) (statictimeseries.DataSeries, error) {
+	ds := statictimeseries.NewDataSeries()
+	if interval != timeutil.Month {
+		return ds, fmt.Errorf("E_UNSUPPORTED_INTERVAL [%v]", interval)
+	}
+	ds.SeriesName = fss.Name
+	for rfc3339, fs := range fss.FrequencyMap {
+		dt, err := time.Parse(time.RFC3339, rfc3339)
+		if err != nil {
+			return ds, err
+		}
+		count := len(fs.Items)
+		ds.AddItem(statictimeseries.DataItem{
+			Time:  dt,
+			Value: int64(count)})
+	}
+	if interval == timeutil.Month {
+		ds = ds.ToMonth()
+	}
+	return ds, nil
 }
 
 // FrequencySetDatetimeToQuarterUnique converts a FrequencySet
