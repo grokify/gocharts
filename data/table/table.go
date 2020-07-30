@@ -152,9 +152,9 @@ func (t *TableData) RecordValueOrEmpty(wantCol string, record []string) string {
 	return val
 }
 
-func (t *TableData) NewTableFiltered(wantColValues map[string]string) (TableData, error) {
+func (t *TableData) NewTableFiltered(wantColNameValues map[string]string) (TableData, error) {
 	t2 := TableData{Columns: t.Columns}
-	records, err := t.FilterRecords(wantColValues)
+	records, err := t.FilterRecords(wantColNameValues)
 	if err != nil {
 		return t2, err
 	}
@@ -162,11 +162,11 @@ func (t *TableData) NewTableFiltered(wantColValues map[string]string) (TableData
 	return t2, nil
 }
 
-func (t *TableData) FilterRecords(wantColValues map[string]string) ([][]string, error) {
+func (t *TableData) FilterRecords(wantColNameValues map[string]string) ([][]string, error) {
 	data := [][]string{}
 	wantColIndexes := map[string]int{}
 	maxIdx := -1
-	for wantColName := range wantColValues {
+	for wantColName := range wantColNameValues {
 		wantColIdx := t.ColumnIndex(wantColName)
 		if wantColIdx < 0 {
 			return data, fmt.Errorf("Column Not Found [%v]", wantColName)
@@ -181,7 +181,7 @@ RECORDS:
 		if len(rec) > maxIdx {
 			for wantColName, wantColIdx := range wantColIndexes {
 				colValue := rec[wantColIdx]
-				wantColValue, ok := wantColValues[wantColName]
+				wantColValue, ok := wantColNameValues[wantColName]
 				if !ok {
 					return data, fmt.Errorf("Column Name [%v] has no desired value", wantColName)
 				}
