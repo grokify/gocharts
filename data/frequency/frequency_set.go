@@ -65,10 +65,10 @@ func (fss *FrequencySet) ToDataSeriesDistinct(interval timeutil.Interval) (stati
 		if err != nil {
 			return ds, err
 		}
-		count := len(fs.Items)
 		ds.AddItem(statictimeseries.DataItem{
-			Time:  dt,
-			Value: int64(count)})
+			SeriesName: fss.Name,
+			Time:       dt,
+			Value:      int64(len(fs.Items))})
 	}
 	if interval == timeutil.Month {
 		ds = ds.ToMonth()
