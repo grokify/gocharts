@@ -135,12 +135,25 @@ func (tf *TableFormatter) FormatterFunc() func(val string, colIdx uint) (interfa
 			fmtType := strings.ToLower(strings.TrimSpace(fmtType))
 			if len(fmtType) > 0 {
 				switch fmtType {
+				case "float":
+					floatVal, err := strconv.ParseFloat(val, 64)
+					if err != nil {
+						return val, err
+					}
+					return floatVal, nil
 				case "int":
 					intVal, err := strconv.Atoi(val)
 					if err != nil {
-						return val, nil
+						return val, err
 					}
 					return intVal, nil
+				case "time":
+					dtVal, err := time.Parse(time.RFC3339, val)
+					if err != nil {
+						return val, err
+					} else {
+						return dtVal, nil
+					}
 				}
 			}
 		}
