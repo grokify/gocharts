@@ -119,7 +119,33 @@ func FormatTimeAndFloats(val string, colIdx uint) (interface{}, error) {
 
 type TableFormatter struct {
 	Table     *TableData
+	FormatMap map[int]string
 	Formatter func(val string, colIdx uint) (interface{}, error)
+}
+
+func (tf *TableFormatter) FormatterFunc() func(val string, colIdx uint) (interface{}, error) {
+	if tf.FormatMap == nil || len(tf.FormatMap) == 0 {
+		if tf.Formatter == nil {
+			return FormatStrings
+		}
+		return tf.Formatter
+	}
+	return func(val string, colIdx uint) (interface{}, error) {
+		if fmtType, ok := tf.FormatMap[int(colIdx)]; ok {
+			fmtType := strings.ToLower(strings.TrimSpace(fmtType))
+			if len(fmtType) > 0 {
+				switch fmtType {
+				case "int":
+					intVal, err := strconv.Atoi(val)
+					if err != nil {
+						return val, nil
+					}
+					return intVal, nil
+				}
+			}
+		}
+		return val, nil
+	}
 }
 
 // WriteXLSXFormatted writes a table as an Excel XLSX file with
@@ -151,10 +177,12 @@ func WriteXLSXFormatted(path string, tbls ...*TableFormatter) error {
 				f.SetCellValue(sheetname, cellLocation, cellValue)
 			}
 		}
+		fmtFunc := tf.FormatterFunc()
 		for y, row := range t.Records {
 			for x, cellValue := range row {
 				cellLocation := CoordinatesToSheetLocation(uint32(x), uint32(y+rowBase))
-				formattedVal, err := tf.Formatter(cellValue, uint(x))
+				//formattedVal, err := tf.Formatter(cellValue, uint(x))
+				formattedVal, err := fmtFunc(cellValue, uint(x))
 				if err != nil {
 					fmtutil.PrintJSON(t.Records)
 					return errors.Wrap(err, "gocharts/data/tables/write.go/WriteXLSXFormatted.Error.FormatCellValue")
