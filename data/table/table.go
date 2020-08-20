@@ -12,9 +12,11 @@ var DebugReadCSV = false // should not need to use this.
 
 // TableData is useful for working on CSV data
 type TableData struct {
-	Name    string
-	Columns []string
-	Records [][]string
+	Name      string
+	Columns   []string
+	Records   [][]string
+	FormatMap map[int]string
+	Formatter func(val string, colIdx uint) (interface{}, error)
 }
 
 func NewTableData() TableData {

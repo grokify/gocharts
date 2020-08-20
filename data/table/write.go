@@ -11,7 +11,6 @@ import (
 
 	"github.com/360EntSecGroup-Skylar/excelize"
 	"github.com/grokify/gotilla/encoding/jsonutil"
-	"github.com/grokify/gotilla/fmt/fmtutil"
 	"github.com/pkg/errors"
 )
 
@@ -47,6 +46,7 @@ func WriteCSVSimple(cols []string, records [][]string, filename string) error {
 	return tbl.WriteCSV(filename)
 }
 
+/*
 // WriteXLSX writes a table as an Excel XLSX file.
 func WriteXLSX(path string, tbls ...*TableData) error {
 	tfs := []*TableFormatter{}
@@ -58,6 +58,7 @@ func WriteXLSX(path string, tbls ...*TableData) error {
 	}
 	return WriteXLSXFormatted(path, tfs...)
 }
+*/
 
 func FormatStrings(val string, col uint) (interface{}, error) {
 	return val, nil
@@ -161,6 +162,44 @@ func (tf *TableFormatter) FormatterFunc() func(val string, colIdx uint) (interfa
 	}
 }
 
+func (tf *TableData) FormatterFunc() func(val string, colIdx uint) (interface{}, error) {
+	if tf.FormatMap == nil || len(tf.FormatMap) == 0 {
+		if tf.Formatter == nil {
+			return FormatStrings
+		}
+		return tf.Formatter
+	}
+	return func(val string, colIdx uint) (interface{}, error) {
+		if fmtType, ok := tf.FormatMap[int(colIdx)]; ok {
+			fmtType := strings.ToLower(strings.TrimSpace(fmtType))
+			if len(fmtType) > 0 {
+				switch fmtType {
+				case "float":
+					floatVal, err := strconv.ParseFloat(val, 64)
+					if err != nil {
+						return val, err
+					}
+					return floatVal, nil
+				case "int":
+					intVal, err := strconv.Atoi(val)
+					if err != nil {
+						return val, err
+					}
+					return intVal, nil
+				case "time":
+					dtVal, err := time.Parse(time.RFC3339, val)
+					if err != nil {
+						return val, err
+					} else {
+						return dtVal, nil
+					}
+				}
+			}
+		}
+		return val, nil
+	}
+}
+
 // WriteXLSXFormatted writes a table as an Excel XLSX file with
 // row formatter option.
 func WriteXLSXFormatted(path string, tbls ...*TableFormatter) error {
@@ -194,10 +233,57 @@ func WriteXLSXFormatted(path string, tbls ...*TableFormatter) error {
 		for y, row := range t.Records {
 			for x, cellValue := range row {
 				cellLocation := CoordinatesToSheetLocation(uint32(x), uint32(y+rowBase))
-				//formattedVal, err := tf.Formatter(cellValue, uint(x))
 				formattedVal, err := fmtFunc(cellValue, uint(x))
 				if err != nil {
-					fmtutil.PrintJSON(t.Records)
+					return errors.Wrap(err, "gocharts/data/tables/write.go/WriteXLSXFormatted.Error.FormatCellValue")
+				}
+				f.SetCellValue(sheetname, cellLocation, formattedVal)
+			}
+		}
+		// Set active sheet of the workbook.
+		if i == 0 {
+			f.SetActiveSheet(index)
+		}
+	}
+	// Save xlsx file by the given path.
+	return f.SaveAs(path)
+}
+
+// WriteXLSXFormatted writes a table as an Excel XLSX file with
+// row formatter option.
+func WriteXLSX(path string, tbls ...*TableData) error {
+	f := excelize.NewFile()
+	// Delete default sheet.
+	f.DeleteSheet(f.GetSheetName(f.GetSheetIndex("Sheet1")))
+	f.DeleteSheet("Sheet1")
+	// Create a new sheet.
+	sheetNum := 0
+	for i, tbl := range tbls {
+		if tbl == nil {
+			continue
+		}
+		//t := tf.Table
+		sheetNum++
+		sheetname := strings.TrimSpace(tbl.Name)
+		if len(sheetname) == 0 {
+			sheetname = fmt.Sprintf("Sheet%d", sheetNum)
+		}
+		index := f.NewSheet(sheetname)
+		// Set value of a cell.
+		rowBase := 0
+		if len(tbl.Columns) > 0 {
+			rowBase++
+			for i, cellValue := range tbl.Columns {
+				cellLocation := CoordinatesToSheetLocation(uint32(i), 0)
+				f.SetCellValue(sheetname, cellLocation, cellValue)
+			}
+		}
+		fmtFunc := tbl.FormatterFunc()
+		for y, row := range tbl.Records {
+			for x, cellValue := range row {
+				cellLocation := CoordinatesToSheetLocation(uint32(x), uint32(y+rowBase))
+				formattedVal, err := fmtFunc(cellValue, uint(x))
+				if err != nil {
 					return errors.Wrap(err, "gocharts/data/tables/write.go/WriteXLSXFormatted.Error.FormatCellValue")
 				}
 				f.SetCellValue(sheetname, cellLocation, formattedVal)
