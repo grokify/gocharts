@@ -8,7 +8,8 @@ import (
 type TableSet struct {
 	Columns      []string
 	RowFormatter func(val string, col uint) (interface{}, error)
-	TableMap     map[string]*TableFormatter
+	TableMap     map[string]*TableData
+	//ATableMapOld  map[string]*TableFormatter
 }
 
 func (ts *TableSet) TableNames() []string {
@@ -20,6 +21,18 @@ func (ts *TableSet) TableNames() []string {
 	return names
 }
 
+func (ts *TableSet) TablesSorted() []*TableData {
+	tbls := []*TableData{}
+	names := ts.TableNames()
+	for _, name := range names {
+		if tbl, ok := ts.TableMap[name]; ok {
+			tbls = append(tbls, tbl)
+		}
+	}
+	return tbls
+}
+
+/*
 func (ts *TableSet) TablesFormattedSorted() []*TableFormatter {
 	tfs := []*TableFormatter{}
 	names := ts.TableNames()
@@ -29,7 +42,8 @@ func (ts *TableSet) TablesFormattedSorted() []*TableFormatter {
 		}
 	}
 	return tfs
-}
+}*/
+/*
 
 func (ts *TableSet) AddRecord(tableName string, row []string) {
 	tableName = strings.TrimSpace(tableName)
@@ -44,4 +58,19 @@ func (ts *TableSet) AddRecord(tableName string, row []string) {
 	}
 	tf.Table.Records = append(tf.Table.Records, row)
 	ts.TableMap[tableName] = tf
+}
+*/
+
+func (ts *TableSet) AddRecord(tableName string, row []string) {
+	tableName = strings.TrimSpace(tableName)
+	tbl, ok := ts.TableMap[tableName]
+	if !ok {
+		tbl := NewTableData()
+		tbl.Name = tableName
+		tbl.Columns = ts.Columns
+		tbl.FormatMap = tbl.FormatMap
+		tbl.FormatFunc = tbl.FormatFunc
+	}
+	tbl.Records = append(tbl.Records, row)
+	ts.TableMap[tableName] = tbl
 }

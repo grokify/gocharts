@@ -54,8 +54,6 @@ func DataSeriesSliceTable(dsSlice []DataSeries) table.TableData {
 // Excel XLSX file for easy consumption.
 func DataSeriesSliceWriteXLSX(filename string, dsSlice []DataSeries) error {
 	tbl := DataSeriesSliceTable(dsSlice)
-	tf := table.TableFormatter{
-		Table:     &tbl,
-		Formatter: table.FormatTimeAndFloats}
-	return table.WriteXLSXFormatted(filename, &tf)
+	tbl.FormatFunc = table.FormatTimeAndFloats
+	return table.WriteXLSX(filename, &tbl)
 }

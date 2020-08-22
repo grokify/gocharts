@@ -53,8 +53,11 @@ func DataSeriesToTable(ds DataSeries, col2 string, dtFmt func(dt time.Time) stri
 // DataSeriesWriteXLSX writes an XSLX file given a `DataSeries`
 func DataSeriesWriteXLSX(filename string, ds DataSeries, col2 string, dtFmt func(dt time.Time) string) error {
 	tbl := DataSeriesToTable(ds, col2, dtFmt)
-	tf := &table.TableFormatter{
+	tbl.FormatFunc = table.FormatStringAndInts
+	return table.WriteXLSX(filename, &tbl)
+	/*	tf := &table.TableFormatter{
 		Table:     &tbl,
-		Formatter: table.FormatStringAndInts}
-	return table.WriteXLSXFormatted(filename, tf)
+		Formatter: table.FormatStringAndInts}*/
+	//return table.WriteXLSXFormatted(filename, tf)
+
 }

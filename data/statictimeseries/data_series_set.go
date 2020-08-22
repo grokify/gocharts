@@ -402,8 +402,6 @@ func WriteXLSX(filename string, ds3 DataSeriesSet, fmtTime func(time.Time) strin
 	if err != nil {
 		return err
 	}
-	tf := &table.TableFormatter{
-		Table:     &tbl,
-		Formatter: table.FormatStringAndFloats}
-	return table.WriteXLSXFormatted(filename, tf)
+	tbl.FormatFunc = table.FormatStringAndFloats
+	return table.WriteXLSX(filename, &tbl)
 }

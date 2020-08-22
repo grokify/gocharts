@@ -118,6 +118,7 @@ func FormatTimeAndFloats(val string, colIdx uint) (interface{}, error) {
 	return num, nil
 }
 
+/*
 type TableFormatter struct {
 	Table     *TableData
 	FormatMap map[int]string
@@ -125,44 +126,6 @@ type TableFormatter struct {
 }
 
 func (tf *TableFormatter) FormatterFunc() func(val string, colIdx uint) (interface{}, error) {
-	if tf.FormatMap == nil || len(tf.FormatMap) == 0 {
-		if tf.Formatter == nil {
-			return FormatStrings
-		}
-		return tf.Formatter
-	}
-	return func(val string, colIdx uint) (interface{}, error) {
-		if fmtType, ok := tf.FormatMap[int(colIdx)]; ok {
-			fmtType := strings.ToLower(strings.TrimSpace(fmtType))
-			if len(fmtType) > 0 {
-				switch fmtType {
-				case "float":
-					floatVal, err := strconv.ParseFloat(val, 64)
-					if err != nil {
-						return val, err
-					}
-					return floatVal, nil
-				case "int":
-					intVal, err := strconv.Atoi(val)
-					if err != nil {
-						return val, err
-					}
-					return intVal, nil
-				case "time":
-					dtVal, err := time.Parse(time.RFC3339, val)
-					if err != nil {
-						return val, err
-					} else {
-						return dtVal, nil
-					}
-				}
-			}
-		}
-		return val, nil
-	}
-}
-
-func (tf *TableData) FormatterFunc() func(val string, colIdx uint) (interface{}, error) {
 	if tf.FormatMap == nil || len(tf.FormatMap) == 0 {
 		if tf.Formatter == nil {
 			return FormatStrings
@@ -248,8 +211,47 @@ func WriteXLSXFormatted(path string, tbls ...*TableFormatter) error {
 	// Save xlsx file by the given path.
 	return f.SaveAs(path)
 }
+*/
 
-// WriteXLSXFormatted writes a table as an Excel XLSX file with
+func (tf *TableData) FormatterFunc() func(val string, colIdx uint) (interface{}, error) {
+	if tf.FormatMap == nil || len(tf.FormatMap) == 0 {
+		if tf.FormatFunc == nil {
+			return FormatStrings
+		}
+		return tf.FormatFunc
+	}
+	return func(val string, colIdx uint) (interface{}, error) {
+		if fmtType, ok := tf.FormatMap[int(colIdx)]; ok {
+			fmtType := strings.ToLower(strings.TrimSpace(fmtType))
+			if len(fmtType) > 0 {
+				switch fmtType {
+				case "float":
+					floatVal, err := strconv.ParseFloat(val, 64)
+					if err != nil {
+						return val, err
+					}
+					return floatVal, nil
+				case "int":
+					intVal, err := strconv.Atoi(val)
+					if err != nil {
+						return val, err
+					}
+					return intVal, nil
+				case "time":
+					dtVal, err := time.Parse(time.RFC3339, val)
+					if err != nil {
+						return val, err
+					} else {
+						return dtVal, nil
+					}
+				}
+			}
+		}
+		return val, nil
+	}
+}
+
+// WriteXLSX writes a table as an Excel XLSX file with
 // row formatter option.
 func WriteXLSX(path string, tbls ...*TableData) error {
 	f := excelize.NewFile()
