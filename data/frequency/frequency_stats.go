@@ -65,3 +65,51 @@ func (fs *FrequencyStats) ItemsSliceSorted() []string {
 	sort.Strings(items)
 	return items
 }
+
+type PointSet struct {
+	PointsMap map[string]Point
+}
+
+func NewPointSet() PointSet {
+	return PointSet{PointsMap: map[string]Point{}}
+}
+
+func (ps *PointSet) Slice(sortDesc bool) []Point {
+	points := []Point{}
+	for _, point := range ps.PointsMap {
+		points = append(points, point)
+	}
+	if sortDesc {
+		sort.Slice(points, func(i, j int) bool {
+			return points[i].Absolute > points[j].Absolute
+		})
+	}
+	return points
+}
+
+type Point struct {
+	Name       string
+	Absolute   int64
+	Percentage float64
+}
+
+func (fs *FrequencyStats) TotalCount() uint64 {
+	totalCount := 0
+	for _, itemCount := range fs.Items {
+		totalCount += itemCount
+	}
+	return uint64(totalCount)
+}
+
+func (fs *FrequencyStats) Stats() PointSet {
+	pointSet := NewPointSet()
+	totalCount := fs.TotalCount()
+	for itemName, itemCount := range fs.Items {
+		point := Point{
+			Name:       itemName,
+			Absolute:   int64(itemCount),
+			Percentage: float64(itemCount) / float64(totalCount) * 100}
+		pointSet.PointsMap[itemName] = point
+	}
+	return pointSet
+}
