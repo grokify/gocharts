@@ -222,7 +222,7 @@ func (tbl *TableData) FormatterFunc() func(val string, colIdx uint) (interface{}
 	}
 	return func(val string, colIdx uint) (interface{}, error) {
 		fmtType, ok := tbl.FormatMap[int(colIdx)]
-		if !ok {
+		if !ok || len(strings.TrimSpace(fmtType)) == 0 {
 			fmtType, ok = tbl.FormatMap[-1]
 			if !ok {
 				fmtType = ""
