@@ -213,37 +213,42 @@ func WriteXLSXFormatted(path string, tbls ...*TableFormatter) error {
 }
 */
 
-func (tf *TableData) FormatterFunc() func(val string, colIdx uint) (interface{}, error) {
-	if tf.FormatMap == nil || len(tf.FormatMap) == 0 {
-		if tf.FormatFunc == nil {
+func (tbl *TableData) FormatterFunc() func(val string, colIdx uint) (interface{}, error) {
+	if tbl.FormatMap == nil || len(tbl.FormatMap) == 0 {
+		if tbl.FormatFunc == nil {
 			return FormatStrings
 		}
-		return tf.FormatFunc
+		return tbl.FormatFunc
 	}
 	return func(val string, colIdx uint) (interface{}, error) {
-		if fmtType, ok := tf.FormatMap[int(colIdx)]; ok {
-			fmtType := strings.ToLower(strings.TrimSpace(fmtType))
-			if len(fmtType) > 0 {
-				switch fmtType {
-				case "float":
-					floatVal, err := strconv.ParseFloat(val, 64)
-					if err != nil {
-						return val, err
-					}
-					return floatVal, nil
-				case "int":
-					intVal, err := strconv.Atoi(val)
-					if err != nil {
-						return val, err
-					}
-					return intVal, nil
-				case "time":
-					dtVal, err := time.Parse(time.RFC3339, val)
-					if err != nil {
-						return val, err
-					} else {
-						return dtVal, nil
-					}
+		fmtType, ok := tbl.FormatMap[int(colIdx)]
+		if !ok {
+			fmtType, ok = tbl.FormatMap[-1]
+			if !ok {
+				fmtType = ""
+			}
+		}
+		fmtType = strings.ToLower(strings.TrimSpace(fmtType))
+		if len(fmtType) > 0 {
+			switch fmtType {
+			case "float":
+				floatVal, err := strconv.ParseFloat(val, 64)
+				if err != nil {
+					return val, err
+				}
+				return floatVal, nil
+			case "int":
+				intVal, err := strconv.Atoi(val)
+				if err != nil {
+					return val, err
+				}
+				return intVal, nil
+			case "time":
+				dtVal, err := time.Parse(time.RFC3339, val)
+				if err != nil {
+					return val, err
+				} else {
+					return dtVal, nil
 				}
 			}
 		}
