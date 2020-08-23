@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"github.com/grokify/gocharts/data/table"
-	"github.com/grokify/gotilla/encoding/csvutil"
 	"github.com/grokify/gotilla/encoding/jsonutil"
 	"github.com/grokify/gotilla/math/mathutil"
 	"github.com/grokify/gotilla/type/stringsutil"
@@ -14,7 +13,7 @@ import (
 // NewFrequencySetsCSVs expects multiple files to have same columns.
 func NewFrequencySetsCSVs(filenames []string, key1ColIdx, key2ColIdx, uidColIdx uint) (FrequencySets, table.TableData, error) {
 	fsets := NewFrequencySets()
-	tbl, err := csvutil.NewTableDataFilesSimple(filenames, ",", true, true)
+	tbl, err := table.NewTableDataFilesSimple(filenames, ",", true, true)
 	if err != nil {
 		return fsets, tbl, err
 	}
