@@ -3,6 +3,8 @@ package frequency
 import (
 	"sort"
 	"strconv"
+
+	"github.com/grokify/gocharts/data/point"
 )
 
 // Frequency stats is used to count how many times
@@ -66,6 +68,7 @@ func (fs *FrequencyStats) ItemsSliceSorted() []string {
 	return items
 }
 
+/*
 type PointSet struct {
 	PointsMap map[string]Point
 }
@@ -92,6 +95,7 @@ type Point struct {
 	Absolute   int64
 	Percentage float64
 }
+*/
 
 func (fs *FrequencyStats) TotalCount() uint64 {
 	totalCount := 0
@@ -101,15 +105,15 @@ func (fs *FrequencyStats) TotalCount() uint64 {
 	return uint64(totalCount)
 }
 
-func (fs *FrequencyStats) Stats() PointSet {
-	pointSet := NewPointSet()
-	totalCount := fs.TotalCount()
+func (fs *FrequencyStats) Stats() point.PointSet {
+	pointSet := point.NewPointSet()
 	for itemName, itemCount := range fs.Items {
-		point := Point{
-			Name:       itemName,
-			Absolute:   int64(itemCount),
-			Percentage: float64(itemCount) / float64(totalCount) * 100}
+		point := point.Point{
+			Name:        itemName,
+			AbsoluteInt: int64(itemCount)}
+		// Percentage:  float64(itemCount) / float64(totalCount) * 100}
 		pointSet.PointsMap[itemName] = point
 	}
+	pointSet.Inflate()
 	return pointSet
 }
