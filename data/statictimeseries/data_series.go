@@ -8,6 +8,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/grokify/gocharts/data/point"
 	"github.com/grokify/gocharts/data/table"
 	"github.com/grokify/gotilla/sort/sortutil"
 	"github.com/grokify/gotilla/time/month"
@@ -347,6 +348,25 @@ func DataSeriesMinMaxTimes(series *DataSeries) (time.Time, time.Time) {
 
 func (series *DataSeries) MinMaxTimes() (time.Time, time.Time) {
 	return DataSeriesMinMaxTimes(series)
+}
+
+func (ds *DataSeries) Stats() point.PointSet {
+	ps := point.NewPointSet()
+	ps.IsFloat = ds.IsFloat
+	for rfc3339, item := range ds.ItemMap {
+		point := point.Point{
+			Name:    rfc3339,
+			IsFloat: item.IsFloat}
+		if item.IsFloat {
+			point.AbsoluteFloat = item.ValueFloat
+		} else {
+			point.AbsoluteInt = item.Value
+		}
+		// Percentage:  float64(itemCount) / float64(totalCount) * 100}
+		ps.PointsMap[rfc3339] = point
+	}
+	ps.Inflate()
+	return ps
 }
 
 func DataSeriesDivide(numer, denom DataSeries) (DataSeries, error) {
