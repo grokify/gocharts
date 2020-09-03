@@ -6,6 +6,28 @@ import (
 	"strings"
 )
 
+func ToDocuments(tbl *TableData) []map[string]interface{} {
+	docs := []map[string]interface{}{}
+	fmtFunc := tbl.FormatterFunc()
+	for _, row := range tbl.Records {
+		doc := map[string]interface{}{}
+		for x, valStr := range row {
+			colName := fmt.Sprintf("col%d", x)
+			if x < len(tbl.Columns) {
+				colName = tbl.Columns[x]
+			}
+			valFmt, err := fmtFunc(valStr, uint(x))
+			if err != nil {
+				doc[colName] = valStr
+			} else {
+				doc[colName] = valFmt
+			}
+		}
+		docs = append(docs, doc)
+	}
+	return docs
+}
+
 // ToHTML converts `*TableData` to HTML.
 func ToHTML(tbl *TableData, domID string, escapeHTML bool) string {
 	tHTML := "<table>"
