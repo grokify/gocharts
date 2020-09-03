@@ -125,7 +125,7 @@ func ReadMergeFilterCSVFiles(inPaths []string, outPath string, inComma rune, inS
 			} else if err != nil {
 				return data, err
 			}
-			j += 1
+			j++
 
 			if j == 0 {
 				csvHeader.Columns = line
