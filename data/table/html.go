@@ -14,7 +14,10 @@ func ToDocuments(tbl *TableData) []map[string]interface{} {
 		for x, valStr := range row {
 			colName := fmt.Sprintf("col%d", x)
 			if x < len(tbl.Columns) {
-				colName = tbl.Columns[x]
+				colNameTry := strings.TrimSpace(tbl.Columns[x])
+				if len(colNameTry) > 0 {
+					colName = colNameTry
+				}
 			}
 			valFmt, err := fmtFunc(valStr, uint(x))
 			if err != nil {
