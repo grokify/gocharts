@@ -67,8 +67,8 @@ func NewTableFileSimple(path string, sep string, hasHeader, trimSpace bool) (Tab
 	return tbl, nil
 }
 
-// ReadFileCSV reads in a CSV file and returns a `Table` struct.
-func ReadFileCSV(path string, comma rune, stripBom bool) (Table, error) {
+// ReadFile reads in a delimited file and returns a `Table` struct.
+func ReadFile(path string, comma rune, stripBom bool) (Table, error) {
 	tbl := NewTable()
 	csvReader, f, err := csvutil.NewReader(path, comma, stripBom)
 	if err != nil {
