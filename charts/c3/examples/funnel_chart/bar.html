@@ -1,0 +1,391 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.15/c3.min.js"></script>
+	<link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.15/c3.min.css">
+
+<style>
+table, th, td {
+	border: 1px solid black;
+}
+</style>
+
+</head>
+<body>
+	<h1>Developer Funnel</h1>
+
+	
+
+<!--
+	<input type="button" onclick="chart.transform('bar')" value="Bar" />
+	<input type="button" onclick="chart.transform('pie')" value="Pie" />
+	<input type="button" onclick="chart.transform('donut')" value="Donut" />
+-->
+
+	<div id="chart"></div>
+
+	<script>
+
+	var chart = c3.generate(
+		{"data":{"columns":[["Funnel Stage 1 Count",10,18,12,28,27,56,91,60,56,47,114,143],["Funnel Stage 2 Count",5,15,11,25,25,54,89,57,54,42,113,138],["Funnel Stage 3 Count",8,16,11,26,26,55,90,58,54,45,113,142]],"type":"bar"},"axis":{"x":{"type":"category","categories":["2020 Q3","2020 Q4","2020 Q4","2020 Q4","2021 Q1","2021 Q1","2021 Q1","2021 Q2","2021 Q2","2021 Q2","2021 Q3","2021 Q3"]}},"grid":{"x":{"lines":{}},"y":{"lines":{}}},"donut":{},"bar":{"WidthRatio":0,"Width":0}}
+	);
+
+	</script>
+
+	<h2>QoQ Chart</h2>
+<div id="qoqchart"></div>
+<script>
+c3.generate({"bindto":"#qoqchart","data":{"columns":[["Funnel Stage 1 Count XoX",80,-33,133,-4,107,63,-34,-7,-16,143,25],["Funnel Stage 2 Count XoX",200,-27,127,0,116,65,-36,-5,-22,169,22],["Funnel Stage 3 Count XoX",100,-31,136,0,112,64,-36,-7,-17,151,26]]},"axis":{"x":{"type":"category","categories":["2020 Q3","2020 Q4","2020 Q4","2020 Q4","2021 Q1","2021 Q1","2021 Q1","2021 Q2","2021 Q2","2021 Q2","2021 Q3","2021 Q3"]}},"grid":{"x":{"lines":{}},"y":{"show":true,"lines":{}}},"donut":{},"bar":{"WidthRatio":0,"Width":0}});
+</script>
+<h2>Funnel Chart</h2>
+<div id="funchart"></div>
+<script>
+c3.generate({"bindto":"#funchart","data":{"columns":[["Success Pct #0",50,83,92,89,93,96,98,95,96,89,99,97],["Success Pct #1",160,107,100,104,104,102,101,102,100,107,100,103]]},"axis":{"x":{"type":"category","categories":["2020 Q3","2020 Q4","2020 Q4","2020 Q4","2021 Q1","2021 Q1","2021 Q1","2021 Q2","2021 Q2","2021 Q2","2021 Q3","2021 Q3"]}},"grid":{"x":{"lines":{}},"y":{"show":true,"lines":{}}},"donut":{},"bar":{"WidthRatio":0,"Width":0}});
+</script>
+<h2>Stats</h2>
+
+<table id="funnelpct" style="border:1px solid #000;border-collapse:collapse">
+
+<thead>
+    
+        <th>Count</th>
+    
+        <th>2020 Q3</th>
+    
+        <th>2020 Q4</th>
+    
+        <th>2020 Q4</th>
+    
+        <th>2020 Q4</th>
+    
+        <th>2021 Q1</th>
+    
+        <th>2021 Q1</th>
+    
+        <th>2021 Q1</th>
+    
+        <th>2021 Q2</th>
+    
+        <th>2021 Q2</th>
+    
+        <th>2021 Q2</th>
+    
+        <th>2021 Q3</th>
+    
+        <th>2021 Q3</th>
+    
+</thead>
+
+
+<tbody>
+
+    <tr>
+    
+        <td>Funnel Stage 1 Count</td>
+    
+        <td>10</td>
+    
+        <td>18</td>
+    
+        <td>12</td>
+    
+        <td>28</td>
+    
+        <td>27</td>
+    
+        <td>56</td>
+    
+        <td>91</td>
+    
+        <td>60</td>
+    
+        <td>56</td>
+    
+        <td>47</td>
+    
+        <td>114</td>
+    
+        <td>143</td>
+    
+    </tr>
+
+    <tr>
+    
+        <td>Funnel Stage 2 Count</td>
+    
+        <td>5</td>
+    
+        <td>15</td>
+    
+        <td>11</td>
+    
+        <td>25</td>
+    
+        <td>25</td>
+    
+        <td>54</td>
+    
+        <td>89</td>
+    
+        <td>57</td>
+    
+        <td>54</td>
+    
+        <td>42</td>
+    
+        <td>113</td>
+    
+        <td>138</td>
+    
+    </tr>
+
+    <tr>
+    
+        <td>Funnel Stage 3 Count</td>
+    
+        <td>8</td>
+    
+        <td>16</td>
+    
+        <td>11</td>
+    
+        <td>26</td>
+    
+        <td>26</td>
+    
+        <td>55</td>
+    
+        <td>90</td>
+    
+        <td>58</td>
+    
+        <td>54</td>
+    
+        <td>45</td>
+    
+        <td>113</td>
+    
+        <td>142</td>
+    
+    </tr>
+
+    <tr>
+    
+        <td>QoQ</td>
+    
+        <td>2020 Q3</td>
+    
+        <td>2020 Q4</td>
+    
+        <td>2020 Q4</td>
+    
+        <td>2020 Q4</td>
+    
+        <td>2021 Q1</td>
+    
+        <td>2021 Q1</td>
+    
+        <td>2021 Q1</td>
+    
+        <td>2021 Q2</td>
+    
+        <td>2021 Q2</td>
+    
+        <td>2021 Q2</td>
+    
+        <td>2021 Q3</td>
+    
+        <td>2021 Q3</td>
+    
+    </tr>
+
+    <tr>
+    
+        <td>Funnel Stage 1 Count XoX</td>
+    
+        <td>0%</td>
+    
+        <td>80%</td>
+    
+        <td>-33%</td>
+    
+        <td>133%</td>
+    
+        <td>-4%</td>
+    
+        <td>107%</td>
+    
+        <td>62%</td>
+    
+        <td>-34%</td>
+    
+        <td>-7%</td>
+    
+        <td>-16%</td>
+    
+        <td>143%</td>
+    
+        <td>25%</td>
+    
+    </tr>
+
+    <tr>
+    
+        <td>Funnel Stage 2 Count XoX</td>
+    
+        <td>0%</td>
+    
+        <td>200%</td>
+    
+        <td>-27%</td>
+    
+        <td>127%</td>
+    
+        <td>0%</td>
+    
+        <td>116%</td>
+    
+        <td>65%</td>
+    
+        <td>-36%</td>
+    
+        <td>-5%</td>
+    
+        <td>-22%</td>
+    
+        <td>169%</td>
+    
+        <td>22%</td>
+    
+    </tr>
+
+    <tr>
+    
+        <td>Funnel Stage 3 Count XoX</td>
+    
+        <td>0%</td>
+    
+        <td>100%</td>
+    
+        <td>-31%</td>
+    
+        <td>136%</td>
+    
+        <td>0%</td>
+    
+        <td>112%</td>
+    
+        <td>64%</td>
+    
+        <td>-36%</td>
+    
+        <td>-7%</td>
+    
+        <td>-17%</td>
+    
+        <td>151%</td>
+    
+        <td>26%</td>
+    
+    </tr>
+
+    <tr>
+    
+        <td>Funnel</td>
+    
+        <td>2020 Q3</td>
+    
+        <td>2020 Q4</td>
+    
+        <td>2020 Q4</td>
+    
+        <td>2020 Q4</td>
+    
+        <td>2021 Q1</td>
+    
+        <td>2021 Q1</td>
+    
+        <td>2021 Q1</td>
+    
+        <td>2021 Q2</td>
+    
+        <td>2021 Q2</td>
+    
+        <td>2021 Q2</td>
+    
+        <td>2021 Q3</td>
+    
+        <td>2021 Q3</td>
+    
+    </tr>
+
+    <tr>
+    
+        <td>Success Pct #0</td>
+    
+        <td>50%</td>
+    
+        <td>83%</td>
+    
+        <td>92%</td>
+    
+        <td>89%</td>
+    
+        <td>93%</td>
+    
+        <td>96%</td>
+    
+        <td>98%</td>
+    
+        <td>95%</td>
+    
+        <td>96%</td>
+    
+        <td>89%</td>
+    
+        <td>99%</td>
+    
+        <td>97%</td>
+    
+    </tr>
+
+    <tr>
+    
+        <td>Success Pct #1</td>
+    
+        <td>160%</td>
+    
+        <td>107%</td>
+    
+        <td>100%</td>
+    
+        <td>104%</td>
+    
+        <td>104%</td>
+    
+        <td>102%</td>
+    
+        <td>101%</td>
+    
+        <td>102%</td>
+    
+        <td>100%</td>
+    
+        <td>107%</td>
+    
+        <td>100%</td>
+    
+        <td>103%</td>
+    
+    </tr>
+
+</tbody>
+
+</table>
+
+
+
+</body>
+</html>

@@ -12,6 +12,7 @@ import (
 
 	"github.com/grokify/gocharts/charts/c3"
 	"github.com/grokify/gocharts/data/statictimeseries"
+	"github.com/grokify/gocharts/data/table"
 
 	// More Info
 	"github.com/grokify/gocharts/tables"
@@ -89,11 +90,11 @@ func buildMoreInfoHTML(ds3 statictimeseries.DataSeriesSet, c3Bar c3.C3Chart, rep
 	}
 
 	if addStatsTable {
-		table := tables.TableData{
-			Id:    "funnelpct",
-			Style: tables.StyleSimple,
-			Rows:  tableRows}
-		moreInfoHTML += "<h2>Stats</h2>" + tables.SimpleTable(table)
+		tbl := table.Table{
+			ID:      "funnelpct",
+			Style:   tables.StyleSimple,
+			Records: tableRows}
+		moreInfoHTML += "<h2>Stats</h2>" + table.SimpleTable(tbl)
 	}
 
 	return moreInfoHTML

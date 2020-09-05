@@ -3,17 +3,18 @@ package main
 import (
 	"fmt"
 
+	"github.com/grokify/gocharts/data/table"
 	"github.com/grokify/gocharts/tables"
 )
 
 func main() {
-	table := tables.TableData{
-		Id:    "simpletable",
+	tbl := table.Table{
+		ID:    "simpletable",
 		Style: tables.StyleSimple,
-		Rows: [][]string{
+		Records: [][]string{
 			{"foo", "bar"},
 			{"1", "2"}}}
 
-	output := tables.SimpleTable(table)
+	output := table.SimpleTable(tbl)
 	fmt.Println(output)
 }

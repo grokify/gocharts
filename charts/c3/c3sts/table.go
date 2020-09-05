@@ -1,4 +1,6 @@
-package tables
+// c3sts is a package for creating C3 charts from statictimeseries data.
+// see c3/examples/funnel_chart for usage.
+package c3sts
 
 import (
 	//"math"
@@ -12,18 +14,19 @@ import (
 	"github.com/grokify/gocharts/charts/c3"
 )
 
-const StyleSimple = "border:1px solid #000;border-collapse:collapse"
+// const StyleSimple = "border:1px solid #000;border-collapse:collapse"
 
 // TableData is used to hold generic, simple table data to be generated
 // by a template using `SimpleTable`. Use with `DataRowsToTableRows` to
 // convert output from `statictimeseries.Report` and
 // `statictimeseries.ReportAxisX`. This is used in the C3 Bar Chart
 // example.
+/*
 type TableData struct {
 	Id    string
 	Style string // border:1px solid #000;border-collapse:collapse
 	Rows  [][]string
-}
+}*/
 
 // DataRowsToTableRows Builds rows from the output of statictimeseries.Report,
 // array of []statictimeseries.RowInt64.
@@ -45,9 +48,8 @@ func DataRowsToTableRows(rep []sts.RowInt64, axis []string, addQoQPct, addFunnel
 		rows = append(rows, axis)
 		rows[len(rows)-1] = unshift(rows[len(rows)-1], qoqLabel)
 		for _, r := range qoq {
-			rows = append(rows, r.Flatten(
-				scu.FormatFloat64ToIntString,
-			))
+			rows = append(rows,
+				r.Flatten(scu.FormatFloat64ToIntString, 1, "0%"))
 		}
 	}
 	if addFunnelPct {
@@ -55,9 +57,8 @@ func DataRowsToTableRows(rep []sts.RowInt64, axis []string, addQoQPct, addFunnel
 		rows = append(rows, axis)
 		rows[len(rows)-1] = unshift(rows[len(rows)-1], funnelLabel)
 		for _, r := range fun {
-			rows = append(rows, r.Flatten(
-				scu.FormatFloat64ToIntStringFunnel,
-			))
+			rows = append(rows,
+				r.Flatten(scu.FormatFloat64ToIntStringFunnel, 0, ""))
 		}
 	}
 	return rows, qoq, fun
