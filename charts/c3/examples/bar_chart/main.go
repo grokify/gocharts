@@ -11,11 +11,10 @@ import (
 	"github.com/grokify/gotilla/time/timeutil"
 
 	"github.com/grokify/gocharts/charts/c3"
+	"github.com/grokify/gocharts/charts/c3/c3sts"
 	"github.com/grokify/gocharts/data/statictimeseries"
 	"github.com/grokify/gocharts/data/table"
-
 	// More Info
-	"github.com/grokify/gocharts/tables"
 )
 
 const repoLink = "https://github.com/grokify/gocharts/tree/master/charts/c3/examples/bar_chart"
@@ -69,7 +68,7 @@ func buildMoreInfoHTML(ds3 statictimeseries.DataSeriesSet, c3Bar c3.C3Chart, rep
 
 	axis := c3Bar.Axis.X.Categories
 
-	tableRows, qoqData, funnelData := tables.DataRowsToTableRows(rep, axis, true, true, "Count", "QoQ", "Funnel")
+	tableRows, qoqData, funnelData := c3sts.DataRowsToTableRows(rep, axis, true, true, "Count", "QoQ", "Funnel")
 
 	addQoqChart := true
 	addFunnelChart := true
@@ -77,14 +76,14 @@ func buildMoreInfoHTML(ds3 statictimeseries.DataSeriesSet, c3Bar c3.C3Chart, rep
 
 	if addQoqChart {
 		domId := "qoqChart"
-		qoqChart := tables.QoqDataToChart(domId, c3Bar.Axis, qoqData)
+		qoqChart := c3sts.QoqDataToChart(domId, c3Bar.Axis, qoqData)
 
 		moreInfoHTML += "<h2>QoQ Chart</h2>" + c3.C3ChartHtmlSimple(domId, qoqChart)
 	}
 
 	if addFunnelChart {
 		domId := "funnelChart"
-		funChart := tables.FunnelDataToChart(domId, c3Bar.Axis, funnelData)
+		funChart := c3sts.FunnelDataToChart(domId, c3Bar.Axis, funnelData)
 
 		moreInfoHTML += "<h2>Funnel Chart</h2>" + c3.C3ChartHtmlSimple(domId, funChart)
 	}
@@ -92,7 +91,7 @@ func buildMoreInfoHTML(ds3 statictimeseries.DataSeriesSet, c3Bar c3.C3Chart, rep
 	if addStatsTable {
 		tbl := table.Table{
 			ID:      "funnelpct",
-			Style:   tables.StyleSimple,
+			Style:   table.StyleSimple,
 			Records: tableRows}
 		moreInfoHTML += "<h2>Stats</h2>" + table.SimpleTable(tbl)
 	}

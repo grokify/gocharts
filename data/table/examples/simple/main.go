@@ -4,13 +4,12 @@ import (
 	"fmt"
 
 	"github.com/grokify/gocharts/data/table"
-	"github.com/grokify/gocharts/tables"
 )
 
 func main() {
 	tbl := table.Table{
 		ID:    "simpletable",
-		Style: tables.StyleSimple,
+		Style: table.StyleSimple,
 		Records: [][]string{
 			{"foo", "bar"},
 			{"1", "2"}}}
