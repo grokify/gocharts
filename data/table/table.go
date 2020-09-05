@@ -21,26 +21,11 @@ type Table struct {
 
 func NewTable() Table {
 	return Table{
-		Columns: []string{},
-		Records: [][]string{}}
+		Columns:   []string{},
+		Records:   [][]string{},
+		FormatMap: map[int]string{}}
 }
 
-/*
-func NewTableDataCSV(path string, comma rune, stripBom bool) (TableData, error) {
-	tbl := NewTableData()
-	csv, file, err := csvutil.NewReader(path, comma, stripBom)
-	if err != nil {
-		return tbl, err
-	}
-	defer file.Close()
-	mergedRows, err := csv.ReadAll()
-	if err != nil {
-		return tbl, err
-	}
-	tbl.LoadMergedRows(mergedRows)
-	return tbl, nil
-}
-*/
 // LoadMergedRows is used to load data from `[][]string` sources
 // like csv.ReadAll()
 func (t *Table) LoadMergedRows(data [][]string) {
