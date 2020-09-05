@@ -32,11 +32,23 @@ func ToDocuments(tbl *Table) []map[string]interface{} {
 }
 
 // ToHTML converts `*TableData` to HTML.
-func ToHTML(tbl *Table, domID string, escapeHTML bool) string {
+func ToHTML(tbl *Table, escapeHTML bool) string {
 	tHTML := "<table>"
-	domID = strings.TrimSpace(domID)
-	if len(domID) > 0 {
-		tHTML = fmt.Sprintf("<table id=\"%s\">", domID)
+	tbl.ID = strings.TrimSpace(tbl.ID)
+	tbl.Class = strings.TrimSpace(tbl.Class)
+	tbl.Style = strings.TrimSpace(tbl.Style)
+	attrs := []string{}
+	if len(tbl.ID) > 0 {
+		attrs = append(attrs, fmt.Sprintf("id=\"%s\"", tbl.ID))
+	}
+	if len(tbl.Class) > 0 {
+		attrs = append(attrs, fmt.Sprintf("class=\"%s\"", tbl.Class))
+	}
+	if len(tbl.Style) > 0 {
+		attrs = append(attrs, fmt.Sprintf("style=\"%s\"", tbl.Style))
+	}
+	if len(attrs) > 0 {
+		tHTML = fmt.Sprintf("<table %s>", strings.Join(attrs, " "))
 	}
 	if len(tbl.Columns) > 0 {
 		if escapeHTML {

@@ -8,6 +8,8 @@ import (
 	//"github.com/grokify/gotilla/encoding/csvutil"
 )
 
+const StyleSimple = "border:1px solid #000;border-collapse:collapse"
+
 var DebugReadCSV = false // should not need to use this.
 
 // Table is useful for working on CSV data
@@ -17,6 +19,9 @@ type Table struct {
 	Records    [][]string
 	FormatMap  map[int]string
 	FormatFunc func(val string, colIdx uint) (interface{}, error)
+	ID         string
+	Class      string
+	Style      string
 }
 
 func NewTable() Table {
@@ -76,7 +81,7 @@ func (t *Table) ColumnsValuesDistinct(wantCols []string, stripSpace bool) (map[s
 			if !ok {
 				data[valsStr] = 0
 			}
-			data[valsStr] += 1
+			data[valsStr]++
 		}
 	}
 	return data, nil
@@ -96,7 +101,7 @@ func (t *Table) ColumnValuesDistinct(wantCol string) (map[string]int, error) {
 			if !ok {
 				data[val] = 0
 			}
-			data[val] += 1
+			data[val]++
 		}
 	}
 	return data, nil
