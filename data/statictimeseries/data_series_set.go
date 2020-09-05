@@ -244,8 +244,11 @@ type RowFloat64 struct {
 	Values []float64
 }
 
-func (row *RowFloat64) Flatten(conv func(v float64) string) []string {
+func (row *RowFloat64) Flatten(conv func(v float64) string, preCount int, preVal string) []string {
 	strs := []string{row.Name}
+	for i := 0; i < preCount; i++ {
+		strs = append(strs, preVal)
+	}
 	for _, v := range row.Values {
 		strs = append(strs, conv(v))
 	}
