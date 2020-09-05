@@ -368,8 +368,8 @@ func ReportGrowthPct(rows []RowInt64) []RowFloat64 {
 
 // DS3ToTable returns a `DataSeriesSetSimple` as a
 // `table.TableData`.
-func DS3ToTable(ds3 DataSeriesSet, fmtTime func(time.Time) string) (table.TableData, error) {
-	tbl := table.NewTableData()
+func DS3ToTable(ds3 DataSeriesSet, fmtTime func(time.Time) string) (table.Table, error) {
+	tbl := table.NewTable()
 	seriesNames := ds3.SeriesNames()
 	tbl.Columns = []string{"Time"}
 	tbl.Columns = append(tbl.Columns, seriesNames...)

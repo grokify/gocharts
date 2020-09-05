@@ -26,8 +26,8 @@ func DataSeriesSliceNames(dsSlice []DataSeries) []string {
 	return stringsutil.SliceCondenseSpace(names, false, false)
 }
 
-func DataSeriesSliceTable(dsSlice []DataSeries) table.TableData {
-	tbl := table.NewTableData()
+func DataSeriesSliceTable(dsSlice []DataSeries) table.Table {
+	tbl := table.NewTable()
 	names := DataSeriesSliceNames(dsSlice)
 	tbl.Columns = []string{"Date"}
 	tbl.Columns = append(tbl.Columns, names...)

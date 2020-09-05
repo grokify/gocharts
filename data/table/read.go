@@ -12,14 +12,14 @@ import (
 	"github.com/grokify/gotilla/type/stringsutil"
 )
 
-func NewTableDataFilesSimple(filenames []string, sep string, hasHeader, trimSpace bool) (TableData, error) {
-	tbl := NewTableData()
+func NewTableFilesSimple(filenames []string, sep string, hasHeader, trimSpace bool) (Table, error) {
+	tbl := NewTable()
 	for i, filename := range filenames {
 		filename = strings.TrimSpace(filename)
 		if len(filename) == 0 {
 			continue
 		}
-		tblx, err := NewTableDataFileSimple(filename, sep, hasHeader, trimSpace)
+		tblx, err := NewTableFileSimple(filename, sep, hasHeader, trimSpace)
 		if err != nil {
 			return tbl, err
 		}
@@ -45,8 +45,8 @@ func NewTableDataFilesSimple(filenames []string, sep string, hasHeader, trimSpac
 	return tbl, nil
 }
 
-func NewTableDataFileSimple(path string, sep string, hasHeader, trimSpace bool) (TableData, error) {
-	tbl := NewTableData()
+func NewTableFileSimple(path string, sep string, hasHeader, trimSpace bool) (Table, error) {
+	tbl := NewTable()
 	data, err := ioutil.ReadFile(path)
 	if err != nil {
 		return tbl, err
@@ -67,9 +67,9 @@ func NewTableDataFileSimple(path string, sep string, hasHeader, trimSpace bool) 
 	return tbl, nil
 }
 
-// NewTableDataFileCSV reads in a CSV file and returns a TableData struct.
-func NewTableDataFileCSV(path string, comma rune, stripBom bool) (TableData, error) {
-	tbl := NewTableData()
+// NewTableFileCSV reads in a CSV file and returns a `Table` struct.
+func NewTableFileCSV(path string, comma rune, stripBom bool) (Table, error) {
+	tbl := NewTable()
 	csvReader, f, err := csvutil.NewReader(path, comma, stripBom)
 	if err != nil {
 		return tbl, err
@@ -180,7 +180,7 @@ func ReadCSVFilesSingleColumnValuesString(files []string, sep string, hasHeader,
 }
 
 func ReadCSVFileSingleColumnValuesString(filename, sep string, hasHeader, trimSpace bool, col uint, condenseUniqueSort bool) ([]string, error) {
-	tbl, err := NewTableDataFileSimple(filename, sep, hasHeader, trimSpace)
+	tbl, err := NewTableFileSimple(filename, sep, hasHeader, trimSpace)
 	if err != nil {
 		return []string{}, err
 	}

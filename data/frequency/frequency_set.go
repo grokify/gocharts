@@ -106,10 +106,10 @@ func FrequencySetTimeKeyCount(fset FrequencySet) (statictimeseries.DataSeries, e
 	return ds, nil
 }
 
-func FrequencySetTimeKeyCountTable(fset FrequencySet, interval timeutil.Interval, countColName string) (table.TableData, error) {
+func FrequencySetTimeKeyCountTable(fset FrequencySet, interval timeutil.Interval, countColName string) (table.Table, error) {
 	ds, err := FrequencySetTimeKeyCount(fset)
 	if err != nil {
-		return table.NewTableData(), err
+		return table.NewTable(), err
 	}
 	ds.Interval = interval
 	countColName = strings.TrimSpace(countColName)

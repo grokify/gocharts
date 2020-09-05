@@ -11,9 +11,9 @@ import (
 )
 
 // NewFrequencySetsCSVs expects multiple files to have same columns.
-func NewFrequencySetsCSVs(filenames []string, key1ColIdx, key2ColIdx, uidColIdx uint) (FrequencySets, table.TableData, error) {
+func NewFrequencySetsCSVs(filenames []string, key1ColIdx, key2ColIdx, uidColIdx uint) (FrequencySets, table.Table, error) {
 	fsets := NewFrequencySets()
-	tbl, err := table.NewTableDataFilesSimple(filenames, ",", true, true)
+	tbl, err := table.NewTableFilesSimple(filenames, ",", true, true)
 	if err != nil {
 		return fsets, tbl, err
 	}
@@ -21,7 +21,7 @@ func NewFrequencySetsCSVs(filenames []string, key1ColIdx, key2ColIdx, uidColIdx 
 	return fsets, tbl, err
 }
 
-func NewFrequencySetsTable(tbl table.TableData, key1ColIdx, key2ColIdx, uidColIdx uint) (FrequencySets, error) {
+func NewFrequencySetsTable(tbl table.Table, key1ColIdx, key2ColIdx, uidColIdx uint) (FrequencySets, error) {
 	fsets := NewFrequencySets()
 	_, maxIdx := mathutil.MinMaxUint(key1ColIdx, key2ColIdx, uidColIdx)
 	for _, row := range tbl.Records {

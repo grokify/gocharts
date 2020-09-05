@@ -8,7 +8,7 @@ import (
 type TableSet struct {
 	Columns      []string
 	RowFormatter func(val string, col uint) (interface{}, error)
-	TableMap     map[string]*TableData
+	TableMap     map[string]*Table
 	//ATableMapOld  map[string]*TableFormatter
 }
 
@@ -21,8 +21,8 @@ func (ts *TableSet) TableNames() []string {
 	return names
 }
 
-func (ts *TableSet) TablesSorted() []*TableData {
-	tbls := []*TableData{}
+func (ts *TableSet) TablesSorted() []*Table {
+	tbls := []*Table{}
 	names := ts.TableNames()
 	for _, name := range names {
 		if tbl, ok := ts.TableMap[name]; ok {
@@ -65,7 +65,7 @@ func (ts *TableSet) AddRecord(tableName string, row []string) {
 	tableName = strings.TrimSpace(tableName)
 	tbl, ok := ts.TableMap[tableName]
 	if !ok {
-		tbl := NewTableData()
+		tbl := NewTable()
 		tbl.Name = tableName
 		tbl.Columns = ts.Columns
 		tbl.FormatMap = tbl.FormatMap

@@ -20,9 +20,9 @@ func TimeFormatNiceQuarter(dt time.Time) string {
 	return timeutil.FormatQuarterYYQ(dt)
 }
 
-// DataSeriesToTable generates a `table.TableData` given a `DataSeries`.
-func DataSeriesToTable(ds DataSeries, col2 string, dtFmt func(dt time.Time) string) table.TableData {
-	tbl := table.NewTableData()
+// DataSeriesToTable generates a `table.Table` given a `DataSeries`.
+func DataSeriesToTable(ds DataSeries, col2 string, dtFmt func(dt time.Time) string) table.Table {
+	tbl := table.NewTable()
 	colDt := "Date"
 	/*dtFmt := func(dt time.Time) string {
 		return dt.Format(time.RFC3339)

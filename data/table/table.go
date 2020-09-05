@@ -10,8 +10,8 @@ import (
 
 var DebugReadCSV = false // should not need to use this.
 
-// TableData is useful for working on CSV data
-type TableData struct {
+// Table is useful for working on CSV data
+type Table struct {
 	Name       string
 	Columns    []string
 	Records    [][]string
@@ -19,8 +19,8 @@ type TableData struct {
 	FormatFunc func(val string, colIdx uint) (interface{}, error)
 }
 
-func NewTableData() TableData {
-	return TableData{
+func NewTable() Table {
+	return Table{
 		Columns: []string{},
 		Records: [][]string{}}
 }
@@ -43,7 +43,7 @@ func NewTableDataCSV(path string, comma rune, stripBom bool) (TableData, error) 
 */
 // LoadMergedRows is used to load data from `[][]string` sources
 // like csv.ReadAll()
-func (t *TableData) LoadMergedRows(data [][]string) {
+func (t *Table) LoadMergedRows(data [][]string) {
 	if len(data) == 0 {
 		return
 	}
@@ -53,7 +53,7 @@ func (t *TableData) LoadMergedRows(data [][]string) {
 	}
 }
 
-func (t *TableData) ColumnIndex(wantCol string) int {
+func (t *Table) ColumnIndex(wantCol string) int {
 	for i, col := range t.Columns {
 		if col == wantCol {
 			return i
@@ -62,7 +62,7 @@ func (t *TableData) ColumnIndex(wantCol string) int {
 	return -1
 }
 
-func (t *TableData) ColumnsValuesDistinct(wantCols []string, stripSpace bool) (map[string]int, error) {
+func (t *Table) ColumnsValuesDistinct(wantCols []string, stripSpace bool) (map[string]int, error) {
 	data := map[string]int{}
 	wantIdxs := []int{}
 	maxIdx := -1
@@ -97,7 +97,7 @@ func (t *TableData) ColumnsValuesDistinct(wantCols []string, stripSpace bool) (m
 	return data, nil
 }
 
-func (t *TableData) ColumnValuesDistinct(wantCol string) (map[string]int, error) {
+func (t *Table) ColumnValuesDistinct(wantCol string) (map[string]int, error) {
 	data := map[string]int{}
 	idx := t.ColumnIndex(wantCol)
 	if idx < 0 {
@@ -117,7 +117,7 @@ func (t *TableData) ColumnValuesDistinct(wantCol string) (map[string]int, error)
 	return data, nil
 }
 
-func (t *TableData) ColumnValuesMinMax(wantCol string) (string, string, error) {
+func (t *Table) ColumnValuesMinMax(wantCol string) (string, string, error) {
 	vals, err := t.ColumnValuesDistinct(wantCol)
 	if err != nil {
 		return "", "", err
@@ -135,7 +135,7 @@ func (t *TableData) ColumnValuesMinMax(wantCol string) (string, string, error) {
 	return arr[0], arr[len(arr)-1], nil
 }
 
-func (t *TableData) RecordValue(wantCol string, record []string) (string, error) {
+func (t *Table) RecordValue(wantCol string, record []string) (string, error) {
 	idx := t.ColumnIndex(wantCol)
 	if idx < 0 {
 		return "", fmt.Errorf("Column Not Found [%v]", wantCol)
@@ -146,7 +146,7 @@ func (t *TableData) RecordValue(wantCol string, record []string) (string, error)
 	return record[idx], nil
 }
 
-func (t *TableData) RecordValueOrEmpty(wantCol string, record []string) string {
+func (t *Table) RecordValueOrEmpty(wantCol string, record []string) string {
 	val, err := t.RecordValue(wantCol, record)
 	if err != nil {
 		return ""
@@ -154,8 +154,8 @@ func (t *TableData) RecordValueOrEmpty(wantCol string, record []string) string {
 	return val
 }
 
-func (t *TableData) NewTableFiltered(wantColNameValues map[string]string) (TableData, error) {
-	t2 := TableData{Columns: t.Columns}
+func (t *Table) NewTableFiltered(wantColNameValues map[string]string) (Table, error) {
+	t2 := Table{Columns: t.Columns}
 	records, err := t.FilterRecords(wantColNameValues)
 	if err != nil {
 		return t2, err
@@ -164,7 +164,7 @@ func (t *TableData) NewTableFiltered(wantColNameValues map[string]string) (Table
 	return t2, nil
 }
 
-func (t *TableData) FilterRecords(wantColNameValues map[string]string) ([][]string, error) {
+func (t *Table) FilterRecords(wantColNameValues map[string]string) ([][]string, error) {
 	data := [][]string{}
 	wantColIndexes := map[string]int{}
 	maxIdx := -1
@@ -197,7 +197,7 @@ RECORDS:
 	return data, nil
 }
 
-func (t *TableData) ColIndex(colName string) int {
+func (t *Table) ColIndex(colName string) int {
 	for i, tryColName := range t.Columns {
 		if tryColName == colName {
 			return i
@@ -206,7 +206,7 @@ func (t *TableData) ColIndex(colName string) int {
 	return -1
 }
 
-func (t *TableData) ColValuesByColName(colName string) ([]string, error) {
+func (t *Table) ColValuesByColName(colName string) ([]string, error) {
 	colIdx := t.ColIndex(colName)
 	if colIdx < 0 {
 		return []string{}, fmt.Errorf("E_NO_COL_FOR_NAME [%s]", colName)
@@ -222,16 +222,16 @@ func (t *TableData) ColValuesByColName(colName string) ([]string, error) {
 	return vals, nil
 }
 
-func (t *TableData) WriteXLSX(path, sheetname string) error {
+func (t *Table) WriteXLSX(path, sheetname string) error {
 	t.Name = sheetname
 	return WriteXLSX(path, t)
 }
 
-func (t *TableData) WriteCSV(path string) error {
+func (t *Table) WriteCSV(path string) error {
 	return WriteCSV(path, t)
 }
 
-func (t *TableData) RecordToMSS(record []string) map[string]string {
+func (t *Table) RecordToMSS(record []string) map[string]string {
 	mss := map[string]string{}
 	for i, key := range t.Columns {
 		if i < len(t.Columns) {
@@ -241,7 +241,7 @@ func (t *TableData) RecordToMSS(record []string) map[string]string {
 	return mss
 }
 
-func (t *TableData) ToSliceMSS() []map[string]string {
+func (t *Table) ToSliceMSS() []map[string]string {
 	slice := []map[string]string{}
 	for _, rec := range t.Records {
 		slice = append(slice, t.RecordToMSS(rec))

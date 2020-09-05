@@ -15,7 +15,7 @@ import (
 )
 
 // WriteCSV writes the table as a CSV.
-func WriteCSV(path string, t *TableData) error {
+func WriteCSV(path string, t *Table) error {
 	file, err := os.Create(path)
 	if err != nil {
 		return err
@@ -40,7 +40,7 @@ func WriteCSV(path string, t *TableData) error {
 
 // WriteCSVSimple writes a file with cols and records data.
 func WriteCSVSimple(cols []string, records [][]string, filename string) error {
-	tbl := NewTableData()
+	tbl := NewTable()
 	tbl.Columns = cols
 	tbl.Records = records
 	return tbl.WriteCSV(filename)
@@ -213,7 +213,7 @@ func WriteXLSXFormatted(path string, tbls ...*TableFormatter) error {
 }
 */
 
-func (tbl *TableData) FormatterFunc() func(val string, colIdx uint) (interface{}, error) {
+func (tbl *Table) FormatterFunc() func(val string, colIdx uint) (interface{}, error) {
 	if tbl.FormatMap == nil || len(tbl.FormatMap) == 0 {
 		if tbl.FormatFunc == nil {
 			return FormatStrings
@@ -258,7 +258,7 @@ func (tbl *TableData) FormatterFunc() func(val string, colIdx uint) (interface{}
 
 // WriteXLSX writes a table as an Excel XLSX file with
 // row formatter option.
-func WriteXLSX(path string, tbls ...*TableData) error {
+func WriteXLSX(path string, tbls ...*Table) error {
 	f := excelize.NewFile()
 	// Delete default sheet.
 	f.DeleteSheet(f.GetSheetName(f.GetSheetIndex("Sheet1")))
@@ -341,7 +341,7 @@ type jsonRecords struct {
 	Records []map[string]string `json:"records,omitempty"`
 }
 
-func (t *TableData) WriteJSON(path string, perm os.FileMode, jsonPrefix, jsonIndent string) error {
+func (t *Table) WriteJSON(path string, perm os.FileMode, jsonPrefix, jsonIndent string) error {
 	out := jsonRecords{Records: t.ToSliceMSS()}
 	fmt.Printf("TABLE.WRITEJSON [%v]\n", path)
 	bytes, err := jsonutil.MarshalSimple(out, jsonPrefix, jsonIndent)
