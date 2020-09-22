@@ -125,6 +125,20 @@ func (t *Table) ColumnValuesMinMax(wantCol string) (string, string, error) {
 	return arr[0], arr[len(arr)-1], nil
 }
 
+func (t *Table) UpsertRowColValue(rowIdx, colIdx uint, value string) {
+	rowIdxInt := int(rowIdx)
+	colIdxInt := int(colIdx)
+	for rowIdxInt < len(t.Records)-1 {
+		t.Records = append(t.Records, []string{})
+	}
+	row := t.Records[rowIdxInt]
+	for colIdxInt < len(row)-1 {
+		row = append(row, "")
+	}
+	row[colIdxInt] = value
+	t.Records[rowIdxInt] = row
+}
+
 func (t *Table) RecordValue(wantCol string, record []string) (string, error) {
 	idx := t.ColumnIndex(wantCol)
 	if idx < 0 {
