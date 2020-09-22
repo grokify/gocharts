@@ -10,6 +10,7 @@ import (
 	"github.com/grokify/gotilla/encoding/csvutil"
 	"github.com/grokify/gotilla/encoding/jsonutil"
 	"github.com/grokify/gotilla/type/stringsutil"
+	"github.com/pkg/errors"
 )
 
 func NewTableFilesSimple(filenames []string, sep string, hasHeader, trimSpace bool) (Table, error) {
@@ -194,4 +195,16 @@ func ReadCSVFileSingleColumnValuesString(filename, sep string, hasHeader, trimSp
 		values = stringsutil.SliceCondenseSpace(values, true, true)
 	}
 	return values, nil
+}
+
+// Unmarshal is a convenience function to provide a simple interface to
+// unmarshal table contents into any desired output.
+func (tbl *Table) Unmarshal(funcRecord func(record []string) error) error {
+	for i, rec := range tbl.Records {
+		err := funcRecord(rec)
+		if err != nil {
+			return errors.Wrap(err, fmt.Sprintf("Error on Record Index [%d]", i))
+		}
+	}
+	return nil
 }
