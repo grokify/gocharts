@@ -1,6 +1,8 @@
 package table
 
 import (
+	"bytes"
+	"encoding/csv"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -195,6 +197,34 @@ func ReadCSVFileSingleColumnValuesString(filename, sep string, hasHeader, trimSp
 		values = stringsutil.SliceCondenseSpace(values, true, true)
 	}
 	return values, nil
+}
+
+func ParseBytes(data []byte, delimiter rune, hasHeaderRow bool) (Table, error) {
+	return ParseReader(bytes.NewReader(data), delimiter, hasHeaderRow)
+}
+
+func ParseReader(reader io.Reader, delimiter rune, hasHeaderRow bool) (Table, error) {
+	tbl := NewTable()
+	csvReader := csv.NewReader(reader)
+	csvReader.Comma = delimiter
+	csvReader.TrimLeadingSpace = true
+	idx := -1
+	for {
+		record, err := csvReader.Read()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return tbl, err
+		}
+		idx++
+		if idx == 0 && hasHeaderRow {
+			tbl.Columns = record
+			continue
+		}
+		tbl.Records = append(tbl.Records, record)
+	}
+	return tbl, nil
 }
 
 // Unmarshal is a convenience function to provide a simple interface to
