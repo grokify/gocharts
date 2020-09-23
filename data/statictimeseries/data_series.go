@@ -175,6 +175,26 @@ func (series *DataSeries) MaxValue() int64 {
 	return max
 }
 
+func (ds *DataSeries) OneItemMaxValue() (DataItem, error) {
+	max := DataItem{}
+	if len(ds.ItemMap) == 0 {
+		return max, errors.New("Empty Set has no Max Value Item")
+	}
+	first := true
+	for _, item := range ds.ItemMap {
+		if first {
+			max = item
+			first = false
+		}
+		if ds.IsFloat && item.ValueFloat > max.ValueFloat {
+			max = item
+		} else if item.Value > max.Value {
+			max = item
+		}
+	}
+	return max, nil
+}
+
 func (ds *DataSeries) GetTimeSlice(sortSlice bool) timeutil.TimeSlice {
 	times := timeutil.TimeSlice{}
 	for _, item := range ds.ItemMap {
