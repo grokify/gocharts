@@ -97,7 +97,26 @@ func (tbl *Table) ColumnValuesMinMax(colName string) (string, string, error) {
 	return arr[0], arr[len(arr)-1], nil
 }
 
-func (tbl *Table) ColumnSumFloat64(colIdx int) (float64, error) {
+func (tbl *Table) columnIndexMore(colIdx int, colName string) (int, error) {
+	if colIdx >= 0 {
+		return colIdx, nil
+	}
+	if len(colName) == 0 {
+		return colIdx, errors.New("Must supply colIndex or colName")
+	}
+	colIdx = tbl.ColumnIndex(colName)
+	if colIdx < 0 {
+		return colIdx, fmt.Errorf("Column Not Found [%v]", colName)
+	}
+	return colIdx, nil
+}
+
+func (tbl *Table) ColumnSumFloat64(colIdx int, colName string) (float64, error) {
+	colIdx, err := tbl.columnIndexMore(colIdx, colName)
+	if err != nil {
+		return 0.0, err
+	}
+
 	sum := 0.0
 	for _, row := range tbl.Records {
 		if colIdx < 0 || colIdx >= len(row) {
