@@ -53,6 +53,14 @@ func (fss *FrequencySet) Names() []string {
 	return names
 }
 
+func (fss *FrequencySet) TotalCount() uint64 {
+	totalCount := uint64(0)
+	for _, fstats := range fss.FrequencyMap {
+		totalCount += fstats.TotalCount()
+	}
+	return totalCount
+}
+
 func (fss *FrequencySet) ToDataSeriesDistinct() (statictimeseries.DataSeries, error) {
 	ds := statictimeseries.NewDataSeries()
 	ds.SeriesName = fss.Name
