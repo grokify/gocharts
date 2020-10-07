@@ -247,9 +247,8 @@ func (tbl *Table) FormatterFunc() func(val string, colIdx uint) (interface{}, er
 				dtVal, err := time.Parse(time.RFC3339, val)
 				if err != nil {
 					return val, err
-				} else {
-					return dtVal, nil
 				}
+				return dtVal, nil
 			}
 		}
 		return val, nil
