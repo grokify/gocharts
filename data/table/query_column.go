@@ -43,14 +43,12 @@ func (t *Table) ColumnsValuesDistinct(wantCols []string, stripSpace bool) (map[s
 	return data, nil
 }
 
-func (tbl *Table) ColumnValues(colName string) ([]string, error) {
-	colIdx := tbl.ColumnIndex(colName)
-	if colIdx < 0 {
-		return []string{}, fmt.Errorf("E_NO_COL_FOR_NAME [%s]", colName)
-	}
+func (tbl *Table) ColumnValues(colIdx uint) ([]string, error) {
+	idx := int(colIdx)
+
 	vals := []string{}
 	for _, row := range tbl.Records {
-		if colIdx < len(row) {
+		if idx < len(row) {
 			vals = append(vals, row[colIdx])
 		} else {
 			return vals, fmt.Errorf("E_COL_IDX [%d] ROW_LEN [%d]", colIdx, len(row))
@@ -59,12 +57,9 @@ func (tbl *Table) ColumnValues(colName string) ([]string, error) {
 	return vals, nil
 }
 
-func (tbl *Table) ColumnValuesDistinct(colName string) (map[string]int, error) {
+func (tbl *Table) ColumnValuesDistinct(colIdx uint) (map[string]int, error) {
 	data := map[string]int{}
-	idx := tbl.ColumnIndex(colName)
-	if idx < 0 {
-		return data, fmt.Errorf("Column Not Found [%v]", colName)
-	}
+	idx := int(colIdx)
 
 	for _, rec := range tbl.Records {
 		if len(rec) > idx {
@@ -79,8 +74,8 @@ func (tbl *Table) ColumnValuesDistinct(colName string) (map[string]int, error) {
 	return data, nil
 }
 
-func (tbl *Table) ColumnValuesMinMax(colName string) (string, string, error) {
-	vals, err := tbl.ColumnValuesDistinct(colName)
+func (tbl *Table) ColumnValuesMinMax(colIdx uint) (string, string, error) {
+	vals, err := tbl.ColumnValuesDistinct(colIdx)
 	if err != nil {
 		return "", "", err
 	}
@@ -97,29 +92,11 @@ func (tbl *Table) ColumnValuesMinMax(colName string) (string, string, error) {
 	return arr[0], arr[len(arr)-1], nil
 }
 
-func (tbl *Table) columnIndexMore(colIdx int, colName string) (int, error) {
-	if colIdx >= 0 {
-		return colIdx, nil
-	}
-	if len(colName) == 0 {
-		return colIdx, errors.New("Must supply colIndex or colName")
-	}
-	colIdx = tbl.ColumnIndex(colName)
-	if colIdx < 0 {
-		return colIdx, fmt.Errorf("Column Not Found [%v]", colName)
-	}
-	return colIdx, nil
-}
-
-func (tbl *Table) ColumnSumFloat64(colIdx int, colName string) (float64, error) {
-	colIdx, err := tbl.columnIndexMore(colIdx, colName)
-	if err != nil {
-		return 0.0, err
-	}
-
+func (tbl *Table) ColumnSumFloat64(colIdx uint) (float64, error) {
 	sum := 0.0
+	idx := int(colIdx)
 	for _, row := range tbl.Records {
-		if colIdx < 0 || colIdx >= len(row) {
+		if idx >= len(row) {
 			continue
 		}
 		vstr := strings.TrimSpace(row[colIdx])
@@ -133,4 +110,18 @@ func (tbl *Table) ColumnSumFloat64(colIdx int, colName string) (float64, error) 
 		sum += vnum
 	}
 	return sum, nil
+}
+
+func (tbl *Table) columnIndexMore(colIdx int, colName string) (int, error) {
+	if colIdx >= 0 {
+		return colIdx, nil
+	}
+	if len(colName) == 0 {
+		return colIdx, errors.New("Must supply colIndex or colName")
+	}
+	colIdx = tbl.ColumnIndex(colName)
+	if colIdx < 0 {
+		return colIdx, fmt.Errorf("Column Not Found [%v]", colName)
+	}
+	return colIdx, nil
 }
