@@ -225,6 +225,8 @@ github.com/grokify/elastirad-go v0.0.0-20200223053444-efd32a19dc05 h1:1v4MMGgy2q
 github.com/grokify/elastirad-go v0.0.0-20200223053444-efd32a19dc05/go.mod h1:ZnW+S1+q2FAslCm9CsxXa/xQRhZQmb33dOYlhKRtzxI=
 github.com/grokify/gotilla v1.2.0 h1:gOQxrb+mxKApbjz8mIBbPU4d5djgnnfjJShBc4hYzRc=
 github.com/grokify/gotilla v1.2.0/go.mod h1:7ZZ6IcoJjjNbbPryQI+yWtURkgKqcfrENxGEo5zqv5A=
+github.com/grokify/gotilla v1.2.1 h1:P5t0x5BcCYWV10bS4r7WGH1hey1s191L8mwi/v6B0zk=
+github.com/grokify/gotilla v1.2.1/go.mod h1:7ZZ6IcoJjjNbbPryQI+yWtURkgKqcfrENxGEo5zqv5A=
 github.com/grokify/oauth2more v0.3.1/go.mod h1:33eQMekLyetSGUY/me967It3sCVjHARGQ/jOhCIrggw=
 github.com/grpc-ecosystem/go-grpc-middleware v1.0.1-0.20190118093823-f849b5445de4/go.mod h1:FiyG127CGDf3tlThmgyCl78X/SZQqEOJBCDaAfeWzPs=
 github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0/go.mod h1:8NvIoxWQoOIhqOTXgfV/d3M/q6VIi02HzZEHgUlZvzk=
