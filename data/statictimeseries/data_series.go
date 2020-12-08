@@ -123,6 +123,32 @@ func (series *DataSeries) Pop() (DataItem, error) {
 	return last, nil
 }
 
+func (series *DataSeries) LastItem(skipIfTimePartialValueLessPrev bool) (DataItem, error) {
+	items := series.ItemsSorted()
+	if len(items) == 0 {
+		return DataItem{}, errors.New("E_NO_ITEMS")
+	}
+	if len(items) == 1 {
+		return items[0], nil
+	}
+	itemLast := items[len(items)-1]
+	if skipIfTimePartialValueLessPrev {
+		itemPrev := items[len(items)-2]
+		dtNow := time.Now().UTC()
+		if series.Interval == timeutil.Month {
+			dtNow = month.MonthBegin(dtNow, 0)
+		}
+		if itemLast.Time.Equal(dtNow) {
+			if itemLast.ValueInt64() > itemPrev.ValueInt64() {
+				return itemLast, nil
+			} else {
+				return itemPrev, nil
+			}
+		}
+	}
+	return itemLast, nil
+}
+
 func (series *DataSeries) minMaxValuesInt64Only() (int64, int64) {
 	int64s := []int64{}
 	for _, item := range series.ItemMap {
