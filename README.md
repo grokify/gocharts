@@ -37,8 +37,8 @@ See the example here:
 
 [charts/rickshaw/examples/report.go](charts/rickshaw/examples/report.go)
 
- [build-status-svg]: https://api.travis-ci.org/grokify/gocharts.svg?branch=master
- [build-status-link]: https://travis-ci.org/grokify/gocharts
+ [build-status-svg]: https://github.com/grokify/gocharts/workflows/build/badge.svg
+ [build-status-link]: https://github.com/grokify/gocharts/actions
  [goreport-svg]: https://goreportcard.com/badge/github.com/grokify/gocharts
  [goreport-link]: https://goreportcard.com/report/github.com/grokify/gocharts
  [docs-godoc-svg]: https://img.shields.io/badge/reference-godoc-blue.svg
