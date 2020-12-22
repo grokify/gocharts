@@ -82,6 +82,26 @@ func (t *Table) ColumnIndex(colName string) int {
 	return -1
 }
 
+func (t *Table) IsWellFormed() (isWellFormed bool, columnCount uint) {
+	columnCount = uint(len(t.Columns))
+	if len(t.Records) == 0 {
+		isWellFormed = true
+		return
+	}
+	for i, rec := range t.Records {
+		if i == 0 && len(t.Columns) == 0 {
+			columnCount = uint(len(rec))
+			continue
+		}
+		if uint(len(rec)) != columnCount {
+			isWellFormed = false
+			return
+		}
+	}
+	isWellFormed = true
+	return
+}
+
 func (t *Table) WriteXLSX(path, sheetname string) error {
 	t.Name = sheetname
 	return WriteXLSX(path, t)
