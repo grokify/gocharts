@@ -71,7 +71,7 @@ func NewTableFileSimple(path string, sep string, hasHeader, trimSpace bool) (Tab
 }
 
 // ReadFile reads in a delimited file and returns a `Table` struct.
-func ReadFile(path string, comma rune, stripBom bool) (Table, error) {
+func ReadFile(path string, comma rune, hasHeader, stripBom bool) (Table, error) {
 	tbl := NewTable()
 	csvReader, f, err := csvutil.NewReader(path, comma, stripBom)
 	if err != nil {
@@ -88,7 +88,7 @@ func ReadFile(path string, comma rune, stripBom bool) (Table, error) {
 				return tbl, err
 			}
 			i++
-			if i == 0 {
+			if i == 0 && hasHeader {
 				tbl.Columns = line
 				continue
 			}
@@ -97,13 +97,16 @@ func ReadFile(path string, comma rune, stripBom bool) (Table, error) {
 				fmt.Printf("[%v] %v\n", i, strings.Join(line, ","))
 			}
 		}
-
 	} else {
 		lines, err := csvReader.ReadAll()
 		if err != nil {
 			return tbl, err
 		}
-		tbl.LoadMergedRows(lines)
+		if hasHeader {
+			tbl.LoadMergedRows(lines)
+		} else {
+			tbl.Records = lines
+		}
 	}
 	return tbl, nil
 }
