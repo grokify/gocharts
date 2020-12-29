@@ -41,7 +41,9 @@ See the example here:
  [build-status-link]: https://github.com/grokify/gocharts/actions
  [goreport-svg]: https://goreportcard.com/badge/github.com/grokify/gocharts
  [goreport-link]: https://goreportcard.com/report/github.com/grokify/gocharts
- [docs-godoc-svg]: https://img.shields.io/badge/reference-godoc-blue.svg
- [docs-godoc-link]: https://godoc.org/github.com/grokify/gocharts
+ [docs-godoc-svg]: https://pkg.go.dev/badge/github.com/grokify/gocharts
+ [docs-godoc-link]: https://pkg.go.dev/github.com/grokify/gocharts
  [license-svg]: https://img.shields.io/badge/license-MIT-blue.svg
  [license-link]: https://github.com/grokify/gocharts/blob/master/LICENSE.md
+
+
