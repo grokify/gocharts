@@ -3,7 +3,7 @@ package statictimeseries
 import (
 	"time"
 
-	"github.com/grokify/gotilla/time/timeutil"
+	"github.com/grokify/simplego/time/timeutil"
 	"github.com/pkg/errors"
 )
 

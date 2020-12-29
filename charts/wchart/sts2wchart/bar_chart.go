@@ -6,9 +6,10 @@ import (
 
 	"github.com/grokify/gocharts/charts/wchart"
 	"github.com/grokify/gocharts/data/statictimeseries"
-	"github.com/grokify/gotilla/math/mathutil"
-	"github.com/grokify/gotilla/strconv/strconvutil"
-	"github.com/grokify/gotilla/type/maputil"
+
+	"github.com/grokify/simplego/math/mathutil"
+	"github.com/grokify/simplego/strconv/strconvutil"
+	"github.com/grokify/simplego/type/maputil"
 	"github.com/wcharczuk/go-chart"
 )
 
@@ -71,10 +72,9 @@ func MsiToValues(msi maputil.MapStringInt, inclValueInKey bool) []chart.Value {
 	values := []chart.Value{}
 	keys := msi.Keys(true)
 	for _, key := range keys {
-		val := msi.KeyValue(key, 0)
+		val := msi.MustGet(key, 0)
 		if inclValueInKey {
-			valStr := strconv.Itoa(val)
-			key += " (" + valStr + ")"
+			key += " (" + strconv.Itoa(val) + ")"
 		}
 		values = append(values,
 			chart.Value{

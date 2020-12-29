@@ -10,7 +10,8 @@ import (
 
 	"github.com/grokify/gocharts/data"
 	"github.com/grokify/gocharts/data/statictimeseries/interval"
-	"github.com/grokify/gotilla/time/timeutil"
+
+	"github.com/grokify/simplego/time/timeutil"
 )
 
 // DataInfoJS is the series item to be sent to the

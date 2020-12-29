@@ -2,7 +2,6 @@ package table
 
 import (
 	"fmt"
-	//"github.com/grokify/gotilla/encoding/csvutil"
 )
 
 const StyleSimple = "border:1px solid #000;border-collapse:collapse"

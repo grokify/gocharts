@@ -12,10 +12,11 @@ import (
 	"github.com/grokify/gocharts/charts/c3/c3sts"
 	"github.com/grokify/gocharts/data/statictimeseries"
 	"github.com/grokify/gocharts/data/table"
-	"github.com/grokify/gotilla/fmt/fmtutil"
-	"github.com/grokify/gotilla/strconv/strconvutil"
-	"github.com/grokify/gotilla/time/month"
-	"github.com/grokify/gotilla/time/timeutil"
+
+	"github.com/grokify/simplego/fmt/fmtutil"
+	"github.com/grokify/simplego/strconv/strconvutil"
+	"github.com/grokify/simplego/time/month"
+	"github.com/grokify/simplego/time/timeutil"
 )
 
 func TestData() statictimeseries.DataSeriesSet {

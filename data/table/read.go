@@ -9,9 +9,9 @@ import (
 	"os"
 	"strings"
 
-	"github.com/grokify/gotilla/encoding/csvutil"
-	"github.com/grokify/gotilla/encoding/jsonutil"
-	"github.com/grokify/gotilla/type/stringsutil"
+	"github.com/grokify/simplego/encoding/csvutil"
+	"github.com/grokify/simplego/encoding/jsonutil"
+	"github.com/grokify/simplego/type/stringsutil"
 	"github.com/pkg/errors"
 )
 

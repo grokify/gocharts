@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/grokify/gocharts/data"
-	tu "github.com/grokify/gotilla/time/timeutil"
+	tu "github.com/grokify/simplego/time/timeutil"
 )
 
 type BulletCharts struct {

@@ -6,10 +6,10 @@ import (
 	//"math"
 	"strconv"
 
-	math "github.com/grokify/gotilla/math/mathutil"
+	math "github.com/grokify/simplego/math/mathutil"
 
 	sts "github.com/grokify/gocharts/data/statictimeseries"
-	scu "github.com/grokify/gotilla/strconv/strconvutil"
+	scu "github.com/grokify/simplego/strconv/strconvutil"
 
 	"github.com/grokify/gocharts/charts/c3"
 )

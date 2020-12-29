@@ -5,7 +5,7 @@ import (
 	"io"
 	"io/ioutil"
 
-	"github.com/grokify/gotilla/encoding/csvutil"
+	"github.com/grokify/simplego/encoding/csvutil"
 
 	"github.com/grokify/gocharts/charts/rickshaw"
 )

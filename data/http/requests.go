@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/grokify/gotilla/encoding/csvutil"
-	"github.com/grokify/gotilla/type/stringsutil/join"
+	"github.com/grokify/simplego/encoding/csvutil"
+	"github.com/grokify/simplego/type/stringsutil/join"
 )
 
 // Endpoints writes a CSV with request data. Use Endpoints.Add(),

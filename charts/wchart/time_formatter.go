@@ -4,7 +4,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/grokify/gotilla/time/timeutil"
+	"github.com/grokify/simplego/time/timeutil"
 )
 
 // TimeFormatter provides a struct that satisifies the

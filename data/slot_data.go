@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/grokify/gotilla/time/timeutil"
-	"github.com/grokify/gotilla/type/maputil"
+	"github.com/grokify/simplego/time/timeutil"
+	"github.com/grokify/simplego/type/maputil"
 )
 
 type TimeThin struct {

@@ -7,8 +7,8 @@ import (
 	"log"
 	"time"
 
-	"github.com/grokify/gotilla/fmt/fmtutil"
-	"github.com/grokify/gotilla/time/timeutil"
+	"github.com/grokify/simplego/fmt/fmtutil"
+	"github.com/grokify/simplego/time/timeutil"
 
 	"github.com/grokify/gocharts/charts/c3"
 	"github.com/grokify/gocharts/charts/c3/c3sts"

@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	"github.com/grokify/gocharts/data/table"
-	"github.com/grokify/gotilla/type/stringsutil"
+	"github.com/grokify/simplego/type/stringsutil"
 )
 
 func DataSeriesSliceTimes(dsSlice []DataSeries) []string {

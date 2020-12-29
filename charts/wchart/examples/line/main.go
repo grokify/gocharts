@@ -9,9 +9,10 @@ import (
 	"github.com/grokify/gocharts/charts/wchart"
 	"github.com/grokify/gocharts/charts/wchart/sts2wchart"
 	"github.com/grokify/gocharts/data/statictimeseries"
-	"github.com/grokify/gotilla/fmt/fmtutil"
-	"github.com/grokify/gotilla/time/month"
-	"github.com/grokify/gotilla/time/timeutil"
+
+	"github.com/grokify/simplego/fmt/fmtutil"
+	"github.com/grokify/simplego/time/month"
+	"github.com/grokify/simplego/time/timeutil"
 	chart "github.com/wcharczuk/go-chart"
 )
 

@@ -5,9 +5,9 @@ import (
 	"strings"
 
 	"github.com/grokify/gocharts/data/table"
-	"github.com/grokify/gotilla/encoding/jsonutil"
-	"github.com/grokify/gotilla/math/mathutil"
-	"github.com/grokify/gotilla/type/stringsutil"
+	"github.com/grokify/simplego/encoding/jsonutil"
+	"github.com/grokify/simplego/math/mathutil"
+	"github.com/grokify/simplego/type/stringsutil"
 )
 
 // NewFrequencySetsCSVs expects multiple files to have same columns.

@@ -10,11 +10,11 @@ import (
 	"time"
 
 	"github.com/grokify/gocharts/data/table"
-	"github.com/grokify/gotilla/sort/sortutil"
-	"github.com/grokify/gotilla/time/month"
-	"github.com/grokify/gotilla/time/timeutil"
-	tu "github.com/grokify/gotilla/time/timeutil"
-	"github.com/grokify/gotilla/type/stringsutil"
+	"github.com/grokify/simplego/sort/sortutil"
+	"github.com/grokify/simplego/time/month"
+	"github.com/grokify/simplego/time/timeutil"
+	tu "github.com/grokify/simplego/time/timeutil"
+	"github.com/grokify/simplego/type/stringsutil"
 	"github.com/pkg/errors"
 )
 

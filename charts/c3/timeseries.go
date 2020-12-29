@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 
 	"github.com/grokify/gocharts/data/statictimeseries/interval"
-	tu "github.com/grokify/gotilla/time/timeutil"
+	tu "github.com/grokify/simplego/time/timeutil"
 )
 
 type TimeseriesData struct {

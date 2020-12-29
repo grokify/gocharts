@@ -4,9 +4,10 @@ import (
 	"time"
 
 	"github.com/grokify/gocharts/charts/wchart"
-	"github.com/grokify/gotilla/math/mathutil"
-	"github.com/grokify/gotilla/time/timeutil"
-	"github.com/grokify/gotilla/type/number"
+
+	"github.com/grokify/simplego/math/mathutil"
+	"github.com/grokify/simplego/time/timeutil"
+	"github.com/grokify/simplego/type/number"
 	"github.com/wcharczuk/go-chart"
 )
 

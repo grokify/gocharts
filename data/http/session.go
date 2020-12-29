@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/grokify/gotilla/type/stringsutil/join"
+	"github.com/grokify/simplego/type/stringsutil/join"
 )
 
 type SessionSet struct {

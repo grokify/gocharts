@@ -8,13 +8,12 @@ package c3
 import (
 	qtio422016 "io"
 
-	qt422016 "github.com/valyala/quicktemplate"
+	"github.com/grokify/simplego/time/timeutil"
+	qt422016 "github.com/valyala/quicktemplate" //line timeseries_page.qtpl:1
+
+	//line timeseries_page.qtpl:2
 )
 
-//line timeseries_page.qtpl:1
-import "github.com/grokify/gotilla/time/timeutil"
-
-//line timeseries_page.qtpl:2
 var (
 	_ = qtio422016.Copy
 	_ = qt422016.AcquireByteBuffer

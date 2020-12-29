@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/grokify/gotilla/math/mathutil"
+	"github.com/grokify/simplego/math/mathutil"
 )
 
 // FormatStraightToTabular takes a "straight table" wheere the columnn names

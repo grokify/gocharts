@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	rm "github.com/grokify/gocharts/data/roadmap"
-	"github.com/grokify/gotilla/fmt/fmtutil"
-	"github.com/grokify/gotilla/math/mathutil"
+	"github.com/grokify/simplego/fmt/fmtutil"
+	"github.com/grokify/simplego/math/mathutil"
 )
 
 func main() {

@@ -3,7 +3,7 @@ package wchart
 import (
 	"image/color"
 
-	"github.com/grokify/gotilla/image/colors"
+	"github.com/grokify/simplego/image/colors"
 	"github.com/wcharczuk/go-chart"
 	"github.com/wcharczuk/go-chart/drawing"
 )

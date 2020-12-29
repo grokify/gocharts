@@ -1,6 +1,6 @@
 package frequency
 
-import "github.com/grokify/gotilla/type/stringsutil"
+import "github.com/grokify/simplego/type/stringsutil"
 
 // FrequencySetsCounts returns UID counts. When used with
 // NewFrequencySetsCSV(), it can provide a sanity check

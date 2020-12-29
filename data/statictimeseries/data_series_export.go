@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/grokify/gocharts/data/table"
-	"github.com/grokify/gotilla/time/timeutil"
+	"github.com/grokify/simplego/time/timeutil"
 )
 
 func TimeFormatRFC3339(dt time.Time) string {

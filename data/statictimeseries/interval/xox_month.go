@@ -5,9 +5,9 @@ import (
 	"time"
 
 	"github.com/grokify/gocharts/data/statictimeseries"
-	"github.com/grokify/gotilla/math/mathutil"
-	"github.com/grokify/gotilla/time/month"
-	"github.com/grokify/gotilla/time/timeutil"
+	"github.com/grokify/simplego/math/mathutil"
+	"github.com/grokify/simplego/time/month"
+	"github.com/grokify/simplego/time/timeutil"
 	"github.com/pkg/errors"
 )
 
