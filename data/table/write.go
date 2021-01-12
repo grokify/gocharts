@@ -46,20 +46,6 @@ func WriteCSVSimple(cols []string, records [][]string, filename string) error {
 	return tbl.WriteCSV(filename)
 }
 
-/*
-// WriteXLSX writes a table as an Excel XLSX file.
-func WriteXLSX(path string, tbls ...*TableData) error {
-	tfs := []*TableFormatter{}
-	for _, tbl := range tbls {
-		tfs = append(tfs,
-			&TableFormatter{
-				Table:     tbl,
-				Formatter: FormatStrings})
-	}
-	return WriteXLSXFormatted(path, tfs...)
-}
-*/
-
 func FormatStrings(val string, col uint) (interface{}, error) {
 	return val, nil
 }
@@ -257,14 +243,14 @@ func (tbl *Table) FormatterFunc() func(val string, colIdx uint) (interface{}, er
 
 // WriteXLSX writes a table as an Excel XLSX file with
 // row formatter option.
-func WriteXLSX(path string, tbls ...*Table) error {
+func WriteXLSX(path string, tables ...*Table) error {
 	f := excelize.NewFile()
 	// Delete default sheet.
 	f.DeleteSheet(f.GetSheetName(f.GetSheetIndex("Sheet1")))
 	f.DeleteSheet("Sheet1")
 	// Create a new sheet.
 	sheetNum := 0
-	for i, tbl := range tbls {
+	for i, tbl := range tables {
 		if tbl == nil {
 			continue
 		}
