@@ -29,17 +29,15 @@ func (fs *FrequencyStats) AddInt(i int) {
 	fs.AddString(strconv.Itoa(i))
 }
 
-func (fs *FrequencyStats) AddStringMore(s string, count int) {
-	for i := 0; i < count; i++ {
-		fs.AddString(s)
+func (fstats *FrequencyStats) AddStringMore(s string, count int) {
+	if _, ok := fstats.Items[s]; !ok {
+		fstats.Items[s] = 0
 	}
+	fstats.Items[s] += count
 }
 
-func (fs *FrequencyStats) AddString(s string) {
-	if _, ok := fs.Items[s]; !ok {
-		fs.Items[s] = 0
-	}
-	fs.Items[s]++
+func (fstats *FrequencyStats) AddString(s string) {
+	fstats.AddStringMore(s, 1)
 }
 
 func (fs *FrequencyStats) Inflate() {
