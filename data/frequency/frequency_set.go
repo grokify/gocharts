@@ -5,6 +5,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/360EntSecGroup-Skylar/excelize"
+	"github.com/grokify/gocharts/data/excelizeutil"
 	"github.com/grokify/gocharts/data/statictimeseries"
 	"github.com/grokify/gocharts/data/table"
 	"github.com/grokify/simplego/time/timeutil"
@@ -13,6 +15,7 @@ import (
 type FrequencySet struct {
 	Name         string
 	FrequencyMap map[string]FrequencyStats
+	KeyIsTime    bool
 }
 
 func NewFrequencySet(name string) FrequencySet {
@@ -24,24 +27,27 @@ func NewFrequencySet(name string) FrequencySet {
 func (fset *FrequencySet) AddDateUidCount(dt time.Time, uid string, count int) {
 	fName := dt.Format(time.RFC3339)
 	fset.AddStringMore(fName, uid, count)
+	if !fset.KeyIsTime {
+		fset.KeyIsTime = true
+	}
 }
 
 func (fset *FrequencySet) AddStringMore(frequencyName, uid string, count int) {
-	fs, ok := fset.FrequencyMap[frequencyName]
+	fstats, ok := fset.FrequencyMap[frequencyName]
 	if !ok {
-		fs = NewFrequencyStats(frequencyName)
+		fstats = NewFrequencyStats(frequencyName)
 	}
-	fs.AddStringMore(uid, count)
-	fset.FrequencyMap[frequencyName] = fs
+	fstats.AddStringMore(uid, count)
+	fset.FrequencyMap[frequencyName] = fstats
 }
 
 func (fset *FrequencySet) AddString(frequencyName, itemName string) {
-	fs, ok := fset.FrequencyMap[frequencyName]
+	fstats, ok := fset.FrequencyMap[frequencyName]
 	if !ok {
-		fs = NewFrequencyStats(frequencyName)
+		fstats = NewFrequencyStats(frequencyName)
 	}
-	fs.AddString(itemName)
-	fset.FrequencyMap[frequencyName] = fs
+	fstats.AddString(itemName)
+	fset.FrequencyMap[frequencyName] = fstats
 }
 
 func (fset *FrequencySet) Names() []string {
@@ -75,6 +81,71 @@ func (fset *FrequencySet) ToDataSeriesDistinct() (statictimeseries.DataSeries, e
 			Value:      int64(len(fs.Items))})
 	}
 	return ds, nil
+}
+
+func (fset *FrequencySet) WriteXLSX(path, colName1, colName2, colNameCount string) error {
+	// WriteXLSX writes a table as an Excel XLSX file with
+	// row formatter option.
+	f := excelize.NewFile()
+	// Create a new sheet.
+
+	sheetName := strings.TrimSpace(fset.Name)
+	if len(sheetName) == 0 {
+		sheetName = "Sheet0"
+	}
+	index := f.NewSheet(sheetName)
+
+	colName1 = strings.TrimSpace(colName1)
+	if len(colName1) == 0 {
+		colName1 = fset.Name
+	}
+	if len(colName1) == 0 {
+		colName1 = "Column1"
+	}
+	colName2 = strings.TrimSpace(colName2)
+	if len(colName1) == 0 {
+		for _, fstats := range fset.FrequencyMap {
+			fstats.Name = strings.TrimSpace(fstats.Name)
+			if len(fstats.Name) > 0 {
+				colName2 = fstats.Name
+				break
+			}
+		}
+	}
+	colNameCount = strings.TrimSpace(colNameCount)
+	if len(colNameCount) == 0 {
+		colNameCount = "Count"
+	}
+	header := []interface{}{colName1, colName1, colNameCount}
+
+	excelizeutil.SetRowValues(f, sheetName, 0, header)
+	var err error
+	rowIdx := uint(1)
+	for fstatsName, fstats := range fset.FrequencyMap {
+		fstatsNameDt := time.Now()
+		if fset.KeyIsTime {
+			fstatsNameDt, err = time.Parse(time.RFC3339, fstatsName)
+			if err != nil {
+				return err
+			}
+		}
+		for itemName, itemCount := range fstats.Items {
+			rowVals := []interface{}{}
+			if fset.KeyIsTime {
+				rowVals = []interface{}{fstatsNameDt, itemName, itemCount}
+			} else {
+				rowVals = []interface{}{fstatsName, itemName, itemCount}
+			}
+			excelizeutil.SetRowValues(f, sheetName, rowIdx, rowVals)
+			rowIdx++
+		}
+	}
+	f.SetActiveSheet(index)
+	// Delete Original Sheet
+	f.DeleteSheet(f.GetSheetName(0))
+	// Save xlsx file by the given path.
+	return f.SaveAs(path)
+
 }
 
 // FrequencySetDatetimeToQuarterUnique converts a FrequencySet

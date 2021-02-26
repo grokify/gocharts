@@ -150,9 +150,6 @@ func (tbl *Table) FormatterFunc() func(val string, colIdx uint) (interface{}, er
 // row formatter option.
 func WriteXLSX(path string, tables ...*Table) error {
 	f := excelize.NewFile()
-	// Delete default sheet.
-	f.DeleteSheet(f.GetSheetName(f.GetSheetIndex("Sheet1")))
-	f.DeleteSheet("Sheet1")
 	// Create a new sheet.
 	sheetNum := 0
 	for i, tbl := range tables {
@@ -190,6 +187,8 @@ func WriteXLSX(path string, tables ...*Table) error {
 			f.SetActiveSheet(index)
 		}
 	}
+	// Delete default sheet.
+	f.DeleteSheet(f.GetSheetName(0))
 	// Save xlsx file by the given path.
 	return f.SaveAs(path)
 }
