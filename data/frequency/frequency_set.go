@@ -116,7 +116,7 @@ func (fset *FrequencySet) WriteXLSX(path, colName1, colName2, colNameCount strin
 	if len(colNameCount) == 0 {
 		colNameCount = "Count"
 	}
-	header := []interface{}{colName1, colName1, colNameCount}
+	header := []interface{}{colName1, colName2, colNameCount}
 
 	excelizeutil.SetRowValues(f, sheetName, 0, header)
 	var err error
@@ -130,7 +130,7 @@ func (fset *FrequencySet) WriteXLSX(path, colName1, colName2, colNameCount strin
 			}
 		}
 		for itemName, itemCount := range fstats.Items {
-			rowVals := []interface{}{}
+			var rowVals []interface{}
 			if fset.KeyIsTime {
 				rowVals = []interface{}{fstatsNameDt, itemName, itemCount}
 			} else {
