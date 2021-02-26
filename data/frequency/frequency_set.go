@@ -21,56 +21,56 @@ func NewFrequencySet(name string) FrequencySet {
 		FrequencyMap: map[string]FrequencyStats{}}
 }
 
-func (fss *FrequencySet) AddDateUidCount(dt time.Time, uid string, count int) {
+func (fset *FrequencySet) AddDateUidCount(dt time.Time, uid string, count int) {
 	fName := dt.Format(time.RFC3339)
-	fss.AddStringMore(fName, uid, count)
+	fset.AddStringMore(fName, uid, count)
 }
 
-func (fss *FrequencySet) AddStringMore(frequencyName, uid string, count int) {
-	fs, ok := fss.FrequencyMap[frequencyName]
+func (fset *FrequencySet) AddStringMore(frequencyName, uid string, count int) {
+	fs, ok := fset.FrequencyMap[frequencyName]
 	if !ok {
 		fs = NewFrequencyStats(frequencyName)
 	}
 	fs.AddStringMore(uid, count)
-	fss.FrequencyMap[frequencyName] = fs
+	fset.FrequencyMap[frequencyName] = fs
 }
 
-func (fss *FrequencySet) AddString(frequencyName, itemName string) {
-	fs, ok := fss.FrequencyMap[frequencyName]
+func (fset *FrequencySet) AddString(frequencyName, itemName string) {
+	fs, ok := fset.FrequencyMap[frequencyName]
 	if !ok {
 		fs = NewFrequencyStats(frequencyName)
 	}
 	fs.AddString(itemName)
-	fss.FrequencyMap[frequencyName] = fs
+	fset.FrequencyMap[frequencyName] = fs
 }
 
-func (fss *FrequencySet) Names() []string {
+func (fset *FrequencySet) Names() []string {
 	names := []string{}
-	for name := range fss.FrequencyMap {
+	for name := range fset.FrequencyMap {
 		names = append(names, name)
 	}
 	sort.Strings(names)
 	return names
 }
 
-func (fss *FrequencySet) TotalCount() uint64 {
+func (fset *FrequencySet) TotalCount() uint64 {
 	totalCount := uint64(0)
-	for _, fstats := range fss.FrequencyMap {
+	for _, fstats := range fset.FrequencyMap {
 		totalCount += fstats.TotalCount()
 	}
 	return totalCount
 }
 
-func (fss *FrequencySet) ToDataSeriesDistinct() (statictimeseries.DataSeries, error) {
+func (fset *FrequencySet) ToDataSeriesDistinct() (statictimeseries.DataSeries, error) {
 	ds := statictimeseries.NewDataSeries()
-	ds.SeriesName = fss.Name
-	for rfc3339, fs := range fss.FrequencyMap {
+	ds.SeriesName = fset.Name
+	for rfc3339, fs := range fset.FrequencyMap {
 		dt, err := time.Parse(time.RFC3339, rfc3339)
 		if err != nil {
 			return ds, err
 		}
 		ds.AddItem(statictimeseries.DataItem{
-			SeriesName: fss.Name,
+			SeriesName: fset.Name,
 			Time:       dt,
 			Value:      int64(len(fs.Items))})
 	}
