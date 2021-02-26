@@ -43,16 +43,35 @@ func (t *Table) ColumnsValuesDistinct(wantCols []string, stripSpace bool) (map[s
 	return data, nil
 }
 
-func (tbl *Table) ColumnValues(colIdx uint) ([]string, error) {
+func (t *Table) ColumnIndex(colName string) int {
+	for i, tryColName := range t.Columns {
+		if tryColName == colName {
+			return i
+		}
+	}
+	return -1
+}
+
+func (tbl *Table) ColumnValues(colIdx uint, wantUnique, wantSort bool) ([]string, error) {
 	idx := int(colIdx)
 
+	seen := map[string]int{}
 	vals := []string{}
 	for _, row := range tbl.Records {
 		if idx < len(row) {
+			if wantUnique {
+				if _, ok := seen[row[colIdx]]; ok {
+					continue
+				}
+				seen[row[colIdx]] = 1
+			}
 			vals = append(vals, row[colIdx])
 		} else {
 			return vals, fmt.Errorf("E_COL_IDX [%d] ROW_LEN [%d]", colIdx, len(row))
 		}
+	}
+	if wantSort {
+		sort.Strings(vals)
 	}
 	return vals, nil
 }

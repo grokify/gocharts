@@ -72,15 +72,6 @@ func (t *Table) RecordValueOrEmpty(wantCol string, record []string) string {
 	return val
 }
 
-func (t *Table) ColumnIndex(colName string) int {
-	for i, tryColName := range t.Columns {
-		if tryColName == colName {
-			return i
-		}
-	}
-	return -1
-}
-
 func (t *Table) IsWellFormed() (isWellFormed bool, columnCount uint) {
 	columnCount = uint(len(t.Columns))
 	if len(t.Records) == 0 {
