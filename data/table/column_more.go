@@ -1,5 +1,7 @@
 package table
 
+import "encoding/json"
+
 type Column struct {
 	Display string
 	Slug    string
@@ -42,4 +44,16 @@ func BuildColumnsTabulator(columns []Column) TabulatorColumnSet {
 		colsTabulator = append(colsTabulator, colT)
 	}
 	return TabulatorColumnSet{Columns: colsTabulator}
+}
+
+func (tColSet *TabulatorColumnSet) ColumnsJSON() ([]byte, error) {
+	return json.Marshal(tColSet.Columns)
+}
+
+func (tColSet *TabulatorColumnSet) MustColumnsJSON() []byte {
+	bytes, err := tColSet.ColumnsJSON()
+	if err != nil {
+		return []byte("[]")
+	}
+	return bytes
 }
