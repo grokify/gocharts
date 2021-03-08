@@ -1,10 +1,14 @@
 package frequency
 
 import (
+	"io"
 	"sort"
 	"strconv"
+	"strings"
 
 	"github.com/grokify/gocharts/data/point"
+	"github.com/grokify/simplego/type/maputil"
+	"github.com/olekukonko/tablewriter"
 )
 
 // Frequency stats is used to count how many times
@@ -85,4 +89,53 @@ func (fs *FrequencyStats) Stats() point.PointSet {
 	}
 	pointSet.Inflate()
 	return pointSet
+}
+
+const (
+	SortNameAsc   = maputil.SortNameAsc
+	SortNameDesc  = maputil.SortNameDesc
+	SortValueAsc  = maputil.SortValueAsc
+	SortValueDesc = maputil.SortValueDesc
+)
+
+// ItemCounts returns sorted item names and values.
+func (fs *FrequencyStats) ItemCounts(sortBy string) []maputil.Record {
+	msi := maputil.MapStringInt(fs.Items)
+	return msi.Sorted(sortBy)
+}
+
+// WriteTable writes an ASCII Table. For CLI apps, pass `os.Stdout` for `io.Writer`.
+func (fs *FrequencyStats) WriteTableASCII(writer io.Writer, header []string, sortBy string, inclTotal bool) {
+	rows := [][]string{}
+	sortedItems := fs.ItemCounts(sortBy)
+	for _, sortedItem := range sortedItems {
+		rows = append(rows, []string{
+			sortedItem.Name, strconv.Itoa(sortedItem.Value)})
+	}
+
+	if len(header) == 0 {
+		header = []string{"Name", "Value"}
+	} else if len(header) == 1 {
+		header[1] = "Value"
+	}
+	header[0] = strings.TrimSpace(header[0])
+	header[1] = strings.TrimSpace(header[1])
+	if len(header[0]) == 0 {
+		header[0] = "Name"
+	}
+	if len(header[1]) == 0 {
+		header[1] = "Value"
+	}
+
+	table := tablewriter.NewWriter(writer)
+	table.SetHeader(header)
+	if inclTotal {
+		table.SetFooter([]string{
+			"Total",
+			strconv.Itoa(int(fs.TotalCount())),
+		}) // Add Footer
+	}
+	table.SetBorder(false) // Set Border to false
+	table.AppendBulk(rows) // Add Bulk Data
+	table.Render()
 }
