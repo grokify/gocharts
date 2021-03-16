@@ -147,7 +147,7 @@ func (tbl *Table) FormatterFunc() func(val string, colIdx uint) (interface{}, er
 	}
 }
 
-var rxUrlHttpOrHttps = regexp.MustCompile(`^(i?)https?://.`)
+var rxUrlHttpOrHttps = regexp.MustCompile(`^(?i)https?://.`)
 
 // WriteXLSX writes a table as an Excel XLSX file with
 // row formatter option.
