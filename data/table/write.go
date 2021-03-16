@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -146,6 +147,8 @@ func (tbl *Table) FormatterFunc() func(val string, colIdx uint) (interface{}, er
 	}
 }
 
+var rxUrlHttpOrHttps = regexp.MustCompile(`^(i?)https?://.`)
+
 // WriteXLSX writes a table as an Excel XLSX file with
 // row formatter option.
 func WriteXLSX(path string, tables ...*Table) error {
@@ -180,6 +183,11 @@ func WriteXLSX(path string, tables ...*Table) error {
 					return errors.Wrap(err, "gocharts/data/tables/write.go/WriteXLSXFormatted.Error.FormatCellValue")
 				}
 				f.SetCellValue(sheetname, cellLocation, formattedVal)
+				if tbl.FormatAutoLink {
+					if rxUrlHttpOrHttps.MatchString(cellValue) {
+						f.SetCellHyperLink(sheetname, cellLocation, cellValue, "External")
+					}
+				}
 			}
 		}
 		// Set active sheet of the workbook.
