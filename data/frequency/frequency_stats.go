@@ -36,10 +36,10 @@ func (fs *FrequencyStats) AddInt(i int) {
 */
 
 func (fstats *FrequencyStats) Add(s string, count int) {
-	if _, ok := fstats.Items[s]; !ok {
-		fstats.Items[s] = count
-	} else {
+	if _, ok := fstats.Items[s]; ok {
 		fstats.Items[s] += count
+	} else {
+		fstats.Items[s] = count
 	}
 }
 
