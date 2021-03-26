@@ -80,11 +80,9 @@ func (fs *FrequencyStats) TotalCount() uint64 {
 func (fs *FrequencyStats) Stats() point.PointSet {
 	pointSet := point.NewPointSet()
 	for itemName, itemCount := range fs.Items {
-		point := point.Point{
+		pointSet.PointsMap[itemName] = point.Point{
 			Name:        itemName,
 			AbsoluteInt: int64(itemCount)}
-		// Percentage:  float64(itemCount) / float64(totalCount) * 100}
-		pointSet.PointsMap[itemName] = point
 	}
 	pointSet.Inflate()
 	return pointSet
