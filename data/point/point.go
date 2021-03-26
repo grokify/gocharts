@@ -28,6 +28,7 @@ func (ps *PointSet) Inflate() {
 		} else {
 			point.Percentage = (float64(point.AbsoluteInt) / total) * 100
 		}
+		point.PercentageNot = 100.0 - point.Percentage
 		ps.PointsMap[key] = point
 	}
 }
@@ -69,4 +70,5 @@ type Point struct {
 	AbsoluteInt   int64
 	AbsoluteFloat float64
 	Percentage    float64
+	PercentageNot float64
 }
