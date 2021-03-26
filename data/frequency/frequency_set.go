@@ -24,6 +24,18 @@ func NewFrequencySet(name string) FrequencySet {
 		FrequencyMap: map[string]FrequencyStats{}}
 }
 
+func NewFrequencySetWithData(name string, data map[string]map[string]int) FrequencySet {
+	fset := FrequencySet{
+		Name:         name,
+		FrequencyMap: map[string]FrequencyStats{}}
+	for statsName, statsData := range data {
+		for statsItemName, statsItemValue := range statsData {
+			fset.AddStringMore(statsName, statsItemName, statsItemValue)
+		}
+	}
+	return fset
+}
+
 func (fset *FrequencySet) AddDateUidCount(dt time.Time, uid string, count int) {
 	fName := dt.Format(time.RFC3339)
 	fset.AddStringMore(fName, uid, count)
@@ -37,7 +49,7 @@ func (fset *FrequencySet) AddStringMore(frequencyName, uid string, count int) {
 	if !ok {
 		fstats = NewFrequencyStats(frequencyName)
 	}
-	fstats.AddStringMore(uid, count)
+	fstats.Add(uid, count)
 	fset.FrequencyMap[frequencyName] = fstats
 }
 
@@ -46,7 +58,7 @@ func (fset *FrequencySet) AddString(frequencyName, itemName string) {
 	if !ok {
 		fstats = NewFrequencyStats(frequencyName)
 	}
-	fstats.AddString(itemName)
+	fstats.Add(itemName, 1)
 	fset.FrequencyMap[frequencyName] = fstats
 }
 
@@ -65,6 +77,19 @@ func (fset *FrequencySet) TotalCount() uint64 {
 		totalCount += fstats.TotalCount()
 	}
 	return totalCount
+}
+
+func (fset *FrequencySet) LeafStats(name string) FrequencyStats {
+	if len(name) == 0 {
+		name = "leaf stats"
+	}
+	setLeafStats := NewFrequencyStats(name)
+	for _, fstats := range fset.FrequencyMap {
+		for k, v := range fstats.Items {
+			setLeafStats.Add(k, v)
+		}
+	}
+	return setLeafStats
 }
 
 func (fset *FrequencySet) ToDataSeriesDistinct() (statictimeseries.DataSeries, error) {
