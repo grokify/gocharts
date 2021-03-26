@@ -29,19 +29,18 @@ func NewFrequencyStats(name string) FrequencyStats {
 		ItemCount: 0}
 }
 
+/*
 func (fs *FrequencyStats) AddInt(i int) {
-	fs.AddString(strconv.Itoa(i))
+	fs.AddString(strconv.Itoa(i), 1)
 }
+*/
 
-func (fstats *FrequencyStats) AddStringMore(s string, count int) {
+func (fstats *FrequencyStats) Add(s string, count int) {
 	if _, ok := fstats.Items[s]; !ok {
-		fstats.Items[s] = 0
+		fstats.Items[s] = count
+	} else {
+		fstats.Items[s] += count
 	}
-	fstats.Items[s] += count
-}
-
-func (fstats *FrequencyStats) AddString(s string) {
-	fstats.AddStringMore(s, 1)
 }
 
 func (fs *FrequencyStats) Inflate() {
