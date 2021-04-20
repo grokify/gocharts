@@ -1,5 +1,3 @@
-// statictimeseriesdata provides tools for adding and formatting
-// static time series data for reporting purposes.
 package statictimeseries
 
 import (

@@ -1,5 +1,3 @@
-// statictimeseriesdata provides tools for adding and formatting
-// static time series data for reporting purposes.
 package statictimeseries
 
 import (
@@ -12,9 +10,9 @@ import (
 )
 
 type TableConfig struct {
+	CountColIdx         uint
 	TimeColIdx          uint
 	TimeFormat          string
-	CountColIdx         uint
 	SeriesSetNameColIdx int // optional. Set < 0 to discard.
 	SeriesNameColIdx    int
 	Interval            timeutil.Interval

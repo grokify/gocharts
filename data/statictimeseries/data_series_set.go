@@ -1,5 +1,3 @@
-// statictimeseriesdata provides tools for adding and formatting
-// static time series data for reporting purposes.
 package statictimeseries
 
 import (
@@ -13,7 +11,6 @@ import (
 	"github.com/grokify/simplego/sort/sortutil"
 	"github.com/grokify/simplego/time/month"
 	"github.com/grokify/simplego/time/timeutil"
-	tu "github.com/grokify/simplego/time/timeutil"
 	"github.com/grokify/simplego/type/stringsutil"
 	"github.com/pkg/errors"
 )
@@ -255,7 +252,7 @@ func (row *RowFloat64) Flatten(conv func(v float64) string, preCount int, preVal
 
 // ReportAxisX generates data for use with `C3Chart.C3Axis.C3AxisX.Categories`.
 func ReportAxisX(dss DataSeriesSet, cols int, conv func(time.Time) string) []string {
-	var times tu.TimeSlice
+	var times timeutil.TimeSlice
 	if cols < len(dss.Times) {
 		min := len(dss.Times) - cols
 		times = dss.Times[min:]
@@ -272,7 +269,7 @@ func ReportAxisX(dss DataSeriesSet, cols int, conv func(time.Time) string) []str
 // Report generates data for use with `C3Chart.C3ChartData.Columns`.
 func Report(dss DataSeriesSet, cols int, lowFirst bool) []RowInt64 {
 	rows := []RowInt64{}
-	var times tu.TimeSlice
+	var times timeutil.TimeSlice
 	var timePlus1 time.Time
 	havePlus1 := false
 	if cols < len(dss.Times) {
@@ -290,7 +287,7 @@ func Report(dss DataSeriesSet, cols int, lowFirst bool) []RowInt64 {
 	}
 	timePlus1Rfc := timePlus1.UTC().Format(time.RFC3339)
 	if !lowFirst {
-		times = sort.Reverse(times).(tu.TimeSlice)
+		times = sort.Reverse(times).(timeutil.TimeSlice)
 	}
 	for _, seriesName := range dss.Order {
 		row := RowInt64{
