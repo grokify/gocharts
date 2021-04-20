@@ -13,7 +13,7 @@ import (
 // NewFrequencySetsCSVs expects multiple files to have same columns.
 func NewFrequencySetsCSVs(filenames []string, key1ColIdx, key2ColIdx, uidColIdx uint) (FrequencySets, table.Table, error) {
 	fsets := NewFrequencySets()
-	tbl, err := table.NewTableFilesSimple(filenames, ",", true, true)
+	tbl, err := table.ReadFilesSimple(filenames, ",", true, true)
 	if err != nil {
 		return fsets, tbl, err
 	}
