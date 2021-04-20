@@ -30,6 +30,7 @@ func (dss2 *DataSeriesSet2) AddItem(item DataItem) {
 	dss, ok := dss2.SetsMap[item.SeriesSetName]
 	if !ok {
 		dss = NewDataSeriesSet()
+		dss.Name = item.SeriesSetName
 		dss.Interval = dss2.Interval
 		if len(item.SeriesName) > 0 {
 			dss.Name = item.SeriesName

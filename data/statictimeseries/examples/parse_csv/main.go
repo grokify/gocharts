@@ -36,7 +36,7 @@ func main() {
 	}
 	fmtutil.PrintJSON(counts)
 
-	dss2 := statictimeseries.NewDataSeriesSet2("time_group2_counts")
+	dss2 := statictimeseries.NewDataSeriesSet2("Data Series Sets Counts")
 	dss2.Interval = timeutil.Month
 	dss2.AddItems(counts...)
 
