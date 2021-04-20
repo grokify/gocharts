@@ -15,14 +15,14 @@ import (
 	"github.com/pkg/errors"
 )
 
-func NewTableFilesSimple(filenames []string, sep string, hasHeader, trimSpace bool) (Table, error) {
+func ReadFilesSimple(filenames []string, sep string, hasHeader, trimSpace bool) (Table, error) {
 	tbl := NewTable()
 	for i, filename := range filenames {
 		filename = strings.TrimSpace(filename)
 		if len(filename) == 0 {
 			continue
 		}
-		tblx, err := NewTableFileSimple(filename, sep, hasHeader, trimSpace)
+		tblx, err := ReadFileSimple(filename, sep, hasHeader, trimSpace)
 		if err != nil {
 			return tbl, err
 		}
@@ -48,7 +48,7 @@ func NewTableFilesSimple(filenames []string, sep string, hasHeader, trimSpace bo
 	return tbl, nil
 }
 
-func NewTableFileSimple(path string, sep string, hasHeader, trimSpace bool) (Table, error) {
+func ReadFileSimple(path string, sep string, hasHeader, trimSpace bool) (Table, error) {
 	tbl := NewTable()
 	data, err := ioutil.ReadFile(path)
 	if err != nil {
@@ -186,7 +186,7 @@ func ReadCSVFilesSingleColumnValuesString(files []string, sep string, hasHeader,
 }
 
 func ReadCSVFileSingleColumnValuesString(filename, sep string, hasHeader, trimSpace bool, col uint, condenseUniqueSort bool) ([]string, error) {
-	tbl, err := NewTableFileSimple(filename, sep, hasHeader, trimSpace)
+	tbl, err := ReadFileSimple(filename, sep, hasHeader, trimSpace)
 	if err != nil {
 		return []string{}, err
 	}
