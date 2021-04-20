@@ -4,34 +4,44 @@ package statictimeseries
 
 import (
 	"sort"
+
+	"github.com/grokify/simplego/time/timeutil"
 )
 
-type DataSeriesSetSimpleSet struct {
-	Name    string
-	SetsMap map[string]DataSeriesSet
+type DataSeriesSet2 struct {
+	Name     string
+	SetsMap  map[string]DataSeriesSet
+	Interval timeutil.Interval
 }
 
-func NewDataSeriesSetSimpleSet(name string) DataSeriesSetSimpleSet {
-	return DataSeriesSetSimpleSet{
+func NewDataSeriesSet2(name string) DataSeriesSet2 {
+	return DataSeriesSet2{
 		Name:    name,
 		SetsMap: map[string]DataSeriesSet{}}
 }
 
-func (ds3set *DataSeriesSetSimpleSet) AddItem(setName string, item DataItem) {
-	ds3, ok := ds3set.SetsMap[setName]
-	if !ok {
-		ds3 = NewDataSeriesSet()
-		if len(item.SeriesName) > 0 {
-			ds3.Name = item.SeriesName
-		}
+func (dss2 *DataSeriesSet2) AddItems(items ...DataItem) {
+	for _, item := range items {
+		dss2.AddItem(item)
 	}
-	ds3.AddItem(item)
-	ds3set.SetsMap[setName] = ds3
 }
 
-func (ds3set *DataSeriesSetSimpleSet) SetNamesSorted() []string {
+func (dss2 *DataSeriesSet2) AddItem(item DataItem) {
+	dss, ok := dss2.SetsMap[item.SeriesSetName]
+	if !ok {
+		dss = NewDataSeriesSet()
+		dss.Interval = dss2.Interval
+		if len(item.SeriesName) > 0 {
+			dss.Name = item.SeriesName
+		}
+	}
+	dss.AddItem(item)
+	dss2.SetsMap[item.SeriesSetName] = dss
+}
+
+func (dss2 *DataSeriesSet2) SetNamesSorted() []string {
 	names := []string{}
-	for name := range ds3set.SetsMap {
+	for name := range dss2.SetsMap {
 		names = append(names, name)
 	}
 	sort.Strings(names)

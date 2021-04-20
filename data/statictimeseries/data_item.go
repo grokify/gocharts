@@ -7,11 +7,12 @@ import (
 )
 
 type DataItem struct {
-	SeriesName string
-	Time       time.Time
-	IsFloat    bool
-	Value      int64
-	ValueFloat float64
+	SeriesName    string
+	SeriesSetName string
+	Time          time.Time
+	IsFloat       bool
+	Value         int64
+	ValueFloat    float64
 }
 
 func (item *DataItem) ValueInt64() int64 {

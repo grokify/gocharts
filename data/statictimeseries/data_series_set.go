@@ -41,7 +41,6 @@ func (set *DataSeriesSet) AddItems(items ...DataItem) {
 }
 
 func (set *DataSeriesSet) AddItem(item DataItem) {
-	item.SeriesName = strings.TrimSpace(item.SeriesName)
 	if _, ok := set.Series[item.SeriesName]; !ok {
 		set.Series[item.SeriesName] =
 			DataSeries{
@@ -50,10 +49,9 @@ func (set *DataSeriesSet) AddItem(item DataItem) {
 				IsFloat:    item.IsFloat,
 				Interval:   set.Interval}
 	}
-	series := set.Series[item.SeriesName]
-	series.AddItem(item)
-	set.Series[item.SeriesName] = series
-
+	dataSeries := set.Series[item.SeriesName]
+	dataSeries.AddItem(item)
+	set.Series[item.SeriesName] = dataSeries
 	set.Times = append(set.Times, item.Time)
 }
 
