@@ -30,7 +30,7 @@ func main() {
 		SeriesSetNameColIdx: 2,
 		SeriesNameColIdx:    3}
 
-	counts, err := statictimeseries.ParseTableDataItems(tbl, cfg)
+	counts, err := statictimeseries.ParseRecordsDataItems(tbl.Records, cfg)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -43,17 +43,4 @@ func main() {
 	fmtutil.PrintJSON(dss2)
 
 	fmt.Println("DONE")
-}
-
-func Distinct(times []time.Time) []time.Time {
-	filtered := []time.Time{}
-	seen := map[time.Time]int{}
-	for _, t := range times {
-		if _, ok := seen[t]; ok {
-			continue
-		}
-		seen[t] = 1
-		filtered = append(filtered, t)
-	}
-	return filtered
 }

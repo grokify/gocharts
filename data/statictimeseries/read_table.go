@@ -8,7 +8,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/grokify/gocharts/data/table"
 	"github.com/grokify/simplego/time/timeutil"
 )
 
@@ -29,9 +28,9 @@ func (cfg *TableConfig) GetTimeFormat() string {
 	return cfg.TimeFormat
 }
 
-func ParseTableDataItems(tbl table.Table, cfg TableConfig) ([]DataItem, error) {
+func ParseRecordsDataItems(records [][]string, cfg TableConfig) ([]DataItem, error) {
 	items := []DataItem{}
-	for i, rec := range tbl.Records {
+	for i, rec := range records {
 		item := DataItem{}
 		if cfg.TimeColIdx >= uint(len(rec)) {
 			return items, fmt.Errorf("row [%d] missing time index col [%d]", i, cfg.TimeColIdx)
