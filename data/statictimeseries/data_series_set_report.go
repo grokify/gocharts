@@ -124,30 +124,83 @@ func ReportGrowthPct(rows []RowInt64) []RowFloat64 {
 	return grows
 }
 
-// DS3ToTable returns a `DataSeriesSetSimple` as a
-// `table.TableData`.
-func DS3ToTable(ds3 DataSeriesSet, fmtTime func(time.Time) string) (table.Table, error) {
+type DssTableOpts struct {
+	FuncFormatTime func(time.Time) string
+	TotalInclude   bool
+	TotalTitle     string
+	PercentInclude bool
+	PercentSuffix  string
+}
+
+func (opts *DssTableOpts) TotalTitleOrDefault() string {
+	if len(opts.TotalTitle) > 0 {
+		return opts.TotalTitle
+	}
+	return "Total"
+}
+
+func (opts *DssTableOpts) PercentSuffixOrDefault() string {
+	if len(opts.PercentSuffix) > 0 {
+		return opts.PercentSuffix
+	}
+	return "%"
+}
+
+// ToTable returns a `DataSeriesSet` as a `table.TableData`.
+// func DssToTable(dss DataSeriesSet, fmtTime func(time.Time) string) (table.Table, error) {
+func (dss *DataSeriesSet) ToTable(opts *DssTableOpts) (table.Table, error) {
+	if opts == nil {
+		opts = &DssTableOpts{}
+	}
 	tbl := table.NewTable()
-	seriesNames := ds3.SeriesNames()
+	seriesNames := dss.SeriesNames()
 	tbl.Columns = []string{"Time"}
 	tbl.Columns = append(tbl.Columns, seriesNames...)
-	timeStrings := ds3.TimeStrings()
-	for _, rfc3339 := range timeStrings {
-		dt, err := time.Parse(time.RFC3339, rfc3339)
-		if err != nil {
-			return tbl, err
-		}
-		line := []string{fmtTime(dt)}
+	if opts.TotalInclude {
+		tbl.Columns = append(tbl.Columns, opts.TotalTitleOrDefault())
+	}
+	if opts.PercentInclude {
 		for _, seriesName := range seriesNames {
-			item, err := ds3.GetItem(seriesName, rfc3339)
+			tbl.Columns = append(
+				tbl.Columns,
+				seriesName+" "+opts.PercentSuffixOrDefault())
+		}
+	}
+	timeStrings := dss.TimeStrings()
+	for _, rfc3339 := range timeStrings {
+		line := []string{}
+		if opts.FuncFormatTime == nil {
+			line = append(line, rfc3339)
+		} else {
+			dt, err := time.Parse(time.RFC3339, rfc3339)
+			if err != nil {
+				return tbl, err
+			}
+			line = append(line, opts.FuncFormatTime(dt))
+		}
+		lineTotal := float64(0)
+		seriesValues := []float64{}
+		for _, seriesName := range seriesNames {
+			item, err := dss.GetItem(seriesName, rfc3339)
 			if err == nil {
 				if item.IsFloat {
 					line = append(line, fmt.Sprintf("%.10f", item.ValueFloat))
 				} else {
 					line = append(line, strconv.Itoa(int(item.Value)))
 				}
+				lineTotal += item.ValueFloat64()
+				seriesValues = append(seriesValues, item.ValueFloat64())
 			} else {
 				line = append(line, "0")
+				seriesValues = append(seriesValues, 0)
+			}
+		}
+		if opts.TotalInclude {
+			line = append(line, fmt.Sprintf("%.10f", lineTotal))
+		}
+		if opts.PercentInclude {
+			for _, seriesValue := range seriesValues {
+				line = append(line, fmt.Sprintf("%.10f", seriesValue/lineTotal))
 			}
 		}
 		tbl.Records = append(tbl.Records, line)
@@ -155,14 +208,18 @@ func DS3ToTable(ds3 DataSeriesSet, fmtTime func(time.Time) string) (table.Table,
 	return tbl, nil
 }
 
-func WriteXLSX(filename string, ds3 DataSeriesSet, fmtTime func(time.Time) string) error {
-	tbl, err := DS3ToTable(ds3, fmtTime)
+func (dss *DataSeriesSet) WriteXLSX(filename string, opts *DssTableOpts) error {
+	tbl, err := dss.ToTable(opts)
 	if err != nil {
 		return err
 	}
-	// tbl.FormatFunc = table.FormatStringAndFloats
-	tbl.FormatMap = map[int]string{
-		0:  "string",
-		-1: "float"}
+	if dss.Interval == timeutil.Month {
+		tbl.FormatFunc = table.FormatMonthAndFloats
+	} else {
+		tbl.FormatFunc = table.FormatDateAndFloats
+	}
+	/*tbl.FormatMap = map[int]string{
+	0:  "string",
+	-1: "float"}*/
 	return table.WriteXLSX(filename, &tbl)
 }
