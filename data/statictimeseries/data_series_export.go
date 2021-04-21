@@ -55,9 +55,4 @@ func DataSeriesWriteXLSX(filename string, ds DataSeries, col2 string, dtFmt func
 	tbl := DataSeriesToTable(ds, col2, dtFmt)
 	tbl.FormatFunc = table.FormatStringAndInts
 	return table.WriteXLSX(filename, &tbl)
-	/*	tf := &table.TableFormatter{
-		Table:     &tbl,
-		Formatter: table.FormatStringAndInts}*/
-	//return table.WriteXLSXFormatted(filename, tf)
-
 }
