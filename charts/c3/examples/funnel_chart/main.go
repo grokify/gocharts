@@ -20,7 +20,7 @@ import (
 )
 
 func TestData() statictimeseries.DataSeriesSet {
-	dss := statictimeseries.NewDataSeriesSet()
+	dss := statictimeseries.NewDataSeriesSet("Funnel Chart Data")
 	dss.Interval = timeutil.Month
 	for i := 0; i < 12; i++ {
 		dt := month.MonthBegin(time.Now().UTC(), i)

@@ -74,8 +74,7 @@ func DefaultLineChartOpts() *LineChartOpts {
 }
 
 func DataSeriesToLineChart(ds statictimeseries.DataSeries, opts *LineChartOpts) (chart.Chart, error) {
-	dss := statictimeseries.NewDataSeriesSet()
-	dss.Name = ds.SeriesName
+	dss := statictimeseries.NewDataSeriesSet(ds.SeriesName)
 	dss.Interval = ds.Interval
 	dss.IsFloat = ds.IsFloat
 	dss.Series[ds.SeriesName] = ds
