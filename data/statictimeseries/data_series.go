@@ -27,37 +27,37 @@ func NewDataSeries() DataSeries {
 
 // AddItem adds data item. It will sum values when
 // existing time unit is encountered.
-func (series *DataSeries) AddItem(item DataItem) {
-	if series.ItemMap == nil {
-		series.ItemMap = map[string]DataItem{}
+func (ds *DataSeries) AddItem(item DataItem) {
+	if ds.ItemMap == nil {
+		ds.ItemMap = map[string]DataItem{}
 	}
 	if len(item.SeriesName) == 0 {
-		item.SeriesName = series.SeriesName
+		item.SeriesName = ds.SeriesName
 	}
 	item.Time = item.Time.UTC()
 	rfc := item.Time.Format(time.RFC3339)
-	if existingItem, ok := series.ItemMap[rfc]; ok {
+	if existingItem, ok := ds.ItemMap[rfc]; ok {
 		existingItem.Value += item.Value
 		existingItem.ValueFloat += item.ValueFloat
-		series.ItemMap[rfc] = existingItem
+		ds.ItemMap[rfc] = existingItem
 	} else {
-		series.ItemMap[rfc] = item
+		ds.ItemMap[rfc] = item
 	}
 }
 
-func (series *DataSeries) SetSeriesName(seriesName string) {
-	series.SeriesName = seriesName
-	for k, v := range series.ItemMap {
+func (ds *DataSeries) SetSeriesName(seriesName string) {
+	ds.SeriesName = seriesName
+	for k, v := range ds.ItemMap {
 		v.SeriesName = seriesName
-		series.ItemMap[k] = v
+		ds.ItemMap[k] = v
 	}
 }
 
 // Keys returns a sorted listed of Item keys.
-func (series *DataSeries) Keys() []string {
+func (ds *DataSeries) Keys() []string {
 	// maputil.StringKeysSorted(series.ItemMap)
 	keys := []string{}
-	for key := range series.ItemMap {
+	for key := range ds.ItemMap {
 		keys = append(keys, key)
 	}
 	sort.Strings(keys)
@@ -66,11 +66,11 @@ func (series *DataSeries) Keys() []string {
 
 // ItemsSorted returns sorted DataItems. This currently uses
 // a simple string sort on RFC3339 times.
-func (series *DataSeries) ItemsSorted() []DataItem {
-	keys := series.Keys()
+func (ds *DataSeries) ItemsSorted() []DataItem {
+	keys := ds.Keys()
 	itemsSorted := []DataItem{}
 	for _, key := range keys {
-		item, ok := series.ItemMap[key]
+		item, ok := ds.ItemMap[key]
 		if !ok {
 			panic(fmt.Sprintf("KEY_NOT_FOUND [%s]", key))
 		}
@@ -79,27 +79,27 @@ func (series *DataSeries) ItemsSorted() []DataItem {
 	return itemsSorted
 }
 
-func (series *DataSeries) Last() (DataItem, error) {
-	items := series.ItemsSorted()
+func (ds *DataSeries) Last() (DataItem, error) {
+	items := ds.ItemsSorted()
 	if len(items) == 0 {
 		return DataItem{}, errors.New("E_NO_ITEMS")
 	}
 	return items[len(items)-1], nil
 }
 
-func (series *DataSeries) Pop() (DataItem, error) {
-	items := series.ItemsSorted()
+func (ds *DataSeries) Pop() (DataItem, error) {
+	items := ds.ItemsSorted()
 	if len(items) == 0 {
 		return DataItem{}, errors.New("E_NO_ERROR")
 	}
 	last := items[len(items)-1]
 	rfc := last.Time.Format(time.RFC3339)
-	delete(series.ItemMap, rfc)
+	delete(ds.ItemMap, rfc)
 	return last, nil
 }
 
-func (series *DataSeries) LastItem(skipIfTimePartialValueLessPrev bool) (DataItem, error) {
-	items := series.ItemsSorted()
+func (ds *DataSeries) LastItem(skipIfTimePartialValueLessPrev bool) (DataItem, error) {
+	items := ds.ItemsSorted()
 	if len(items) == 0 {
 		return DataItem{}, errors.New("E_NO_ITEMS")
 	}
@@ -110,7 +110,7 @@ func (series *DataSeries) LastItem(skipIfTimePartialValueLessPrev bool) (DataIte
 	if skipIfTimePartialValueLessPrev {
 		itemPrev := items[len(items)-2]
 		dtNow := time.Now().UTC()
-		if series.Interval == timeutil.Month {
+		if ds.Interval == timeutil.Month {
 			dtNow = month.MonthBegin(dtNow, 0)
 		}
 		if itemLast.Time.Equal(dtNow) {
@@ -124,9 +124,9 @@ func (series *DataSeries) LastItem(skipIfTimePartialValueLessPrev bool) (DataIte
 	return itemLast, nil
 }
 
-func (series *DataSeries) minMaxValuesInt64Only() (int64, int64) {
+func (ds *DataSeries) minMaxValuesInt64Only() (int64, int64) {
 	int64s := []int64{}
-	for _, item := range series.ItemMap {
+	for _, item := range ds.ItemMap {
 		int64s = append(int64s, item.Value)
 	}
 	if len(int64s) == 0 {
@@ -136,9 +136,9 @@ func (series *DataSeries) minMaxValuesInt64Only() (int64, int64) {
 	return int64s[0], int64s[len(int64s)-1]
 }
 
-func (series *DataSeries) minMaxValuesFloat64Only() (float64, float64) {
+func (ds *DataSeries) minMaxValuesFloat64Only() (float64, float64) {
 	float64s := []float64{}
-	for _, item := range series.ItemMap {
+	for _, item := range ds.ItemMap {
 		float64s = append(float64s, item.ValueFloat)
 	}
 	if len(float64s) == 0 {
@@ -150,29 +150,29 @@ func (series *DataSeries) minMaxValuesFloat64Only() (float64, float64) {
 	return float64slice[0], float64slice[len(float64slice)-1]
 }
 
-func (series *DataSeries) MinMaxValues() (int64, int64) {
-	if series.IsFloat {
-		min, max := series.minMaxValuesFloat64Only()
+func (ds *DataSeries) MinMaxValues() (int64, int64) {
+	if ds.IsFloat {
+		min, max := ds.minMaxValuesFloat64Only()
 		return int64(min), int64(max)
 	}
-	return series.minMaxValuesInt64Only()
+	return ds.minMaxValuesInt64Only()
 }
 
-func (series *DataSeries) MinMaxValuesFloat64() (float64, float64) {
-	if series.IsFloat {
-		return series.minMaxValuesFloat64Only()
+func (ds *DataSeries) MinMaxValuesFloat64() (float64, float64) {
+	if ds.IsFloat {
+		return ds.minMaxValuesFloat64Only()
 	}
-	min, max := series.minMaxValuesInt64Only()
+	min, max := ds.minMaxValuesInt64Only()
 	return float64(min), float64(max)
 }
 
-func (series *DataSeries) MinValue() int64 {
-	min, _ := series.MinMaxValues()
+func (ds *DataSeries) MinValue() int64 {
+	min, _ := ds.MinMaxValues()
 	return min
 }
 
-func (series *DataSeries) MaxValue() int64 {
-	_, max := series.MinMaxValues()
+func (ds *DataSeries) MaxValue() int64 {
+	_, max := ds.MinMaxValues()
 	return max
 }
 
@@ -211,13 +211,13 @@ func (ds *DataSeries) DeleteByTime(dt time.Time) {
 	delete(ds.ItemMap, dt.Format(time.RFC3339))
 }
 
-func (series *DataSeries) ToMonth() DataSeries {
+func (ds *DataSeries) ToMonth() DataSeries {
 	newDataSeries := DataSeries{
-		SeriesName: series.SeriesName,
+		SeriesName: ds.SeriesName,
 		ItemMap:    map[string]DataItem{},
-		IsFloat:    series.IsFloat,
+		IsFloat:    ds.IsFloat,
 		Interval:   timeutil.Month}
-	for _, item := range series.ItemMap {
+	for _, item := range ds.ItemMap {
 		newDataSeries.AddItem(DataItem{
 			SeriesName: item.SeriesName,
 			Time:       month.MonthBegin(item.Time, 0),
@@ -295,13 +295,13 @@ func (ds *DataSeries) ToMonthCumulative(timesInput ...time.Time) (DataSeries, er
 	return newDataSeries, nil
 }
 
-func (series *DataSeries) ToQuarter() DataSeries {
+func (ds *DataSeries) ToQuarter() DataSeries {
 	newDataSeries := DataSeries{
-		SeriesName: series.SeriesName,
+		SeriesName: ds.SeriesName,
 		ItemMap:    map[string]DataItem{},
-		IsFloat:    series.IsFloat,
+		IsFloat:    ds.IsFloat,
 		Interval:   timeutil.Quarter}
-	for _, item := range series.ItemMap {
+	for _, item := range ds.ItemMap {
 		newDataSeries.AddItem(DataItem{
 			SeriesName: item.SeriesName,
 			Time:       timeutil.QuarterStart(item.Time),
