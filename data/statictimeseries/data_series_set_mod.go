@@ -56,3 +56,30 @@ func (set *DataSeriesSet) DeleteItemByTime(dt time.Time) {
 		set.Series[id] = ds
 	}
 }
+
+func (set *DataSeriesSet) ToNewSeriesNames(seriesNames, seriesSetNames map[string]string) DataSeriesSet {
+	newDss := DataSeriesSet{
+		Name:     set.Name,
+		Series:   map[string]DataSeries{},
+		Times:    set.Times,
+		IsFloat:  set.IsFloat,
+		Interval: timeutil.Month,
+		Order:    []string{}}
+	for _, ds := range set.Series {
+		for _, item := range ds.ItemMap {
+			if len(seriesNames) > 0 {
+				if newSeriesName, ok := seriesNames[item.SeriesName]; ok {
+					item.SeriesName = newSeriesName
+				}
+			}
+			if len(seriesSetNames) > 0 {
+				if newSeriesSetName, ok := seriesSetNames[item.SeriesName]; ok {
+					item.SeriesSetName = newSeriesSetName
+				}
+			}
+			newDss.AddItem(item)
+		}
+	}
+	newDss.Inflate()
+	return newDss
+}
