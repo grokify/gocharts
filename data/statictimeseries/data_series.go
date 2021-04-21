@@ -36,13 +36,12 @@ func (series *DataSeries) AddItem(item DataItem) {
 	}
 	item.Time = item.Time.UTC()
 	rfc := item.Time.Format(time.RFC3339)
-	if _, ok := series.ItemMap[rfc]; !ok {
-		series.ItemMap[rfc] = item
-	} else {
-		existingItem := series.ItemMap[rfc]
+	if existingItem, ok := series.ItemMap[rfc]; ok {
 		existingItem.Value += item.Value
 		existingItem.ValueFloat += item.ValueFloat
 		series.ItemMap[rfc] = existingItem
+	} else {
+		series.ItemMap[rfc] = item
 	}
 }
 
