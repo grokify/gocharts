@@ -9,10 +9,21 @@ import (
 	"github.com/grokify/gocharts/data/table"
 	"github.com/grokify/simplego/fmt/fmtutil"
 	"github.com/grokify/simplego/time/timeutil"
+	"github.com/jessevdk/go-flags"
 )
 
+type Options struct {
+	File string `short:"f" long:"file" description:"Input OAS Spec File" required:"true"`
+}
+
 func main() {
-	tbl, err := table.ReadFileSimple("data.csv", ",", true, true)
+	var opts Options
+	_, err := flags.Parse(&opts)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	tbl, err := table.ReadFileSimple(opts.File, ",", true, true)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -36,11 +47,18 @@ func main() {
 	}
 	fmtutil.PrintJSON(counts)
 
-	dss2 := statictimeseries.NewDataSeriesSet2("Data Series Sets Counts")
-	dss2.Interval = timeutil.Month
-	dss2.AddItems(counts...)
-
-	fmtutil.PrintJSON(dss2)
+	if cfg.SeriesSetNameColIdx >= 0 {
+		dss2 := statictimeseries.NewDataSeriesSet2("Data Series Sets Counts")
+		dss2.Interval = timeutil.Month
+		dss2.AddItems(counts...)
+		fmtutil.PrintJSON(dss2)
+	} else {
+		dss := statictimeseries.NewDataSeriesSet("Data Series Set Counts")
+		dss.Interval = timeutil.Month
+		dss.AddItems(counts...)
+		dss.Inflate()
+		fmtutil.PrintJSON(dss)
+	}
 
 	fmt.Println("DONE")
 }
