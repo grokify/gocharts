@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/grokify/simplego/time/timeutil"
+	"github.com/grokify/simplego/type/stringsutil"
 )
 
 type TableConfig struct {
@@ -29,6 +30,9 @@ func (cfg *TableConfig) GetTimeFormat() string {
 func ParseRecordsDataItems(records [][]string, cfg TableConfig) ([]DataItem, error) {
 	items := []DataItem{}
 	for i, rec := range records {
+		if stringsutil.SliceIsEmpty(rec, true) {
+			continue
+		}
 		item := DataItem{}
 		if cfg.TimeColIdx >= uint(len(rec)) {
 			return items, fmt.Errorf("row [%d] missing time index col [%d]", i, cfg.TimeColIdx)
