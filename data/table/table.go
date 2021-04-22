@@ -40,22 +40,22 @@ func (tbl *Table) LoadMergedRows(data [][]string) {
 	}
 }
 
-func (t *Table) UpsertRowColumnValue(rowIdx, colIdx uint, value string) {
+func (tbl *Table) UpsertRowColumnValue(rowIdx, colIdx uint, value string) {
 	rowIdxInt := int(rowIdx)
 	colIdxInt := int(colIdx)
-	for rowIdxInt < len(t.Records)-1 {
-		t.Records = append(t.Records, []string{})
+	for rowIdxInt < len(tbl.Records)-1 {
+		tbl.Records = append(tbl.Records, []string{})
 	}
-	row := t.Records[rowIdxInt]
+	row := tbl.Records[rowIdxInt]
 	for colIdxInt < len(row)-1 {
 		row = append(row, "")
 	}
 	row[colIdxInt] = value
-	t.Records[rowIdxInt] = row
+	tbl.Records[rowIdxInt] = row
 }
 
-func (t *Table) RecordValue(wantCol string, record []string) (string, error) {
-	idx := t.ColumnIndex(wantCol)
+func (tbl *Table) RecordValue(wantCol string, record []string) (string, error) {
+	idx := tbl.ColumnIndex(wantCol)
 	if idx < 0 {
 		return "", fmt.Errorf("Column Not Found [%v]", wantCol)
 	}
@@ -65,22 +65,22 @@ func (t *Table) RecordValue(wantCol string, record []string) (string, error) {
 	return record[idx], nil
 }
 
-func (t *Table) RecordValueOrEmpty(wantCol string, record []string) string {
-	val, err := t.RecordValue(wantCol, record)
+func (tbl *Table) RecordValueOrEmpty(wantCol string, record []string) string {
+	val, err := tbl.RecordValue(wantCol, record)
 	if err != nil {
 		return ""
 	}
 	return val
 }
 
-func (t *Table) IsWellFormed() (isWellFormed bool, columnCount uint) {
-	columnCount = uint(len(t.Columns))
-	if len(t.Records) == 0 {
+func (tbl *Table) IsWellFormed() (isWellFormed bool, columnCount uint) {
+	columnCount = uint(len(tbl.Columns))
+	if len(tbl.Records) == 0 {
 		isWellFormed = true
 		return
 	}
-	for i, rec := range t.Records {
-		if i == 0 && len(t.Columns) == 0 {
+	for i, rec := range tbl.Records {
+		if i == 0 && len(tbl.Columns) == 0 {
 			columnCount = uint(len(rec))
 			continue
 		}
@@ -98,24 +98,24 @@ func (t *Table) WriteXLSX(path, sheetname string) error {
 	return WriteXLSX(path, t)
 }
 
-func (t *Table) WriteCSV(path string) error {
-	return WriteCSV(path, t)
+func (tbl *Table) WriteCSV(path string) error {
+	return WriteCSV(path, tbl)
 }
 
-func (t *Table) RecordToMSS(record []string) map[string]string {
+func (tbl *Table) RecordToMSS(record []string) map[string]string {
 	mss := map[string]string{}
-	for i, key := range t.Columns {
-		if i < len(t.Columns) {
+	for i, key := range tbl.Columns {
+		if i < len(tbl.Columns) {
 			mss[key] = record[i]
 		}
 	}
 	return mss
 }
 
-func (t *Table) ToSliceMSS() []map[string]string {
+func (tbl *Table) ToSliceMSS() []map[string]string {
 	slice := []map[string]string{}
-	for _, rec := range t.Records {
-		slice = append(slice, t.RecordToMSS(rec))
+	for _, rec := range tbl.Records {
+		slice = append(slice, tbl.RecordToMSS(rec))
 	}
 	return slice
 }

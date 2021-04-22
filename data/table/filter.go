@@ -23,9 +23,9 @@ func (tbl *Table) NewTableFilterColDistinctFirst(colIdx int) *Table {
 
 // NewTableFilterColumnValues returns a Table filtered
 // by column names and column values.
-func (t *Table) NewTableFilterColumnValues(wantColNameValues map[string]string) (Table, error) {
-	t2 := Table{Columns: t.Columns}
-	records, err := t.FilterRecordsColumnValues(wantColNameValues)
+func (tbl *Table) NewTableFilterColumnValues(wantColNameValues map[string]string) (Table, error) {
+	t2 := Table{Columns: tbl.Columns}
+	records, err := tbl.FilterRecordsColumnValues(wantColNameValues)
 	if err != nil {
 		return t2, err
 	}
@@ -35,12 +35,12 @@ func (t *Table) NewTableFilterColumnValues(wantColNameValues map[string]string) 
 
 // FilterRecordsColumnValues returns a set of records filtered
 // by column names and column values.
-func (t *Table) FilterRecordsColumnValues(wantColNameValues map[string]string) ([][]string, error) {
+func (tbl *Table) FilterRecordsColumnValues(wantColNameValues map[string]string) ([][]string, error) {
 	data := [][]string{}
 	wantColIndexes := map[string]int{}
 	maxIdx := -1
 	for wantColName := range wantColNameValues {
-		wantColIdx := t.ColumnIndex(wantColName)
+		wantColIdx := tbl.ColumnIndex(wantColName)
 		if wantColIdx < 0 {
 			return data, fmt.Errorf("Column Not Found [%v]", wantColName)
 		}
@@ -50,7 +50,7 @@ func (t *Table) FilterRecordsColumnValues(wantColNameValues map[string]string) (
 		wantColIndexes[wantColName] = wantColIdx
 	}
 RECORDS:
-	for _, rec := range t.Records {
+	for _, rec := range tbl.Records {
 		if len(rec) > maxIdx {
 			for wantColName, wantColIdx := range wantColIndexes {
 				colValue := rec[wantColIdx]
