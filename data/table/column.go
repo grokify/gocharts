@@ -8,12 +8,12 @@ import (
 	"strings"
 )
 
-func (t *Table) ColumnsValuesDistinct(wantCols []string, stripSpace bool) (map[string]int, error) {
+func (tbl *Table) ColumnsValuesDistinct(wantCols []string, stripSpace bool) (map[string]int, error) {
 	data := map[string]int{}
 	wantIdxs := []int{}
 	maxIdx := -1
 	for _, wantCol := range wantCols {
-		wantIdx := t.ColumnIndex(wantCol)
+		wantIdx := tbl.ColumnIndex(wantCol)
 		if wantIdx < 0 {
 			return data, fmt.Errorf("Column Not Found [%v]", wantCol)
 		}
@@ -22,7 +22,7 @@ func (t *Table) ColumnsValuesDistinct(wantCols []string, stripSpace bool) (map[s
 			maxIdx = wantIdx
 		}
 	}
-	for _, rec := range t.Records {
+	for _, rec := range tbl.Records {
 		if len(rec) > maxIdx {
 			vals := []string{}
 			for _, wantIdx := range wantIdxs {
@@ -43,8 +43,8 @@ func (t *Table) ColumnsValuesDistinct(wantCols []string, stripSpace bool) (map[s
 	return data, nil
 }
 
-func (t *Table) ColumnIndex(colName string) int {
-	for i, tryColName := range t.Columns {
+func (tbl *Table) ColumnIndex(colName string) int {
+	for i, tryColName := range tbl.Columns {
 		if tryColName == colName {
 			return i
 		}
