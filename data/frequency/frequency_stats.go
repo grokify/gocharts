@@ -15,18 +15,21 @@ import (
 // an item appears and how many times number of
 // appearances appear.
 type FrequencyStats struct {
-	Name      string
-	Items     map[string]int
-	Counts    map[string]int // how many items have counts.
-	ItemCount uint
+	Name        string
+	Items       map[string]int
+	Counts      map[string]int // how many items have counts.
+	Percentages map[string]float64
+	ItemCount   uint
+	Sum         int
 }
 
 func NewFrequencyStats(name string) FrequencyStats {
 	return FrequencyStats{
-		Name:      name,
-		Items:     map[string]int{},
-		Counts:    map[string]int{},
-		ItemCount: 0}
+		Name:        name,
+		Items:       map[string]int{},
+		Counts:      map[string]int{},
+		Percentages: map[string]float64{},
+		ItemCount:   0}
 }
 
 /*
@@ -45,14 +48,22 @@ func (fstats *FrequencyStats) Add(s string, count int) {
 
 func (fs *FrequencyStats) Inflate() {
 	fs.Counts = map[string]int{}
+	sum := int(0)
 	for _, itemCount := range fs.Items {
 		countString := strconv.Itoa(itemCount)
 		if _, ok := fs.Counts[countString]; !ok {
 			fs.Counts[countString] = 0
 		}
 		fs.Counts[countString]++
+		sum += itemCount
 	}
 	fs.ItemCount = uint(len(fs.Items))
+
+	fs.Percentages = map[string]float64{}
+	for itemName, itemCount := range fs.Items {
+		fs.Percentages[itemName] = float64(itemCount) / float64(sum)
+	}
+	fs.Sum = sum
 }
 
 func (fs *FrequencyStats) ItemsSlice() []string {
