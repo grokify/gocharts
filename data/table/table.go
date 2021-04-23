@@ -93,9 +93,9 @@ func (tbl *Table) IsWellFormed() (isWellFormed bool, columnCount uint) {
 	return
 }
 
-func (t *Table) WriteXLSX(path, sheetname string) error {
-	t.Name = sheetname
-	return WriteXLSX(path, t)
+func (tbl *Table) WriteXLSX(path, sheetname string) error {
+	tbl.Name = sheetname
+	return WriteXLSX(path, tbl)
 }
 
 func (tbl *Table) WriteCSV(path string) error {

@@ -270,8 +270,8 @@ type jsonRecords struct {
 	Records []map[string]string `json:"records,omitempty"`
 }
 
-func (t *Table) WriteJSON(path string, perm os.FileMode, jsonPrefix, jsonIndent string) error {
-	out := jsonRecords{Records: t.ToSliceMSS()}
+func (tbl *Table) WriteJSON(path string, perm os.FileMode, jsonPrefix, jsonIndent string) error {
+	out := jsonRecords{Records: tbl.ToSliceMSS()}
 	fmt.Printf("TABLE.WRITEJSON [%v]\n", path)
 	bytes, err := jsonutil.MarshalSimple(out, jsonPrefix, jsonIndent)
 	if err != nil {
