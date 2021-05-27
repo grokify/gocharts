@@ -14,6 +14,7 @@ func TransformBinNames(hist *Histogram, xfFunc func(input string) string) *Histo
 	for binName, binFreq := range hist.BinsFrequency {
 		newHist.Add(xfFunc(binName), binFreq)
 	}
+	newHist.Inflate()
 	return newHist
 }
 
