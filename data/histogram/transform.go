@@ -18,6 +18,24 @@ func TransformBinNames(hist *Histogram, xfFunc func(input string) string) *Histo
 	return newHist
 }
 
+// TransformBinNamesExactMatch modifies bin names and returns a new
+// histogram.
+func TransformBinNamesExactMatch(hist *Histogram, xfMap map[string]string) *Histogram {
+	if hist == nil {
+		return nil
+	}
+	return TransformBinNames(hist,
+		func(oldName string) string {
+			for oldNameTry, newName := range xfMap {
+				if oldNameTry == oldName {
+					return newName
+				}
+			}
+			return oldName
+		},
+	)
+}
+
 // TransformBinNamesByPrefix modifies bin names and returns a new
 // histogram.
 func TransformBinNamesByPrefix(hist *Histogram, xfMap map[string]string) *Histogram {
