@@ -9,8 +9,8 @@ type Histogram struct {
 	BinsFrequency map[string]int `json:"binsFrequency"`
 }
 
-func NewHistogram() Histogram {
-	return Histogram{BinsFrequency: map[string]int{}}
+func NewHistogram() *Histogram {
+	return &Histogram{BinsFrequency: map[string]int{}}
 }
 
 func (h *Histogram) Inflate() {
@@ -26,8 +26,8 @@ func (h *Histogram) Add(bin string, count int) {
 }
 
 type HistogramSet struct {
-	Meta         HistogramSetMetadata `json:"meta,omitempty"`
-	HistogramMap map[string]Histogram `json:"histograms"`
+	Meta         HistogramSetMetadata  `json:"meta,omitempty"`
+	HistogramMap map[string]*Histogram `json:"histograms"`
 }
 
 type HistogramSetMetadata struct {
@@ -43,12 +43,12 @@ func NewHistogramSetMetadata() HistogramSetMetadata {
 func NewHistogramSet() HistogramSet {
 	return HistogramSet{
 		Meta:         NewHistogramSetMetadata(),
-		HistogramMap: map[string]Histogram{}}
+		HistogramMap: map[string]*Histogram{}}
 }
 
 func (hs *HistogramSet) Add(name, bin string, count int) {
 	if hs.HistogramMap == nil {
-		hs.HistogramMap = map[string]Histogram{}
+		hs.HistogramMap = map[string]*Histogram{}
 	}
 	if _, ok := hs.HistogramMap[name]; !ok {
 		hs.HistogramMap[name] = NewHistogram()

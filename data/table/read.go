@@ -6,11 +6,9 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"os"
 	"strings"
 
 	"github.com/grokify/simplego/encoding/csvutil"
-	"github.com/grokify/simplego/encoding/jsonutil"
 	"github.com/grokify/simplego/type/stringsutil"
 	"github.com/pkg/errors"
 )
@@ -111,6 +109,7 @@ func ReadFile(path string, comma rune, hasHeader, stripBom bool) (Table, error) 
 	return tbl, nil
 }
 
+/*
 func ReadMergeFilterCSVFiles(inPaths []string, outPath string, inComma rune, inStripBom bool, andFilter map[string]stringsutil.MatchInfo) (DocumentsSet, error) {
 	//data := JsonRecordsInfo{Records: []map[string]string{}}
 	data := NewDocumentsSet()
@@ -156,7 +155,8 @@ func ReadMergeFilterCSVFiles(inPaths []string, outPath string, inComma rune, inS
 	data.Inflate()
 	return data, nil
 }
-
+*/
+/*
 func MergeFilterCSVFilesToJSON(inPaths []string, outPath string, inComma rune, inStripBom bool, perm os.FileMode, andFilter map[string]stringsutil.MatchInfo) error {
 	data, err := ReadMergeFilterCSVFiles(inPaths, outPath, inComma, inStripBom, andFilter)
 	if err != nil {
@@ -168,6 +168,7 @@ func MergeFilterCSVFilesToJSON(inPaths []string, outPath string, inComma rune, i
 	}
 	return ioutil.WriteFile(outPath, bytes, perm)
 }
+*/
 
 func ReadCSVFilesSingleColumnValuesString(files []string, sep string, hasHeader, trimSpace bool, col uint, condenseUniqueSort bool) ([]string, error) {
 	values := []string{}
