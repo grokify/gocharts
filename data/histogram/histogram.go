@@ -34,8 +34,8 @@ func NewHistogram(name string) *Histogram {
 }
 
 /*
-func (fs *FrequencyStats) AddInt(i int) {
-	fs.AddString(strconv.Itoa(i), 1)
+func (hist *Histogram) AddInt(i int) {
+	hist.Add(strconv.Itoa(i), 1)
 }
 */
 
