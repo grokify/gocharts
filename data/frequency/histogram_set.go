@@ -12,79 +12,80 @@ import (
 	"github.com/grokify/simplego/time/timeutil"
 )
 
-type FrequencySet struct {
+type HistogramSet struct {
 	Name         string
-	FrequencyMap map[string]FrequencyStats
+	HistogramMap map[string]*Histogram
 	KeyIsTime    bool
 }
 
-func NewFrequencySet(name string) FrequencySet {
-	return FrequencySet{
+func NewHistogramSet(name string) *HistogramSet {
+	return &HistogramSet{
 		Name:         name,
-		FrequencyMap: map[string]FrequencyStats{}}
+		HistogramMap: map[string]*Histogram{}}
 }
 
-func NewFrequencySetWithData(name string, data map[string]map[string]int) FrequencySet {
-	fset := FrequencySet{
+func NewHistogramSetWithData(name string, data map[string]map[string]int) *HistogramSet {
+	fset := &HistogramSet{
 		Name:         name,
-		FrequencyMap: map[string]FrequencyStats{}}
+		HistogramMap: map[string]*Histogram{}}
 	for statsName, statsData := range data {
 		for statsItemName, statsItemValue := range statsData {
-			fset.AddStringMore(statsName, statsItemName, statsItemValue)
+			fset.Add(statsName, statsItemName, statsItemValue)
 		}
 	}
 	return fset
 }
 
-func (fset *FrequencySet) AddDateUidCount(dt time.Time, uid string, count int) {
+func (fset *HistogramSet) AddDateUidCount(dt time.Time, uid string, count int) {
 	fName := dt.Format(time.RFC3339)
-	fset.AddStringMore(fName, uid, count)
+	fset.Add(fName, uid, count)
 	if !fset.KeyIsTime {
 		fset.KeyIsTime = true
 	}
 }
 
-func (fset *FrequencySet) AddStringMore(frequencyName, uid string, count int) {
-	fstats, ok := fset.FrequencyMap[frequencyName]
+func (fset *HistogramSet) Add(setName, binName string, count int) {
+	fstats, ok := fset.HistogramMap[setName]
 	if !ok {
-		fstats = NewFrequencyStats(frequencyName)
+		fstats = NewHistogram(setName)
 	}
-	fstats.Add(uid, count)
-	fset.FrequencyMap[frequencyName] = fstats
+	fstats.Add(binName, count)
+	fset.HistogramMap[setName] = fstats
 }
 
-func (fset *FrequencySet) AddString(frequencyName, itemName string) {
-	fstats, ok := fset.FrequencyMap[frequencyName]
+/*
+func (fset *HistogramSet) AddString(frequencyName, itemName string) {
+	fstats, ok := fset.HistogramMap[frequencyName]
 	if !ok {
-		fstats = NewFrequencyStats(frequencyName)
+		fstats = NewHistogram(frequencyName)
 	}
 	fstats.Add(itemName, 1)
-	fset.FrequencyMap[frequencyName] = fstats
-}
+	fset.HistogramMap[frequencyName] = fstats
+}*/
 
-func (fset *FrequencySet) Names() []string {
+func (fset *HistogramSet) Names() []string {
 	names := []string{}
-	for name := range fset.FrequencyMap {
+	for name := range fset.HistogramMap {
 		names = append(names, name)
 	}
 	sort.Strings(names)
 	return names
 }
 
-func (fset *FrequencySet) TotalCount() uint64 {
+func (fset *HistogramSet) TotalCount() uint64 {
 	totalCount := uint64(0)
-	for _, fstats := range fset.FrequencyMap {
+	for _, fstats := range fset.HistogramMap {
 		totalCount += fstats.TotalCount()
 	}
 	return totalCount
 }
 
-func (fset *FrequencySet) LeafStats(name string) FrequencyStats {
+func (fset *HistogramSet) LeafStats(name string) *Histogram {
 	if len(name) == 0 {
 		name = "leaf stats"
 	}
-	setLeafStats := NewFrequencyStats(name)
-	for _, fstats := range fset.FrequencyMap {
+	setLeafStats := NewHistogram(name)
+	for _, fstats := range fset.HistogramMap {
 		for k, v := range fstats.Items {
 			setLeafStats.Add(k, v)
 		}
@@ -92,10 +93,10 @@ func (fset *FrequencySet) LeafStats(name string) FrequencyStats {
 	return setLeafStats
 }
 
-func (fset *FrequencySet) ToDataSeriesDistinct() (statictimeseries.DataSeries, error) {
+func (fset *HistogramSet) ToDataSeriesDistinct() (statictimeseries.DataSeries, error) {
 	ds := statictimeseries.NewDataSeries()
 	ds.SeriesName = fset.Name
-	for rfc3339, fs := range fset.FrequencyMap {
+	for rfc3339, fs := range fset.HistogramMap {
 		dt, err := time.Parse(time.RFC3339, rfc3339)
 		if err != nil {
 			return ds, err
@@ -108,7 +109,7 @@ func (fset *FrequencySet) ToDataSeriesDistinct() (statictimeseries.DataSeries, e
 	return ds, nil
 }
 
-func (fset *FrequencySet) WriteXLSX(path, colName1, colName2, colNameCount string) error {
+func (fset *HistogramSet) WriteXLSX(path, colName1, colName2, colNameCount string) error {
 	// WriteXLSX writes a table as an Excel XLSX file with
 	// row formatter option.
 	f := excelize.NewFile()
@@ -129,7 +130,7 @@ func (fset *FrequencySet) WriteXLSX(path, colName1, colName2, colNameCount strin
 	}
 	colName2 = strings.TrimSpace(colName2)
 	if len(colName1) == 0 {
-		for _, fstats := range fset.FrequencyMap {
+		for _, fstats := range fset.HistogramMap {
 			fstats.Name = strings.TrimSpace(fstats.Name)
 			if len(fstats.Name) > 0 {
 				colName2 = fstats.Name
@@ -146,7 +147,7 @@ func (fset *FrequencySet) WriteXLSX(path, colName1, colName2, colNameCount strin
 	excelizeutil.SetRowValues(f, sheetName, 0, header)
 	var err error
 	rowIdx := uint(1)
-	for fstatsName, fstats := range fset.FrequencyMap {
+	for fstatsName, fstats := range fset.HistogramMap {
 		fstatsNameDt := time.Now()
 		if fset.KeyIsTime {
 			fstatsNameDt, err = time.Parse(time.RFC3339, fstatsName)
@@ -173,11 +174,11 @@ func (fset *FrequencySet) WriteXLSX(path, colName1, colName2, colNameCount strin
 
 }
 
-// FrequencySetDatetimeToQuarterUnique converts a FrequencySet
+// HistogramSetDatetimeToQuarter converts a HistogramSet
 // by date to one by quarter.s.
-func FrequencySetDatetimeToQuarter(name string, fsetIn FrequencySet) (FrequencySet, error) {
-	fsetQtr := NewFrequencySet(name)
-	for rfc3339, fstats := range fsetIn.FrequencyMap {
+func HistogramSetDatetimeToQuarter(name string, fsetIn *HistogramSet) (*HistogramSet, error) {
+	fsetQtr := NewHistogramSet(name)
+	for rfc3339, fstats := range fsetIn.HistogramMap {
 		dt, err := time.Parse(time.RFC3339, rfc3339)
 		if err != nil {
 			return fsetQtr, err
@@ -185,19 +186,19 @@ func FrequencySetDatetimeToQuarter(name string, fsetIn FrequencySet) (FrequencyS
 		dt = timeutil.QuarterStart(dt)
 		rfc3339Qtr := dt.Format(time.RFC3339)
 		for item, count := range fstats.Items {
-			fsetQtr.AddStringMore(rfc3339Qtr, item, count)
+			fsetQtr.Add(rfc3339Qtr, item, count)
 		}
 	}
 	return fsetQtr, nil
 }
 
-// FrequencySetTimeKeyCount returns a DataSeries when
+// HistogramSetTimeKeyCount returns a DataSeries when
 // the first key is a RFC3339 time and a sum of items
 // is desired per time.
-func FrequencySetTimeKeyCount(fset FrequencySet) (statictimeseries.DataSeries, error) {
+func HistogramSetTimeKeyCount(fset HistogramSet) (statictimeseries.DataSeries, error) {
 	ds := statictimeseries.NewDataSeries()
 	ds.SeriesName = fset.Name
-	for rfc3339, fstats := range fset.FrequencyMap {
+	for rfc3339, fstats := range fset.HistogramMap {
 		dt, err := time.Parse(time.RFC3339, rfc3339)
 		if err != nil {
 			return ds, err
@@ -210,8 +211,8 @@ func FrequencySetTimeKeyCount(fset FrequencySet) (statictimeseries.DataSeries, e
 	return ds, nil
 }
 
-func FrequencySetTimeKeyCountTable(fset FrequencySet, interval timeutil.Interval, countColName string) (table.Table, error) {
-	ds, err := FrequencySetTimeKeyCount(fset)
+func HistogramSetTimeKeyCountTable(fset HistogramSet, interval timeutil.Interval, countColName string) (table.Table, error) {
+	ds, err := HistogramSetTimeKeyCount(fset)
 	if err != nil {
 		return table.NewTable(), err
 	}
@@ -223,8 +224,8 @@ func FrequencySetTimeKeyCountTable(fset FrequencySet, interval timeutil.Interval
 	return statictimeseries.DataSeriesToTable(ds, countColName, statictimeseries.TimeFormatRFC3339), nil
 }
 
-func FrequencySetTimeKeyCountWriteXLSX(filename string, fset FrequencySet, interval timeutil.Interval, countColName string) error {
-	tbl, err := FrequencySetTimeKeyCountTable(fset, interval, countColName)
+func HistogramSetTimeKeyCountWriteXLSX(filename string, fset HistogramSet, interval timeutil.Interval, countColName string) error {
+	tbl, err := HistogramSetTimeKeyCountTable(fset, interval, countColName)
 	if err != nil {
 		return err
 	}

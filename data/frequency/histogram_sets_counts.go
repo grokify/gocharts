@@ -2,11 +2,11 @@ package frequency
 
 import "github.com/grokify/simplego/type/stringsutil"
 
-// FrequencySetsCounts returns UID counts. When used with
+// HistogramSetsCounts returns UID counts. When used with
 // NewFrequencySetsCSV(), it can provide a sanity check
 // for raw record counts against aggregate query values,
 // e.g. compare counts of raw records to GROUP BY counts.
-type FrequencySetsCounts struct {
+type HistogramSetsCounts struct {
 	UidCounts     map[string]map[string]uint
 	UidCountsKey1 map[string]uint
 	UidCountsKey2 map[string]uint
@@ -14,14 +14,14 @@ type FrequencySetsCounts struct {
 	Key2Names     []string
 }
 
-func (fcounts *FrequencySetsCounts) preflate() {
+func (fcounts *HistogramSetsCounts) preflate() {
 	fcounts.Key1Names = []string{}
 	fcounts.Key2Names = []string{}
 	fcounts.UidCountsKey1 = map[string]uint{}
 	fcounts.UidCountsKey2 = map[string]uint{}
 }
 
-func (fcounts *FrequencySetsCounts) Inflate() {
+func (fcounts *HistogramSetsCounts) Inflate() {
 	fcounts.preflate()
 	for key1Name, key1Vals := range fcounts.UidCounts {
 		fcounts.Key1Names = append(fcounts.Key1Names, key1Name)
@@ -43,23 +43,23 @@ func (fcounts *FrequencySetsCounts) Inflate() {
 		fcounts.Key2Names, true, true)
 }
 
-func NewFrequencySetsCounts(fsets FrequencySets) FrequencySetsCounts {
-	fcounts := FrequencySetsCounts{
+func NewHistogramSetsCounts(fsets HistogramSets) *HistogramSetsCounts {
+	fcounts := &HistogramSetsCounts{
 		Key1Names:     []string{},
 		Key2Names:     []string{},
 		UidCounts:     map[string]map[string]uint{},
 		UidCountsKey1: map[string]uint{},
 		UidCountsKey2: map[string]uint{}}
-	if len(fsets.FrequencySetMap) == 0 {
+	if len(fsets.HistogramSetMap) == 0 {
 		return fcounts
 	}
 
-	for fsetGroupName, fsetGroup := range fsets.FrequencySetMap {
+	for fsetGroupName, fsetGroup := range fsets.HistogramSetMap {
 		fcountsGroup, ok := fcounts.UidCounts[fsetGroupName]
 		if !ok {
 			fcountsGroup = map[string]uint{}
 		}
-		for fstatsName, fstats := range fsetGroup.FrequencyMap {
+		for fstatsName, fstats := range fsetGroup.HistogramMap {
 			fcountsGroup[fstatsName] = uint(len(fstats.Items))
 		}
 		fcounts.UidCounts[fsetGroupName] = fcountsGroup

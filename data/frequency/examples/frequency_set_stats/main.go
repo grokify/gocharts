@@ -47,7 +47,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fs := frequency.NewFrequencySetWithData("FooBar", msmsi)
+	fs := frequency.NewHistogramSetWithData("FooBar", msmsi)
 	stats := fs.LeafStats("CategoryNumber")
 	stats.Inflate()
 	fmtutil.PrintJSON(stats)

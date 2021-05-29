@@ -14,7 +14,7 @@ import (
 // Frequency stats is used to count how many times
 // an item appears and how many times number of
 // appearances appear.
-type FrequencyStats struct {
+type Histogram struct {
 	Name        string
 	Items       map[string]int
 	Counts      map[string]int // how many items have counts.
@@ -23,8 +23,8 @@ type FrequencyStats struct {
 	Sum         int
 }
 
-func NewFrequencyStats(name string) FrequencyStats {
-	return FrequencyStats{
+func NewHistogram(name string) *Histogram {
+	return &Histogram{
 		Name:        name,
 		Items:       map[string]int{},
 		Counts:      map[string]int{},
@@ -38,7 +38,7 @@ func (fs *FrequencyStats) AddInt(i int) {
 }
 */
 
-func (fstats *FrequencyStats) Add(s string, count int) {
+func (fstats *Histogram) Add(s string, count int) {
 	if _, ok := fstats.Items[s]; ok {
 		fstats.Items[s] += count
 	} else {
@@ -46,7 +46,7 @@ func (fstats *FrequencyStats) Add(s string, count int) {
 	}
 }
 
-func (fs *FrequencyStats) Inflate() {
+func (fs *Histogram) Inflate() {
 	fs.Counts = map[string]int{}
 	sum := int(0)
 	for _, itemCount := range fs.Items {
@@ -66,7 +66,7 @@ func (fs *FrequencyStats) Inflate() {
 	fs.Sum = sum
 }
 
-func (fs *FrequencyStats) ItemsSlice() []string {
+func (fs *Histogram) ItemsSlice() []string {
 	strs := []string{}
 	for key := range fs.Items {
 		strs = append(strs, key)
@@ -74,13 +74,13 @@ func (fs *FrequencyStats) ItemsSlice() []string {
 	return strs
 }
 
-func (fs *FrequencyStats) ItemsSliceSorted() []string {
+func (fs *Histogram) ItemsSliceSorted() []string {
 	items := fs.ItemsSlice()
 	sort.Strings(items)
 	return items
 }
 
-func (fs *FrequencyStats) TotalCount() uint64 {
+func (fs *Histogram) TotalCount() uint64 {
 	totalCount := 0
 	for _, itemCount := range fs.Items {
 		totalCount += itemCount
@@ -88,7 +88,7 @@ func (fs *FrequencyStats) TotalCount() uint64 {
 	return uint64(totalCount)
 }
 
-func (fs *FrequencyStats) Stats() point.PointSet {
+func (fs *Histogram) Stats() point.PointSet {
 	pointSet := point.NewPointSet()
 	for itemName, itemCount := range fs.Items {
 		pointSet.PointsMap[itemName] = point.Point{
@@ -107,13 +107,13 @@ const (
 )
 
 // ItemCounts returns sorted item names and values.
-func (fs *FrequencyStats) ItemCounts(sortBy string) []maputil.Record {
+func (fs *Histogram) ItemCounts(sortBy string) []maputil.Record {
 	msi := maputil.MapStringInt(fs.Items)
 	return msi.Sorted(sortBy)
 }
 
 // WriteTable writes an ASCII Table. For CLI apps, pass `os.Stdout` for `io.Writer`.
-func (fs *FrequencyStats) WriteTableASCII(writer io.Writer, header []string, sortBy string, inclTotal bool) {
+func (fs *Histogram) WriteTableASCII(writer io.Writer, header []string, sortBy string, inclTotal bool) {
 	rows := [][]string{}
 	sortedItems := fs.ItemCounts(sortBy)
 	for _, sortedItem := range sortedItems {
