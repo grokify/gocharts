@@ -44,6 +44,4 @@ See the example here:
  [docs-godoc-svg]: https://pkg.go.dev/badge/github.com/grokify/gocharts
  [docs-godoc-url]: https://pkg.go.dev/github.com/grokify/gocharts
  [license-svg]: https://img.shields.io/badge/license-MIT-blue.svg
- [license-url]: https://github.com/grokify/gocharts/blob/master/LICENSE.md
-
-
+ [license-url]: https://github.com/grokify/gocharts/blob/master/LICENSE
