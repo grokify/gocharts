@@ -38,59 +38,59 @@ func (fs *FrequencyStats) AddInt(i int) {
 }
 */
 
-func (fstats *Histogram) Add(s string, count int) {
-	if _, ok := fstats.Items[s]; ok {
-		fstats.Items[s] += count
+func (hist *Histogram) Add(s string, count int) {
+	if _, ok := hist.Items[s]; ok {
+		hist.Items[s] += count
 	} else {
-		fstats.Items[s] = count
+		hist.Items[s] = count
 	}
 }
 
-func (fs *Histogram) Inflate() {
-	fs.Counts = map[string]int{}
+func (hist *Histogram) Inflate() {
+	hist.Counts = map[string]int{}
 	sum := int(0)
-	for _, itemCount := range fs.Items {
+	for _, itemCount := range hist.Items {
 		countString := strconv.Itoa(itemCount)
-		if _, ok := fs.Counts[countString]; !ok {
-			fs.Counts[countString] = 0
+		if _, ok := hist.Counts[countString]; !ok {
+			hist.Counts[countString] = 0
 		}
-		fs.Counts[countString]++
+		hist.Counts[countString]++
 		sum += itemCount
 	}
-	fs.ItemCount = uint(len(fs.Items))
+	hist.ItemCount = uint(len(hist.Items))
 
-	fs.Percentages = map[string]float64{}
-	for itemName, itemCount := range fs.Items {
-		fs.Percentages[itemName] = float64(itemCount) / float64(sum)
+	hist.Percentages = map[string]float64{}
+	for itemName, itemCount := range hist.Items {
+		hist.Percentages[itemName] = float64(itemCount) / float64(sum)
 	}
-	fs.Sum = sum
+	hist.Sum = sum
 }
 
-func (fs *Histogram) ItemsSlice() []string {
+func (hist *Histogram) ItemsSlice() []string {
 	strs := []string{}
-	for key := range fs.Items {
+	for key := range hist.Items {
 		strs = append(strs, key)
 	}
 	return strs
 }
 
-func (fs *Histogram) ItemsSliceSorted() []string {
-	items := fs.ItemsSlice()
+func (hist *Histogram) ItemsSliceSorted() []string {
+	items := hist.ItemsSlice()
 	sort.Strings(items)
 	return items
 }
 
-func (fs *Histogram) TotalCount() uint64 {
+func (hist *Histogram) TotalCount() uint64 {
 	totalCount := 0
-	for _, itemCount := range fs.Items {
+	for _, itemCount := range hist.Items {
 		totalCount += itemCount
 	}
 	return uint64(totalCount)
 }
 
-func (fs *Histogram) Stats() point.PointSet {
+func (hist *Histogram) Stats() point.PointSet {
 	pointSet := point.NewPointSet()
-	for itemName, itemCount := range fs.Items {
+	for itemName, itemCount := range hist.Items {
 		pointSet.PointsMap[itemName] = point.Point{
 			Name:        itemName,
 			AbsoluteInt: int64(itemCount)}
@@ -107,15 +107,15 @@ const (
 )
 
 // ItemCounts returns sorted item names and values.
-func (fs *Histogram) ItemCounts(sortBy string) []maputil.Record {
-	msi := maputil.MapStringInt(fs.Items)
+func (hist *Histogram) ItemCounts(sortBy string) []maputil.Record {
+	msi := maputil.MapStringInt(hist.Items)
 	return msi.Sorted(sortBy)
 }
 
 // WriteTable writes an ASCII Table. For CLI apps, pass `os.Stdout` for `io.Writer`.
-func (fs *Histogram) WriteTableASCII(writer io.Writer, header []string, sortBy string, inclTotal bool) {
+func (hist *Histogram) WriteTableASCII(writer io.Writer, header []string, sortBy string, inclTotal bool) {
 	rows := [][]string{}
-	sortedItems := fs.ItemCounts(sortBy)
+	sortedItems := hist.ItemCounts(sortBy)
 	for _, sortedItem := range sortedItems {
 		rows = append(rows, []string{
 			sortedItem.Name, strconv.Itoa(sortedItem.Value)})
@@ -140,7 +140,7 @@ func (fs *Histogram) WriteTableASCII(writer io.Writer, header []string, sortBy s
 	if inclTotal {
 		table.SetFooter([]string{
 			"Total",
-			strconv.Itoa(int(fs.TotalCount())),
+			strconv.Itoa(int(hist.TotalCount())),
 		}) // Add Footer
 	}
 	table.SetBorder(false) // Set Border to false
