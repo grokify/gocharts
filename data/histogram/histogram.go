@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/grokify/gocharts/data/point"
+	"github.com/grokify/gocharts/data/table"
 	"github.com/grokify/simplego/type/maputil"
 	"github.com/olekukonko/tablewriter"
 )
@@ -48,7 +49,7 @@ func (hist *Histogram) Add(s string, count int) {
 
 func (hist *Histogram) Inflate() {
 	hist.Counts = map[string]int{}
-	sum := int(0)
+	sum := 0
 	for _, itemCount := range hist.Items {
 		countString := strconv.Itoa(itemCount)
 		if _, ok := hist.Counts[countString]; !ok {
@@ -146,4 +147,21 @@ func (hist *Histogram) WriteTableASCII(writer io.Writer, header []string, sortBy
 	table.SetBorder(false) // Set Border to false
 	table.AppendBulk(rows) // Add Bulk Data
 	table.Render()
+}
+
+func (hist *Histogram) ToTable(colNameBinName, colNameBinCount string) *table.Table {
+	tbl := table.NewTable()
+	tbl.Name = hist.Name
+	tbl.Columns = []string{colNameBinName, colNameBinCount}
+	for binName, binCount := range hist.Items {
+		tbl.Records = append(tbl.Records,
+			[]string{binName, strconv.Itoa(binCount)})
+	}
+	tbl.FormatMap = map[int]string{1: "int"}
+	return &tbl
+}
+
+func (hist *Histogram) WriteXLSX(filename, sheetname, colNameBinName, colNameBinCount string) error {
+	tbl := hist.ToTable(colNameBinName, colNameBinCount)
+	return tbl.WriteXLSX(filename, sheetname)
 }
