@@ -1,4 +1,4 @@
-package histogram
+package documents
 
 import (
 	"io"

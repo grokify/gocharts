@@ -1,5 +1,6 @@
-package frequency
+package histogram
 
+/*
 import (
 	"fmt"
 	"strconv"
@@ -18,15 +19,14 @@ func ParseFileCSV(file string, name string, binNameColIdx, binFrequencyColIdx ui
 	if err != nil {
 		return nil, err
 	}
-	tbl.Name = name
-	return ParseTable(tbl, binNameColIdx, binFrequencyColIdx)
+	return ParseTable(tbl, name, binNameColIdx, binFrequencyColIdx)
 }
 
 // ParseTable parses a `table.Table` to a `Histogram` given a table,
 // binName column index and binFrequency column index. Empty rows are
 // skipped.
-func ParseTable(tbl table.Table, binNameColIdx, binFrequencyColIdx uint) (*Histogram, error) {
-	hist := NewHistogram(tbl.Name)
+func ParseTable(tbl table.Table, name string, binNameColIdx, binFrequencyColIdx uint) (*Histogram, error) {
+	hist := NewHistogram(name)
 	for _, rec := range tbl.Records {
 		if stringsutil.SliceIsEmpty(rec, true) {
 			continue
@@ -56,3 +56,4 @@ func ParseTable(tbl table.Table, binNameColIdx, binFrequencyColIdx uint) (*Histo
 	hist.Inflate()
 	return hist, nil
 }
+*/

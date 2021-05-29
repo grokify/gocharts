@@ -1,9 +1,9 @@
-package frequency
+package histogram
 
 import "github.com/grokify/simplego/type/stringsutil"
 
 // HistogramSetsCounts returns UID counts. When used with
-// NewFrequencySetsCSV(), it can provide a sanity check
+// NewHistogramSetsCSV(), it can provide a sanity check
 // for raw record counts against aggregate query values,
 // e.g. compare counts of raw records to GROUP BY counts.
 type HistogramSetsCounts struct {

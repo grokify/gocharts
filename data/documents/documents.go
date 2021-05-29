@@ -1,4 +1,8 @@
-package histogram
+package documents
+
+import (
+	"github.com/grokify/gocharts/data/histogram"
+)
 
 type DocumentsSet struct {
 	Meta      DocumentsSetMeta    `json:"meta"`
@@ -16,30 +20,30 @@ func (ds *DocumentsSet) Inflate() {
 }
 
 func (ds *DocumentsSet) CreateHistogram(key string) {
-	hg := NewHistogram()
+	hg := histogram.NewHistogram("")
 
 	//histogram := map[string]int{}
 	for _, doc := range ds.Documents {
 		if val, ok := doc[key]; ok {
-			if _, ok := hg.BinsFrequency[val]; !ok {
-				hg.BinsFrequency[val] = 0
+			if _, ok := hg.Items[val]; !ok {
+				hg.Items[val] = 0
 			}
-			hg.BinsFrequency[val] += 1
+			hg.Items[val] += 1
 		}
 	}
 	hg.Inflate()
 	if ds.Meta.Histograms == nil {
-		ds.Meta.Histograms = map[string]*Histogram{}
+		ds.Meta.Histograms = map[string]*histogram.Histogram{}
 	}
 	ds.Meta.Histograms[key] = hg
 }
 
 type DocumentsSetMeta struct {
-	Count      int                   `json:"count"`
-	Histograms map[string]*Histogram `json:"histograms"`
+	Count      int                             `json:"count"`
+	Histograms map[string]*histogram.Histogram `json:"histograms"`
 }
 
 func NewDocumentsSetMeta() DocumentsSetMeta {
 	return DocumentsSetMeta{
-		Histograms: map[string]*Histogram{}}
+		Histograms: map[string]*histogram.Histogram{}}
 }

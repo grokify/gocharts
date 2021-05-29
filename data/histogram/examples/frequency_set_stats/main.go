@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"log"
 
-	"github.com/grokify/gocharts/data/frequency"
+	"github.com/grokify/gocharts/data/histogram"
 	"github.com/grokify/simplego/fmt/fmtutil"
 )
 
@@ -47,7 +47,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fs := frequency.NewHistogramSetWithData("FooBar", msmsi)
+	fs := histogram.NewHistogramSetWithData("FooBar", msmsi)
 	stats := fs.LeafStats("CategoryNumber")
 	stats.Inflate()
 	fmtutil.PrintJSON(stats)

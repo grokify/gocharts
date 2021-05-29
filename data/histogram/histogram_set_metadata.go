@@ -1,4 +1,4 @@
-package frequency
+package histogram
 
 import "sort"
 
