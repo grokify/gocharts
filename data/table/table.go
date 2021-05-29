@@ -11,7 +11,7 @@ var DebugReadCSV = false // should not need to use this.
 // Table is useful for working on CSV data
 type Table struct {
 	Name           string
-	Columns        []string
+	Columns        Columns
 	Records        [][]string
 	FormatMap      map[int]string
 	FormatFunc     func(val string, colIdx uint) (interface{}, error)
