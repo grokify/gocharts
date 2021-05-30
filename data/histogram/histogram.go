@@ -67,18 +67,13 @@ func (hist *Histogram) Inflate() {
 	hist.Sum = sum
 }
 
-func (hist *Histogram) ItemsSlice() []string {
-	strs := []string{}
-	for key := range hist.Items {
-		strs = append(strs, key)
+func (hist *Histogram) BinNames() []string {
+	binNames := []string{}
+	for binName := range hist.Items {
+		binNames = append(binNames, binName)
 	}
-	return strs
-}
-
-func (hist *Histogram) ItemsSliceSorted() []string {
-	items := hist.ItemsSlice()
-	sort.Strings(items)
-	return items
+	sort.Strings(binNames)
+	return binNames
 }
 
 func (hist *Histogram) TotalCount() uint64 {
