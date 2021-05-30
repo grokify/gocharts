@@ -25,97 +25,104 @@ func NewHistogramSet(name string) *HistogramSet {
 }
 
 func NewHistogramSetWithData(name string, data map[string]map[string]int) *HistogramSet {
-	fset := &HistogramSet{
+	hset := &HistogramSet{
 		Name:         name,
 		HistogramMap: map[string]*Histogram{}}
 	for statsName, statsData := range data {
 		for statsItemName, statsItemValue := range statsData {
-			fset.Add(statsName, statsItemName, statsItemValue)
+			hset.Add(statsName, statsItemName, statsItemValue)
 		}
 	}
-	return fset
+	return hset
 }
 
-func (fset *HistogramSet) AddDateUidCount(dt time.Time, uid string, count int) {
+func (hset *HistogramSet) AddDateUidCount(dt time.Time, uid string, count int) {
 	fName := dt.Format(time.RFC3339)
-	fset.Add(fName, uid, count)
-	if !fset.KeyIsTime {
-		fset.KeyIsTime = true
+	hset.Add(fName, uid, count)
+	if !hset.KeyIsTime {
+		hset.KeyIsTime = true
 	}
 }
 
-func (fset *HistogramSet) Add(setName, binName string, count int) {
-	fstats, ok := fset.HistogramMap[setName]
+func (hset *HistogramSet) Add(setName, binName string, count int) {
+	fstats, ok := hset.HistogramMap[setName]
 	if !ok {
 		fstats = NewHistogram(setName)
 	}
 	fstats.Add(binName, count)
-	fset.HistogramMap[setName] = fstats
+	hset.HistogramMap[setName] = fstats
 }
 
 /*
-func (fset *HistogramSet) AddString(frequencyName, itemName string) {
-	fstats, ok := fset.HistogramMap[frequencyName]
+func (hset *HistogramSet) AddString(frequencyName, itemName string) {
+	fstats, ok := hset.HistogramMap[frequencyName]
 	if !ok {
 		fstats = NewHistogram(frequencyName)
 	}
 	fstats.Add(itemName, 1)
-	fset.HistogramMap[frequencyName] = fstats
+	hset.HistogramMap[frequencyName] = fstats
 }*/
 
-func (fset *HistogramSet) Names() []string {
+func (hset *HistogramSet) Names() []string {
 	names := []string{}
-	for name := range fset.HistogramMap {
+	for name := range hset.HistogramMap {
 		names = append(names, name)
 	}
 	sort.Strings(names)
 	return names
 }
 
-func (fset *HistogramSet) TotalCount() uint64 {
+func (hset *HistogramSet) TotalCount() uint64 {
 	totalCount := uint64(0)
-	for _, fstats := range fset.HistogramMap {
+	for _, fstats := range hset.HistogramMap {
 		totalCount += fstats.TotalCount()
 	}
 	return totalCount
 }
 
-func (fset *HistogramSet) LeafStats(name string) *Histogram {
+func (hset *HistogramSet) HistogramBinNames(setName string) []string {
+	if hist, ok := hset.HistogramMap[setName]; ok {
+		return hist.BinNames()
+	}
+	return []string{}
+}
+
+func (hset *HistogramSet) LeafStats(name string) *Histogram {
 	if len(name) == 0 {
 		name = "leaf stats"
 	}
 	setLeafStats := NewHistogram(name)
-	for _, fstats := range fset.HistogramMap {
-		for k, v := range fstats.Items {
+	for _, hist := range hset.HistogramMap {
+		for k, v := range hist.Items {
 			setLeafStats.Add(k, v)
 		}
 	}
 	return setLeafStats
 }
 
-func (fset *HistogramSet) ToDataSeriesDistinct() (statictimeseries.DataSeries, error) {
+func (hset *HistogramSet) ToDataSeriesDistinct() (statictimeseries.DataSeries, error) {
 	ds := statictimeseries.NewDataSeries()
-	ds.SeriesName = fset.Name
-	for rfc3339, fs := range fset.HistogramMap {
+	ds.SeriesName = hset.Name
+	for rfc3339, fs := range hset.HistogramMap {
 		dt, err := time.Parse(time.RFC3339, rfc3339)
 		if err != nil {
 			return ds, err
 		}
 		ds.AddItem(statictimeseries.DataItem{
-			SeriesName: fset.Name,
+			SeriesName: hset.Name,
 			Time:       dt,
 			Value:      int64(len(fs.Items))})
 	}
 	return ds, nil
 }
 
-func (fset *HistogramSet) WriteXLSX(path, colName1, colName2, colNameCount string) error {
+func (hset *HistogramSet) WriteXLSX(path, colName1, colName2, colNameCount string) error {
 	// WriteXLSX writes a table as an Excel XLSX file with
 	// row formatter option.
 	f := excelize.NewFile()
 	// Create a new sheet.
 
-	sheetName := strings.TrimSpace(fset.Name)
+	sheetName := strings.TrimSpace(hset.Name)
 	if len(sheetName) == 0 {
 		sheetName = "Sheet0"
 	}
@@ -123,14 +130,14 @@ func (fset *HistogramSet) WriteXLSX(path, colName1, colName2, colNameCount strin
 
 	colName1 = strings.TrimSpace(colName1)
 	if len(colName1) == 0 {
-		colName1 = fset.Name
+		colName1 = hset.Name
 	}
 	if len(colName1) == 0 {
 		colName1 = "Column1"
 	}
 	colName2 = strings.TrimSpace(colName2)
 	if len(colName1) == 0 {
-		for _, fstats := range fset.HistogramMap {
+		for _, fstats := range hset.HistogramMap {
 			fstats.Name = strings.TrimSpace(fstats.Name)
 			if len(fstats.Name) > 0 {
 				colName2 = fstats.Name
@@ -147,9 +154,9 @@ func (fset *HistogramSet) WriteXLSX(path, colName1, colName2, colNameCount strin
 	excelizeutil.SetRowValues(f, sheetName, 0, header)
 	var err error
 	rowIdx := uint(1)
-	for fstatsName, fstats := range fset.HistogramMap {
+	for fstatsName, fstats := range hset.HistogramMap {
 		fstatsNameDt := time.Now()
-		if fset.KeyIsTime {
+		if hset.KeyIsTime {
 			fstatsNameDt, err = time.Parse(time.RFC3339, fstatsName)
 			if err != nil {
 				return err
@@ -157,7 +164,7 @@ func (fset *HistogramSet) WriteXLSX(path, colName1, colName2, colNameCount strin
 		}
 		for itemName, itemCount := range fstats.Items {
 			var rowVals []interface{}
-			if fset.KeyIsTime {
+			if hset.KeyIsTime {
 				rowVals = []interface{}{fstatsNameDt, itemName, itemCount}
 			} else {
 				rowVals = []interface{}{fstatsName, itemName, itemCount}
