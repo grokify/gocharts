@@ -39,12 +39,8 @@ func (hist *Histogram) AddInt(i int) {
 }
 */
 
-func (hist *Histogram) Add(s string, count int) {
-	if _, ok := hist.Bins[s]; ok {
-		hist.Bins[s] += count
-	} else {
-		hist.Bins[s] = count
-	}
+func (hist *Histogram) Add(binName string, binCount int) {
+	hist.Bins[binName] += binCount
 }
 
 func (hist *Histogram) Inflate() {
