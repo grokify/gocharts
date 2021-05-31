@@ -14,57 +14,57 @@ type HistogramSetsCounts struct {
 	Key2Names     []string
 }
 
-func (fcounts *HistogramSetsCounts) preflate() {
-	fcounts.Key1Names = []string{}
-	fcounts.Key2Names = []string{}
-	fcounts.UidCountsKey1 = map[string]uint{}
-	fcounts.UidCountsKey2 = map[string]uint{}
+func (hcounts *HistogramSetsCounts) preflate() {
+	hcounts.Key1Names = []string{}
+	hcounts.Key2Names = []string{}
+	hcounts.UidCountsKey1 = map[string]uint{}
+	hcounts.UidCountsKey2 = map[string]uint{}
 }
 
-func (fcounts *HistogramSetsCounts) Inflate() {
-	fcounts.preflate()
-	for key1Name, key1Vals := range fcounts.UidCounts {
-		fcounts.Key1Names = append(fcounts.Key1Names, key1Name)
-		if _, ok := fcounts.UidCountsKey1[key1Name]; !ok {
-			fcounts.UidCountsKey1[key1Name] = uint(0)
+func (hcounts *HistogramSetsCounts) Inflate() {
+	hcounts.preflate()
+	for key1Name, key1Vals := range hcounts.UidCounts {
+		hcounts.Key1Names = append(hcounts.Key1Names, key1Name)
+		if _, ok := hcounts.UidCountsKey1[key1Name]; !ok {
+			hcounts.UidCountsKey1[key1Name] = uint(0)
 		}
 		for key2Name, k1k2Count := range key1Vals {
-			fcounts.Key2Names = append(fcounts.Key2Names, key2Name)
-			if _, ok := fcounts.UidCountsKey1[key1Name]; !ok {
-				fcounts.UidCountsKey2[key2Name] = uint(0)
+			hcounts.Key2Names = append(hcounts.Key2Names, key2Name)
+			if _, ok := hcounts.UidCountsKey1[key1Name]; !ok {
+				hcounts.UidCountsKey2[key2Name] = uint(0)
 			}
-			fcounts.UidCountsKey1[key1Name] += k1k2Count
-			fcounts.UidCountsKey2[key2Name] += k1k2Count
+			hcounts.UidCountsKey1[key1Name] += k1k2Count
+			hcounts.UidCountsKey2[key2Name] += k1k2Count
 		}
 	}
-	fcounts.Key1Names = stringsutil.SliceCondenseSpace(
-		fcounts.Key1Names, true, true)
-	fcounts.Key2Names = stringsutil.SliceCondenseSpace(
-		fcounts.Key2Names, true, true)
+	hcounts.Key1Names = stringsutil.SliceCondenseSpace(
+		hcounts.Key1Names, true, true)
+	hcounts.Key2Names = stringsutil.SliceCondenseSpace(
+		hcounts.Key2Names, true, true)
 }
 
-func NewHistogramSetsCounts(fsets HistogramSets) *HistogramSetsCounts {
-	fcounts := &HistogramSetsCounts{
+func NewHistogramSetsCounts(hsets HistogramSets) *HistogramSetsCounts {
+	hcounts := &HistogramSetsCounts{
 		Key1Names:     []string{},
 		Key2Names:     []string{},
 		UidCounts:     map[string]map[string]uint{},
 		UidCountsKey1: map[string]uint{},
 		UidCountsKey2: map[string]uint{}}
-	if len(fsets.HistogramSetMap) == 0 {
-		return fcounts
+	if len(hsets.HistogramSetMap) == 0 {
+		return hcounts
 	}
 
-	for fsetGroupName, fsetGroup := range fsets.HistogramSetMap {
-		fcountsGroup, ok := fcounts.UidCounts[fsetGroupName]
+	for hsetName, hset := range hsets.HistogramSetMap {
+		hcountsGroup, ok := hcounts.UidCounts[hsetName]
 		if !ok {
-			fcountsGroup = map[string]uint{}
+			hcountsGroup = map[string]uint{}
 		}
-		for fstatsName, fstats := range fsetGroup.HistogramMap {
-			fcountsGroup[fstatsName] = uint(len(fstats.Items))
+		for histName, hist := range hset.HistogramMap {
+			hcountsGroup[histName] = uint(len(hist.Bins))
 		}
-		fcounts.UidCounts[fsetGroupName] = fcountsGroup
+		hcounts.UidCounts[hsetName] = hcountsGroup
 	}
 
-	fcounts.Inflate()
-	return fcounts
+	hcounts.Inflate()
+	return hcounts
 }

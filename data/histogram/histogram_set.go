@@ -93,8 +93,8 @@ func (hset *HistogramSet) LeafStats(name string) *Histogram {
 	}
 	setLeafStats := NewHistogram(name)
 	for _, hist := range hset.HistogramMap {
-		for k, v := range hist.Items {
-			setLeafStats.Add(k, v)
+		for binName, binCount := range hist.Bins {
+			setLeafStats.Add(binName, binCount)
 		}
 	}
 	return setLeafStats
@@ -103,7 +103,7 @@ func (hset *HistogramSet) LeafStats(name string) *Histogram {
 func (hset *HistogramSet) ToDataSeriesDistinct() (statictimeseries.DataSeries, error) {
 	ds := statictimeseries.NewDataSeries()
 	ds.SeriesName = hset.Name
-	for rfc3339, fs := range hset.HistogramMap {
+	for rfc3339, hist := range hset.HistogramMap {
 		dt, err := time.Parse(time.RFC3339, rfc3339)
 		if err != nil {
 			return ds, err
@@ -111,7 +111,7 @@ func (hset *HistogramSet) ToDataSeriesDistinct() (statictimeseries.DataSeries, e
 		ds.AddItem(statictimeseries.DataItem{
 			SeriesName: hset.Name,
 			Time:       dt,
-			Value:      int64(len(fs.Items))})
+			Value:      int64(len(hist.Bins))})
 	}
 	return ds, nil
 }
@@ -162,12 +162,12 @@ func (hset *HistogramSet) WriteXLSX(path, colName1, colName2, colNameCount strin
 				return err
 			}
 		}
-		for itemName, itemCount := range fstats.Items {
+		for binName, binCount := range fstats.Bins {
 			var rowVals []interface{}
 			if hset.KeyIsTime {
-				rowVals = []interface{}{fstatsNameDt, itemName, itemCount}
+				rowVals = []interface{}{fstatsNameDt, binName, binCount}
 			} else {
-				rowVals = []interface{}{fstatsName, itemName, itemCount}
+				rowVals = []interface{}{fstatsName, binName, binCount}
 			}
 			excelizeutil.SetRowValues(f, sheetName, rowIdx, rowVals)
 			rowIdx++
@@ -185,15 +185,15 @@ func (hset *HistogramSet) WriteXLSX(path, colName1, colName2, colNameCount strin
 // by date to one by quarter.s.
 func HistogramSetDatetimeToQuarter(name string, fsetIn *HistogramSet) (*HistogramSet, error) {
 	fsetQtr := NewHistogramSet(name)
-	for rfc3339, fstats := range fsetIn.HistogramMap {
+	for rfc3339, hist := range fsetIn.HistogramMap {
 		dt, err := time.Parse(time.RFC3339, rfc3339)
 		if err != nil {
 			return fsetQtr, err
 		}
 		dt = timeutil.QuarterStart(dt)
 		rfc3339Qtr := dt.Format(time.RFC3339)
-		for item, count := range fstats.Items {
-			fsetQtr.Add(rfc3339Qtr, item, count)
+		for binName, binCount := range hist.Bins {
+			fsetQtr.Add(rfc3339Qtr, binName, binCount)
 		}
 	}
 	return fsetQtr, nil
@@ -202,24 +202,24 @@ func HistogramSetDatetimeToQuarter(name string, fsetIn *HistogramSet) (*Histogra
 // HistogramSetTimeKeyCount returns a DataSeries when
 // the first key is a RFC3339 time and a sum of items
 // is desired per time.
-func HistogramSetTimeKeyCount(fset HistogramSet) (statictimeseries.DataSeries, error) {
+func HistogramSetTimeKeyCount(hset HistogramSet) (statictimeseries.DataSeries, error) {
 	ds := statictimeseries.NewDataSeries()
-	ds.SeriesName = fset.Name
-	for rfc3339, fstats := range fset.HistogramMap {
+	ds.SeriesName = hset.Name
+	for rfc3339, hist := range hset.HistogramMap {
 		dt, err := time.Parse(time.RFC3339, rfc3339)
 		if err != nil {
 			return ds, err
 		}
 		ds.AddItem(statictimeseries.DataItem{
-			SeriesName: fset.Name,
+			SeriesName: hset.Name,
 			Time:       dt,
-			Value:      int64(len(fstats.Items))})
+			Value:      int64(len(hist.Bins))})
 	}
 	return ds, nil
 }
 
-func HistogramSetTimeKeyCountTable(fset HistogramSet, interval timeutil.Interval, countColName string) (table.Table, error) {
-	ds, err := HistogramSetTimeKeyCount(fset)
+func HistogramSetTimeKeyCountTable(hset HistogramSet, interval timeutil.Interval, countColName string) (table.Table, error) {
+	ds, err := HistogramSetTimeKeyCount(hset)
 	if err != nil {
 		return table.NewTable(), err
 	}
@@ -231,8 +231,8 @@ func HistogramSetTimeKeyCountTable(fset HistogramSet, interval timeutil.Interval
 	return statictimeseries.DataSeriesToTable(ds, countColName, statictimeseries.TimeFormatRFC3339), nil
 }
 
-func HistogramSetTimeKeyCountWriteXLSX(filename string, fset HistogramSet, interval timeutil.Interval, countColName string) error {
-	tbl, err := HistogramSetTimeKeyCountTable(fset, interval, countColName)
+func HistogramSetTimeKeyCountWriteXLSX(filename string, hset HistogramSet, interval timeutil.Interval, countColName string) error {
+	tbl, err := HistogramSetTimeKeyCountTable(hset, interval, countColName)
 	if err != nil {
 		return err
 	}

@@ -17,20 +17,20 @@ import (
 // appearances appear.
 type Histogram struct {
 	Name        string
-	Items       map[string]int
+	Bins        map[string]int
 	Counts      map[string]int // how many items have counts.
 	Percentages map[string]float64
-	ItemCount   uint
+	BinCount    uint
 	Sum         int
 }
 
 func NewHistogram(name string) *Histogram {
 	return &Histogram{
 		Name:        name,
-		Items:       map[string]int{},
+		Bins:        map[string]int{},
 		Counts:      map[string]int{},
 		Percentages: map[string]float64{},
-		ItemCount:   0}
+		BinCount:    0}
 }
 
 /*
@@ -40,36 +40,36 @@ func (hist *Histogram) AddInt(i int) {
 */
 
 func (hist *Histogram) Add(s string, count int) {
-	if _, ok := hist.Items[s]; ok {
-		hist.Items[s] += count
+	if _, ok := hist.Bins[s]; ok {
+		hist.Bins[s] += count
 	} else {
-		hist.Items[s] = count
+		hist.Bins[s] = count
 	}
 }
 
 func (hist *Histogram) Inflate() {
 	hist.Counts = map[string]int{}
 	sum := 0
-	for _, itemCount := range hist.Items {
-		countString := strconv.Itoa(itemCount)
+	for _, binCount := range hist.Bins {
+		countString := strconv.Itoa(binCount)
 		if _, ok := hist.Counts[countString]; !ok {
 			hist.Counts[countString] = 0
 		}
 		hist.Counts[countString]++
-		sum += itemCount
+		sum += binCount
 	}
-	hist.ItemCount = uint(len(hist.Items))
+	hist.BinCount = uint(len(hist.Bins))
 
 	hist.Percentages = map[string]float64{}
-	for itemName, itemCount := range hist.Items {
-		hist.Percentages[itemName] = float64(itemCount) / float64(sum)
+	for binName, binCount := range hist.Bins {
+		hist.Percentages[binName] = float64(binCount) / float64(sum)
 	}
 	hist.Sum = sum
 }
 
 func (hist *Histogram) BinNames() []string {
 	binNames := []string{}
-	for binName := range hist.Items {
+	for binName := range hist.Bins {
 		binNames = append(binNames, binName)
 	}
 	sort.Strings(binNames)
@@ -78,18 +78,18 @@ func (hist *Histogram) BinNames() []string {
 
 func (hist *Histogram) TotalCount() uint64 {
 	totalCount := 0
-	for _, itemCount := range hist.Items {
-		totalCount += itemCount
+	for _, binCount := range hist.Bins {
+		totalCount += binCount
 	}
 	return uint64(totalCount)
 }
 
 func (hist *Histogram) Stats() point.PointSet {
 	pointSet := point.NewPointSet()
-	for itemName, itemCount := range hist.Items {
-		pointSet.PointsMap[itemName] = point.Point{
-			Name:        itemName,
-			AbsoluteInt: int64(itemCount)}
+	for binName, binCount := range hist.Bins {
+		pointSet.PointsMap[binName] = point.Point{
+			Name:        binName,
+			AbsoluteInt: int64(binCount)}
 	}
 	pointSet.Inflate()
 	return pointSet
@@ -104,7 +104,7 @@ const (
 
 // ItemCounts returns sorted item names and values.
 func (hist *Histogram) ItemCounts(sortBy string) []maputil.Record {
-	msi := maputil.MapStringInt(hist.Items)
+	msi := maputil.MapStringInt(hist.Bins)
 	return msi.Sorted(sortBy)
 }
 
@@ -148,7 +148,7 @@ func (hist *Histogram) ToTable(colNameBinName, colNameBinCount string) *table.Ta
 	tbl := table.NewTable()
 	tbl.Name = hist.Name
 	tbl.Columns = []string{colNameBinName, colNameBinCount}
-	for binName, binCount := range hist.Items {
+	for binName, binCount := range hist.Bins {
 		tbl.Records = append(tbl.Records,
 			[]string{binName, strconv.Itoa(binCount)})
 	}

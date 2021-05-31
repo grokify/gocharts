@@ -21,21 +21,21 @@ func NewHistogramSetsCSVs(filenames []string, key1ColIdx, key2ColIdx, uidColIdx 
 }
 
 func NewHistogramSetsTable(tbl table.Table, key1ColIdx, key2ColIdx, uidColIdx uint) (*HistogramSets, error) {
-	fsets := NewHistogramSets()
+	hsets := NewHistogramSets()
 	_, maxIdx := mathutil.MinMaxUint(key1ColIdx, key2ColIdx, uidColIdx)
 	for _, row := range tbl.Records {
 		if len(stringsutil.SliceCondenseSpace(row, true, false)) == 0 {
 			continue
 		} else if len(row) <= int(maxIdx) {
-			return fsets, fmt.Errorf(
+			return hsets, fmt.Errorf(
 				"NewHistogramSetsTable.E_ROW_LEN_ERROR NEED_ROW_LEN [%v] HAVE_ROW_LEN [%v] ROW_DATA [%s]",
 				maxIdx+1, len(row),
 				jsonutil.MustMarshalSimple(row, "", ""))
 		}
-		fsets.Add(
+		hsets.Add(
 			row[key1ColIdx],
 			row[key2ColIdx],
 			row[uidColIdx], 1, true)
 	}
-	return fsets, nil
+	return hsets, nil
 }

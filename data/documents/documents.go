@@ -20,22 +20,22 @@ func (ds *DocumentsSet) Inflate() {
 }
 
 func (ds *DocumentsSet) CreateHistogram(key string) {
-	hg := histogram.NewHistogram("")
+	hist := histogram.NewHistogram("")
 
 	//histogram := map[string]int{}
 	for _, doc := range ds.Documents {
 		if val, ok := doc[key]; ok {
-			if _, ok := hg.Items[val]; !ok {
-				hg.Items[val] = 0
+			if _, ok := hist.Bins[val]; !ok {
+				hist.Bins[val] = 0
 			}
-			hg.Items[val] += 1
+			hist.Bins[val] += 1
 		}
 	}
-	hg.Inflate()
+	hist.Inflate()
 	if ds.Meta.Histograms == nil {
 		ds.Meta.Histograms = map[string]*histogram.Histogram{}
 	}
-	ds.Meta.Histograms[key] = hg
+	ds.Meta.Histograms[key] = hist
 }
 
 type DocumentsSetMeta struct {

@@ -23,11 +23,11 @@ func buildHistogramSetMetadata(hs *HistogramSet) *HistogramSetMetadata {
 		h.Inflate()
 		hs.HistogramMap[name] = h
 		names = append(names, name)
-		for binName, binFreq := range h.Items {
+		for binName, binCount := range h.Bins {
 			if _, ok := uniqueBins[binName]; !ok {
 				uniqueBins[binName] = 0
 			}
-			uniqueBins[binName] += binFreq
+			uniqueBins[binName] += binCount
 		}
 	}
 	meta.UniqueBinCount = len(uniqueBins)

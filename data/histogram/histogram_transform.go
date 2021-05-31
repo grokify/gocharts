@@ -11,8 +11,8 @@ func (hist *Histogram) TransformBinNames(xfFunc func(input string) string) *Hist
 		return nil
 	}
 	newHist := NewHistogram(hist.Name)
-	for binName, binFreq := range hist.Items {
-		newHist.Add(xfFunc(binName), binFreq)
+	for binName, binCount := range hist.Bins {
+		newHist.Add(xfFunc(binName), binCount)
 	}
 	newHist.Inflate()
 	return newHist
