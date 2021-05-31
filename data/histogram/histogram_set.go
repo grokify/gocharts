@@ -63,13 +63,20 @@ func (hset *HistogramSet) AddString(frequencyName, itemName string) {
 	hset.HistogramMap[frequencyName] = fstats
 }*/
 
-func (hset *HistogramSet) Names() []string {
+func (hset *HistogramSet) HistogramNames() []string {
 	names := []string{}
 	for name := range hset.HistogramMap {
 		names = append(names, name)
 	}
 	sort.Strings(names)
 	return names
+}
+
+func (hset *HistogramSet) HistogramNameExists(histName string) bool {
+	if _, ok := hset.HistogramMap[histName]; ok {
+		return true
+	}
+	return false
 }
 
 func (hset *HistogramSet) TotalCount() uint64 {
