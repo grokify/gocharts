@@ -63,6 +63,11 @@ func (hist *Histogram) Inflate() {
 	hist.Sum = sum
 }
 
+// ItemCount returns the number of bins.
+func (hist *Histogram) ItemCount() uint {
+	return uint(len(hist.Bins))
+}
+
 func (hist *Histogram) BinNames() []string {
 	binNames := []string{}
 	for binName := range hist.Bins {

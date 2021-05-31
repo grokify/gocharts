@@ -39,6 +39,11 @@ func (hsets *HistogramSets) Flatten(name string) *HistogramSet {
 	return hsetFlat
 }
 
+// ItemCount returns the number of histogram sets.
+func (hsets *HistogramSets) ItemCount() uint {
+	return uint(len(hsets.HistogramSetMap))
+}
+
 func (hsets *HistogramSets) Counts() *HistogramSetsCounts {
 	return NewHistogramSetsCounts(*hsets)
 }

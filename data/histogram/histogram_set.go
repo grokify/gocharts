@@ -53,6 +53,10 @@ func (hset *HistogramSet) Add(setName, binName string, count int) {
 	hset.HistogramMap[setName] = fstats
 }
 
+func (hset *HistogramSet) ItemCount() uint {
+	return uint(len(hset.HistogramMap))
+}
+
 /*
 func (hset *HistogramSet) AddString(frequencyName, itemName string) {
 	fstats, ok := hset.HistogramMap[frequencyName]
