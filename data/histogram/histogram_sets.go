@@ -28,15 +28,15 @@ func (hsets *HistogramSets) Add(setKey1, setKey2, binName string, binValue int, 
 }
 
 func (hsets *HistogramSets) Flatten(name string) *HistogramSet {
-	fsetFlat := NewHistogramSet(name)
-	for _, fset := range hsets.HistogramSetMap {
-		for k2, fstats := range fset.HistogramMap {
-			for binName, binCount := range fstats.Bins {
-				fsetFlat.Add(k2, binName, binCount)
+	hsetFlat := NewHistogramSet(name)
+	for _, hset := range hsets.HistogramSetMap {
+		for histName, hist := range hset.HistogramMap {
+			for binName, binCount := range hist.Bins {
+				hsetFlat.Add(histName, binName, binCount)
 			}
 		}
 	}
-	return fsetFlat
+	return hsetFlat
 }
 
 func (hsets *HistogramSets) Counts() *HistogramSetsCounts {
