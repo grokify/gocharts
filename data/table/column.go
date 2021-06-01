@@ -67,6 +67,25 @@ func (cols Columns) MustRowVals(colNames []string, row []string) []string {
 	return vals
 }
 
+// RowVals returns a slice of values.
+func (cols Columns) RowVals(colNames []string, row []string) ([]string, error) {
+	missingColumnNames := []string{}
+	vals := []string{}
+	for _, colName := range colNames {
+		val, err := cols.RowVal(colName, row)
+		if err != nil {
+			missingColumnNames = append(missingColumnNames, colName)
+		} else {
+			vals = append(vals, val)
+		}
+	}
+	if len(missingColumnNames) > 0 {
+		return vals, fmt.Errorf(
+			"columnNames missing [%s]", strings.Join(missingColumnNames, ","))
+	}
+	return vals, nil
+}
+
 // RowMap converts a CSV row to a `map[string]string`.
 func (cols Columns) RowMap(row []string, omitEmpty bool) map[string]string {
 	mss := map[string]string{}
