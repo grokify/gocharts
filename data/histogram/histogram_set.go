@@ -44,13 +44,13 @@ func (hset *HistogramSet) AddDateUidCount(dt time.Time, uid string, count int) {
 	}
 }
 
-func (hset *HistogramSet) Add(setName, binName string, count int) {
-	fstats, ok := hset.HistogramMap[setName]
+func (hset *HistogramSet) Add(histName, binName string, count int) {
+	hist, ok := hset.HistogramMap[histName]
 	if !ok {
-		fstats = NewHistogram(setName)
+		hist = NewHistogram(histName)
 	}
-	fstats.Add(binName, count)
-	hset.HistogramMap[setName] = fstats
+	hist.Add(binName, count)
+	hset.HistogramMap[histName] = hist
 }
 
 // ItemCount returns the number of histograms.
@@ -64,6 +64,7 @@ func (hset *HistogramSet) ItemCounts() *Histogram {
 	for histName, hist := range hset.HistogramMap {
 		histCount.Bins[histName] = int(hist.ItemCount())
 	}
+	histCount.Inflate()
 	return histCount
 }
 
