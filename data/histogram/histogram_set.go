@@ -53,20 +53,27 @@ func (hset *HistogramSet) Add(setName, binName string, count int) {
 	hset.HistogramMap[setName] = fstats
 }
 
+// ItemCount returns the number of histograms.
 func (hset *HistogramSet) ItemCount() uint {
 	return uint(len(hset.HistogramMap))
 }
 
-/*
-func (hset *HistogramSet) AddString(frequencyName, itemName string) {
-	fstats, ok := hset.HistogramMap[frequencyName]
-	if !ok {
-		fstats = NewHistogram(frequencyName)
+// ItemCounts returns the number of histograms.
+func (hset *HistogramSet) ItemCounts() map[string]uint {
+	counts := map[string]uint{}
+	for histName, hist := range hset.HistogramMap {
+		counts[histName] = hist.ItemCount()
 	}
-	fstats.Add(itemName, 1)
-	hset.HistogramMap[frequencyName] = fstats
-}*/
+	return counts
+}
 
+// ItemNames returns the number of histograms.
+// Alias for `HistogramNames()`.
+func (hset *HistogramSet) ItemNames() []string {
+	return hset.HistogramNames()
+}
+
+// HistogramNames returns the number of histograms.
 func (hset *HistogramSet) HistogramNames() []string {
 	names := []string{}
 	for name := range hset.HistogramMap {
