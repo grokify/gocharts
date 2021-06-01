@@ -77,6 +77,13 @@ func (hist *Histogram) BinNames() []string {
 	return binNames
 }
 
+func (hist *Histogram) BinNameExists(binName string) bool {
+if _,ok := hist.Bins[binName];ok{
+	return true
+}
+return false
+}
+
 func (hist *Histogram) TotalCount() uint64 {
 	totalCount := 0
 	for _, binCount := range hist.Bins {

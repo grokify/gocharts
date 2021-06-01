@@ -59,12 +59,12 @@ func (hset *HistogramSet) ItemCount() uint {
 }
 
 // ItemCounts returns the number of histograms.
-func (hset *HistogramSet) ItemCounts() map[string]uint {
-	counts := map[string]uint{}
+func (hset *HistogramSet) ItemCounts() *Histogram {
+	histCount := NewHistogram("histogram counts counts")
 	for histName, hist := range hset.HistogramMap {
-		counts[histName] = hist.ItemCount()
+		histCount.Bins[histName] = int(hist.ItemCount())
 	}
-	return counts
+	return histCount
 }
 
 // ItemNames returns the number of histograms.
@@ -96,6 +96,15 @@ func (hset *HistogramSet) TotalCount() uint64 {
 		totalCount += fstats.TotalCount()
 	}
 	return totalCount
+}
+
+func (hset *HistogramSet) BinNameExists(binName string) bool {
+	for _, hist := range hset.HistogramMap {
+		if hist.BinNameExists(binName) {
+			return true
+		}
+	}
+	return false
 }
 
 func (hset *HistogramSet) HistogramBinNames(setName string) []string {
