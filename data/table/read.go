@@ -5,7 +5,6 @@ import (
 	"encoding/csv"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"strings"
 
 	"github.com/grokify/simplego/encoding/csvutil"
@@ -13,6 +12,7 @@ import (
 	"github.com/pkg/errors"
 )
 
+/*
 func ReadFilesSimple(filenames []string, sep string, hasHeader, trimSpace bool) (Table, error) {
 	tbl := NewTable()
 	for i, filename := range filenames {
@@ -67,11 +67,28 @@ func ReadFileSimple(path string, sep string, hasHeader, trimSpace bool) (Table, 
 	}
 	return tbl, nil
 }
+*/
 
 // ReadFile reads in a delimited file and returns a `Table` struct.
-func ReadFile(path string, comma rune, hasHeader, stripBom bool) (Table, error) {
+func ReadFiles(filenames []string, comma rune, hasHeader, stripBom bool) (Table, error) {
 	tbl := NewTable()
-	csvReader, f, err := csvutil.NewReader(path, comma, stripBom)
+	for i, filename := range filenames {
+		tblx, err := ReadFile(filename, comma, hasHeader, stripBom)
+		if err != nil {
+			return tblx, err
+		}
+		if i > 0 && len(tbl.Columns) != len(tblx.Columns) {
+			return tbl, fmt.Errorf("csv column count mismatch earlier files count [%d] file [%s] count [%d]",
+				len(tbl.Columns), filename, len(tblx.Columns))
+		}
+	}
+	return tbl, nil
+}
+
+// ReadFile reads in a delimited file and returns a `Table` struct.
+func ReadFile(filename string, comma rune, hasHeader, stripBom bool) (Table, error) {
+	tbl := NewTable()
+	csvReader, f, err := csvutil.NewReader(filename, comma, stripBom)
 	if err != nil {
 		return tbl, err
 	}
@@ -170,7 +187,7 @@ func MergeFilterCSVFilesToJSON(inPaths []string, outPath string, inComma rune, i
 }
 */
 
-func ReadCSVFilesSingleColumnValuesString(files []string, sep string, hasHeader, trimSpace bool, col uint, condenseUniqueSort bool) ([]string, error) {
+func ReadCSVFilesSingleColumnValuesString(files []string, sep rune, hasHeader, trimSpace bool, col uint, condenseUniqueSort bool) ([]string, error) {
 	values := []string{}
 	for _, file := range files {
 		fileValues, err := ReadCSVFileSingleColumnValuesString(
@@ -186,8 +203,8 @@ func ReadCSVFilesSingleColumnValuesString(files []string, sep string, hasHeader,
 	return values, nil
 }
 
-func ReadCSVFileSingleColumnValuesString(filename, sep string, hasHeader, trimSpace bool, col uint, condenseUniqueSort bool) ([]string, error) {
-	tbl, err := ReadFileSimple(filename, sep, hasHeader, trimSpace)
+func ReadCSVFileSingleColumnValuesString(filename string, sep rune, hasHeader, stripBom bool, col uint, condenseUniqueSort bool) ([]string, error) {
+	tbl, err := ReadFile(filename, sep, hasHeader, stripBom)
 	if err != nil {
 		return []string{}, err
 	}
