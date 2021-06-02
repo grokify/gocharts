@@ -69,7 +69,8 @@ func ReadFileSimple(path string, sep string, hasHeader, trimSpace bool) (Table, 
 }
 */
 
-// ReadFile reads in a delimited file and returns a `Table` struct.
+// ReadFiles reads in a list of delimited files and returns a merged `Table` struct.
+// An 
 func ReadFiles(filenames []string, comma rune, hasHeader, stripBom bool) (Table, error) {
 	tbl := NewTable()
 	for i, filename := range filenames {
