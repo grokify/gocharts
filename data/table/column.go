@@ -10,6 +10,31 @@ import (
 // Columns represents a slice of string with tabular functions.
 type Columns []string
 
+func (cols Columns) Index(colName string) int {
+	for idx, colNameTry := range cols {
+		if colNameTry == colName {
+			return idx
+		}
+	}
+	return -1
+}
+
+/*
+func (tbl *Table) IndexMore(colIdx int, colName string) (int, error) {
+	if colIdx >= 0 {
+		return colIdx, nil
+	}
+	if len(colName) == 0 {
+		return colIdx, errors.New("must supply `colIndex` or `colName`")
+	}
+	colIdx = tbl.Columns.Index(colName)
+	if colIdx < 0 {
+		return colIdx, fmt.Errorf("columnName not found [%v]", colName)
+	}
+	return colIdx, nil
+}
+*/
+
 // MustRowVal returns a single row value.
 func (cols Columns) MustRowVal(colName string, row []string) string {
 	val, err := cols.RowVal(colName, row)

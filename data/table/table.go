@@ -55,7 +55,7 @@ func (tbl *Table) UpsertRowColumnValue(rowIdx, colIdx uint, value string) {
 }
 
 func (tbl *Table) RecordValue(wantCol string, record []string) (string, error) {
-	idx := tbl.ColumnIndex(wantCol)
+	idx := tbl.Columns.Index(wantCol)
 	if idx < 0 {
 		return "", fmt.Errorf("Column Not Found [%v]", wantCol)
 	}
