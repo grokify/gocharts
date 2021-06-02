@@ -13,7 +13,7 @@ func (tbl *Table) ColumnsValuesDistinct(wantCols []string, stripSpace bool) (map
 	wantIdxs := []int{}
 	maxIdx := -1
 	for _, wantCol := range wantCols {
-		wantIdx := tbl.ColumnIndex(wantCol)
+		wantIdx := tbl.Columns.Index(wantCol)
 		if wantIdx < 0 {
 			return data, fmt.Errorf("Column Not Found [%v]", wantCol)
 		}
@@ -43,6 +43,7 @@ func (tbl *Table) ColumnsValuesDistinct(wantCols []string, stripSpace bool) (map
 	return data, nil
 }
 
+/*
 func (tbl *Table) ColumnIndex(colName string) int {
 	for i, tryColName := range tbl.Columns {
 		if tryColName == colName {
@@ -51,15 +52,16 @@ func (tbl *Table) ColumnIndex(colName string) int {
 	}
 	return -1
 }
+*/
 
-func (tbl *Table) ColumnValues(colIdx uint, wantUnique, wantSort bool) ([]string, error) {
+func (tbl *Table) ColumnValues(colIdx uint, dedupeValues, sortResults bool) ([]string, error) {
 	idx := int(colIdx)
 
 	seen := map[string]int{}
 	vals := []string{}
 	for _, row := range tbl.Records {
 		if idx < len(row) {
-			if wantUnique {
+			if dedupeValues {
 				if _, ok := seen[row[colIdx]]; ok {
 					continue
 				}
@@ -67,13 +69,21 @@ func (tbl *Table) ColumnValues(colIdx uint, wantUnique, wantSort bool) ([]string
 			}
 			vals = append(vals, row[colIdx])
 		} else {
-			return vals, fmt.Errorf("E_COL_IDX [%d] ROW_LEN [%d]", colIdx, len(row))
+			return vals, fmt.Errorf("column index not found for index [%d] row length [%d]", colIdx, len(row))
 		}
 	}
-	if wantSort {
+	if sortResults {
 		sort.Strings(vals)
 	}
 	return vals, nil
+}
+
+func (tbl *Table) ColumnValuesForColumnName(colName string, dedupeValues, sortValues bool) ([]string, error) {
+	colIdx := tbl.Columns.Index(colName)
+	if colIdx <= 0 {
+		return []string{}, fmt.Errorf("column [%s] not found", colName)
+	}
+	return tbl.ColumnValues(uint(colIdx), dedupeValues, sortValues)
 }
 
 func (tbl *Table) ColumnValuesDistinct(colIdx uint) (map[string]int, error) {
@@ -99,7 +109,7 @@ func (tbl *Table) ColumnValuesMinMax(colIdx uint) (string, string, error) {
 		return "", "", err
 	}
 	if len(vals) == 0 {
-		return "", "", errors.New("No Values Found")
+		return "", "", errors.New("no values found")
 	}
 
 	arr := []string{}
@@ -131,16 +141,18 @@ func (tbl *Table) ColumnSumFloat64(colIdx uint) (float64, error) {
 	return sum, nil
 }
 
+/*
 func (tbl *Table) columnIndexMore(colIdx int, colName string) (int, error) {
 	if colIdx >= 0 {
 		return colIdx, nil
 	}
 	if len(colName) == 0 {
-		return colIdx, errors.New("Must supply colIndex or colName")
+		return colIdx, errors.New("must supply `colIndex` or `colName`")
 	}
-	colIdx = tbl.ColumnIndex(colName)
+	colIdx = tbl.Columns.Index(colName)
 	if colIdx < 0 {
-		return colIdx, fmt.Errorf("Column Not Found [%v]", colName)
+		return colIdx, fmt.Errorf("columnName not found [%v]", colName)
 	}
 	return colIdx, nil
 }
+*/
