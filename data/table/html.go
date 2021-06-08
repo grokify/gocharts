@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func ToDocuments(tbl *Table) []map[string]interface{} {
+func (tbl *Table) ToDocuments() []map[string]interface{} {
 	docs := []map[string]interface{}{}
 	fmtFunc := tbl.FormatterFunc()
 	for _, row := range tbl.Records {
@@ -32,7 +32,7 @@ func ToDocuments(tbl *Table) []map[string]interface{} {
 }
 
 // ToHTML converts `*TableData` to HTML.
-func ToHTML(tbl *Table, escapeHTML bool) string {
+func (tbl *Table) ToHTML(escapeHTML bool) string {
 	tHTML := "<table>"
 	tbl.ID = strings.TrimSpace(tbl.ID)
 	tbl.Class = strings.TrimSpace(tbl.Class)
