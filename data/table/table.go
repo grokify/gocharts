@@ -1,9 +1,5 @@
 package table
 
-import (
-	"fmt"
-)
-
 const StyleSimple = "border:1px solid #000;border-collapse:collapse"
 
 var DebugReadCSV = false // should not need to use this.
@@ -54,6 +50,7 @@ func (tbl *Table) UpsertRowColumnValue(rowIdx, colIdx uint, value string) {
 	tbl.Records[rowIdxInt] = row
 }
 
+/*
 func (tbl *Table) RecordValue(wantCol string, record []string) (string, error) {
 	idx := tbl.Columns.Index(wantCol)
 	if idx < 0 {
@@ -72,6 +69,7 @@ func (tbl *Table) RecordValueOrEmpty(wantCol string, record []string) string {
 	}
 	return val
 }
+*/
 
 func (tbl *Table) IsWellFormed() (isWellFormed bool, columnCount uint) {
 	columnCount = uint(len(tbl.Columns))
@@ -102,6 +100,7 @@ func (tbl *Table) WriteCSV(path string) error {
 	return WriteCSV(path, tbl)
 }
 
+/*
 func (tbl *Table) RecordToMSS(record []string) map[string]string {
 	mss := map[string]string{}
 	for i, key := range tbl.Columns {
@@ -111,11 +110,12 @@ func (tbl *Table) RecordToMSS(record []string) map[string]string {
 	}
 	return mss
 }
+*/
 
 func (tbl *Table) ToSliceMSS() []map[string]string {
 	slice := []map[string]string{}
 	for _, rec := range tbl.Records {
-		slice = append(slice, tbl.RecordToMSS(rec))
+		slice = append(slice, tbl.Columns.RowMap(rec, false))
 	}
 	return slice
 }

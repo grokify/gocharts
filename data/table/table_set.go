@@ -6,10 +6,11 @@ import (
 )
 
 type TableSet struct {
-	Columns      []string
-	RowFormatter func(val string, col uint) (interface{}, error)
-	TableMap     map[string]*Table
-	//ATableMapOld  map[string]*TableFormatter
+	Columns    []string
+	FormatMap  map[int]string
+	FormatFunc func(val string, colIdx uint) (interface{}, error)
+	TableMap   map[string]*Table
+	//TableMapOld  map[string]*TableFormatter
 }
 
 func (ts *TableSet) TableNames() []string {
@@ -68,8 +69,8 @@ func (ts *TableSet) AddRecord(tableName string, row []string) {
 		tbl := NewTable()
 		tbl.Name = tableName
 		tbl.Columns = ts.Columns
-		tbl.FormatMap = tbl.FormatMap
-		tbl.FormatFunc = tbl.FormatFunc
+		tbl.FormatMap = ts.FormatMap
+		tbl.FormatFunc = ts.FormatFunc
 	}
 	tbl.Records = append(tbl.Records, row)
 	ts.TableMap[tableName] = tbl
