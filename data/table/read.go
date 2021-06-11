@@ -12,69 +12,14 @@ import (
 	"github.com/pkg/errors"
 )
 
-/*
-func ReadFilesSimple(filenames []string, sep string, hasHeader, trimSpace bool) (Table, error) {
-	tbl := NewTable()
-	for i, filename := range filenames {
-		filename = strings.TrimSpace(filename)
-		if len(filename) == 0 {
-			continue
-		}
-		tblx, err := ReadFileSimple(filename, sep, hasHeader, trimSpace)
-		if err != nil {
-			return tbl, err
-		}
-		if len(tbl.Columns) == 0 {
-			tbl.Columns = tblx.Columns
-		} else {
-			curCols := strings.Join(tbl.Columns, ",")
-			nowCols := strings.Join(tblx.Columns, ",")
-			if curCols != nowCols {
-				if i == 0 {
-					// if len(tbl.Columns) > 0, i has to be > 0
-					panic("E_BAD_FILE_COUNTER_TABLE_COLUMNS")
-				}
-				return tbl, fmt.Errorf("CSV table definition mismatch [%s] AND [%s] for FILES [%s]",
-					curCols, nowCols,
-					filenames[i-1]+","+filename)
-			}
-		}
-		if len(tblx.Records) > 0 {
-			tbl.Records = append(tbl.Records, tblx.Records...)
-		}
-	}
-	return tbl, nil
-}
-
-func ReadFileSimple(path string, sep string, hasHeader, trimSpace bool) (Table, error) {
-	tbl := NewTable()
-	data, err := ioutil.ReadFile(path)
-	if err != nil {
-		return tbl, err
-	}
-	lines := strings.Split(string(data), "\n")
-	for i, line := range lines {
-		if trimSpace {
-			line = strings.TrimSpace(line)
-		}
-		parts := strings.Split(line, sep)
-		parts = stringsutil.SliceTrimSpace(parts, false)
-		if hasHeader && i == 0 {
-			tbl.Columns = parts
-		} else {
-			tbl.Records = append(tbl.Records, parts)
-		}
-	}
-	return tbl, nil
-}
-*/
+var debugReadCSV = false // should not need to use this.
 
 // ReadFiles reads in a list of delimited files and returns a merged `Table` struct.
 // An error is returned if the columns count differs between files.
-func ReadFiles(filenames []string, comma rune, hasHeader, stripBom bool) (Table, error) {
+func ReadFiles(filenames []string, comma rune, hasHeader bool) (Table, error) {
 	tbl := NewTable()
 	for i, filename := range filenames {
-		tblx, err := ReadFile(filename, comma, hasHeader, stripBom)
+		tblx, err := ReadFile(filename, comma, hasHeader)
 		if err != nil {
 			return tblx, err
 		}
@@ -87,14 +32,14 @@ func ReadFiles(filenames []string, comma rune, hasHeader, stripBom bool) (Table,
 }
 
 // ReadFile reads in a delimited file and returns a `Table` struct.
-func ReadFile(filename string, comma rune, hasHeader, stripBom bool) (Table, error) {
+func ReadFile(filename string, comma rune, hasHeader bool) (Table, error) {
 	tbl := NewTable()
-	csvReader, f, err := csvutil.NewReader(filename, comma, stripBom)
+	csvReader, f, err := csvutil.NewReader(filename, comma, false)
 	if err != nil {
 		return tbl, err
 	}
 	defer f.Close()
-	if DebugReadCSV {
+	if debugReadCSV {
 		i := -1
 		for {
 			line, err := csvReader.Read()
@@ -117,6 +62,11 @@ func ReadFile(filename string, comma rune, hasHeader, stripBom bool) (Table, err
 		lines, err := csvReader.ReadAll()
 		if err != nil {
 			return tbl, err
+		}
+		byteOrderMarkAsString := string('\uFEFF')
+		if len(lines) > 0 && len(lines[0]) > 0 &&
+			strings.HasPrefix(lines[0][0], byteOrderMarkAsString) {
+			lines[0][0] = strings.TrimPrefix(lines[0][0], byteOrderMarkAsString)
 		}
 		if hasHeader {
 			tbl.LoadMergedRows(lines)
@@ -188,11 +138,11 @@ func MergeFilterCSVFilesToJSON(inPaths []string, outPath string, inComma rune, i
 }
 */
 
-func ReadCSVFilesSingleColumnValuesString(files []string, sep rune, hasHeader, trimSpace bool, col uint, condenseUniqueSort bool) ([]string, error) {
+func ReadCSVFilesSingleColumnValuesString(files []string, sep rune, hasHeader bool, col uint, condenseUniqueSort bool) ([]string, error) {
 	values := []string{}
 	for _, file := range files {
 		fileValues, err := ReadCSVFileSingleColumnValuesString(
-			file, sep, hasHeader, trimSpace, col, false)
+			file, sep, hasHeader, col, false)
 		if err != nil {
 			return values, err
 		}
@@ -204,8 +154,8 @@ func ReadCSVFilesSingleColumnValuesString(files []string, sep rune, hasHeader, t
 	return values, nil
 }
 
-func ReadCSVFileSingleColumnValuesString(filename string, sep rune, hasHeader, stripBom bool, col uint, condenseUniqueSort bool) ([]string, error) {
-	tbl, err := ReadFile(filename, sep, hasHeader, stripBom)
+func ReadCSVFileSingleColumnValuesString(filename string, sep rune, hasHeader bool, col uint, condenseUniqueSort bool) ([]string, error) {
+	tbl, err := ReadFile(filename, sep, hasHeader)
 	if err != nil {
 		return []string{}, err
 	}

@@ -2,8 +2,6 @@ package table
 
 const StyleSimple = "border:1px solid #000;border-collapse:collapse"
 
-var DebugReadCSV = false // should not need to use this.
-
 // Table is useful for working on CSV data
 type Table struct {
 	Name           string
