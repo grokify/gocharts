@@ -1,8 +1,11 @@
+// table provides a struct to handle tabular data.
 package table
 
 const StyleSimple = "border:1px solid #000;border-collapse:collapse"
 
-// Table is useful for working on CSV data
+// Table is useful for working on CSV data. It stores
+// records as `[]string` with typed formatting information
+// per-column to faciliate transformations.
 type Table struct {
 	Name           string
 	Columns        Columns
@@ -15,6 +18,8 @@ type Table struct {
 	Style          string
 }
 
+// NewTable returns a new empty `Table` struct with
+// slices and maps set to empty (non-nil) values.
 func NewTable() Table {
 	return Table{
 		Columns:   []string{},
@@ -22,8 +27,9 @@ func NewTable() Table {
 		FormatMap: map[int]string{}}
 }
 
-// LoadMergedRows is used to load data from `[][]string` sources
-// like csv.ReadAll()
+// LoadMergedRows is used to load data including both
+// column names and rows from `[][]string` sources
+// like `csv.ReadAll()`.
 func (tbl *Table) LoadMergedRows(data [][]string) {
 	if len(data) == 0 {
 		return
