@@ -48,27 +48,6 @@ func (tbl *Table) UpsertRowColumnValue(rowIdx, colIdx uint, value string) {
 	tbl.Rows[rowIdxInt] = row
 }
 
-/*
-func (tbl *Table) RecordValue(wantCol string, record []string) (string, error) {
-	idx := tbl.Columns.Index(wantCol)
-	if idx < 0 {
-		return "", fmt.Errorf("Column Not Found [%v]", wantCol)
-	}
-	if idx >= len(record) {
-		return "", fmt.Errorf("Record does not have enough columns [%v]", idx+1)
-	}
-	return record[idx], nil
-}
-
-func (tbl *Table) RecordValueOrEmpty(wantCol string, record []string) string {
-	val, err := tbl.RecordValue(wantCol, record)
-	if err != nil {
-		return ""
-	}
-	return val
-}
-*/
-
 func (tbl *Table) IsWellFormed() (isWellFormed bool, columnCount uint) {
 	columnCount = uint(len(tbl.Columns))
 	if len(tbl.Rows) == 0 {
@@ -97,18 +76,6 @@ func (tbl *Table) WriteXLSX(path, sheetname string) error {
 func (tbl *Table) WriteCSV(path string) error {
 	return WriteCSV(path, tbl)
 }
-
-/*
-func (tbl *Table) RecordToMSS(record []string) map[string]string {
-	mss := map[string]string{}
-	for i, key := range tbl.Columns {
-		if i < len(tbl.Columns) {
-			mss[key] = record[i]
-		}
-	}
-	return mss
-}
-*/
 
 func (tbl *Table) ToSliceMSS() []map[string]string {
 	slice := []map[string]string{}
