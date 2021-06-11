@@ -22,11 +22,11 @@ func (tbl *Table) ColumnsValuesDistinct(wantCols []string, stripSpace bool) (map
 			maxIdx = wantIdx
 		}
 	}
-	for _, rec := range tbl.Records {
-		if len(rec) > maxIdx {
+	for _, row := range tbl.Rows {
+		if len(row) > maxIdx {
 			vals := []string{}
 			for _, wantIdx := range wantIdxs {
-				val := rec[wantIdx]
+				val := row[wantIdx]
 				if stripSpace {
 					val = strings.TrimSpace(val)
 				}
@@ -59,7 +59,7 @@ func (tbl *Table) ColumnValues(colIdx uint, dedupeValues, sortResults bool) ([]s
 
 	seen := map[string]int{}
 	vals := []string{}
-	for _, row := range tbl.Records {
+	for _, row := range tbl.Rows {
 		if idx < len(row) {
 			if dedupeValues {
 				if _, ok := seen[row[colIdx]]; ok {
@@ -90,9 +90,9 @@ func (tbl *Table) ColumnValuesDistinct(colIdx uint) (map[string]int, error) {
 	data := map[string]int{}
 	idx := int(colIdx)
 
-	for _, rec := range tbl.Records {
-		if len(rec) > idx {
-			val := rec[idx]
+	for _, row := range tbl.Rows {
+		if len(row) > idx {
+			val := row[idx]
 			_, ok := data[val]
 			if !ok {
 				data[val] = 0
@@ -124,7 +124,7 @@ func (tbl *Table) ColumnValuesMinMax(colIdx uint) (string, string, error) {
 func (tbl *Table) ColumnSumFloat64(colIdx uint) (float64, error) {
 	sum := 0.0
 	idx := int(colIdx)
-	for _, row := range tbl.Records {
+	for _, row := range tbl.Rows {
 		if idx >= len(row) {
 			continue
 		}

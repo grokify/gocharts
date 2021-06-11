@@ -78,10 +78,10 @@ func (hist *Histogram) BinNames() []string {
 }
 
 func (hist *Histogram) BinNameExists(binName string) bool {
-if _,ok := hist.Bins[binName];ok{
-	return true
-}
-return false
+	if _, ok := hist.Bins[binName]; ok {
+		return true
+	}
+	return false
 }
 
 func (hist *Histogram) TotalCount() uint64 {
@@ -157,7 +157,7 @@ func (hist *Histogram) ToTable(colNameBinName, colNameBinCount string) *table.Ta
 	tbl.Name = hist.Name
 	tbl.Columns = []string{colNameBinName, colNameBinCount}
 	for binName, binCount := range hist.Bins {
-		tbl.Records = append(tbl.Records,
+		tbl.Rows = append(tbl.Rows,
 			[]string{binName, strconv.Itoa(binCount)})
 	}
 	tbl.FormatMap = map[int]string{1: "int"}

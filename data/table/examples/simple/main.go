@@ -10,7 +10,7 @@ func main() {
 	tbl := table.Table{
 		ID:    "simpletable",
 		Style: table.StyleSimple,
-		Records: [][]string{
+		Rows: [][]string{
 			{"foo", "bar"},
 			{"1", "2"}}}
 

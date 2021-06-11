@@ -33,13 +33,13 @@ func StreamSimpleTable(qw422016 *qt422016.Writer, table Table) {
 	qw422016.N().S(`">
 `)
 //line table_simple.qtpl:4
-	if len(table.Records) > 0 {
+	if len(table.Rows) > 0 {
 //line table_simple.qtpl:4
 		qw422016.N().S(`
 <thead>
     `)
 //line table_simple.qtpl:6
-		for _, item := range table.Records[0] {
+		for _, item := range table.Rows[0] {
 //line table_simple.qtpl:6
 			qw422016.N().S(`
         <th>`)
@@ -60,13 +60,13 @@ func StreamSimpleTable(qw422016 *qt422016.Writer, table Table) {
 	qw422016.N().S(`
 `)
 //line table_simple.qtpl:11
-	if len(table.Records) > 1 {
+	if len(table.Rows) > 1 {
 //line table_simple.qtpl:11
 		qw422016.N().S(`
 <tbody>
 `)
 //line table_simple.qtpl:13
-		for _, r := range table.Records[1:] {
+		for _, r := range table.Rows[1:] {
 //line table_simple.qtpl:13
 			qw422016.N().S(`
     <tr>

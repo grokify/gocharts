@@ -9,11 +9,11 @@ func (tbl *Table) NewTableFilterColDistinctFirst(colIdx int) *Table {
 	newTbl.Columns = tbl.Columns
 
 	seen := map[string]int{}
-	for _, row := range tbl.Records {
+	for _, row := range tbl.Rows {
 		if colIdx >= 0 && colIdx < len(row) {
 			val := row[colIdx]
 			if _, ok := seen[val]; !ok {
-				newTbl.Records = append(newTbl.Records, row)
+				newTbl.Rows = append(newTbl.Rows, row)
 				seen[val] = 1
 			}
 		}
@@ -25,11 +25,11 @@ func (tbl *Table) NewTableFilterColDistinctFirst(colIdx int) *Table {
 // by column names and column values.
 func (tbl *Table) NewTableFilterColumnValues(wantColNameValues map[string]string) (Table, error) {
 	t2 := Table{Columns: tbl.Columns}
-	records, err := tbl.FilterRecordsColumnValues(wantColNameValues)
+	rows, err := tbl.FilterRecordsColumnValues(wantColNameValues)
 	if err != nil {
 		return t2, err
 	}
-	t2.Records = records
+	t2.Rows = rows
 	return t2, nil
 }
 
@@ -49,20 +49,20 @@ func (tbl *Table) FilterRecordsColumnValues(wantColNameValues map[string]string)
 		}
 		wantColIndexes[wantColName] = wantColIdx
 	}
-RECORDS:
-	for _, rec := range tbl.Records {
-		if len(rec) > maxIdx {
+ROWS:
+	for _, row := range tbl.Rows {
+		if len(row) > maxIdx {
 			for wantColName, wantColIdx := range wantColIndexes {
-				colValue := rec[wantColIdx]
+				colValue := row[wantColIdx]
 				wantColValue, ok := wantColNameValues[wantColName]
 				if !ok {
 					return data, fmt.Errorf("Column Name [%v] has no desired value", wantColName)
 				}
 				if colValue != wantColValue {
-					continue RECORDS
+					continue ROWS
 				}
 			}
-			data = append(data, rec)
+			data = append(data, row)
 		}
 	}
 	return data, nil

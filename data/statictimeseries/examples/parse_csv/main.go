@@ -27,11 +27,11 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf("Record Count [%d]\n", len(tbl.Records))
-	fmtutil.PrintJSON(tbl.Records)
+	fmt.Printf("Record Count [%d]\n", len(tbl.Rows))
+	fmtutil.PrintJSON(tbl.Rows)
 
-	for _, rec := range tbl.Records {
-		fmtutil.PrintJSON(rec)
+	for _, row := range tbl.Rows {
+		fmtutil.PrintJSON(row)
 	}
 
 	cfg := statictimeseries.TableConfig{
@@ -41,7 +41,7 @@ func main() {
 		SeriesSetNameColIdx: 2,
 		SeriesNameColIdx:    3}
 
-	counts, err := statictimeseries.ParseRecordsDataItems(tbl.Records, cfg)
+	counts, err := statictimeseries.ParseRecordsDataItems(tbl.Rows, cfg)
 	if err != nil {
 		log.Fatal(err)
 	}

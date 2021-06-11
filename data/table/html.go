@@ -9,7 +9,7 @@ import (
 func (tbl *Table) ToDocuments() []map[string]interface{} {
 	docs := []map[string]interface{}{}
 	fmtFunc := tbl.FormatterFunc()
-	for _, row := range tbl.Records {
+	for _, row := range tbl.Rows {
 		doc := map[string]interface{}{}
 		for x, valStr := range row {
 			colName := fmt.Sprintf("col%d", x)
@@ -61,10 +61,10 @@ func (tbl *Table) ToHTML(escapeHTML bool) string {
 			tHTML += "<thead><tr><th>" + strings.Join(tbl.Columns, "</th><th>") + "</th></tr></thead>"
 		}
 	}
-	if len(tbl.Records) > 0 {
+	if len(tbl.Rows) > 0 {
 		tHTML += "<tbody>"
 		fmtFunc := tbl.FormatterFunc()
-		for _, row := range tbl.Records {
+		for _, row := range tbl.Rows {
 			tHTML += "<tr>"
 			for x, cell := range row {
 				cfmt, err := fmtFunc(cell, uint(x))

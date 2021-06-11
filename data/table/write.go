@@ -32,7 +32,7 @@ func WriteCSV(path string, t *Table) error {
 			return err
 		}
 	}
-	err = writer.WriteAll(t.Records)
+	err = writer.WriteAll(t.Rows)
 	if err != nil {
 		return err
 	}
@@ -40,11 +40,11 @@ func WriteCSV(path string, t *Table) error {
 	return writer.Error()
 }
 
-// WriteCSVSimple writes a file with cols and records data.
-func WriteCSVSimple(cols []string, records [][]string, filename string) error {
+// WriteCSVSimple writes a file with cols and rows data.
+func WriteCSVSimple(cols []string, rows [][]string, filename string) error {
 	tbl := NewTable()
 	tbl.Columns = cols
-	tbl.Records = records
+	tbl.Rows = rows
 	return tbl.WriteCSV(filename)
 }
 
@@ -208,7 +208,7 @@ func WriteXLSX(path string, tables ...*Table) error {
 			}
 		}
 		fmtFunc := tbl.FormatterFunc()
-		for y, row := range tbl.Records {
+		for y, row := range tbl.Rows {
 			for x, cellValue := range row {
 				cellLocation := CoordinatesToSheetLocation(uint32(x), uint32(y+rowBase))
 				formattedVal, err := fmtFunc(cellValue, uint(x))

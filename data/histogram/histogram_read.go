@@ -27,19 +27,19 @@ func ParseFileCSV(file string, name string, binNameColIdx, binFrequencyColIdx ui
 // skipped.
 func ParseTable(tbl table.Table, binNameColIdx, binFrequencyColIdx uint) (*Histogram, error) {
 	hist := NewHistogram(tbl.Name)
-	for _, rec := range tbl.Records {
-		if stringsutil.SliceIsEmpty(rec, true) {
+	for _, row := range tbl.Rows {
+		if stringsutil.SliceIsEmpty(row, true) {
 			continue
 		}
-		if int(binNameColIdx) >= len(rec) {
+		if int(binNameColIdx) >= len(row) {
 			return hist, fmt.Errorf("error row length smaller than binNameColIdx: recordLen[%d] binNameColIdx [%d]",
-				len(rec), binNameColIdx)
-		} else if int(binFrequencyColIdx) >= len(rec) {
+				len(row), binNameColIdx)
+		} else if int(binFrequencyColIdx) >= len(row) {
 			return hist, fmt.Errorf("error row length smaller than binFrequencyColIdx: recordLen[%d] binFrequencyColIdx [%d]",
-				len(rec), binFrequencyColIdx)
+				len(row), binFrequencyColIdx)
 		}
-		binName := strings.TrimSpace(rec[binNameColIdx])
-		binFreq := strings.TrimSpace(rec[binFrequencyColIdx])
+		binName := strings.TrimSpace(row[binNameColIdx])
+		binFreq := strings.TrimSpace(row[binFrequencyColIdx])
 		if len(binName) == 0 && len(binFreq) == 0 {
 			continue
 		}

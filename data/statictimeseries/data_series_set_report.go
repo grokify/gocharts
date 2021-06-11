@@ -203,7 +203,7 @@ func (dss *DataSeriesSet) ToTable(opts *DssTableOpts) (table.Table, error) {
 				line = append(line, fmt.Sprintf("%.10f", seriesValue/lineTotal))
 			}
 		}
-		tbl.Records = append(tbl.Records, line)
+		tbl.Rows = append(tbl.Rows, line)
 	}
 	return tbl, nil
 }

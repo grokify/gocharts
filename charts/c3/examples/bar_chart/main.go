@@ -90,9 +90,9 @@ func buildMoreInfoHTML(ds3 statictimeseries.DataSeriesSet, c3Bar c3.C3Chart, rep
 
 	if addStatsTable {
 		tbl := table.Table{
-			ID:      "funnelpct",
-			Style:   table.StyleSimple,
-			Records: tableRows}
+			ID:    "funnelpct",
+			Style: table.StyleSimple,
+			Rows:  tableRows}
 		moreInfoHTML += "<h2>Stats</h2>" + table.SimpleTable(tbl)
 	}
 

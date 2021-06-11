@@ -23,7 +23,7 @@ func NewHistogramSetsCSVs(filenames []string, key1ColIdx, key2ColIdx, uidColIdx 
 func NewHistogramSetsTable(tbl table.Table, key1ColIdx, key2ColIdx, uidColIdx uint) (*HistogramSets, error) {
 	hsets := NewHistogramSets()
 	_, maxIdx := mathutil.MinMaxUint(key1ColIdx, key2ColIdx, uidColIdx)
-	for _, row := range tbl.Records {
+	for _, row := range tbl.Rows {
 		if len(stringsutil.SliceCondenseSpace(row, true, false)) == 0 {
 			continue
 		} else if len(row) <= int(maxIdx) {

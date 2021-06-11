@@ -20,24 +20,24 @@ func FormatStraightToTabular(tbl Table, colCount uint) (Table, error) {
 	} else if colCountActual != 1 {
 		return newTbl, fmt.Errorf("has non-1 column count [%d]", colCountActual)
 	}
-	rowCount := len(tbl.Records)
+	rowCount := len(tbl.Rows)
 	_, remainder := mathutil.DivideInt64(int64(rowCount), int64(colCount))
 	if remainder != 0 {
 		return newTbl, fmt.Errorf("row count [%d] is not a multiple of col count [%d]", rowCount, colCount)
 	}
 	newRow := []string{}
-	for i, rec := range tbl.Records {
+	for i, row := range tbl.Rows {
 		_, remainder := mathutil.DivideInt64(int64(i), int64(colCount))
 		if remainder == 0 {
 			if len(newRow) > 0 {
-				newTbl.Records = append(newTbl.Records, newRow)
+				newTbl.Rows = append(newTbl.Rows, newRow)
 				newRow = []string{}
 			}
 		}
-		newRow = append(newRow, rec[0])
+		newRow = append(newRow, row[0])
 	}
 	if len(newRow) > 0 {
-		newTbl.Records = append(newTbl.Records, newRow)
+		newTbl.Rows = append(newTbl.Rows, newRow)
 	}
 	return newTbl, nil
 }

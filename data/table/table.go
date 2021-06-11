@@ -6,7 +6,7 @@ const StyleSimple = "border:1px solid #000;border-collapse:collapse"
 type Table struct {
 	Name           string
 	Columns        Columns
-	Records        [][]string
+	Rows           [][]string
 	FormatMap      map[int]string
 	FormatFunc     func(val string, colIdx uint) (interface{}, error)
 	FormatAutoLink bool
@@ -18,7 +18,7 @@ type Table struct {
 func NewTable() Table {
 	return Table{
 		Columns:   []string{},
-		Records:   [][]string{},
+		Rows:      [][]string{},
 		FormatMap: map[int]string{}}
 }
 
@@ -30,22 +30,22 @@ func (tbl *Table) LoadMergedRows(data [][]string) {
 	}
 	tbl.Columns = data[0]
 	if len(data) > 1 {
-		tbl.Records = data[1:]
+		tbl.Rows = data[1:]
 	}
 }
 
 func (tbl *Table) UpsertRowColumnValue(rowIdx, colIdx uint, value string) {
 	rowIdxInt := int(rowIdx)
 	colIdxInt := int(colIdx)
-	for rowIdxInt < len(tbl.Records)-1 {
-		tbl.Records = append(tbl.Records, []string{})
+	for rowIdxInt < len(tbl.Rows)-1 {
+		tbl.Rows = append(tbl.Rows, []string{})
 	}
-	row := tbl.Records[rowIdxInt]
+	row := tbl.Rows[rowIdxInt]
 	for colIdxInt < len(row)-1 {
 		row = append(row, "")
 	}
 	row[colIdxInt] = value
-	tbl.Records[rowIdxInt] = row
+	tbl.Rows[rowIdxInt] = row
 }
 
 /*
@@ -71,16 +71,16 @@ func (tbl *Table) RecordValueOrEmpty(wantCol string, record []string) string {
 
 func (tbl *Table) IsWellFormed() (isWellFormed bool, columnCount uint) {
 	columnCount = uint(len(tbl.Columns))
-	if len(tbl.Records) == 0 {
+	if len(tbl.Rows) == 0 {
 		isWellFormed = true
 		return
 	}
-	for i, rec := range tbl.Records {
+	for i, row := range tbl.Rows {
 		if i == 0 && len(tbl.Columns) == 0 {
-			columnCount = uint(len(rec))
+			columnCount = uint(len(row))
 			continue
 		}
-		if uint(len(rec)) != columnCount {
+		if uint(len(row)) != columnCount {
 			isWellFormed = false
 			return
 		}
@@ -112,8 +112,8 @@ func (tbl *Table) RecordToMSS(record []string) map[string]string {
 
 func (tbl *Table) ToSliceMSS() []map[string]string {
 	slice := []map[string]string{}
-	for _, rec := range tbl.Records {
-		slice = append(slice, tbl.Columns.RowMap(rec, false))
+	for _, row := range tbl.Rows {
+		slice = append(slice, tbl.Columns.RowMap(row, false))
 	}
 	return slice
 }

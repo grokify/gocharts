@@ -116,9 +116,9 @@ func main() {
 		}
 
 		tbl := table.Table{
-			ID:      "funnelpct",
-			Style:   table.StyleSimple,
-			Records: tableRows}
+			ID:    "funnelpct",
+			Style: table.StyleSimple,
+			Rows:  tableRows}
 		footerHTML += "<h2>Stats</h2>" + table.SimpleTable(tbl)
 	}
 

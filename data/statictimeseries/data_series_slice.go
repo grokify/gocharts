@@ -43,7 +43,7 @@ func DataSeriesSliceTable(dsSlice []DataSeries) table.Table {
 				row = append(row, "0")
 			}
 		}
-		tbl.Records = append(tbl.Records, row)
+		tbl.Rows = append(tbl.Rows, row)
 	}
 	return tbl
 }

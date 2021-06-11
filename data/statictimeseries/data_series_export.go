@@ -45,7 +45,7 @@ func DataSeriesToTable(ds DataSeries, col2 string, dtFmt func(dt time.Time) stri
 			dtFmt(item.Time),
 			strconv.Itoa(int(item.Value)),
 		}
-		tbl.Records = append(tbl.Records, row)
+		tbl.Rows = append(tbl.Rows, row)
 	}
 	return tbl
 }

@@ -62,7 +62,7 @@ func (ts *TableSet) AddRecord(tableName string, row []string) {
 }
 */
 
-func (ts *TableSet) AddRecord(tableName string, row []string) {
+func (ts *TableSet) AddRow(tableName string, row []string) {
 	tableName = strings.TrimSpace(tableName)
 	tbl, ok := ts.TableMap[tableName]
 	if !ok {
@@ -72,6 +72,6 @@ func (ts *TableSet) AddRecord(tableName string, row []string) {
 		tbl.FormatMap = ts.FormatMap
 		tbl.FormatFunc = ts.FormatFunc
 	}
-	tbl.Records = append(tbl.Records, row)
+	tbl.Rows = append(tbl.Rows, row)
 	ts.TableMap[tableName] = tbl
 }

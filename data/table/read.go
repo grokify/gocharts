@@ -53,7 +53,7 @@ func ReadFile(filename string, comma rune, hasHeader bool) (Table, error) {
 				tbl.Columns = line
 				continue
 			}
-			tbl.Records = append(tbl.Records, line)
+			tbl.Rows = append(tbl.Rows, line)
 			if i > 2500 {
 				fmt.Printf("[%v] %v\n", i, strings.Join(line, ","))
 			}
@@ -71,7 +71,7 @@ func ReadFile(filename string, comma rune, hasHeader bool) (Table, error) {
 		if hasHeader {
 			tbl.LoadMergedRows(lines)
 		} else {
-			tbl.Records = lines
+			tbl.Rows = lines
 		}
 	}
 	return tbl, nil
@@ -160,7 +160,7 @@ func ReadCSVFileSingleColumnValuesString(filename string, sep rune, hasHeader bo
 		return []string{}, err
 	}
 	values := []string{}
-	for _, row := range tbl.Records {
+	for _, row := range tbl.Rows {
 		if len(row) > int(col) {
 			values = append(values, row[col])
 		}
@@ -182,7 +182,7 @@ func ParseReader(reader io.Reader, delimiter rune, hasHeaderRow bool) (Table, er
 	csvReader.TrimLeadingSpace = true
 	idx := -1
 	for {
-		record, err := csvReader.Read()
+		row, err := csvReader.Read()
 		if err == io.EOF {
 			break
 		}
@@ -191,19 +191,19 @@ func ParseReader(reader io.Reader, delimiter rune, hasHeaderRow bool) (Table, er
 		}
 		idx++
 		if idx == 0 && hasHeaderRow {
-			tbl.Columns = record
+			tbl.Columns = row
 			continue
 		}
-		tbl.Records = append(tbl.Records, record)
+		tbl.Rows = append(tbl.Rows, row)
 	}
 	return tbl, nil
 }
 
 // Unmarshal is a convenience function to provide a simple interface to
 // unmarshal table contents into any desired output.
-func (tbl *Table) Unmarshal(funcRecord func(record []string) error) error {
-	for i, rec := range tbl.Records {
-		err := funcRecord(rec)
+func (tbl *Table) Unmarshal(funcRow func(row []string) error) error {
+	for i, row := range tbl.Rows {
+		err := funcRow(row)
 		if err != nil {
 			return errors.Wrap(err, fmt.Sprintf("Error on Record Index [%d]", i))
 		}
