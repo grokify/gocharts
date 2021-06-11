@@ -16,8 +16,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-// WriteCSV writes the table as a CSV.
-func WriteCSV(path string, t *Table) error {
+func writeCSV(path string, t *Table) error {
 	file, err := os.Create(path)
 	if err != nil {
 		return err

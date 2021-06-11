@@ -74,7 +74,7 @@ func (tbl *Table) WriteXLSX(path, sheetname string) error {
 }
 
 func (tbl *Table) WriteCSV(path string) error {
-	return WriteCSV(path, tbl)
+	return writeCSV(path, tbl)
 }
 
 func (tbl *Table) ToSliceMSS() []map[string]string {
