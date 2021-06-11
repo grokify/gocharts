@@ -10,7 +10,6 @@ type TableSet struct {
 	FormatMap  map[int]string
 	FormatFunc func(val string, colIdx uint) (interface{}, error)
 	TableMap   map[string]*Table
-	//TableMapOld  map[string]*TableFormatter
 }
 
 func (ts *TableSet) TableNames() []string {
@@ -32,35 +31,6 @@ func (ts *TableSet) TablesSorted() []*Table {
 	}
 	return tbls
 }
-
-/*
-func (ts *TableSet) TablesFormattedSorted() []*TableFormatter {
-	tfs := []*TableFormatter{}
-	names := ts.TableNames()
-	for _, name := range names {
-		if tf, ok := ts.TableMap[name]; ok {
-			tfs = append(tfs, tf)
-		}
-	}
-	return tfs
-}*/
-/*
-
-func (ts *TableSet) AddRecord(tableName string, row []string) {
-	tableName = strings.TrimSpace(tableName)
-	tf, ok := ts.TableMap[tableName]
-	if !ok {
-		tbl := NewTableData()
-		tbl.Name = tableName
-		tbl.Columns = ts.Columns
-		tf = &TableFormatter{
-			Table:     &tbl,
-			Formatter: ts.RowFormatter}
-	}
-	tf.Table.Records = append(tf.Table.Records, row)
-	ts.TableMap[tableName] = tf
-}
-*/
 
 func (ts *TableSet) AddRow(tableName string, row []string) {
 	tableName = strings.TrimSpace(tableName)
