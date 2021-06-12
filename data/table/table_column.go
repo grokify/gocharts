@@ -43,17 +43,6 @@ func (tbl *Table) ColumnsValuesDistinct(wantCols []string, stripSpace bool) (map
 	return data, nil
 }
 
-/*
-func (tbl *Table) ColumnIndex(colName string) int {
-	for i, tryColName := range tbl.Columns {
-		if tryColName == colName {
-			return i
-		}
-	}
-	return -1
-}
-*/
-
 func (tbl *Table) ColumnValues(colIdx uint, dedupeValues, sortResults bool) ([]string, error) {
 	idx := int(colIdx)
 
@@ -140,19 +129,3 @@ func (tbl *Table) ColumnSumFloat64(colIdx uint) (float64, error) {
 	}
 	return sum, nil
 }
-
-/*
-func (tbl *Table) columnIndexMore(colIdx int, colName string) (int, error) {
-	if colIdx >= 0 {
-		return colIdx, nil
-	}
-	if len(colName) == 0 {
-		return colIdx, errors.New("must supply `colIndex` or `colName`")
-	}
-	colIdx = tbl.Columns.Index(colName)
-	if colIdx < 0 {
-		return colIdx, fmt.Errorf("columnName not found [%v]", colName)
-	}
-	return colIdx, nil
-}
-*/
