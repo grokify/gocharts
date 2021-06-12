@@ -34,7 +34,7 @@ func ReadFiles(filenames []string, comma rune, hasHeader bool) (Table, error) {
 // ReadFile reads in a delimited file and returns a `Table` struct.
 func ReadFile(filename string, comma rune, hasHeader bool) (Table, error) {
 	tbl := NewTable()
-	csvReader, f, err := csvutil.NewReader(filename, comma, false)
+	csvReader, f, err := csvutil.NewReader(filename, comma)
 	if err != nil {
 		return tbl, err
 	}

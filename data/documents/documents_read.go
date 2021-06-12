@@ -10,12 +10,12 @@ import (
 	"github.com/grokify/simplego/type/stringsutil"
 )
 
-func ReadMergeFilterCSVFiles(inPaths []string, outPath string, inComma rune, inStripBom bool, andFilter map[string]stringsutil.MatchInfo) (DocumentsSet, error) {
+func ReadMergeFilterCSVFiles(inPaths []string, outPath string, inComma rune, andFilter map[string]stringsutil.MatchInfo) (DocumentsSet, error) {
 	//data := JsonRecordsInfo{Records: []map[string]string{}}
 	data := NewDocumentsSet()
 
 	for _, inPath := range inPaths {
-		reader, inFile, err := csvutil.NewReader(inPath, inComma, inStripBom)
+		reader, inFile, err := csvutil.NewReader(inPath, inComma)
 		if err != nil {
 			return data, err
 		}
@@ -56,8 +56,8 @@ func ReadMergeFilterCSVFiles(inPaths []string, outPath string, inComma rune, inS
 	return data, nil
 }
 
-func MergeFilterCSVFilesToJSON(inPaths []string, outPath string, inComma rune, inStripBom bool, perm os.FileMode, andFilter map[string]stringsutil.MatchInfo) error {
-	data, err := ReadMergeFilterCSVFiles(inPaths, outPath, inComma, inStripBom, andFilter)
+func MergeFilterCSVFilesToJSON(inPaths []string, outPath string, inComma rune, perm os.FileMode, andFilter map[string]stringsutil.MatchInfo) error {
+	data, err := ReadMergeFilterCSVFiles(inPaths, outPath, inComma, andFilter)
 	if err != nil {
 		return err
 	}
