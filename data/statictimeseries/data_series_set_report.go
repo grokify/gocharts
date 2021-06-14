@@ -219,7 +219,11 @@ func (dss *DataSeriesSet) ToTable(opts *DssTableOpts) (table.Table, error) {
 		}
 		if opts.PercentInclude {
 			for _, seriesValue := range seriesValues {
-				line = append(line, fmt.Sprintf("%.10f", seriesValue/lineTotal))
+				if lineTotal == 0 {
+					line = append(line, fmt.Sprintf("%.10f", lineTotal))
+				} else {
+					line = append(line, fmt.Sprintf("%.10f", seriesValue/lineTotal))
+				}
 			}
 		}
 		tbl.Rows = append(tbl.Rows, line)
