@@ -164,7 +164,12 @@ func (tbl *Table) FormatterFunc() func(val string, colIdx uint) (interface{}, er
 			case FormatInt:
 				intVal, err := strconv.Atoi(val)
 				if err != nil {
-					return val, err
+					floatVal, err2 := strconv.ParseFloat(val, 64)
+					if err2 != nil {
+						return val, err
+					} else {
+						return int(floatVal), nil
+					}
 				}
 				return intVal, nil
 			case FormatTime:
