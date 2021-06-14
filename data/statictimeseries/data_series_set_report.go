@@ -183,6 +183,7 @@ func (dss *DataSeriesSet) ToTable(opts *DssTableOpts) (table.Table, error) {
 			tbl.Columns = append(
 				tbl.Columns,
 				seriesName+" "+opts.PercentSuffixOrDefault())
+			tbl.FormatMap[len(tbl.Columns)-1] = table.FormatFloat
 		}
 	}
 	timeStrings := dss.TimeStrings()
@@ -201,7 +202,10 @@ func (dss *DataSeriesSet) ToTable(opts *DssTableOpts) (table.Table, error) {
 		seriesValues := []float64{}
 		for _, seriesName := range seriesNames {
 			item, err := dss.Item(seriesName, rfc3339)
-			if err == nil {
+			if err != nil {
+				line = append(line, "0")
+				seriesValues = append(seriesValues, 0)
+			} else {
 				if item.IsFloat {
 					line = append(line, fmt.Sprintf("%.10f", item.ValueFloat))
 				} else {
@@ -209,13 +213,14 @@ func (dss *DataSeriesSet) ToTable(opts *DssTableOpts) (table.Table, error) {
 				}
 				lineTotal += item.ValueFloat64()
 				seriesValues = append(seriesValues, item.ValueFloat64())
-			} else {
-				line = append(line, "0")
-				seriesValues = append(seriesValues, 0)
 			}
 		}
 		if opts.TotalInclude {
-			line = append(line, fmt.Sprintf("%.10f", lineTotal))
+			if dss.IsFloat {
+				line = append(line, fmt.Sprintf("%.10f", lineTotal))
+			} else {
+				line = append(line, strconv.Itoa(int(lineTotal)))
+			}
 		}
 		if opts.PercentInclude {
 			for _, seriesValue := range seriesValues {
