@@ -148,8 +148,7 @@ func (opts *DssTableOpts) PercentSuffixOrDefault() string {
 	return "%"
 }
 
-// ToTable returns a `DataSeriesSet` as a `table.TableData`.
-// func DssToTable(dss DataSeriesSet, fmtTime func(time.Time) string) (table.Table, error) {
+// ToTable returns a `table.TableData`.
 func (dss *DataSeriesSet) ToTable(opts *DssTableOpts) (table.Table, error) {
 	if opts == nil {
 		opts = &DssTableOpts{}
@@ -246,8 +245,5 @@ func (dss *DataSeriesSet) WriteXLSX(filename string, opts *DssTableOpts) error {
 	} else {
 		tbl.FormatFunc = table.FormatDateAndFloats
 	}
-	/*tbl.FormatMap = map[int]string{
-	0:  "string",
-	-1: "float"}*/
 	return table.WriteXLSX(filename, &tbl)
 }
