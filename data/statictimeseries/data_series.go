@@ -364,13 +364,13 @@ func AggregateSeries(series DataSeries) DataSeries {
 	return aggregate
 }
 
-func (series *DataSeries) TimeSeries(interval timeutil.Interval) []time.Time {
-	return timeutil.TimeSeriesSlice(interval, series.ItemTimes())
+func (ds *DataSeries) TimeSeries(interval timeutil.Interval) []time.Time {
+	return timeutil.TimeSeriesSlice(interval, ds.ItemTimes())
 }
 
-func (series *DataSeries) ItemTimes() []time.Time {
+func (ds *DataSeries) ItemTimes() []time.Time {
 	times := []time.Time{}
-	for _, item := range series.ItemMap {
+	for _, item := range ds.ItemMap {
 		times = append(times, item.Time)
 	}
 	return times
@@ -382,8 +382,8 @@ func DataSeriesMinMaxTimes(series *DataSeries) (time.Time, time.Time) {
 }
 */
 
-func (series *DataSeries) MinMaxTimes() (time.Time, time.Time) {
-	return timeutil.SliceMinMax(series.ItemTimes())
+func (ds *DataSeries) MinMaxTimes() (time.Time, time.Time) {
+	return timeutil.SliceMinMax(ds.ItemTimes())
 }
 
 func (ds *DataSeries) Stats() point.PointSet {
