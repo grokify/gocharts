@@ -16,7 +16,7 @@ func (set *DataSeriesSet) ToMonth(inflate bool) DataSeriesSet {
 	for name, ds := range set.Series {
 		newDss.Series[name] = ds.ToMonth(inflate)
 	}
-	newDss.Times = newDss.GetTimeSlice(true)
+	newDss.Times = newDss.TimeSlice(true)
 	return newDss
 }
 
@@ -37,12 +37,12 @@ func (set *DataSeriesSet) ToMonthCumulative(popLast, inflate bool) (DataSeriesSe
 	if popLast {
 		newDss.PopLast()
 	}
-	newDss.Times = newDss.GetTimeSlice(true)
+	newDss.Times = newDss.TimeSlice(true)
 	return newDss, nil
 }
 
 func (set *DataSeriesSet) PopLast() {
-	times := set.GetTimeSlice(true)
+	times := set.TimeSlice(true)
 	if len(times) == 0 {
 		return
 	}

@@ -68,7 +68,7 @@ func (set *DataSeriesSet) AddDataSeries(dataSeries ...DataSeries) error {
 }
 
 func (set *DataSeriesSet) Inflate() {
-	set.Times = set.GetTimeSlice(true)
+	set.Times = set.TimeSlice(true)
 	if len(set.Order) > 0 {
 		set.Order = stringsutil.SliceCondenseSpace(set.Order, true, false)
 	} else {
@@ -103,7 +103,7 @@ func (set *DataSeriesSet) GetSeriesByIndex(index int) (DataSeries, error) {
 	return DataSeries{}, fmt.Errorf("E_CANNOT_FIND_INDEX_[%d]_SET_COUNT_[%d]", index, len(set.Order))
 }
 
-func (set *DataSeriesSet) GetItem(seriesName, rfc3339 string) (DataItem, error) {
+func (set *DataSeriesSet) Item(seriesName, rfc3339 string) (DataItem, error) {
 	di := DataItem{}
 	dss, ok := set.Series[seriesName]
 	if !ok {
@@ -116,7 +116,7 @@ func (set *DataSeriesSet) GetItem(seriesName, rfc3339 string) (DataItem, error) 
 	return item, nil
 }
 
-func (set *DataSeriesSet) GetTimeSlice(sortAsc bool) sortutil.TimeSlice {
+func (set *DataSeriesSet) TimeSlice(sortAsc bool) sortutil.TimeSlice {
 	times := []time.Time{}
 	for _, ds := range set.Series {
 		for _, item := range ds.ItemMap {

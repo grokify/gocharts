@@ -55,7 +55,6 @@ func (ds *DataSeries) SetSeriesName(seriesName string) {
 
 // Keys returns a sorted listed of Item keys.
 func (ds *DataSeries) Keys() []string {
-	// maputil.StringKeysSorted(series.ItemMap)
 	keys := []string{}
 	for key := range ds.ItemMap {
 		keys = append(keys, key)
@@ -196,7 +195,7 @@ func (ds *DataSeries) OneItemMaxValue() (DataItem, error) {
 	return max, nil
 }
 
-func (ds *DataSeries) GetTimeSlice(sortSlice bool) timeutil.TimeSlice {
+func (ds *DataSeries) TimeSlice(sortSlice bool) timeutil.TimeSlice {
 	times := timeutil.TimeSlice{}
 	for _, item := range ds.ItemMap {
 		times = append(times, item.Time)
@@ -257,7 +256,7 @@ func (ds *DataSeries) ToMonthCumulative(inflate bool, timesInput ...time.Time) (
 			return newDataSeries, err
 		}
 	} else {
-		min, max, err = timeutil.TimeSliceMinMax(dsMonth.GetTimeSlice(false))
+		min, max, err = timeutil.TimeSliceMinMax(dsMonth.TimeSlice(false))
 		if err != nil {
 			return newDataSeries, err
 		}
@@ -375,12 +374,6 @@ func (ds *DataSeries) ItemTimes() []time.Time {
 	}
 	return times
 }
-
-/*
-func DataSeriesMinMaxTimes(series *DataSeries) (time.Time, time.Time) {
-	return timeutil.SliceMinMax(DataSeriesItemTimes(series))
-}
-*/
 
 func (ds *DataSeries) MinMaxTimes() (time.Time, time.Time) {
 	return timeutil.SliceMinMax(ds.ItemTimes())

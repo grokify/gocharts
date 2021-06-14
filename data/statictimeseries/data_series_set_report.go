@@ -181,7 +181,7 @@ func (dss *DataSeriesSet) ToTable(opts *DssTableOpts) (table.Table, error) {
 		lineTotal := float64(0)
 		seriesValues := []float64{}
 		for _, seriesName := range seriesNames {
-			item, err := dss.GetItem(seriesName, rfc3339)
+			item, err := dss.Item(seriesName, rfc3339)
 			if err == nil {
 				if item.IsFloat {
 					line = append(line, fmt.Sprintf("%.10f", item.ValueFloat))
