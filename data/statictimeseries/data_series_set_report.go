@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"sort"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/grokify/gocharts/data/table"
@@ -125,11 +126,12 @@ func ReportGrowthPct(rows []RowInt64) []RowFloat64 {
 }
 
 type DssTableOpts struct {
-	FuncFormatTime func(time.Time) string
-	TotalInclude   bool
-	TotalTitle     string
-	PercentInclude bool
-	PercentSuffix  string
+	TimeColumnTitle string
+	FuncFormatTime  func(time.Time) string
+	TotalInclude    bool
+	TotalTitle      string
+	PercentInclude  bool
+	PercentSuffix   string
 }
 
 func (opts *DssTableOpts) TotalTitleOrDefault() string {
@@ -154,10 +156,27 @@ func (dss *DataSeriesSet) ToTable(opts *DssTableOpts) (table.Table, error) {
 	}
 	tbl := table.NewTable()
 	seriesNames := dss.SeriesNames()
-	tbl.Columns = []string{"Time"}
+	timeColumnTitle := strings.TrimSpace(opts.TimeColumnTitle)
+	if len(timeColumnTitle) == 0 {
+		timeColumnTitle = "Time"
+	}
+	tbl.Columns = []string{timeColumnTitle}
 	tbl.Columns = append(tbl.Columns, seriesNames...)
+	tbl.FormatMap = map[int]string{0: table.FormatTime}
+	for i := range seriesNames {
+		if dss.IsFloat {
+			tbl.FormatMap[i+1] = table.FormatFloat
+		} else {
+			tbl.FormatMap[i+1] = table.FormatInt
+		}
+	}
 	if opts.TotalInclude {
 		tbl.Columns = append(tbl.Columns, opts.TotalTitleOrDefault())
+		if dss.IsFloat {
+			tbl.FormatMap[len(tbl.Columns)-1] = table.FormatFloat
+		} else {
+			tbl.FormatMap[len(tbl.Columns)-1] = table.FormatInt
+		}
 	}
 	if opts.PercentInclude {
 		for _, seriesName := range seriesNames {

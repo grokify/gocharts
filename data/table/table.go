@@ -1,7 +1,12 @@
 // table provides a struct to handle tabular data.
 package table
 
-const StyleSimple = "border:1px solid #000;border-collapse:collapse"
+const (
+	FormatFloat = "float"
+	FormatInt   = "int"
+	FormatTime  = "time"
+	StyleSimple = "border:1px solid #000;border-collapse:collapse"
+)
 
 // Table is useful for working on CSV data. It stores
 // records as `[]string` with typed formatting information
