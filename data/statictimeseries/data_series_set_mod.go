@@ -6,7 +6,7 @@ import (
 	"github.com/grokify/simplego/time/timeutil"
 )
 
-func (set *DataSeriesSet) ToMonth() DataSeriesSet {
+func (set *DataSeriesSet) ToMonth(inflate bool) DataSeriesSet {
 	newDss := DataSeriesSet{
 		Name:     set.Name,
 		Series:   map[string]DataSeries{},
@@ -14,13 +14,13 @@ func (set *DataSeriesSet) ToMonth() DataSeriesSet {
 		Interval: timeutil.Month,
 		Order:    set.Order}
 	for name, ds := range set.Series {
-		newDss.Series[name] = ds.ToMonth()
+		newDss.Series[name] = ds.ToMonth(inflate)
 	}
 	newDss.Times = newDss.GetTimeSlice(true)
 	return newDss
 }
 
-func (set *DataSeriesSet) ToMonthCumulative(popLast bool) (DataSeriesSet, error) {
+func (set *DataSeriesSet) ToMonthCumulative(popLast, inflate bool) (DataSeriesSet, error) {
 	newDss := DataSeriesSet{
 		Name:     set.Name,
 		Series:   map[string]DataSeries{},
@@ -28,7 +28,7 @@ func (set *DataSeriesSet) ToMonthCumulative(popLast bool) (DataSeriesSet, error)
 		Interval: timeutil.Month,
 		Order:    set.Order}
 	for name, ds := range set.Series {
-		newDs, err := ds.ToMonthCumulative(newDss.Times...)
+		newDs, err := ds.ToMonthCumulative(inflate, newDss.Times...)
 		if err != nil {
 			return newDss, err
 		}

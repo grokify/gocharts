@@ -211,7 +211,7 @@ func (ds *DataSeries) DeleteByTime(dt time.Time) {
 	delete(ds.ItemMap, dt.Format(time.RFC3339))
 }
 
-func (ds *DataSeries) ToMonth() DataSeries {
+func (ds *DataSeries) ToMonth(inflate bool) DataSeries {
 	newDataSeries := DataSeries{
 		SeriesName: ds.SeriesName,
 		ItemMap:    map[string]DataItem{},
@@ -225,16 +225,29 @@ func (ds *DataSeries) ToMonth() DataSeries {
 			Value:      item.Value,
 			ValueFloat: item.ValueFloat})
 	}
+	if inflate {
+		timeSeries := timeutil.TimeSeriesSlice(
+			timeutil.Month,
+			newDataSeries.ItemTimes())
+		for _, dt := range timeSeries {
+			newDataSeries.AddItem(DataItem{
+				SeriesName: newDataSeries.SeriesName,
+				Time:       dt,
+				IsFloat:    newDataSeries.IsFloat,
+				Value:      0,
+				ValueFloat: 0.0})
+		}
+	}
 	return newDataSeries
 }
 
-func (ds *DataSeries) ToMonthCumulative(timesInput ...time.Time) (DataSeries, error) {
+func (ds *DataSeries) ToMonthCumulative(inflate bool, timesInput ...time.Time) (DataSeries, error) {
 	newDataSeries := DataSeries{
 		SeriesName: ds.SeriesName,
 		ItemMap:    map[string]DataItem{},
 		IsFloat:    ds.IsFloat,
 		Interval:   timeutil.Month}
-	dsMonth := ds.ToMonth()
+	dsMonth := ds.ToMonth(inflate)
 	var min time.Time
 	var max time.Time
 	var err error
@@ -335,9 +348,9 @@ func (ds *DataSeries) WriteXLSX(filename, sheetname, col1, col2 string) error {
 		Rows:      rows})
 }
 
-func AggregateSeries(s1 DataSeries) DataSeries {
+func AggregateSeries(series DataSeries) DataSeries {
 	aggregate := NewDataSeries()
-	sortedItems := s1.ItemsSorted()
+	sortedItems := series.ItemsSorted()
 	sum := int64(0)
 	for _, atomicItem := range sortedItems {
 		aggregateItem := DataItem{
@@ -351,11 +364,11 @@ func AggregateSeries(s1 DataSeries) DataSeries {
 	return aggregate
 }
 
-func DataSeriesTimeSeries(series *DataSeries, interval timeutil.Interval) []time.Time {
-	return timeutil.TimeSeriesSlice(interval, DataSeriesItemTimes(series))
+func (series *DataSeries) TimeSeries(interval timeutil.Interval) []time.Time {
+	return timeutil.TimeSeriesSlice(interval, series.ItemTimes())
 }
 
-func DataSeriesItemTimes(series *DataSeries) []time.Time {
+func (series *DataSeries) ItemTimes() []time.Time {
 	times := []time.Time{}
 	for _, item := range series.ItemMap {
 		times = append(times, item.Time)
@@ -363,12 +376,14 @@ func DataSeriesItemTimes(series *DataSeries) []time.Time {
 	return times
 }
 
+/*
 func DataSeriesMinMaxTimes(series *DataSeries) (time.Time, time.Time) {
 	return timeutil.SliceMinMax(DataSeriesItemTimes(series))
 }
+*/
 
 func (series *DataSeries) MinMaxTimes() (time.Time, time.Time) {
-	return DataSeriesMinMaxTimes(series)
+	return timeutil.SliceMinMax(series.ItemTimes())
 }
 
 func (ds *DataSeries) Stats() point.PointSet {

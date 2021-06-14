@@ -30,7 +30,7 @@ func DSSToChart(data statictimeseries.DataSeriesSet, opts ChartOptions) chart.Ch
 		}
 		times := timeutil.TimeSeriesSlice(
 			timeutil.Month,
-			statictimeseries.DataSeriesItemTimes(&series))
+			series.ItemTimes())
 		ts.XValues = times
 		yvalues := []float64{}
 		for _, t := range times {
