@@ -62,7 +62,7 @@ func (hset *HistogramSet) ItemCount() uint {
 func (hset *HistogramSet) ItemCounts() *Histogram {
 	histCount := NewHistogram("histogram counts counts")
 	for histName, hist := range hset.HistogramMap {
-		histCount.Bins[histName] = int(hist.ItemCount())
+		histCount.Bins[histName] = len(hist.Bins)
 	}
 	histCount.Inflate()
 	return histCount
@@ -91,12 +91,12 @@ func (hset *HistogramSet) HistogramNameExists(histName string) bool {
 	return false
 }
 
-func (hset *HistogramSet) TotalCount() uint64 {
-	totalCount := uint64(0)
-	for _, fstats := range hset.HistogramMap {
-		totalCount += fstats.TotalCount()
+func (hset *HistogramSet) ValueSum() int {
+	valueSum := 0
+	for _, hist := range hset.HistogramMap {
+		valueSum += hist.ValueSum()
 	}
-	return totalCount
+	return valueSum
 }
 
 func (hset *HistogramSet) BinNameExists(binName string) bool {

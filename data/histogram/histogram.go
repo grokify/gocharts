@@ -63,11 +63,6 @@ func (hist *Histogram) Inflate() {
 	hist.Sum = sum
 }
 
-// ItemCount returns the number of bins.
-func (hist *Histogram) ItemCount() uint {
-	return uint(len(hist.Bins))
-}
-
 func (hist *Histogram) BinNames() []string {
 	binNames := []string{}
 	for binName := range hist.Bins {
@@ -84,12 +79,12 @@ func (hist *Histogram) BinNameExists(binName string) bool {
 	return false
 }
 
-func (hist *Histogram) TotalCount() uint64 {
+func (hist *Histogram) ValueSum() int {
 	totalCount := 0
 	for _, binCount := range hist.Bins {
 		totalCount += binCount
 	}
-	return uint64(totalCount)
+	return totalCount
 }
 
 func (hist *Histogram) Stats() point.PointSet {
@@ -144,7 +139,7 @@ func (hist *Histogram) WriteTableASCII(writer io.Writer, header []string, sortBy
 	if inclTotal {
 		table.SetFooter([]string{
 			"Total",
-			strconv.Itoa(int(hist.TotalCount())),
+			strconv.Itoa(hist.ValueSum()),
 		}) // Add Footer
 	}
 	table.SetBorder(false) // Set Border to false
