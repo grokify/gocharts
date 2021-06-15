@@ -51,15 +51,15 @@ func (set *TimeSeriesSet) AddItem(item TimeItem) {
 	set.Times = append(set.Times, item.Time)
 }
 
-func (set *TimeSeriesSet) AddTimeSeries(dataSeries ...TimeSeries) error {
-	for _, ds := range dataSeries {
-		ds.SeriesName = strings.TrimSpace(ds.SeriesName)
-		if len(ds.SeriesName) == 0 {
+func (set *TimeSeriesSet) AddSeries(timeSeries ...TimeSeries) error {
+	for _, ts := range timeSeries {
+		ts.SeriesName = strings.TrimSpace(ts.SeriesName)
+		if len(ts.SeriesName) == 0 {
 			return errors.New("E_TImeSeriesSet.AddTimeSeries_NO_DataSeries.SeriesName")
 		}
-		for _, item := range ds.ItemMap {
-			if len(item.SeriesName) == 0 || item.SeriesName != ds.SeriesName {
-				item.SeriesName = ds.SeriesName
+		for _, item := range ts.ItemMap {
+			if len(item.SeriesName) == 0 || item.SeriesName != ts.SeriesName {
+				item.SeriesName = ts.SeriesName
 			}
 			set.AddItem(item)
 		}

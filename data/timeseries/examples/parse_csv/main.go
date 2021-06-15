@@ -41,7 +41,7 @@ func main() {
 		SeriesSetNameColIdx: 2,
 		SeriesNameColIdx:    3}
 
-	counts, err := timeseries.ParseRecordsDataItems(tbl.Rows, cfg)
+	counts, err := timeseries.ParseRecordsTimeItems(tbl.Rows, cfg)
 	if err != nil {
 		log.Fatal(err)
 	}

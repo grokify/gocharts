@@ -27,7 +27,7 @@ func (cfg *TableConfig) GetTimeFormat() string {
 	return cfg.TimeFormat
 }
 
-func ParseRecordsDataItems(records [][]string, cfg TableConfig) ([]TimeItem, error) {
+func ParseRecordsTimeItems(records [][]string, cfg TableConfig) ([]TimeItem, error) {
 	items := []TimeItem{}
 	for i, rec := range records {
 		if stringsutil.SliceIsEmpty(rec, true) {
