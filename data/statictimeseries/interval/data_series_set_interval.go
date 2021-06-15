@@ -106,7 +106,7 @@ func (set *DataSeriesSet) addAllSeries(allSeriesName string) {
 }
 
 func (set *DataSeriesSet) GetDataSeries(seriesName string, seriesType SeriesType) (statictimeseries.DataSeries, error) {
-	seriesMap := map[string]statictimeseries.DataSeries{}
+	var seriesMap map[string]statictimeseries.DataSeries
 	switch seriesType {
 	case Source:
 		seriesMap = set.SourceSeriesMap
@@ -115,13 +115,13 @@ func (set *DataSeriesSet) GetDataSeries(seriesName string, seriesType SeriesType
 	case OutputAggregate:
 		seriesMap = set.OutputAggregateSeriesMap
 	default:
-		return statictimeseries.DataSeries{}, fmt.Errorf("Could not find seriesName [%v] seriesType [%v]",
+		return statictimeseries.DataSeries{}, fmt.Errorf("could not find seriesName [%v] seriesType [%v]",
 			seriesName,
 			seriesType)
 	}
 	seriesData, ok := seriesMap[seriesName]
 	if !ok {
-		return statictimeseries.DataSeries{}, fmt.Errorf("Could not find seriesName [%v] seriesType [%v]",
+		return statictimeseries.DataSeries{}, fmt.Errorf("could not find seriesName [%v] seriesType [%v]",
 			seriesName,
 			seriesType)
 	}
