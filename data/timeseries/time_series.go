@@ -86,6 +86,11 @@ func (ts *TimeSeries) Last() (TimeItem, error) {
 	return items[len(items)-1], nil
 }
 
+// Pop removes the item with the chronologically last
+// time. This is useful when generating interval
+// charts and the last period has not concluded, thus
+// providing an inaccurate projection when compared to
+// previous full months of data.
 func (ts *TimeSeries) Pop() (TimeItem, error) {
 	items := ts.ItemsSorted()
 	if len(items) == 0 {

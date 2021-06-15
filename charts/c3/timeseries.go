@@ -40,7 +40,7 @@ type TimeseriesPageData struct {
 	XoxPoints []interval.XoxPoint
 }
 
-func (data *TimeseriesData) AddDataSeriesSet(set *interval.TimeSeriesSet, interval tu.Interval, seriesType interval.SeriesType) error {
+func (data *TimeseriesData) AddTimeSeriesSet(set *interval.TimeSeriesSet, interval tu.Interval, seriesType interval.SeriesType) error {
 	data.TimeSeriesSet = set
 	columns := [][]interface{}{}
 	xValues := []interface{}{"x"}
