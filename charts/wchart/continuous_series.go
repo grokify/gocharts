@@ -1,14 +1,14 @@
 package wchart
 
 import (
-	"github.com/grokify/gocharts/data/statictimeseries"
+	"github.com/grokify/gocharts/data/timeseries"
 	"github.com/grokify/simplego/time/month"
 	"github.com/grokify/simplego/time/quarter"
 	"github.com/grokify/simplego/time/timeutil"
 	"github.com/wcharczuk/go-chart"
 )
 
-func DataSeriesMapToContinuousSeriesMonths(dsm map[string]statictimeseries.DataSeries, order []string) []chart.ContinuousSeries {
+func DataSeriesMapToContinuousSeriesMonths(dsm map[string]timeseries.DataSeries, order []string) []chart.ContinuousSeries {
 	csSet := []chart.ContinuousSeries{}
 	for _, seriesName := range order {
 		if ds, ok := dsm[seriesName]; ok {
@@ -18,7 +18,7 @@ func DataSeriesMapToContinuousSeriesMonths(dsm map[string]statictimeseries.DataS
 	return csSet
 }
 
-func DataSeriesToContinuousSeries(ds statictimeseries.DataSeries) chart.ContinuousSeries {
+func DataSeriesToContinuousSeries(ds timeseries.DataSeries) chart.ContinuousSeries {
 	series := chart.ContinuousSeries{
 		Name:    ds.SeriesName,
 		XValues: []float64{},
@@ -45,7 +45,7 @@ func DataSeriesToContinuousSeries(ds statictimeseries.DataSeries) chart.Continuo
 	return series
 }
 
-func DataSeriesMapToContinuousSeriesQuarters(dsm map[string]statictimeseries.DataSeries, order []string) []chart.ContinuousSeries {
+func DataSeriesMapToContinuousSeriesQuarters(dsm map[string]timeseries.DataSeries, order []string) []chart.ContinuousSeries {
 	csSet := []chart.ContinuousSeries{}
 	for _, seriesName := range order {
 		if ds, ok := dsm[seriesName]; ok {
@@ -55,7 +55,7 @@ func DataSeriesMapToContinuousSeriesQuarters(dsm map[string]statictimeseries.Dat
 	return csSet
 }
 
-func DataSeriesToContinuousSeriesQuarter(ds statictimeseries.DataSeries) chart.ContinuousSeries {
+func DataSeriesToContinuousSeriesQuarter(ds timeseries.DataSeries) chart.ContinuousSeries {
 	series := chart.ContinuousSeries{
 		Name:    ds.SeriesName,
 		XValues: []float64{},

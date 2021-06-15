@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/grokify/gocharts/data"
-	"github.com/grokify/gocharts/data/statictimeseries/interval"
+	"github.com/grokify/gocharts/data/timeseries/interval"
 
 	"github.com/grokify/simplego/time/timeutil"
 )

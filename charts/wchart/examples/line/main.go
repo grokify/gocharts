@@ -8,7 +8,7 @@ import (
 
 	"github.com/grokify/gocharts/charts/wchart"
 	"github.com/grokify/gocharts/charts/wchart/sts2wchart"
-	"github.com/grokify/gocharts/data/statictimeseries"
+	"github.com/grokify/gocharts/data/timeseries"
 
 	"github.com/grokify/simplego/fmt/fmtutil"
 	"github.com/grokify/simplego/time/month"
@@ -17,13 +17,13 @@ import (
 )
 
 func drawChartDSSSimple(res http.ResponseWriter, req *http.Request) {
-	ds3 := statictimeseries.NewDataSeriesSet("Example Data Series Set")
+	ds3 := timeseries.NewDataSeriesSet("Example Data Series Set")
 
 	j := 0
 	for i := -10; i <= 0; i++ {
 		j++
 		fmt.Println(i)
-		item := statictimeseries.DataItem{
+		item := timeseries.DataItem{
 			SeriesName: "A Series",
 			Time:       month.MonthBegin(time.Now().AddDate(0, i, 0), 0),
 			Value:      int64(j)}

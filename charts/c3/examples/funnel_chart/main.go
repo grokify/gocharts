@@ -10,8 +10,8 @@ import (
 
 	"github.com/grokify/gocharts/charts/c3"
 	"github.com/grokify/gocharts/charts/c3/c3sts"
-	"github.com/grokify/gocharts/data/statictimeseries"
 	"github.com/grokify/gocharts/data/table"
+	"github.com/grokify/gocharts/data/timeseries"
 
 	"github.com/grokify/simplego/fmt/fmtutil"
 	"github.com/grokify/simplego/strconv/strconvutil"
@@ -19,8 +19,8 @@ import (
 	"github.com/grokify/simplego/time/timeutil"
 )
 
-func TestData() statictimeseries.DataSeriesSet {
-	dss := statictimeseries.NewDataSeriesSet("Funnel Chart Data")
+func TestData() timeseries.DataSeriesSet {
+	dss := timeseries.NewDataSeriesSet("Funnel Chart Data")
 	dss.Interval = timeutil.Month
 	for i := 0; i < 12; i++ {
 		dt := month.MonthBegin(time.Now().UTC(), i)
@@ -29,15 +29,15 @@ func TestData() statictimeseries.DataSeriesSet {
 		val2 := int64(float64(val1)*1 - (float64(5) * rand.Float64()))
 		val3 := int64(float64(val1)*1 - (float64(2) * rand.Float64()))
 
-		dss.AddItem(statictimeseries.DataItem{
+		dss.AddItem(timeseries.DataItem{
 			SeriesName: "Funnel Stage 1",
 			Time:       dt,
 			Value:      val1})
-		dss.AddItem(statictimeseries.DataItem{
+		dss.AddItem(timeseries.DataItem{
 			SeriesName: "Funnel Stage 2",
 			Time:       dt,
 			Value:      val2})
-		dss.AddItem(statictimeseries.DataItem{
+		dss.AddItem(timeseries.DataItem{
 			SeriesName: "Funnel Stage 3",
 			Time:       dt,
 			Value:      val3})
@@ -50,10 +50,10 @@ func main() {
 	dss.Inflate()
 	numCols := len(dss.Times)
 	lowFirst := true
-	rep := statictimeseries.Report(dss, numCols, lowFirst)
+	rep := timeseries.Report(dss, numCols, lowFirst)
 
 	fmtutil.PrintJSON(rep)
-	axis := statictimeseries.ReportAxisX(dss, numCols,
+	axis := timeseries.ReportAxisX(dss, numCols,
 		func(t time.Time) string { return timeutil.FormatQuarterYYYYQ(t) })
 
 	c3Bar := c3.DataSeriesSetSimpleToC3ChartBar(rep, c3.C3Bar{})

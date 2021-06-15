@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/grokify/gocharts/data/statictimeseries"
+	"github.com/grokify/gocharts/data/timeseries"
 	"github.com/grokify/simplego/time/timeutil"
 	"github.com/grokify/simplego/type/maputil"
 	"github.com/pkg/errors"
@@ -25,18 +25,18 @@ const (
 // time slots as necessary. Usage is to create to call:
 // NewDataSeriesSet("quarter"), AddItem() and then Inflate()
 type DataSeriesSet struct {
-	SourceSeriesMap          map[string]statictimeseries.DataSeries
-	OutputSeriesMap          map[string]statictimeseries.DataSeries
-	OutputAggregateSeriesMap map[string]statictimeseries.DataSeries
+	SourceSeriesMap          map[string]timeseries.DataSeries
+	OutputSeriesMap          map[string]timeseries.DataSeries
+	OutputAggregateSeriesMap map[string]timeseries.DataSeries
 	SeriesIntervals          SeriesIntervals
 	AllSeriesName            string
 }
 
 func NewDataSeriesSet(interval timeutil.Interval, weekStart time.Weekday) DataSeriesSet {
 	return DataSeriesSet{
-		SourceSeriesMap:          map[string]statictimeseries.DataSeries{},
-		OutputSeriesMap:          map[string]statictimeseries.DataSeries{},
-		OutputAggregateSeriesMap: map[string]statictimeseries.DataSeries{},
+		SourceSeriesMap:          map[string]timeseries.DataSeries{},
+		OutputSeriesMap:          map[string]timeseries.DataSeries{},
+		OutputAggregateSeriesMap: map[string]timeseries.DataSeries{},
 		SeriesIntervals:          SeriesIntervals{Interval: interval, WeekStart: weekStart}}
 }
 
@@ -44,13 +44,13 @@ func (set *DataSeriesSet) SeriesNamesSorted() []string {
 	return maputil.StringKeysSorted(set.OutputSeriesMap)
 }
 
-func (set *DataSeriesSet) AddItem(item statictimeseries.DataItem) {
+func (set *DataSeriesSet) AddItem(item timeseries.DataItem) {
 	item.SeriesName = strings.TrimSpace(item.SeriesName)
 	if _, ok := set.SourceSeriesMap[item.SeriesName]; !ok {
 		set.SourceSeriesMap[item.SeriesName] =
-			statictimeseries.DataSeries{
+			timeseries.DataSeries{
 				SeriesName: item.SeriesName,
-				ItemMap:    map[string]statictimeseries.DataItem{}}
+				ItemMap:    map[string]timeseries.DataItem{}}
 	}
 	series := set.SourceSeriesMap[item.SeriesName]
 	series.AddItem(item)
@@ -82,7 +82,7 @@ func (set *DataSeriesSet) inflateOutput() error {
 			return err
 		}
 		set.OutputSeriesMap[seriesName] = output
-		set.OutputAggregateSeriesMap[seriesName] = statictimeseries.AggregateSeries(output)
+		set.OutputAggregateSeriesMap[seriesName] = timeseries.AggregateSeries(output)
 	}
 	return nil
 }
@@ -91,7 +91,7 @@ func (set *DataSeriesSet) addAllSeries(allSeriesName string) {
 	if len(strings.TrimSpace(allSeriesName)) == 0 {
 		allSeriesName = "All"
 	}
-	allSeries := statictimeseries.NewDataSeries()
+	allSeries := timeseries.NewDataSeries()
 	allSeries.SeriesName = allSeriesName
 
 	for _, series := range set.SourceSeriesMap {
@@ -102,11 +102,11 @@ func (set *DataSeriesSet) addAllSeries(allSeriesName string) {
 	}
 
 	set.OutputSeriesMap[allSeriesName] = allSeries
-	set.OutputAggregateSeriesMap[allSeriesName] = statictimeseries.AggregateSeries(allSeries)
+	set.OutputAggregateSeriesMap[allSeriesName] = timeseries.AggregateSeries(allSeries)
 }
 
-func (set *DataSeriesSet) GetDataSeries(seriesName string, seriesType SeriesType) (statictimeseries.DataSeries, error) {
-	var seriesMap map[string]statictimeseries.DataSeries
+func (set *DataSeriesSet) GetDataSeries(seriesName string, seriesType SeriesType) (timeseries.DataSeries, error) {
+	var seriesMap map[string]timeseries.DataSeries
 	switch seriesType {
 	case Source:
 		seriesMap = set.SourceSeriesMap
@@ -115,21 +115,21 @@ func (set *DataSeriesSet) GetDataSeries(seriesName string, seriesType SeriesType
 	case OutputAggregate:
 		seriesMap = set.OutputAggregateSeriesMap
 	default:
-		return statictimeseries.DataSeries{}, fmt.Errorf("could not find seriesName [%v] seriesType [%v]",
+		return timeseries.DataSeries{}, fmt.Errorf("could not find seriesName [%v] seriesType [%v]",
 			seriesName,
 			seriesType)
 	}
 	seriesData, ok := seriesMap[seriesName]
 	if !ok {
-		return statictimeseries.DataSeries{}, fmt.Errorf("could not find seriesName [%v] seriesType [%v]",
+		return timeseries.DataSeries{}, fmt.Errorf("could not find seriesName [%v] seriesType [%v]",
 			seriesName,
 			seriesType)
 	}
 	return seriesData, nil
 }
 
-func (set *DataSeriesSet) BuildOutputSeries(source statictimeseries.DataSeries) (statictimeseries.DataSeries, error) {
-	output := statictimeseries.NewDataSeries()
+func (set *DataSeriesSet) BuildOutputSeries(source timeseries.DataSeries) (timeseries.DataSeries, error) {
+	output := timeseries.NewDataSeries()
 	for _, item := range source.ItemMap {
 		output.SeriesName = item.SeriesName
 		ivalStart, err := timeutil.IntervalStart(
@@ -139,13 +139,13 @@ func (set *DataSeriesSet) BuildOutputSeries(source statictimeseries.DataSeries) 
 		if err != nil {
 			return output, err
 		}
-		output.AddItem(statictimeseries.DataItem{
+		output.AddItem(timeseries.DataItem{
 			SeriesName: item.SeriesName,
 			Time:       ivalStart,
 			Value:      item.Value})
 	}
 	for _, dt := range set.SeriesIntervals.CanonicalSeries {
-		output.AddItem(statictimeseries.DataItem{
+		output.AddItem(timeseries.DataItem{
 			SeriesName: output.SeriesName,
 			Time:       dt,
 			Value:      0})
@@ -191,7 +191,7 @@ func (ival *SeriesIntervals) areEndpointsSet() bool {
 	return true
 }
 
-func (ival *SeriesIntervals) ProcItemsMap(itemMap map[string]statictimeseries.DataItem) {
+func (ival *SeriesIntervals) ProcItemsMap(itemMap map[string]timeseries.DataItem) {
 	for _, dataItem := range itemMap {
 		dt := dataItem.Time
 		if !ival.areEndpointsSet() {

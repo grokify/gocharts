@@ -3,7 +3,7 @@ package c3
 import (
 	"encoding/json"
 
-	"github.com/grokify/gocharts/data/statictimeseries/interval"
+	"github.com/grokify/gocharts/data/timeseries/interval"
 	tu "github.com/grokify/simplego/time/timeutil"
 )
 

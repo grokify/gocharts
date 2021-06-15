@@ -3,7 +3,7 @@ package wchart
 import (
 	"time"
 
-	"github.com/grokify/gocharts/data/statictimeseries"
+	"github.com/grokify/gocharts/data/timeseries"
 	"github.com/grokify/simplego/time/timeutil"
 	"github.com/wcharczuk/go-chart"
 )
@@ -15,7 +15,7 @@ type ChartOptions struct {
 }
 
 // DSSToChart converts a `DataSeriesSet` to a `wcharczuk.Chart`.
-func DSSToChart(data statictimeseries.DataSeriesSet, opts ChartOptions) chart.Chart {
+func DSSToChart(data timeseries.DataSeriesSet, opts ChartOptions) chart.Chart {
 	formatter := TimeFormatter{Layout: opts.XAxisTimeLayout}
 	graph := chart.Chart{
 		XAxis: chart.XAxis{

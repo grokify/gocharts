@@ -7,8 +7,8 @@ import (
 
 	"github.com/360EntSecGroup-Skylar/excelize"
 	"github.com/grokify/gocharts/data/excelizeutil"
-	"github.com/grokify/gocharts/data/statictimeseries"
 	"github.com/grokify/gocharts/data/table"
+	"github.com/grokify/gocharts/data/timeseries"
 	"github.com/grokify/simplego/time/timeutil"
 )
 
@@ -128,15 +128,15 @@ func (hset *HistogramSet) LeafStats(name string) *Histogram {
 	return setLeafStats
 }
 
-func (hset *HistogramSet) ToDataSeriesDistinct() (statictimeseries.DataSeries, error) {
-	ds := statictimeseries.NewDataSeries()
+func (hset *HistogramSet) ToDataSeriesDistinct() (timeseries.DataSeries, error) {
+	ds := timeseries.NewDataSeries()
 	ds.SeriesName = hset.Name
 	for rfc3339, hist := range hset.HistogramMap {
 		dt, err := time.Parse(time.RFC3339, rfc3339)
 		if err != nil {
 			return ds, err
 		}
-		ds.AddItem(statictimeseries.DataItem{
+		ds.AddItem(timeseries.DataItem{
 			SeriesName: hset.Name,
 			Time:       dt,
 			Value:      int64(len(hist.Bins))})
@@ -230,15 +230,15 @@ func HistogramSetDatetimeToQuarter(name string, fsetIn *HistogramSet) (*Histogra
 // HistogramSetTimeKeyCount returns a DataSeries when
 // the first key is a RFC3339 time and a sum of items
 // is desired per time.
-func HistogramSetTimeKeyCount(hset HistogramSet) (statictimeseries.DataSeries, error) {
-	ds := statictimeseries.NewDataSeries()
+func HistogramSetTimeKeyCount(hset HistogramSet) (timeseries.DataSeries, error) {
+	ds := timeseries.NewDataSeries()
 	ds.SeriesName = hset.Name
 	for rfc3339, hist := range hset.HistogramMap {
 		dt, err := time.Parse(time.RFC3339, rfc3339)
 		if err != nil {
 			return ds, err
 		}
-		ds.AddItem(statictimeseries.DataItem{
+		ds.AddItem(timeseries.DataItem{
 			SeriesName: hset.Name,
 			Time:       dt,
 			Value:      int64(len(hist.Bins))})
@@ -256,7 +256,7 @@ func HistogramSetTimeKeyCountTable(hset HistogramSet, interval timeutil.Interval
 	if len(countColName) == 0 {
 		countColName = "Count"
 	}
-	return statictimeseries.DataSeriesToTable(ds, countColName, statictimeseries.TimeFormatRFC3339), nil
+	return timeseries.DataSeriesToTable(ds, countColName, timeseries.TimeFormatRFC3339), nil
 }
 
 func HistogramSetTimeKeyCountWriteXLSX(filename string, hset HistogramSet, interval timeutil.Interval, countColName string) error {

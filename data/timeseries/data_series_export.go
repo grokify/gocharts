@@ -1,4 +1,4 @@
-package statictimeseries
+package timeseries
 
 import (
 	"strconv"

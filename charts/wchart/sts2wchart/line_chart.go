@@ -7,8 +7,8 @@ import (
 	"time"
 
 	"github.com/grokify/gocharts/charts/wchart"
-	"github.com/grokify/gocharts/data/statictimeseries"
-	"github.com/grokify/gocharts/data/statictimeseries/interval"
+	"github.com/grokify/gocharts/data/timeseries"
+	"github.com/grokify/gocharts/data/timeseries/interval"
 	"github.com/grokify/simplego/math/ratio"
 	"github.com/grokify/simplego/strconv/strconvutil"
 	"github.com/grokify/simplego/time/month"
@@ -73,8 +73,8 @@ func DefaultLineChartOpts() *LineChartOpts {
 	return defaultLineChartOpts
 }
 
-func DataSeriesToLineChart(ds statictimeseries.DataSeries, opts *LineChartOpts) (chart.Chart, error) {
-	dss := statictimeseries.NewDataSeriesSet(ds.SeriesName)
+func DataSeriesToLineChart(ds timeseries.DataSeries, opts *LineChartOpts) (chart.Chart, error) {
+	dss := timeseries.NewDataSeriesSet(ds.SeriesName)
 	dss.Interval = ds.Interval
 	dss.IsFloat = ds.IsFloat
 	dss.Series[ds.SeriesName] = ds
@@ -82,7 +82,7 @@ func DataSeriesToLineChart(ds statictimeseries.DataSeries, opts *LineChartOpts) 
 	return DataSeriesSetToLineChart(dss, opts)
 }
 
-func WriteLineChartDataSeriesSet(filename string, dss statictimeseries.DataSeriesSet, opts *LineChartOpts) error {
+func WriteLineChartDataSeriesSet(filename string, dss timeseries.DataSeriesSet, opts *LineChartOpts) error {
 	chart, err := DataSeriesSetToLineChart(dss, opts)
 	if err != nil {
 		return err
@@ -90,7 +90,7 @@ func WriteLineChartDataSeriesSet(filename string, dss statictimeseries.DataSerie
 	return wchart.WritePNG(filename, chart)
 }
 
-func DataSeriesSetToLineChart(dss statictimeseries.DataSeriesSet, opts *LineChartOpts) (chart.Chart, error) {
+func DataSeriesSetToLineChart(dss timeseries.DataSeriesSet, opts *LineChartOpts) (chart.Chart, error) {
 	if opts == nil {
 		opts = defaultLineChartOpts
 	}
@@ -243,7 +243,7 @@ func DataSeriesSetToLineChart(dss statictimeseries.DataSeriesSet, opts *LineChar
 	return graph, nil
 }
 
-func dataSeriesMonthToAnnotations(ds statictimeseries.DataSeries, opts LineChartOpts) (chart.AnnotationSeries, error) {
+func dataSeriesMonthToAnnotations(ds timeseries.DataSeries, opts LineChartOpts) (chart.AnnotationSeries, error) {
 	annoSeries := chart.AnnotationSeries{
 		Annotations: []chart.Value2{},
 		Style: chart.Style{
@@ -296,7 +296,7 @@ func dataSeriesMonthToAnnotations(ds statictimeseries.DataSeries, opts LineChart
 	return annoSeries, nil
 }
 
-func dataSeriesQuarterToAnnotations(ds statictimeseries.DataSeries, opts LineChartOpts) (chart.AnnotationSeries, error) {
+func dataSeriesQuarterToAnnotations(ds timeseries.DataSeries, opts LineChartOpts) (chart.AnnotationSeries, error) {
 	annoSeries := chart.AnnotationSeries{
 		Annotations: []chart.Value2{},
 		Style: chart.Style{

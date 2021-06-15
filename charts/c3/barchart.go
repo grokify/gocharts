@@ -4,10 +4,10 @@ import (
 	"fmt"
 
 	"github.com/grokify/gocharts/data"
-	"github.com/grokify/gocharts/data/statictimeseries"
+	"github.com/grokify/gocharts/data/timeseries"
 )
 
-func DataSeriesSetSimpleToC3ChartBar(data []statictimeseries.RowInt64, c3BarInfo C3Bar) C3Chart {
+func DataSeriesSetSimpleToC3ChartBar(data []timeseries.RowInt64, c3BarInfo C3Bar) C3Chart {
 	c3Chart := C3Chart{
 		Data: C3ChartData{
 			Columns: [][]interface{}{},

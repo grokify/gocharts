@@ -8,7 +8,7 @@ import (
 
 	math "github.com/grokify/simplego/math/mathutil"
 
-	sts "github.com/grokify/gocharts/data/statictimeseries"
+	sts "github.com/grokify/gocharts/data/timeseries"
 	scu "github.com/grokify/simplego/strconv/strconvutil"
 
 	"github.com/grokify/gocharts/charts/c3"
@@ -18,8 +18,8 @@ import (
 
 // TableData is used to hold generic, simple table data to be generated
 // by a template using `SimpleTable`. Use with `DataRowsToTableRows` to
-// convert output from `statictimeseries.Report` and
-// `statictimeseries.ReportAxisX`. This is used in the C3 Bar Chart
+// convert output from `timeseries.Report` and
+// `timeseries.ReportAxisX`. This is used in the C3 Bar Chart
 // example.
 /*
 type TableData struct {
@@ -28,8 +28,8 @@ type TableData struct {
 	Rows  [][]string
 }*/
 
-// DataRowsToTableRows Builds rows from the output of statictimeseries.Report,
-// array of []statictimeseries.RowInt64.
+// DataRowsToTableRows Builds rows from the output of timeseries.Report,
+// array of []timeseries.RowInt64.
 func DataRowsToTableRows(rep []sts.RowInt64, axis []string, addQoQPct, addFunnelPct bool, countLabel, qoqLabel, funnelLabel string) ([][]string, []sts.RowFloat64, []sts.RowFloat64) {
 	rows := [][]string{}
 	rows = append(rows, axis)

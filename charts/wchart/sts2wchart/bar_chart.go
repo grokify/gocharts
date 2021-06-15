@@ -5,7 +5,7 @@ import (
 	"strconv"
 
 	"github.com/grokify/gocharts/charts/wchart"
-	"github.com/grokify/gocharts/data/statictimeseries"
+	"github.com/grokify/gocharts/data/timeseries"
 
 	"github.com/grokify/simplego/math/mathutil"
 	"github.com/grokify/simplego/strconv/strconvutil"
@@ -13,7 +13,7 @@ import (
 	"github.com/wcharczuk/go-chart"
 )
 
-func DataSeriesToBarChart(ds statictimeseries.DataSeries) chart.BarChart {
+func DataSeriesToBarChart(ds timeseries.DataSeries) chart.BarChart {
 	graph := chart.BarChart{
 		Title: ds.SeriesName,
 		Background: chart.Style{
