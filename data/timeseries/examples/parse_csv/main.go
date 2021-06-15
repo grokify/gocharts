@@ -48,16 +48,16 @@ func main() {
 	fmtutil.PrintJSON(counts)
 
 	if cfg.SeriesSetNameColIdx >= 0 {
-		dss2 := timeseries.NewDataSeriesSet2("Data Series Sets Counts")
-		dss2.Interval = timeutil.Month
-		dss2.AddItems(counts...)
-		fmtutil.PrintJSON(dss2)
+		tss2 := timeseries.NewTimeSeriesSet2("Time Series Sets Counts")
+		tss2.Interval = timeutil.Month
+		tss2.AddItems(counts...)
+		fmtutil.PrintJSON(tss2)
 	} else {
-		dss := timeseries.NewDataSeriesSet("Data Series Set Counts")
-		dss.Interval = timeutil.Month
-		dss.AddItems(counts...)
-		dss.Inflate()
-		fmtutil.PrintJSON(dss)
+		tss := timeseries.NewTimeSeriesSet("Time Series Set Counts")
+		tss.Interval = timeutil.Month
+		tss.AddItems(counts...)
+		tss.Inflate()
+		fmtutil.PrintJSON(tss)
 	}
 
 	fmt.Println("DONE")

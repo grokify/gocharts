@@ -20,8 +20,8 @@ func TimeFormatNiceQuarter(dt time.Time) string {
 	return timeutil.FormatQuarterYYQ(dt)
 }
 
-// DataSeriesToTable generates a `table.Table` given a `DataSeries`.
-func DataSeriesToTable(ds DataSeries, col2 string, dtFmt func(dt time.Time) string) table.Table {
+// TimeSeriesToTable generates a `table.Table` given a `TimeSeries`.
+func TimeSeriesToTable(ds TimeSeries, col2 string, dtFmt func(dt time.Time) string) table.Table {
 	tbl := table.NewTable()
 	colDt := "Date"
 	/*dtFmt := func(dt time.Time) string {
@@ -50,9 +50,9 @@ func DataSeriesToTable(ds DataSeries, col2 string, dtFmt func(dt time.Time) stri
 	return tbl
 }
 
-// DataSeriesWriteXLSX writes an XSLX file given a `DataSeries`
-func DataSeriesWriteXLSX(filename string, ds DataSeries, col2 string, dtFmt func(dt time.Time) string) error {
-	tbl := DataSeriesToTable(ds, col2, dtFmt)
+// TimeSeriesWriteXLSX writes an XSLX file given a `TimeSeries`
+func TimeSeriesWriteXLSX(filename string, ds TimeSeries, col2 string, dtFmt func(dt time.Time) string) error {
+	tbl := TimeSeriesToTable(ds, col2, dtFmt)
 	tbl.FormatFunc = table.FormatStringAndInts
 	return table.WriteXLSX(filename, &tbl)
 }

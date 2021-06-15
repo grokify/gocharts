@@ -7,7 +7,7 @@ import (
 	"github.com/grokify/simplego/type/stringsutil"
 )
 
-func DataSeriesSliceTimes(dsSlice []DataSeries) []string {
+func TimeSeriesSliceTimes(dsSlice []TimeSeries) []string {
 	timeStrings := []string{}
 	for _, ds := range dsSlice {
 		keys := ds.Keys()
@@ -16,7 +16,7 @@ func DataSeriesSliceTimes(dsSlice []DataSeries) []string {
 	return stringsutil.SliceCondenseSpace(timeStrings, true, true)
 }
 
-func DataSeriesSliceNames(dsSlice []DataSeries) []string {
+func TimeSeriesSliceNames(dsSlice []TimeSeries) []string {
 	names := []string{}
 	for _, ds := range dsSlice {
 		names = append(names, ds.SeriesName)
@@ -24,12 +24,12 @@ func DataSeriesSliceNames(dsSlice []DataSeries) []string {
 	return stringsutil.SliceCondenseSpace(names, false, false)
 }
 
-func DataSeriesSliceTable(dsSlice []DataSeries) table.Table {
+func TimeSeriesSliceTable(dsSlice []TimeSeries) table.Table {
 	tbl := table.NewTable()
-	names := DataSeriesSliceNames(dsSlice)
+	names := TimeSeriesSliceNames(dsSlice)
 	tbl.Columns = []string{"Date"}
 	tbl.Columns = append(tbl.Columns, names...)
-	timeStrings := DataSeriesSliceTimes(dsSlice)
+	timeStrings := TimeSeriesSliceTimes(dsSlice)
 	for _, timeStr := range timeStrings {
 		row := []string{timeStr}
 		for _, ds := range dsSlice {
@@ -48,10 +48,10 @@ func DataSeriesSliceTable(dsSlice []DataSeries) table.Table {
 	return tbl
 }
 
-// DataSeriesSliceWriteXLSX writes a slice of DataSeries to an
+// TimeSeries writes a slice of TimeSeries to an
 // Excel XLSX file for easy consumption.
-func DataSeriesSliceWriteXLSX(filename string, dsSlice []DataSeries) error {
-	tbl := DataSeriesSliceTable(dsSlice)
+func TimeSeriesSliceWriteXLSX(filename string, dsSlice []TimeSeries) error {
+	tbl := TimeSeriesSliceTable(dsSlice)
 	tbl.FormatFunc = table.FormatTimeAndFloats
 	return table.WriteXLSX(filename, &tbl)
 }

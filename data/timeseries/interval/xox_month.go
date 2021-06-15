@@ -17,12 +17,12 @@ type XoXGrowth struct {
 	QTD     int64
 }
 
-func NewXoXDataSeries(ds timeseries.DataSeries) (XoXGrowth, error) {
+func NewXoXTimeSeries(ds timeseries.TimeSeries) (XoXGrowth, error) {
 	xox := XoXGrowth{DateMap: map[string]XoxPoint{}}
 	for dateNowRfc, itemNow := range ds.ItemMap {
 		dateNow, err := time.Parse(time.RFC3339, dateNowRfc)
 		if err != nil {
-			return xox, errors.Wrap(err, "timeseries.NewXoXDataSeries")
+			return xox, errors.Wrap(err, "timeseries.NewXoXTimeSeries")
 		}
 		xoxPoint := XoxPoint{Time: dateNow, Value: itemNow.ValueInt64()}
 
@@ -66,7 +66,7 @@ func NewXoXDataSeries(ds timeseries.DataSeries) (XoXGrowth, error) {
 	return xox, nil
 }
 
-func AggregatePriorMonths(ds timeseries.DataSeries, start time.Time, months uint) int64 {
+func AggregatePriorMonths(ds timeseries.TimeSeries, start time.Time, months uint) int64 {
 	aggregateValue := int64(0)
 	monthBegin := month.MonthBegin(start, 0)
 	for i := uint(1); i <= months; i++ {

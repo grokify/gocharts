@@ -6,10 +6,10 @@ import (
 	"github.com/grokify/simplego/time/timeutil"
 )
 
-func (set *DataSeriesSet) ToMonth(inflate bool) DataSeriesSet {
-	newDss := DataSeriesSet{
+func (set *TimeSeriesSet) ToMonth(inflate bool) TimeSeriesSet {
+	newDss := TimeSeriesSet{
 		Name:     set.Name,
-		Series:   map[string]DataSeries{},
+		Series:   map[string]TimeSeries{},
 		Times:    set.Times,
 		Interval: timeutil.Month,
 		Order:    set.Order}
@@ -20,10 +20,10 @@ func (set *DataSeriesSet) ToMonth(inflate bool) DataSeriesSet {
 	return newDss
 }
 
-func (set *DataSeriesSet) ToMonthCumulative(popLast, inflate bool) (DataSeriesSet, error) {
-	newDss := DataSeriesSet{
+func (set *TimeSeriesSet) ToMonthCumulative(popLast, inflate bool) (TimeSeriesSet, error) {
+	newDss := TimeSeriesSet{
 		Name:     set.Name,
-		Series:   map[string]DataSeries{},
+		Series:   map[string]TimeSeries{},
 		Times:    set.Times,
 		Interval: timeutil.Month,
 		Order:    set.Order}
@@ -41,7 +41,7 @@ func (set *DataSeriesSet) ToMonthCumulative(popLast, inflate bool) (DataSeriesSe
 	return newDss, nil
 }
 
-func (set *DataSeriesSet) PopLast() {
+func (set *TimeSeriesSet) PopLast() {
 	times := set.TimeSlice(true)
 	if len(times) == 0 {
 		return
@@ -50,17 +50,17 @@ func (set *DataSeriesSet) PopLast() {
 	set.DeleteItemByTime(last)
 }
 
-func (set *DataSeriesSet) DeleteItemByTime(dt time.Time) {
+func (set *TimeSeriesSet) DeleteItemByTime(dt time.Time) {
 	for id, ds := range set.Series {
 		ds.DeleteByTime(dt)
 		set.Series[id] = ds
 	}
 }
 
-func (set *DataSeriesSet) ToNewSeriesNames(seriesNames, seriesSetNames map[string]string) DataSeriesSet {
-	newDss := DataSeriesSet{
+func (set *TimeSeriesSet) ToNewSeriesNames(seriesNames, seriesSetNames map[string]string) TimeSeriesSet {
+	newDss := TimeSeriesSet{
 		Name:     set.Name,
-		Series:   map[string]DataSeries{},
+		Series:   map[string]TimeSeries{},
 		Times:    set.Times,
 		IsFloat:  set.IsFloat,
 		Interval: timeutil.Month,

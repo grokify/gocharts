@@ -12,7 +12,7 @@ import (
 )
 
 // ReportAxisX generates data for use with `C3Chart.C3Axis.C3AxisX.Categories`.
-func ReportAxisX(dss DataSeriesSet, cols int, conv func(time.Time) string) []string {
+func ReportAxisX(dss TimeSeriesSet, cols int, conv func(time.Time) string) []string {
 	var times timeutil.TimeSlice
 	if cols < len(dss.Times) {
 		min := len(dss.Times) - cols
@@ -28,7 +28,7 @@ func ReportAxisX(dss DataSeriesSet, cols int, conv func(time.Time) string) []str
 }
 
 // Report generates data for use with `C3Chart.C3ChartData.Columns`.
-func Report(dss DataSeriesSet, cols int, lowFirst bool) []RowInt64 {
+func Report(dss TimeSeriesSet, cols int, lowFirst bool) []RowInt64 {
 	rows := []RowInt64{}
 	var times timeutil.TimeSlice
 	var timePlus1 time.Time
@@ -149,7 +149,7 @@ func (opts *DssTableOpts) PercentSuffixOrDefault() string {
 }
 
 // ToTable returns a `table.TableData`.
-func (set *DataSeriesSet) ToTable(opts *DssTableOpts) (table.Table, error) {
+func (set *TimeSeriesSet) ToTable(opts *DssTableOpts) (table.Table, error) {
 	if opts == nil {
 		opts = &DssTableOpts{}
 	}
@@ -235,7 +235,7 @@ func (set *DataSeriesSet) ToTable(opts *DssTableOpts) (table.Table, error) {
 	return tbl, nil
 }
 
-func (set *DataSeriesSet) WriteXLSX(filename string, opts *DssTableOpts) error {
+func (set *TimeSeriesSet) WriteXLSX(filename string, opts *DssTableOpts) error {
 	tbl, err := set.ToTable(opts)
 	if err != nil {
 		return err

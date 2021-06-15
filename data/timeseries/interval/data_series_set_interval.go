@@ -25,18 +25,18 @@ const (
 // time slots as necessary. Usage is to create to call:
 // NewDataSeriesSet("quarter"), AddItem() and then Inflate()
 type DataSeriesSet struct {
-	SourceSeriesMap          map[string]timeseries.DataSeries
-	OutputSeriesMap          map[string]timeseries.DataSeries
-	OutputAggregateSeriesMap map[string]timeseries.DataSeries
+	SourceSeriesMap          map[string]timeseries.TimeSeries
+	OutputSeriesMap          map[string]timeseries.TimeSeries
+	OutputAggregateSeriesMap map[string]timeseries.TimeSeries
 	SeriesIntervals          SeriesIntervals
 	AllSeriesName            string
 }
 
 func NewDataSeriesSet(interval timeutil.Interval, weekStart time.Weekday) DataSeriesSet {
 	return DataSeriesSet{
-		SourceSeriesMap:          map[string]timeseries.DataSeries{},
-		OutputSeriesMap:          map[string]timeseries.DataSeries{},
-		OutputAggregateSeriesMap: map[string]timeseries.DataSeries{},
+		SourceSeriesMap:          map[string]timeseries.TimeSeries{},
+		OutputSeriesMap:          map[string]timeseries.TimeSeries{},
+		OutputAggregateSeriesMap: map[string]timeseries.TimeSeries{},
 		SeriesIntervals:          SeriesIntervals{Interval: interval, WeekStart: weekStart}}
 }
 
@@ -48,7 +48,7 @@ func (set *DataSeriesSet) AddItem(item timeseries.TimeItem) {
 	item.SeriesName = strings.TrimSpace(item.SeriesName)
 	if _, ok := set.SourceSeriesMap[item.SeriesName]; !ok {
 		set.SourceSeriesMap[item.SeriesName] =
-			timeseries.DataSeries{
+			timeseries.TimeSeries{
 				SeriesName: item.SeriesName,
 				ItemMap:    map[string]timeseries.TimeItem{}}
 	}
@@ -91,7 +91,7 @@ func (set *DataSeriesSet) addAllSeries(allSeriesName string) {
 	if len(strings.TrimSpace(allSeriesName)) == 0 {
 		allSeriesName = "All"
 	}
-	allSeries := timeseries.NewDataSeries()
+	allSeries := timeseries.NewTimeSeries()
 	allSeries.SeriesName = allSeriesName
 
 	for _, series := range set.SourceSeriesMap {
@@ -105,8 +105,8 @@ func (set *DataSeriesSet) addAllSeries(allSeriesName string) {
 	set.OutputAggregateSeriesMap[allSeriesName] = timeseries.AggregateSeries(allSeries)
 }
 
-func (set *DataSeriesSet) GetDataSeries(seriesName string, seriesType SeriesType) (timeseries.DataSeries, error) {
-	var seriesMap map[string]timeseries.DataSeries
+func (set *DataSeriesSet) GetTimeSeries(seriesName string, seriesType SeriesType) (timeseries.TimeSeries, error) {
+	var seriesMap map[string]timeseries.TimeSeries
 	switch seriesType {
 	case Source:
 		seriesMap = set.SourceSeriesMap
@@ -115,21 +115,21 @@ func (set *DataSeriesSet) GetDataSeries(seriesName string, seriesType SeriesType
 	case OutputAggregate:
 		seriesMap = set.OutputAggregateSeriesMap
 	default:
-		return timeseries.DataSeries{}, fmt.Errorf("could not find seriesName [%v] seriesType [%v]",
+		return timeseries.TimeSeries{}, fmt.Errorf("could not find seriesName [%v] seriesType [%v]",
 			seriesName,
 			seriesType)
 	}
 	seriesData, ok := seriesMap[seriesName]
 	if !ok {
-		return timeseries.DataSeries{}, fmt.Errorf("could not find seriesName [%v] seriesType [%v]",
+		return timeseries.TimeSeries{}, fmt.Errorf("could not find seriesName [%v] seriesType [%v]",
 			seriesName,
 			seriesType)
 	}
 	return seriesData, nil
 }
 
-func (set *DataSeriesSet) BuildOutputSeries(source timeseries.DataSeries) (timeseries.DataSeries, error) {
-	output := timeseries.NewDataSeries()
+func (set *DataSeriesSet) BuildOutputSeries(source timeseries.TimeSeries) (timeseries.TimeSeries, error) {
+	output := timeseries.NewTimeSeries()
 	for _, item := range source.ItemMap {
 		output.SeriesName = item.SeriesName
 		ivalStart, err := timeutil.IntervalStart(
@@ -155,12 +155,12 @@ func (set *DataSeriesSet) BuildOutputSeries(source timeseries.DataSeries) (times
 
 func (set *DataSeriesSet) FlattenData() map[string][]time.Time {
 	out := map[string][]time.Time{}
-	for seriesName, dataSeries := range set.SourceSeriesMap {
+	for seriesName, timeSeries := range set.SourceSeriesMap {
 		if _, ok := out[seriesName]; !ok {
 			out[seriesName] = []time.Time{}
 		}
 		times := out[seriesName]
-		for _, timeItem := range dataSeries.ItemMap {
+		for _, timeItem := range timeSeries.ItemMap {
 			for i := 0; i < int(timeItem.Value); i++ {
 				times = append(times, timeItem.Time)
 			}

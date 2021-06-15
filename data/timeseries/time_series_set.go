@@ -13,33 +13,33 @@ import (
 	"github.com/pkg/errors"
 )
 
-type DataSeriesSet struct {
+type TimeSeriesSet struct {
 	Name     string
-	Series   map[string]DataSeries
+	Series   map[string]TimeSeries
 	Times    []time.Time
 	Order    []string
 	IsFloat  bool
 	Interval timeutil.Interval
 }
 
-func NewDataSeriesSet(name string) DataSeriesSet {
-	return DataSeriesSet{
+func NewTimeSeriesSet(name string) TimeSeriesSet {
+	return TimeSeriesSet{
 		Name:   name,
-		Series: map[string]DataSeries{},
+		Series: map[string]TimeSeries{},
 		Times:  []time.Time{},
 		Order:  []string{}}
 }
 
-func (set *DataSeriesSet) AddItems(items ...TimeItem) {
+func (set *TimeSeriesSet) AddItems(items ...TimeItem) {
 	for _, item := range items {
 		set.AddItem(item)
 	}
 }
 
-func (set *DataSeriesSet) AddItem(item TimeItem) {
+func (set *TimeSeriesSet) AddItem(item TimeItem) {
 	if _, ok := set.Series[item.SeriesName]; !ok {
 		set.Series[item.SeriesName] =
-			DataSeries{
+			TimeSeries{
 				SeriesName: item.SeriesName,
 				ItemMap:    map[string]TimeItem{},
 				IsFloat:    item.IsFloat,
@@ -51,11 +51,11 @@ func (set *DataSeriesSet) AddItem(item TimeItem) {
 	set.Times = append(set.Times, item.Time)
 }
 
-func (set *DataSeriesSet) AddDataSeries(dataSeries ...DataSeries) error {
+func (set *TimeSeriesSet) AddTimeSeries(dataSeries ...TimeSeries) error {
 	for _, ds := range dataSeries {
 		ds.SeriesName = strings.TrimSpace(ds.SeriesName)
 		if len(ds.SeriesName) == 0 {
-			return errors.New("E_DataSeriesSet.AddDataSeries_NO_DataSeries.SeriesName")
+			return errors.New("E_TImeSeriesSet.AddTimeSeries_NO_DataSeries.SeriesName")
 		}
 		for _, item := range ds.ItemMap {
 			if len(item.SeriesName) == 0 || item.SeriesName != ds.SeriesName {
@@ -67,7 +67,7 @@ func (set *DataSeriesSet) AddDataSeries(dataSeries ...DataSeries) error {
 	return nil
 }
 
-func (set *DataSeriesSet) Inflate() {
+func (set *TimeSeriesSet) Inflate() {
 	set.Times = set.TimeSlice(true)
 	if len(set.Order) > 0 {
 		set.Order = stringsutil.SliceCondenseSpace(set.Order, true, false)
@@ -81,7 +81,7 @@ func (set *DataSeriesSet) Inflate() {
 	}
 }
 
-func (set *DataSeriesSet) SeriesNames() []string {
+func (set *TimeSeriesSet) SeriesNames() []string {
 	seriesNames := []string{}
 	for seriesName := range set.Series {
 		seriesNames = append(seriesNames, seriesName)
@@ -90,7 +90,7 @@ func (set *DataSeriesSet) SeriesNames() []string {
 	return seriesNames
 }
 
-func (set *DataSeriesSet) GetSeriesByIndex(index int) (DataSeries, error) {
+func (set *TimeSeriesSet) GetSeriesByIndex(index int) (TimeSeries, error) {
 	if len(set.Order) == 0 && len(set.Series) > 0 {
 		set.Inflate()
 	}
@@ -100,10 +100,10 @@ func (set *DataSeriesSet) GetSeriesByIndex(index int) (DataSeries, error) {
 			return ds, nil
 		}
 	}
-	return DataSeries{}, fmt.Errorf("E_CANNOT_FIND_INDEX_[%d]_SET_COUNT_[%d]", index, len(set.Order))
+	return TimeSeries{}, fmt.Errorf("E_CANNOT_FIND_INDEX_[%d]_SET_COUNT_[%d]", index, len(set.Order))
 }
 
-func (set *DataSeriesSet) Item(seriesName, rfc3339 string) (TimeItem, error) {
+func (set *TimeSeriesSet) Item(seriesName, rfc3339 string) (TimeItem, error) {
 	di := TimeItem{}
 	dss, ok := set.Series[seriesName]
 	if !ok {
@@ -116,7 +116,7 @@ func (set *DataSeriesSet) Item(seriesName, rfc3339 string) (TimeItem, error) {
 	return item, nil
 }
 
-func (set *DataSeriesSet) TimeSlice(sortAsc bool) sortutil.TimeSlice {
+func (set *TimeSeriesSet) TimeSlice(sortAsc bool) sortutil.TimeSlice {
 	times := []time.Time{}
 	for _, ds := range set.Series {
 		for _, item := range ds.ItemMap {
@@ -127,7 +127,7 @@ func (set *DataSeriesSet) TimeSlice(sortAsc bool) sortutil.TimeSlice {
 	return month.TimeSeriesMonth(sortAsc, times...)
 }
 
-func (set *DataSeriesSet) TimeStrings() []string {
+func (set *TimeSeriesSet) TimeStrings() []string {
 	times := []string{}
 	for _, ds := range set.Series {
 		for rfc3339 := range ds.ItemMap {
@@ -137,7 +137,7 @@ func (set *DataSeriesSet) TimeStrings() []string {
 	return stringsutil.SliceCondenseSpace(times, true, true)
 }
 
-func (set *DataSeriesSet) MinMaxTimes() (time.Time, time.Time) {
+func (set *TimeSeriesSet) MinMaxTimes() (time.Time, time.Time) {
 	values := sortutil.TimeSlice{}
 	for _, ds := range set.Series {
 		min, max := ds.MinMaxTimes()
@@ -147,7 +147,7 @@ func (set *DataSeriesSet) MinMaxTimes() (time.Time, time.Time) {
 	return values[0], values[len(values)-1]
 }
 
-func (set *DataSeriesSet) MinMaxValues() (int64, int64) {
+func (set *TimeSeriesSet) MinMaxValues() (int64, int64) {
 	values := sortutil.Int64Slice{}
 	for _, ds := range set.Series {
 		min, max := ds.MinMaxValues()
@@ -157,7 +157,7 @@ func (set *DataSeriesSet) MinMaxValues() (int64, int64) {
 	return values[0], values[len(values)-1]
 }
 
-func (set *DataSeriesSet) MinMaxValuesFloat64() (float64, float64) {
+func (set *TimeSeriesSet) MinMaxValuesFloat64() (float64, float64) {
 	values := sort.Float64Slice{}
 	for _, ds := range set.Series {
 		min, max := ds.MinMaxValuesFloat64()

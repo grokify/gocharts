@@ -7,7 +7,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-func DataSeriesMapMinMaxTimes(dsm map[string]DataSeries) (time.Time, time.Time, error) {
+func TimeSeriesMapMinMaxTimes(dsm map[string]TimeSeries) (time.Time, time.Time, error) {
 	times := []time.Time{}
 	for _, ds := range dsm {
 		min, max := ds.MinMaxTimes()
@@ -18,11 +18,11 @@ func DataSeriesMapMinMaxTimes(dsm map[string]DataSeries) (time.Time, time.Time, 
 	return timeutil.TimeSliceMinMax(times)
 }
 
-func DataSeriesMapMinMaxValues(dsm map[string]DataSeries) (int64, int64, error) {
+func TimeSeriesMapMinMaxValues(tsm map[string]TimeSeries) (int64, int64, error) {
 	minVal := int64(0)
 	maxVal := int64(0)
 	haveItems := false
-	for _, ds := range dsm {
+	for _, ds := range tsm {
 		if len(ds.ItemMap) == 0 {
 			continue
 		}
@@ -38,7 +38,7 @@ func DataSeriesMapMinMaxValues(dsm map[string]DataSeries) (int64, int64, error) 
 		}
 	}
 	if !haveItems {
-		return minVal, maxVal, errors.New("dataSeriesMap no items")
+		return minVal, maxVal, errors.New("timeSeriesMap no items")
 	}
 	return minVal, maxVal, nil
 }
