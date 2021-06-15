@@ -15,7 +15,7 @@ func EsAggsToDataSeriesSet(aggs []v5.AggregationResRad, interval timeutil.Interv
 	for _, agg := range aggs {
 		seriesName := agg.AggregationName
 		for _, bucket := range agg.AggregationData.Buckets {
-			set.AddItem(timeseries.DataItem{
+			set.AddItem(timeseries.TimeItem{
 				SeriesName: seriesName,
 				Time:       timeutil.UnixMillis(int64(bucket.Key.(float64))),
 				Value:      int64(bucket.DocCount)})

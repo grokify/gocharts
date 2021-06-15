@@ -44,13 +44,13 @@ func (set *DataSeriesSet) SeriesNamesSorted() []string {
 	return maputil.StringKeysSorted(set.OutputSeriesMap)
 }
 
-func (set *DataSeriesSet) AddItem(item timeseries.DataItem) {
+func (set *DataSeriesSet) AddItem(item timeseries.TimeItem) {
 	item.SeriesName = strings.TrimSpace(item.SeriesName)
 	if _, ok := set.SourceSeriesMap[item.SeriesName]; !ok {
 		set.SourceSeriesMap[item.SeriesName] =
 			timeseries.DataSeries{
 				SeriesName: item.SeriesName,
-				ItemMap:    map[string]timeseries.DataItem{}}
+				ItemMap:    map[string]timeseries.TimeItem{}}
 	}
 	series := set.SourceSeriesMap[item.SeriesName]
 	series.AddItem(item)
@@ -139,13 +139,13 @@ func (set *DataSeriesSet) BuildOutputSeries(source timeseries.DataSeries) (times
 		if err != nil {
 			return output, err
 		}
-		output.AddItem(timeseries.DataItem{
+		output.AddItem(timeseries.TimeItem{
 			SeriesName: item.SeriesName,
 			Time:       ivalStart,
 			Value:      item.Value})
 	}
 	for _, dt := range set.SeriesIntervals.CanonicalSeries {
-		output.AddItem(timeseries.DataItem{
+		output.AddItem(timeseries.TimeItem{
 			SeriesName: output.SeriesName,
 			Time:       dt,
 			Value:      0})
@@ -160,9 +160,9 @@ func (set *DataSeriesSet) FlattenData() map[string][]time.Time {
 			out[seriesName] = []time.Time{}
 		}
 		times := out[seriesName]
-		for _, dataItem := range dataSeries.ItemMap {
-			for i := 0; i < int(dataItem.Value); i++ {
-				times = append(times, dataItem.Time)
+		for _, timeItem := range dataSeries.ItemMap {
+			for i := 0; i < int(timeItem.Value); i++ {
+				times = append(times, timeItem.Time)
 			}
 		}
 		out[seriesName] = times
@@ -191,9 +191,9 @@ func (ival *SeriesIntervals) areEndpointsSet() bool {
 	return true
 }
 
-func (ival *SeriesIntervals) ProcItemsMap(itemMap map[string]timeseries.DataItem) {
-	for _, dataItem := range itemMap {
-		dt := dataItem.Time
+func (ival *SeriesIntervals) ProcItemsMap(itemMap map[string]timeseries.TimeItem) {
+	for _, timeItem := range itemMap {
+		dt := timeItem.Time
 		if !ival.areEndpointsSet() {
 			ival.Max = dt
 			ival.Min = dt

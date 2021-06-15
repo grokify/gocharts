@@ -16,20 +16,20 @@ import (
 
 type DataSeries struct {
 	SeriesName string
-	ItemMap    map[string]DataItem
+	ItemMap    map[string]TimeItem
 	IsFloat    bool
 	Interval   timeutil.Interval // Informational
 }
 
 func NewDataSeries() DataSeries {
-	return DataSeries{ItemMap: map[string]DataItem{}}
+	return DataSeries{ItemMap: map[string]TimeItem{}}
 }
 
 // AddItem adds data item. It will sum values when
 // existing time unit is encountered.
-func (ds *DataSeries) AddItem(item DataItem) {
+func (ds *DataSeries) AddItem(item TimeItem) {
 	if ds.ItemMap == nil {
-		ds.ItemMap = map[string]DataItem{}
+		ds.ItemMap = map[string]TimeItem{}
 	}
 	if len(item.SeriesName) == 0 {
 		item.SeriesName = ds.SeriesName
@@ -63,11 +63,11 @@ func (ds *DataSeries) Keys() []string {
 	return keys
 }
 
-// ItemsSorted returns sorted DataItems. This currently uses
+// ItemsSorted returns sorted TimeItems. This currently uses
 // a simple string sort on RFC3339 times.
-func (ds *DataSeries) ItemsSorted() []DataItem {
+func (ds *DataSeries) ItemsSorted() []TimeItem {
 	keys := ds.Keys()
-	itemsSorted := []DataItem{}
+	itemsSorted := []TimeItem{}
 	for _, key := range keys {
 		item, ok := ds.ItemMap[key]
 		if !ok {
@@ -78,18 +78,18 @@ func (ds *DataSeries) ItemsSorted() []DataItem {
 	return itemsSorted
 }
 
-func (ds *DataSeries) Last() (DataItem, error) {
+func (ds *DataSeries) Last() (TimeItem, error) {
 	items := ds.ItemsSorted()
 	if len(items) == 0 {
-		return DataItem{}, errors.New("E_NO_ITEMS")
+		return TimeItem{}, errors.New("E_NO_ITEMS")
 	}
 	return items[len(items)-1], nil
 }
 
-func (ds *DataSeries) Pop() (DataItem, error) {
+func (ds *DataSeries) Pop() (TimeItem, error) {
 	items := ds.ItemsSorted()
 	if len(items) == 0 {
-		return DataItem{}, errors.New("E_NO_ERROR")
+		return TimeItem{}, errors.New("E_NO_ERROR")
 	}
 	last := items[len(items)-1]
 	rfc := last.Time.Format(time.RFC3339)
@@ -97,10 +97,10 @@ func (ds *DataSeries) Pop() (DataItem, error) {
 	return last, nil
 }
 
-func (ds *DataSeries) LastItem(skipIfTimePartialValueLessPrev bool) (DataItem, error) {
+func (ds *DataSeries) LastItem(skipIfTimePartialValueLessPrev bool) (TimeItem, error) {
 	items := ds.ItemsSorted()
 	if len(items) == 0 {
-		return DataItem{}, errors.New("E_NO_ITEMS")
+		return TimeItem{}, errors.New("E_NO_ITEMS")
 	}
 	if len(items) == 1 {
 		return items[0], nil
@@ -175,8 +175,8 @@ func (ds *DataSeries) MaxValue() int64 {
 	return max
 }
 
-func (ds *DataSeries) OneItemMaxValue() (DataItem, error) {
-	max := DataItem{}
+func (ds *DataSeries) OneItemMaxValue() (TimeItem, error) {
+	max := TimeItem{}
 	if len(ds.ItemMap) == 0 {
 		return max, errors.New("Empty Set has no Max Value Item")
 	}
@@ -213,11 +213,11 @@ func (ds *DataSeries) DeleteByTime(dt time.Time) {
 func (ds *DataSeries) ToMonth(inflate bool) DataSeries {
 	newDataSeries := DataSeries{
 		SeriesName: ds.SeriesName,
-		ItemMap:    map[string]DataItem{},
+		ItemMap:    map[string]TimeItem{},
 		IsFloat:    ds.IsFloat,
 		Interval:   timeutil.Month}
 	for _, item := range ds.ItemMap {
-		newDataSeries.AddItem(DataItem{
+		newDataSeries.AddItem(TimeItem{
 			SeriesName: item.SeriesName,
 			Time:       month.MonthBegin(item.Time, 0),
 			IsFloat:    item.IsFloat,
@@ -229,7 +229,7 @@ func (ds *DataSeries) ToMonth(inflate bool) DataSeries {
 			timeutil.Month,
 			newDataSeries.ItemTimes())
 		for _, dt := range timeSeries {
-			newDataSeries.AddItem(DataItem{
+			newDataSeries.AddItem(TimeItem{
 				SeriesName: newDataSeries.SeriesName,
 				Time:       dt,
 				IsFloat:    newDataSeries.IsFloat,
@@ -243,7 +243,7 @@ func (ds *DataSeries) ToMonth(inflate bool) DataSeries {
 func (ds *DataSeries) ToMonthCumulative(inflate bool, timesInput ...time.Time) (DataSeries, error) {
 	newDataSeries := DataSeries{
 		SeriesName: ds.SeriesName,
-		ItemMap:    map[string]DataItem{},
+		ItemMap:    map[string]TimeItem{},
 		IsFloat:    ds.IsFloat,
 		Interval:   timeutil.Month}
 	dsMonth := ds.ToMonth(inflate)
@@ -262,20 +262,20 @@ func (ds *DataSeries) ToMonthCumulative(inflate bool, timesInput ...time.Time) (
 		}
 	}
 	times := timeutil.TimeSeriesSlice(timeutil.Month, []time.Time{min, max})
-	cItems := []DataItem{}
+	cItems := []TimeItem{}
 	for _, t := range times {
 		rfc := t.Format(time.RFC3339)
 		if item, ok := dsMonth.ItemMap[rfc]; ok {
 			if len(cItems) > 0 {
 				prevCItem := cItems[len(cItems)-1]
-				cItems = append(cItems, DataItem{
+				cItems = append(cItems, TimeItem{
 					SeriesName: newDataSeries.SeriesName,
 					IsFloat:    newDataSeries.IsFloat,
 					Time:       t,
 					Value:      item.Value + prevCItem.Value,
 					ValueFloat: item.ValueFloat + prevCItem.ValueFloat})
 			} else {
-				cItems = append(cItems, DataItem{
+				cItems = append(cItems, TimeItem{
 					SeriesName: newDataSeries.SeriesName,
 					IsFloat:    newDataSeries.IsFloat,
 					Time:       t,
@@ -285,14 +285,14 @@ func (ds *DataSeries) ToMonthCumulative(inflate bool, timesInput ...time.Time) (
 		} else {
 			if len(cItems) > 0 {
 				prevCItem := cItems[len(cItems)-1]
-				cItems = append(cItems, DataItem{
+				cItems = append(cItems, TimeItem{
 					SeriesName: newDataSeries.SeriesName,
 					IsFloat:    newDataSeries.IsFloat,
 					Time:       t,
 					Value:      prevCItem.Value,
 					ValueFloat: prevCItem.ValueFloat})
 			} else {
-				cItems = append(cItems, DataItem{
+				cItems = append(cItems, TimeItem{
 					SeriesName: newDataSeries.SeriesName,
 					IsFloat:    newDataSeries.IsFloat,
 					Time:       t,
@@ -310,11 +310,11 @@ func (ds *DataSeries) ToMonthCumulative(inflate bool, timesInput ...time.Time) (
 func (ds *DataSeries) ToQuarter() DataSeries {
 	newDataSeries := DataSeries{
 		SeriesName: ds.SeriesName,
-		ItemMap:    map[string]DataItem{},
+		ItemMap:    map[string]TimeItem{},
 		IsFloat:    ds.IsFloat,
 		Interval:   timeutil.Quarter}
 	for _, item := range ds.ItemMap {
-		newDataSeries.AddItem(DataItem{
+		newDataSeries.AddItem(TimeItem{
 			SeriesName: item.SeriesName,
 			Time:       timeutil.QuarterStart(item.Time),
 			IsFloat:    item.IsFloat,
@@ -352,7 +352,7 @@ func AggregateSeries(series DataSeries) DataSeries {
 	sortedItems := series.ItemsSorted()
 	sum := int64(0)
 	for _, atomicItem := range sortedItems {
-		aggregateItem := DataItem{
+		aggregateItem := TimeItem{
 			SeriesName: atomicItem.SeriesName,
 			Time:       atomicItem.Time,
 			Value:      atomicItem.Value + sum,
@@ -415,7 +415,7 @@ func DataSeriesDivide(numer, denom DataSeries) (DataSeries, error) {
 			return ds, fmt.Errorf("E_DENOM_MISSING_OR_ZERO TIME [%s] NUMERATOR [%v]",
 				dKey, nItem.Value)
 		}
-		ds.AddItem(DataItem{
+		ds.AddItem(TimeItem{
 			Time:       dItem.Time,
 			ValueFloat: float64(nItem.Value) / float64(dItem.Value),
 			IsFloat:    true,

@@ -24,7 +24,7 @@ func (tss *TimeSeriesSimple) ToDataSeriesQuarter() DataSeries {
 	ds := NewDataSeries()
 	ds.SeriesName = tss.Name
 	for _, t := range tss.Times {
-		ds.AddItem(DataItem{
+		ds.AddItem(TimeItem{
 			SeriesName: tss.Name,
 			Time:       tu.QuarterStart(t),
 			Value:      int64(1)})
@@ -83,7 +83,7 @@ func (tsf *TimeSeriesFunnel) DataSeriesSetByQuarter() (DataSeriesSet, error) {
 			q = q.UTC()
 			rfc := q.Format(time.RFC3339)
 			if _, ok := dataSeries.ItemMap[rfc]; !ok {
-				dataSeries.AddItem(DataItem{
+				dataSeries.AddItem(TimeItem{
 					SeriesName: tss.Name,
 					Time:       q,
 					Value:      int64(0)})

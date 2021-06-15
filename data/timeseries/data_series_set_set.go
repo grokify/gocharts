@@ -18,13 +18,13 @@ func NewDataSeriesSet2(name string) DataSeriesSet2 {
 		SetsMap: map[string]DataSeriesSet{}}
 }
 
-func (dss2 *DataSeriesSet2) AddItems(items ...DataItem) {
+func (dss2 *DataSeriesSet2) AddItems(items ...TimeItem) {
 	for _, item := range items {
 		dss2.AddItem(item)
 	}
 }
 
-func (dss2 *DataSeriesSet2) AddItem(item DataItem) {
+func (dss2 *DataSeriesSet2) AddItem(item TimeItem) {
 	dss, ok := dss2.SetsMap[item.SeriesSetName]
 	if !ok {
 		dss = NewDataSeriesSet(item.SeriesSetName)

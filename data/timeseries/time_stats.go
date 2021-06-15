@@ -6,10 +6,10 @@ import (
 	tu "github.com/grokify/simplego/time/timeutil"
 )
 
-// DataItemsStats is used to generate unique counts stats
+// TimeStats is used to generate unique counts stats
 // for an array of with time ane names.
 type TimeStats struct {
-	Items []DataItem
+	Items []TimeItem
 }
 
 func (ts *TimeStats) UniqueCountsByQuarter() map[string]int {

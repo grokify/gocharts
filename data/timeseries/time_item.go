@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-type DataItem struct {
+type TimeItem struct {
 	SeriesName    string
 	SeriesSetName string
 	Time          time.Time
@@ -15,14 +15,14 @@ type DataItem struct {
 	ValueFloat    float64
 }
 
-func (item *DataItem) ValueInt64() int64 {
+func (item *TimeItem) ValueInt64() int64 {
 	if item.IsFloat {
 		return int64(item.ValueFloat)
 	}
 	return item.Value
 }
 
-func (item *DataItem) ValueFloat64() float64 {
+func (item *TimeItem) ValueFloat64() float64 {
 	if item.IsFloat {
 		return item.ValueFloat
 	}

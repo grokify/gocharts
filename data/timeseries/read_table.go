@@ -27,13 +27,13 @@ func (cfg *TableConfig) GetTimeFormat() string {
 	return cfg.TimeFormat
 }
 
-func ParseRecordsDataItems(records [][]string, cfg TableConfig) ([]DataItem, error) {
-	items := []DataItem{}
+func ParseRecordsDataItems(records [][]string, cfg TableConfig) ([]TimeItem, error) {
+	items := []TimeItem{}
 	for i, rec := range records {
 		if stringsutil.SliceIsEmpty(rec, true) {
 			continue
 		}
-		item := DataItem{}
+		item := TimeItem{}
 		if cfg.TimeColIdx >= uint(len(rec)) {
 			return items, fmt.Errorf("row [%d] missing time index col [%d]", i, cfg.TimeColIdx)
 		}

@@ -30,18 +30,18 @@ func NewDataSeriesSet(name string) DataSeriesSet {
 		Order:  []string{}}
 }
 
-func (set *DataSeriesSet) AddItems(items ...DataItem) {
+func (set *DataSeriesSet) AddItems(items ...TimeItem) {
 	for _, item := range items {
 		set.AddItem(item)
 	}
 }
 
-func (set *DataSeriesSet) AddItem(item DataItem) {
+func (set *DataSeriesSet) AddItem(item TimeItem) {
 	if _, ok := set.Series[item.SeriesName]; !ok {
 		set.Series[item.SeriesName] =
 			DataSeries{
 				SeriesName: item.SeriesName,
-				ItemMap:    map[string]DataItem{},
+				ItemMap:    map[string]TimeItem{},
 				IsFloat:    item.IsFloat,
 				Interval:   set.Interval}
 	}
@@ -103,8 +103,8 @@ func (set *DataSeriesSet) GetSeriesByIndex(index int) (DataSeries, error) {
 	return DataSeries{}, fmt.Errorf("E_CANNOT_FIND_INDEX_[%d]_SET_COUNT_[%d]", index, len(set.Order))
 }
 
-func (set *DataSeriesSet) Item(seriesName, rfc3339 string) (DataItem, error) {
-	di := DataItem{}
+func (set *DataSeriesSet) Item(seriesName, rfc3339 string) (TimeItem, error) {
+	di := TimeItem{}
 	dss, ok := set.Series[seriesName]
 	if !ok {
 		return di, fmt.Errorf("SeriesName not found [%s]", seriesName)
