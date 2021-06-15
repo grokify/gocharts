@@ -58,13 +58,17 @@ func (cols Columns) RowValInt(colName string, row []string) (int, error) {
 	return strconv.Atoi(val)
 }
 
-// RowValTime returns a single row value.
-func (cols Columns) RowValTime(colName string, row []string) (time.Time, error) {
+// RowValTime returns a single row value. If no
+// `timeFormat` is provided `time.RFC3339` is used.
+func (cols Columns) RowValTime(colName, timeFormat string, row []string) (time.Time, error) {
 	val, err := cols.RowVal(colName, row)
 	if err != nil {
 		return time.Now(), err
 	}
-	return time.Parse(time.RFC3339, val)
+	if strings.TrimSpace(timeFormat) == "" {
+		timeFormat = time.RFC3339
+	}
+	return time.Parse(timeFormat, val)
 }
 
 // MustRowVals returns a slice of values.
