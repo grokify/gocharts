@@ -6,7 +6,24 @@ GoCharts
 [![Docs][docs-godoc-svg]][docs-godoc-url]
 [![License][license-svg]][license-url]
 
-GoCharts is a library to assist with building charts:
+GoCharts is a library to assist with building charts.
+
+It includes two sets of packages:
+
+1. data structures to generically hold and manipulate different types of data
+1. chart library helpers to make generating charts eaiser, often times using data structures mentioned above
+
+## Data Structures
+
+Well-used data structures include:
+
+* [Table](https://pkg.go.dev/github.com/grokify/gocharts/data/table) - Easy manipulation including [writing to CSV and XLSX](data/table/write.go).
+* [Time Series](https://pkg.go.dev/github.com/grokify/gocharts/data/timeseries) - for building time-based line charts and bar charts.
+* [Histogram](https://pkg.go.dev/github.com/grokify/gocharts/data/histogram) - for building histograms and bar charts.
+
+A full list is available in the [`data`](data) folder.
+
+## Chart Helpers
 
 * [C3](https://c3js.org/) - [code](charts/c3)
 * [D3](https://d3js.org/) - [code](charts/d3)
@@ -14,12 +31,6 @@ GoCharts is a library to assist with building charts:
 * [wcharczuk/go-chart](https://github.com/wcharczuk/go-chart) - [code](charts/wchart)
 
 [`quicktemplate`](https://github.com/valyala/quicktemplate) is used for rendering some of the charts.
-
-Supporting data objects are also provided including:
-
-* [Table](https://pkg.go.dev/github.com/grokify/gocharts/data/table) - Easy manipulation including [writing to CSV and XLSX](data/table/write.go).
-* [Time Series](https://pkg.go.dev/github.com/grokify/gocharts/data/timeseries) - for building time-baased line charts and bar charts.
-* [Histogram](https://pkg.go.dev/github.com/grokify/gocharts/data/histogram) - for building histograms and bar charts.
 
 An example chart is the Rickshaw chart shown below:
 
