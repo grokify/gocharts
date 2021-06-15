@@ -12,13 +12,13 @@ import (
 )
 
 // ReportAxisX generates data for use with `C3Chart.C3Axis.C3AxisX.Categories`.
-func ReportAxisX(dss TimeSeriesSet, cols int, conv func(time.Time) string) []string {
+func ReportAxisX(tss TimeSeriesSet, cols int, conv func(time.Time) string) []string {
 	var times timeutil.TimeSlice
-	if cols < len(dss.Times) {
-		min := len(dss.Times) - cols
-		times = dss.Times[min:]
-	} else { // cols >= len(dss.Times)
-		times = dss.Times
+	if cols < len(tss.Times) {
+		min := len(tss.Times) - cols
+		times = tss.Times[min:]
+	} else { // cols >= len(tss.Times)
+		times = tss.Times
 	}
 	cats := []string{}
 	for _, t := range times {
@@ -28,21 +28,21 @@ func ReportAxisX(dss TimeSeriesSet, cols int, conv func(time.Time) string) []str
 }
 
 // Report generates data for use with `C3Chart.C3ChartData.Columns`.
-func Report(dss TimeSeriesSet, cols int, lowFirst bool) []RowInt64 {
+func Report(tss TimeSeriesSet, cols int, lowFirst bool) []RowInt64 {
 	rows := []RowInt64{}
 	var times timeutil.TimeSlice
 	var timePlus1 time.Time
 	havePlus1 := false
-	if cols < len(dss.Times) {
-		min := len(dss.Times) - cols
+	if cols < len(tss.Times) {
+		min := len(tss.Times) - cols
 		prev := min - 1
-		times = dss.Times[min:]
-		timePlus1 = dss.Times[prev]
+		times = tss.Times[min:]
+		timePlus1 = tss.Times[prev]
 		havePlus1 = true
-	} else { // cols >= len(dss.Times)
-		times = dss.Times
-		if cols > len(dss.Times) {
-			timePlus1 = dss.Times[len(dss.Times)-cols-1]
+	} else { // cols >= len(tss.Times)
+		times = tss.Times
+		if cols > len(tss.Times) {
+			timePlus1 = tss.Times[len(tss.Times)-cols-1]
 			havePlus1 = true
 		}
 	}
@@ -50,12 +50,12 @@ func Report(dss TimeSeriesSet, cols int, lowFirst bool) []RowInt64 {
 	if !lowFirst {
 		times = sort.Reverse(times).(timeutil.TimeSlice)
 	}
-	for _, seriesName := range dss.Order {
+	for _, seriesName := range tss.Order {
 		row := RowInt64{
 			Name:        seriesName + " Count",
 			HavePlusOne: havePlus1,
 		}
-		if ds, ok := dss.Series[seriesName]; !ok {
+		if ds, ok := tss.Series[seriesName]; !ok {
 			for i := 0; i < cols; i++ {
 				row.Values = append(row.Values, 0)
 			}
@@ -125,7 +125,7 @@ func ReportGrowthPct(rows []RowInt64) []RowFloat64 {
 	return grows
 }
 
-type DssTableOpts struct {
+type TssTableOpts struct {
 	TimeColumnTitle string
 	FuncFormatTime  func(time.Time) string
 	TotalInclude    bool
@@ -134,14 +134,14 @@ type DssTableOpts struct {
 	PercentSuffix   string
 }
 
-func (opts *DssTableOpts) TotalTitleOrDefault() string {
+func (opts *TssTableOpts) TotalTitleOrDefault() string {
 	if len(opts.TotalTitle) > 0 {
 		return opts.TotalTitle
 	}
 	return "Total"
 }
 
-func (opts *DssTableOpts) PercentSuffixOrDefault() string {
+func (opts *TssTableOpts) PercentSuffixOrDefault() string {
 	if len(opts.PercentSuffix) > 0 {
 		return opts.PercentSuffix
 	}
@@ -149,9 +149,9 @@ func (opts *DssTableOpts) PercentSuffixOrDefault() string {
 }
 
 // ToTable returns a `table.TableData`.
-func (set *TimeSeriesSet) ToTable(opts *DssTableOpts) (table.Table, error) {
+func (set *TimeSeriesSet) ToTable(opts *TssTableOpts) (table.Table, error) {
 	if opts == nil {
-		opts = &DssTableOpts{}
+		opts = &TssTableOpts{}
 	}
 	tbl := table.NewTable()
 	seriesNames := set.SeriesNames()
@@ -235,7 +235,7 @@ func (set *TimeSeriesSet) ToTable(opts *DssTableOpts) (table.Table, error) {
 	return tbl, nil
 }
 
-func (set *TimeSeriesSet) WriteXLSX(filename string, opts *DssTableOpts) error {
+func (set *TimeSeriesSet) WriteXLSX(filename string, opts *TssTableOpts) error {
 	tbl, err := set.ToTable(opts)
 	if err != nil {
 		return err

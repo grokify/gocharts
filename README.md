@@ -18,7 +18,7 @@ GoCharts is a library to assist with building charts:
 Supporting data objects are also provided including:
 
 * [Table](https://pkg.go.dev/github.com/grokify/gocharts/data/table) - Easy manipulation including [writing to CSV and XLSX](data/table/write.go).
-* [Static Time Series](https://pkg.go.dev/github.com/grokify/gocharts/data/statictimeseries) - for building time-baased line charts and bar charts.
+* [Time Series](https://pkg.go.dev/github.com/grokify/gocharts/data/timeseries) - for building time-baased line charts and bar charts.
 * [Histogram](https://pkg.go.dev/github.com/grokify/gocharts/data/histogram) - for building histograms and bar charts.
 
 An example chart is the Rickshaw chart shown below:
