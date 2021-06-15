@@ -149,12 +149,12 @@ func (opts *DssTableOpts) PercentSuffixOrDefault() string {
 }
 
 // ToTable returns a `table.TableData`.
-func (dss *DataSeriesSet) ToTable(opts *DssTableOpts) (table.Table, error) {
+func (set *DataSeriesSet) ToTable(opts *DssTableOpts) (table.Table, error) {
 	if opts == nil {
 		opts = &DssTableOpts{}
 	}
 	tbl := table.NewTable()
-	seriesNames := dss.SeriesNames()
+	seriesNames := set.SeriesNames()
 	timeColumnTitle := strings.TrimSpace(opts.TimeColumnTitle)
 	if len(timeColumnTitle) == 0 {
 		timeColumnTitle = "Time"
@@ -163,7 +163,7 @@ func (dss *DataSeriesSet) ToTable(opts *DssTableOpts) (table.Table, error) {
 	tbl.Columns = append(tbl.Columns, seriesNames...)
 	tbl.FormatMap = map[int]string{0: table.FormatTime}
 	for i := range seriesNames {
-		if dss.IsFloat {
+		if set.IsFloat {
 			tbl.FormatMap[i+1] = table.FormatFloat
 		} else {
 			tbl.FormatMap[i+1] = table.FormatInt
@@ -171,7 +171,7 @@ func (dss *DataSeriesSet) ToTable(opts *DssTableOpts) (table.Table, error) {
 	}
 	if opts.TotalInclude {
 		tbl.Columns = append(tbl.Columns, opts.TotalTitleOrDefault())
-		if dss.IsFloat {
+		if set.IsFloat {
 			tbl.FormatMap[len(tbl.Columns)-1] = table.FormatFloat
 		} else {
 			tbl.FormatMap[len(tbl.Columns)-1] = table.FormatInt
@@ -185,7 +185,7 @@ func (dss *DataSeriesSet) ToTable(opts *DssTableOpts) (table.Table, error) {
 			tbl.FormatMap[len(tbl.Columns)-1] = table.FormatFloat
 		}
 	}
-	timeStrings := dss.TimeStrings()
+	timeStrings := set.TimeStrings()
 	for _, rfc3339 := range timeStrings {
 		line := []string{}
 		if opts.FuncFormatTime == nil {
@@ -200,7 +200,7 @@ func (dss *DataSeriesSet) ToTable(opts *DssTableOpts) (table.Table, error) {
 		lineTotal := float64(0)
 		seriesValues := []float64{}
 		for _, seriesName := range seriesNames {
-			item, err := dss.Item(seriesName, rfc3339)
+			item, err := set.Item(seriesName, rfc3339)
 			if err != nil {
 				line = append(line, "0")
 				seriesValues = append(seriesValues, 0)
@@ -215,7 +215,7 @@ func (dss *DataSeriesSet) ToTable(opts *DssTableOpts) (table.Table, error) {
 			}
 		}
 		if opts.TotalInclude {
-			if dss.IsFloat {
+			if set.IsFloat {
 				line = append(line, fmt.Sprintf("%.10f", lineTotal))
 			} else {
 				line = append(line, strconv.Itoa(int(lineTotal)))
@@ -235,12 +235,12 @@ func (dss *DataSeriesSet) ToTable(opts *DssTableOpts) (table.Table, error) {
 	return tbl, nil
 }
 
-func (dss *DataSeriesSet) WriteXLSX(filename string, opts *DssTableOpts) error {
-	tbl, err := dss.ToTable(opts)
+func (set *DataSeriesSet) WriteXLSX(filename string, opts *DssTableOpts) error {
+	tbl, err := set.ToTable(opts)
 	if err != nil {
 		return err
 	}
-	if dss.Interval == timeutil.Month {
+	if set.Interval == timeutil.Month {
 		tbl.FormatFunc = table.FormatMonthAndFloats
 	} else {
 		tbl.FormatFunc = table.FormatDateAndFloats
