@@ -7,7 +7,7 @@ import (
 	"github.com/grokify/gocharts/data/timeseries"
 )
 
-func DataSeriesSetSimpleToC3ChartBar(data []timeseries.RowInt64, c3BarInfo C3Bar) C3Chart {
+func TimeSeriesSetSimpleToC3ChartBar(data []timeseries.RowInt64, c3BarInfo C3Bar) C3Chart {
 	c3Chart := C3Chart{
 		Data: C3ChartData{
 			Columns: [][]interface{}{},

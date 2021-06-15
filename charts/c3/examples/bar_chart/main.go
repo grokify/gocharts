@@ -19,27 +19,27 @@ import (
 
 const repoLink = "https://github.com/grokify/gocharts/tree/master/charts/c3/examples/bar_chart"
 
-func getData(numQuarters int) []timeseries.DataItem {
-	dataItems := []timeseries.DataItem{}
+func getData(numQuarters int) []timeseries.TimeItem {
+	timeItems := []timeseries.TimeItem{}
 
 	quarterStart := timeutil.PrevQuarters(time.Now(), uint(numQuarters))
 
 	for i := 1; i <= 3; i++ {
 		for j := 0; j < numQuarters; j++ {
-			dataItems = append(dataItems, timeseries.DataItem{
+			timeItems = append(timeItems, timeseries.TimeItem{
 				SeriesName: fmt.Sprintf("Data Series %d", i),
 				Time:       timeutil.NextQuarters(quarterStart, uint(j)),
 				Value:      int64(i + j)})
 		}
 	}
 
-	return dataItems
+	return timeItems
 }
 
-func getDataSeriesSetSimple(numQuarters int) timeseries.DataSeriesSet {
+func getTimeSeriesSetSimple(numQuarters int) timeseries.TimeSeriesSet {
 	dataItems := getData(numQuarters)
 
-	ds3 := timeseries.NewDataSeriesSet("Bar Chart Data")
+	ds3 := timeseries.NewTimeSeriesSet("Bar Chart Data")
 
 	// Add timeseries.DataItem slice in 1 function call
 	ds3.AddItems(dataItems...)
@@ -52,18 +52,18 @@ func getDataSeriesSetSimple(numQuarters int) timeseries.DataSeriesSet {
 	return ds3
 }
 
-func buildBarChart(ds3 timeseries.DataSeriesSet, numCols int, lowFirst bool) (c3.C3Chart, []timeseries.RowInt64) {
+func buildBarChart(ds3 timeseries.TimeSeriesSet, numCols int, lowFirst bool) (c3.C3Chart, []timeseries.RowInt64) {
 	rep := timeseries.Report(ds3, numCols, lowFirst)
 	fmtutil.PrintJSON(rep)
 	axis := timeseries.ReportAxisX(ds3, numCols,
 		func(t time.Time) string { return timeutil.FormatQuarterYYYYQ(t) })
 
-	chart := c3.DataSeriesSetSimpleToC3ChartBar(rep, c3.C3Bar{})
+	chart := c3.TimeSeriesSetSimpleToC3ChartBar(rep, c3.C3Bar{})
 	chart.Axis = c3.C3Axis{X: c3.C3AxisX{Type: "category", Categories: axis}}
 	return chart, rep
 }
 
-func buildMoreInfoHTML(ds3 timeseries.DataSeriesSet, c3Bar c3.C3Chart, rep []timeseries.RowInt64) string {
+func buildMoreInfoHTML(ds3 timeseries.TimeSeriesSet, c3Bar c3.C3Chart, rep []timeseries.RowInt64) string {
 	moreInfoHTML := ""
 
 	axis := c3Bar.Axis.X.Categories
@@ -102,7 +102,7 @@ func buildMoreInfoHTML(ds3 timeseries.DataSeriesSet, c3Bar c3.C3Chart, rep []tim
 func main() {
 	numQuarters := 5
 
-	ds3 := getDataSeriesSetSimple(numQuarters)
+	ds3 := getTimeSeriesSetSimple(numQuarters)
 
 	chart, rep := buildBarChart(ds3, numQuarters, true)
 

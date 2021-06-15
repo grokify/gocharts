@@ -13,7 +13,7 @@ import (
 	"github.com/wcharczuk/go-chart"
 )
 
-func DataSeriesToBarChart(ds timeseries.DataSeries) chart.BarChart {
+func TimeSeriesToBarChart(ds timeseries.TimeSeries) chart.BarChart {
 	graph := chart.BarChart{
 		Title: ds.SeriesName,
 		Background: chart.Style{

@@ -14,7 +14,7 @@ type TimeseriesData struct {
 	DivID         string
 	JSDataVar     string
 	JSChartVar    string
-	DataSeriesSet *interval.DataSeriesSet
+	TimeSeriesSet *interval.TimeSeriesSet
 	JSONData      TimeseriesDataJSON
 }
 
@@ -40,8 +40,8 @@ type TimeseriesPageData struct {
 	XoxPoints []interval.XoxPoint
 }
 
-func (data *TimeseriesData) AddDataSeriesSet(set *interval.DataSeriesSet, interval tu.Interval, seriesType interval.SeriesType) error {
-	data.DataSeriesSet = set
+func (data *TimeseriesData) AddDataSeriesSet(set *interval.TimeSeriesSet, interval tu.Interval, seriesType interval.SeriesType) error {
+	data.TimeSeriesSet = set
 	columns := [][]interface{}{}
 	xValues := []interface{}{"x"}
 	totals := []int64{}
@@ -49,13 +49,13 @@ func (data *TimeseriesData) AddDataSeriesSet(set *interval.DataSeriesSet, interv
 
 	seriesNames := set.SeriesNamesSorted()
 	for i, seriesName := range seriesNames {
-		dataSeries, err := set.GetDataSeries(seriesName, seriesType)
+		timeSeries, err := set.GetTimeSeries(seriesName, seriesType)
 		if err != nil {
 			return err
 		}
 		yValues := []interface{}{seriesName}
 
-		items := dataSeries.ItemsSorted()
+		items := timeSeries.ItemsSorted()
 		for j, item := range items {
 			if i == 0 && interval == tu.Quarter {
 				xValues = append(xValues, item.Time.Format(tu.RFC3339FullDate))

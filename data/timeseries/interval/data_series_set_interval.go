@@ -20,11 +20,11 @@ const (
 	OutputAggregate
 )
 
-// DataSeriesSet is used to prepare histogram data for
+// TimeSeriesSet is used to prepare histogram data for
 // static timeseries charts, adding zero values for
 // time slots as necessary. Usage is to create to call:
-// NewDataSeriesSet("quarter"), AddItem() and then Inflate()
-type DataSeriesSet struct {
+// NewTimeSeriesSet("quarter"), AddItem() and then Inflate()
+type TimeSeriesSet struct {
 	SourceSeriesMap          map[string]timeseries.TimeSeries
 	OutputSeriesMap          map[string]timeseries.TimeSeries
 	OutputAggregateSeriesMap map[string]timeseries.TimeSeries
@@ -32,19 +32,19 @@ type DataSeriesSet struct {
 	AllSeriesName            string
 }
 
-func NewDataSeriesSet(interval timeutil.Interval, weekStart time.Weekday) DataSeriesSet {
-	return DataSeriesSet{
+func NewTimeSeriesSet(interval timeutil.Interval, weekStart time.Weekday) TimeSeriesSet {
+	return TimeSeriesSet{
 		SourceSeriesMap:          map[string]timeseries.TimeSeries{},
 		OutputSeriesMap:          map[string]timeseries.TimeSeries{},
 		OutputAggregateSeriesMap: map[string]timeseries.TimeSeries{},
 		SeriesIntervals:          SeriesIntervals{Interval: interval, WeekStart: weekStart}}
 }
 
-func (set *DataSeriesSet) SeriesNamesSorted() []string {
+func (set *TimeSeriesSet) SeriesNamesSorted() []string {
 	return maputil.StringKeysSorted(set.OutputSeriesMap)
 }
 
-func (set *DataSeriesSet) AddItem(item timeseries.TimeItem) {
+func (set *TimeSeriesSet) AddItem(item timeseries.TimeItem) {
 	item.SeriesName = strings.TrimSpace(item.SeriesName)
 	if _, ok := set.SourceSeriesMap[item.SeriesName]; !ok {
 		set.SourceSeriesMap[item.SeriesName] =
@@ -57,7 +57,7 @@ func (set *DataSeriesSet) AddItem(item timeseries.TimeItem) {
 	set.SourceSeriesMap[item.SeriesName] = series
 }
 
-func (set *DataSeriesSet) Inflate() error {
+func (set *TimeSeriesSet) Inflate() error {
 	if err := set.inflateSource(); err != nil {
 		return err
 	}
@@ -68,14 +68,14 @@ func (set *DataSeriesSet) Inflate() error {
 	return nil
 }
 
-func (set *DataSeriesSet) inflateSource() error {
+func (set *TimeSeriesSet) inflateSource() error {
 	for _, series := range set.SourceSeriesMap {
 		set.SeriesIntervals.ProcItemsMap(series.ItemMap)
 	}
 	return set.SeriesIntervals.Inflate()
 }
 
-func (set *DataSeriesSet) inflateOutput() error {
+func (set *TimeSeriesSet) inflateOutput() error {
 	for seriesName, series := range set.SourceSeriesMap {
 		output, err := set.BuildOutputSeries(series)
 		if err != nil {
@@ -87,7 +87,7 @@ func (set *DataSeriesSet) inflateOutput() error {
 	return nil
 }
 
-func (set *DataSeriesSet) addAllSeries(allSeriesName string) {
+func (set *TimeSeriesSet) addAllSeries(allSeriesName string) {
 	if len(strings.TrimSpace(allSeriesName)) == 0 {
 		allSeriesName = "All"
 	}
@@ -105,7 +105,7 @@ func (set *DataSeriesSet) addAllSeries(allSeriesName string) {
 	set.OutputAggregateSeriesMap[allSeriesName] = timeseries.AggregateSeries(allSeries)
 }
 
-func (set *DataSeriesSet) GetTimeSeries(seriesName string, seriesType SeriesType) (timeseries.TimeSeries, error) {
+func (set *TimeSeriesSet) GetTimeSeries(seriesName string, seriesType SeriesType) (timeseries.TimeSeries, error) {
 	var seriesMap map[string]timeseries.TimeSeries
 	switch seriesType {
 	case Source:
@@ -128,7 +128,7 @@ func (set *DataSeriesSet) GetTimeSeries(seriesName string, seriesType SeriesType
 	return seriesData, nil
 }
 
-func (set *DataSeriesSet) BuildOutputSeries(source timeseries.TimeSeries) (timeseries.TimeSeries, error) {
+func (set *TimeSeriesSet) BuildOutputSeries(source timeseries.TimeSeries) (timeseries.TimeSeries, error) {
 	output := timeseries.NewTimeSeries()
 	for _, item := range source.ItemMap {
 		output.SeriesName = item.SeriesName
@@ -153,7 +153,7 @@ func (set *DataSeriesSet) BuildOutputSeries(source timeseries.TimeSeries) (times
 	return output, nil
 }
 
-func (set *DataSeriesSet) FlattenData() map[string][]time.Time {
+func (set *TimeSeriesSet) FlattenData() map[string][]time.Time {
 	out := map[string][]time.Time{}
 	for seriesName, timeSeries := range set.SourceSeriesMap {
 		if _, ok := out[seriesName]; !ok {

@@ -73,24 +73,24 @@ func DefaultLineChartOpts() *LineChartOpts {
 	return defaultLineChartOpts
 }
 
-func DataSeriesToLineChart(ds timeseries.DataSeries, opts *LineChartOpts) (chart.Chart, error) {
-	dss := timeseries.NewDataSeriesSet(ds.SeriesName)
+func TimeSeriesToLineChart(ds timeseries.TimeSeries, opts *LineChartOpts) (chart.Chart, error) {
+	dss := timeseries.NewTimeSeriesSet(ds.SeriesName)
 	dss.Interval = ds.Interval
 	dss.IsFloat = ds.IsFloat
 	dss.Series[ds.SeriesName] = ds
 	dss.Inflate()
-	return DataSeriesSetToLineChart(dss, opts)
+	return TimeSeriesSetToLineChart(dss, opts)
 }
 
-func WriteLineChartDataSeriesSet(filename string, dss timeseries.DataSeriesSet, opts *LineChartOpts) error {
-	chart, err := DataSeriesSetToLineChart(dss, opts)
+func WriteLineChartTimeSeriesSet(filename string, dss timeseries.TimeSeriesSet, opts *LineChartOpts) error {
+	chart, err := TimeSeriesSetToLineChart(dss, opts)
 	if err != nil {
 		return err
 	}
 	return wchart.WritePNG(filename, chart)
 }
 
-func DataSeriesSetToLineChart(dss timeseries.DataSeriesSet, opts *LineChartOpts) (chart.Chart, error) {
+func TimeSeriesSetToLineChart(dss timeseries.TimeSeriesSet, opts *LineChartOpts) (chart.Chart, error) {
 	if opts == nil {
 		opts = defaultLineChartOpts
 	}
@@ -159,7 +159,7 @@ func DataSeriesSetToLineChart(dss timeseries.DataSeriesSet, opts *LineChartOpts)
 	}
 	for _, seriesName := range dss.Order {
 		if ds, ok := dss.Series[seriesName]; ok {
-			mainSeries = wchart.DataSeriesToContinuousSeries(ds)
+			mainSeries = wchart.TimeSeriesToContinuousSeries(ds)
 
 			mainSeries.Style = chart.Style{StrokeWidth: float64(3)}
 
@@ -234,7 +234,7 @@ func DataSeriesSetToLineChart(dss timeseries.DataSeriesSet, opts *LineChartOpts)
 
 	if opts.Interval == timeutil.Month {
 		for _, ds := range dss.Series {
-			annoSeries, err := dataSeriesMonthToAnnotations(ds, *opts)
+			annoSeries, err := timeSeriesMonthToAnnotations(ds, *opts)
 			if err == nil && len(annoSeries.Annotations) > 0 {
 				graph.Series = append(graph.Series, annoSeries)
 			}
@@ -243,7 +243,7 @@ func DataSeriesSetToLineChart(dss timeseries.DataSeriesSet, opts *LineChartOpts)
 	return graph, nil
 }
 
-func dataSeriesMonthToAnnotations(ds timeseries.DataSeries, opts LineChartOpts) (chart.AnnotationSeries, error) {
+func timeSeriesMonthToAnnotations(ds timeseries.TimeSeries, opts LineChartOpts) (chart.AnnotationSeries, error) {
 	annoSeries := chart.AnnotationSeries{
 		Annotations: []chart.Value2{},
 		Style: chart.Style{
@@ -255,7 +255,7 @@ func dataSeriesMonthToAnnotations(ds timeseries.DataSeries, opts LineChartOpts) 
 		return annoSeries, nil
 	}
 
-	xox, err := interval.NewXoXDataSeries(ds)
+	xox, err := interval.NewXoXTimeSeries(ds)
 	if err != nil {
 		return annoSeries, err
 	}
@@ -296,7 +296,7 @@ func dataSeriesMonthToAnnotations(ds timeseries.DataSeries, opts LineChartOpts) 
 	return annoSeries, nil
 }
 
-func dataSeriesQuarterToAnnotations(ds timeseries.DataSeries, opts LineChartOpts) (chart.AnnotationSeries, error) {
+func dataSeriesQuarterToAnnotations(ds timeseries.TimeSeries, opts LineChartOpts) (chart.AnnotationSeries, error) {
 	annoSeries := chart.AnnotationSeries{
 		Annotations: []chart.Value2{},
 		Style: chart.Style{
@@ -308,7 +308,7 @@ func dataSeriesQuarterToAnnotations(ds timeseries.DataSeries, opts LineChartOpts
 		return annoSeries, nil
 	}
 
-	xox, err := interval.NewXoXDataSeries(ds)
+	xox, err := interval.NewXoXTimeSeries(ds)
 	if err != nil {
 		return annoSeries, err
 	}

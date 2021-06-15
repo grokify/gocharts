@@ -16,21 +16,21 @@ import (
 	chart "github.com/wcharczuk/go-chart"
 )
 
-func drawChartDSSSimple(res http.ResponseWriter, req *http.Request) {
-	ds3 := timeseries.NewDataSeriesSet("Example Data Series Set")
+func drawChartTSSSimple(res http.ResponseWriter, req *http.Request) {
+	ds3 := timeseries.NewTimeSeriesSet("Example Data Series Set")
 
 	j := 0
 	for i := -10; i <= 0; i++ {
 		j++
 		fmt.Println(i)
-		item := timeseries.DataItem{
+		item := timeseries.TimeItem{
 			SeriesName: "A Series",
 			Time:       month.MonthBegin(time.Now().AddDate(0, i, 0), 0),
 			Value:      int64(j)}
 		ds3.AddItem(item)
 	}
 	fmtutil.PrintJSON(ds3)
-	graph, err := sts2wchart.DataSeriesSetToLineChart(
+	graph, err := sts2wchart.TimeSeriesSetToLineChart(
 		ds3,
 		&sts2wchart.LineChartOpts{
 			XAxisTickFunc: func(t time.Time) string {
@@ -197,7 +197,7 @@ func main() {
 		res.Write([]byte{})
 	})
 	http.HandleFunc("/custom1", drawCustomChart)
-	http.HandleFunc("/custom2", drawChartDSSSimple)
+	http.HandleFunc("/custom2", drawChartTSSSimple)
 
 	chart1 := GetChartExampleMonths()
 	err := wchart.WritePNG("_wchart.png", chart1)

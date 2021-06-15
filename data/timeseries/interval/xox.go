@@ -37,7 +37,7 @@ type YoYQoQGrowth struct {
 	QTD     int64
 }
 
-func NewYoYQoQGrowth(set DataSeriesSet) (YoYQoQGrowth, error) {
+func NewYoYQoQGrowth(set TimeSeriesSet) (YoYQoQGrowth, error) {
 	yoy := YoYQoQGrowth{DateMap: map[string]XoxPoint{}}
 
 	seriesNames := set.SeriesNamesSorted()

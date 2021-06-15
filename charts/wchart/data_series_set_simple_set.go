@@ -14,8 +14,8 @@ type ChartOptions struct {
 	XAxisTimeLayout string
 }
 
-// DSSToChart converts a `DataSeriesSet` to a `wcharczuk.Chart`.
-func DSSToChart(data timeseries.DataSeriesSet, opts ChartOptions) chart.Chart {
+// TSSToChart converts a `TimeSeriesSet` to a `wcharczuk.Chart`.
+func TSSToChart(data timeseries.TimeSeriesSet, opts ChartOptions) chart.Chart {
 	formatter := TimeFormatter{Layout: opts.XAxisTimeLayout}
 	graph := chart.Chart{
 		XAxis: chart.XAxis{

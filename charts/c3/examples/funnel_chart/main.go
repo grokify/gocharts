@@ -19,8 +19,8 @@ import (
 	"github.com/grokify/simplego/time/timeutil"
 )
 
-func TestData() timeseries.DataSeriesSet {
-	dss := timeseries.NewDataSeriesSet("Funnel Chart Data")
+func TestData() timeseries.TimeSeriesSet {
+	dss := timeseries.NewTimeSeriesSet("Funnel Chart Data")
 	dss.Interval = timeutil.Month
 	for i := 0; i < 12; i++ {
 		dt := month.MonthBegin(time.Now().UTC(), i)
@@ -29,15 +29,15 @@ func TestData() timeseries.DataSeriesSet {
 		val2 := int64(float64(val1)*1 - (float64(5) * rand.Float64()))
 		val3 := int64(float64(val1)*1 - (float64(2) * rand.Float64()))
 
-		dss.AddItem(timeseries.DataItem{
+		dss.AddItem(timeseries.TimeItem{
 			SeriesName: "Funnel Stage 1",
 			Time:       dt,
 			Value:      val1})
-		dss.AddItem(timeseries.DataItem{
+		dss.AddItem(timeseries.TimeItem{
 			SeriesName: "Funnel Stage 2",
 			Time:       dt,
 			Value:      val2})
-		dss.AddItem(timeseries.DataItem{
+		dss.AddItem(timeseries.TimeItem{
 			SeriesName: "Funnel Stage 3",
 			Time:       dt,
 			Value:      val3})
@@ -56,7 +56,7 @@ func main() {
 	axis := timeseries.ReportAxisX(dss, numCols,
 		func(t time.Time) string { return timeutil.FormatQuarterYYYYQ(t) })
 
-	c3Bar := c3.DataSeriesSetSimpleToC3ChartBar(rep, c3.C3Bar{})
+	c3Bar := c3.TimeSeriesSetSimpleToC3ChartBar(rep, c3.C3Bar{})
 	c3Bar.Axis = c3.C3Axis{X: c3.C3AxisX{Type: "category", Categories: axis}}
 
 	if 1 == 0 {

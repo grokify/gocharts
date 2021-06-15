@@ -8,17 +8,17 @@ import (
 	"github.com/wcharczuk/go-chart"
 )
 
-func DataSeriesMapToContinuousSeriesMonths(dsm map[string]timeseries.DataSeries, order []string) []chart.ContinuousSeries {
+func TimeSeriesMapToContinuousSeriesMonths(dsm map[string]timeseries.TimeSeries, order []string) []chart.ContinuousSeries {
 	csSet := []chart.ContinuousSeries{}
 	for _, seriesName := range order {
 		if ds, ok := dsm[seriesName]; ok {
-			csSet = append(csSet, DataSeriesToContinuousSeries(ds))
+			csSet = append(csSet, TimeSeriesToContinuousSeries(ds))
 		}
 	}
 	return csSet
 }
 
-func DataSeriesToContinuousSeries(ds timeseries.DataSeries) chart.ContinuousSeries {
+func TimeSeriesToContinuousSeries(ds timeseries.TimeSeries) chart.ContinuousSeries {
 	series := chart.ContinuousSeries{
 		Name:    ds.SeriesName,
 		XValues: []float64{},
@@ -45,17 +45,17 @@ func DataSeriesToContinuousSeries(ds timeseries.DataSeries) chart.ContinuousSeri
 	return series
 }
 
-func DataSeriesMapToContinuousSeriesQuarters(dsm map[string]timeseries.DataSeries, order []string) []chart.ContinuousSeries {
+func TimeSeriesMapToContinuousSeriesQuarters(dsm map[string]timeseries.TimeSeries, order []string) []chart.ContinuousSeries {
 	csSet := []chart.ContinuousSeries{}
 	for _, seriesName := range order {
 		if ds, ok := dsm[seriesName]; ok {
-			csSet = append(csSet, DataSeriesToContinuousSeriesQuarter(ds))
+			csSet = append(csSet, TimeSeriesToContinuousSeriesQuarter(ds))
 		}
 	}
 	return csSet
 }
 
-func DataSeriesToContinuousSeriesQuarter(ds timeseries.DataSeries) chart.ContinuousSeries {
+func TimeSeriesToContinuousSeriesQuarter(ds timeseries.TimeSeries) chart.ContinuousSeries {
 	series := chart.ContinuousSeries{
 		Name:    ds.SeriesName,
 		XValues: []float64{},

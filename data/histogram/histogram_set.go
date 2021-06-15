@@ -128,15 +128,15 @@ func (hset *HistogramSet) LeafStats(name string) *Histogram {
 	return setLeafStats
 }
 
-func (hset *HistogramSet) ToDataSeriesDistinct() (timeseries.DataSeries, error) {
-	ds := timeseries.NewDataSeries()
+func (hset *HistogramSet) ToTimeSeriesDistinct() (timeseries.TimeSeries, error) {
+	ds := timeseries.NewTimeSeries()
 	ds.SeriesName = hset.Name
 	for rfc3339, hist := range hset.HistogramMap {
 		dt, err := time.Parse(time.RFC3339, rfc3339)
 		if err != nil {
 			return ds, err
 		}
-		ds.AddItem(timeseries.DataItem{
+		ds.AddItem(timeseries.TimeItem{
 			SeriesName: hset.Name,
 			Time:       dt,
 			Value:      int64(len(hist.Bins))})
@@ -227,18 +227,18 @@ func HistogramSetDatetimeToQuarter(name string, fsetIn *HistogramSet) (*Histogra
 	return fsetQtr, nil
 }
 
-// HistogramSetTimeKeyCount returns a DataSeries when
+// HistogramSetTimeKeyCount returns a TimeSeries when
 // the first key is a RFC3339 time and a sum of items
 // is desired per time.
-func HistogramSetTimeKeyCount(hset HistogramSet) (timeseries.DataSeries, error) {
-	ds := timeseries.NewDataSeries()
+func HistogramSetTimeKeyCount(hset HistogramSet) (timeseries.TimeSeries, error) {
+	ds := timeseries.NewTimeSeries()
 	ds.SeriesName = hset.Name
 	for rfc3339, hist := range hset.HistogramMap {
 		dt, err := time.Parse(time.RFC3339, rfc3339)
 		if err != nil {
 			return ds, err
 		}
-		ds.AddItem(timeseries.DataItem{
+		ds.AddItem(timeseries.TimeItem{
 			SeriesName: hset.Name,
 			Time:       dt,
 			Value:      int64(len(hist.Bins))})
@@ -256,7 +256,7 @@ func HistogramSetTimeKeyCountTable(hset HistogramSet, interval timeutil.Interval
 	if len(countColName) == 0 {
 		countColName = "Count"
 	}
-	return timeseries.DataSeriesToTable(ds, countColName, timeseries.TimeFormatRFC3339), nil
+	return timeseries.TimeSeriesToTable(ds, countColName, timeseries.TimeFormatRFC3339), nil
 }
 
 func HistogramSetTimeKeyCountWriteXLSX(filename string, hset HistogramSet, interval timeutil.Interval, countColName string) error {

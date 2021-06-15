@@ -9,8 +9,8 @@ import (
 	v5 "github.com/grokify/elastirad-go/models/v5"
 )
 
-func EsAggsToDataSeriesSet(aggs []v5.AggregationResRad, interval timeutil.Interval, weekStart time.Weekday) DataSeriesSet {
-	set := NewDataSeriesSet(interval, weekStart)
+func EsAggsToTimeSeriesSet(aggs []v5.AggregationResRad, interval timeutil.Interval, weekStart time.Weekday) TimeSeriesSet {
+	set := NewTimeSeriesSet(interval, weekStart)
 
 	for _, agg := range aggs {
 		seriesName := agg.AggregationName
