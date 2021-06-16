@@ -209,11 +209,11 @@ func (hset *HistogramSet) WriteXLSX(path, colName1, colName2, colNameCount strin
 
 }
 
-// HistogramSetDatetimeToQuarter converts a HistogramSet
+// DatetimeKeyToQuarter converts a HistogramSet
 // by date to one by quarter.s.
-func HistogramSetDatetimeToQuarter(name string, fsetIn *HistogramSet) (*HistogramSet, error) {
+func (hset *HistogramSet) DatetimeKeyToQuarter(name string) (*HistogramSet, error) {
 	fsetQtr := NewHistogramSet(name)
-	for rfc3339, hist := range fsetIn.HistogramMap {
+	for rfc3339, hist := range hset.HistogramMap {
 		dt, err := time.Parse(time.RFC3339, rfc3339)
 		if err != nil {
 			return fsetQtr, err
@@ -227,40 +227,39 @@ func HistogramSetDatetimeToQuarter(name string, fsetIn *HistogramSet) (*Histogra
 	return fsetQtr, nil
 }
 
-// HistogramSetTimeKeyCount returns a TimeSeries when
+// DatetimeKeyCount returns a TimeSeries when
 // the first key is a RFC3339 time and a sum of items
 // is desired per time.
-func HistogramSetTimeKeyCount(hset HistogramSet) (timeseries.TimeSeries, error) {
-	ds := timeseries.NewTimeSeries()
-	ds.SeriesName = hset.Name
+func (hset *HistogramSet) DatetimeKeyCount() (timeseries.TimeSeries, error) {
+	ts := timeseries.NewTimeSeries()
+	ts.SeriesName = hset.Name
 	for rfc3339, hist := range hset.HistogramMap {
 		dt, err := time.Parse(time.RFC3339, rfc3339)
 		if err != nil {
-			return ds, err
+			return ts, err
 		}
-		ds.AddItem(timeseries.TimeItem{
+		ts.AddItem(timeseries.TimeItem{
 			SeriesName: hset.Name,
 			Time:       dt,
 			Value:      int64(len(hist.Bins))})
 	}
-	return ds, nil
+	return ts, nil
 }
 
-func HistogramSetTimeKeyCountTable(hset HistogramSet, interval timeutil.Interval, countColName string) (table.Table, error) {
-	ds, err := HistogramSetTimeKeyCount(hset)
+func (hset *HistogramSet) DatetimeKeyCountTable(interval timeutil.Interval, countColName string) (table.Table, error) {
+	ts, err := hset.DatetimeKeyCount()
 	if err != nil {
 		return table.NewTable(), err
 	}
-	ds.Interval = interval
-	countColName = strings.TrimSpace(countColName)
-	if len(countColName) == 0 {
+	ts.Interval = interval
+	if len(strings.TrimSpace(countColName)) == 0 {
 		countColName = "Count"
 	}
-	return timeseries.TimeSeriesToTable(ds, countColName, timeseries.TimeFormatRFC3339), nil
+	return timeseries.TimeSeriesToTable(ts, countColName, timeseries.TimeFormatRFC3339), nil
 }
 
-func HistogramSetTimeKeyCountWriteXLSX(filename string, hset HistogramSet, interval timeutil.Interval, countColName string) error {
-	tbl, err := HistogramSetTimeKeyCountTable(hset, interval, countColName)
+func (hset *HistogramSet) HistogramSetTimeKeyCountWriteXLSX(filename string, interval timeutil.Interval, countColName string) error {
+	tbl, err := hset.DatetimeKeyCountTable(interval, countColName)
 	if err != nil {
 		return err
 	}

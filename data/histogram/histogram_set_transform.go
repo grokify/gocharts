@@ -37,9 +37,9 @@ func (hset *HistogramSet) TransformHistogramNamesExactMatch(xfMap map[string]str
 	)
 }
 
-// TransformHistogramNamesByPrefix modifies bin names and returns a new
+// TransformHistogramNamesPrefix modifies bin names and returns a new
 // histogram.
-func (hset *HistogramSet) TransformHistogramNamesByPrefix(xfMap map[string]string) *HistogramSet {
+func (hset *HistogramSet) TransformHistogramNamesPrefix(xfMap map[string]string) *HistogramSet {
 	if hset == nil {
 		return nil
 	}
