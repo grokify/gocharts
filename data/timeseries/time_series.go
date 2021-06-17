@@ -209,7 +209,7 @@ func (ts *TimeSeries) TimeSlice(sortSlice bool) timeutil.TimeSlice {
 	return times
 }
 
-func (ts *TimeSeries) DeleteByTime(dt time.Time) {
+func (ts *TimeSeries) DeleteTime(dt time.Time) {
 	delete(ts.ItemMap, dt.Format(time.RFC3339))
 }
 

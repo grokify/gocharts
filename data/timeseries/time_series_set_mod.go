@@ -47,12 +47,12 @@ func (set *TimeSeriesSet) PopLast() {
 		return
 	}
 	last := times[len(times)-1]
-	set.DeleteItemByTime(last)
+	set.DeleteTime(last)
 }
 
-func (set *TimeSeriesSet) DeleteItemByTime(dt time.Time) {
+func (set *TimeSeriesSet) DeleteTime(dt time.Time) {
 	for id, ds := range set.Series {
-		ds.DeleteByTime(dt)
+		ds.DeleteTime(dt)
 		set.Series[id] = ds
 	}
 }
