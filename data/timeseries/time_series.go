@@ -3,11 +3,9 @@ package timeseries
 import (
 	"fmt"
 	"sort"
-	"strings"
 	"time"
 
 	"github.com/grokify/gocharts/data/point"
-	"github.com/grokify/gocharts/data/table"
 	"github.com/grokify/simplego/sort/sortutil"
 	"github.com/grokify/simplego/time/month"
 	"github.com/grokify/simplego/time/timeutil"
@@ -327,29 +325,6 @@ func (ts *TimeSeries) ToQuarter() TimeSeries {
 			ValueFloat: item.ValueFloat})
 	}
 	return newTimeSeries
-}
-
-func (ts *TimeSeries) WriteXLSX(filename, sheetname, col1, col2 string) error {
-	col1 = strings.TrimSpace(col1)
-	col2 = strings.TrimSpace(col2)
-	if len(col1) == 0 {
-		col1 = "Date"
-	}
-	if len(col2) == 0 {
-		col2 = "Value"
-	}
-	rows := [][]interface{}{{col1, col2}}
-	items := ts.ItemsSorted()
-	for _, item := range items {
-		if ts.IsFloat {
-			rows = append(rows, []interface{}{item.Time, item.ValueFloat})
-		} else {
-			rows = append(rows, []interface{}{item.Time, item.Value})
-		}
-	}
-	return table.WriteXLSXInterface(filename, table.SheetData{
-		SheetName: sheetname,
-		Rows:      rows})
 }
 
 func AggregateSeries(series TimeSeries) TimeSeries {

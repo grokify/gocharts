@@ -255,7 +255,7 @@ func (hset *HistogramSet) DatetimeKeyCountTable(interval timeutil.Interval, coun
 	if len(strings.TrimSpace(countColName)) == 0 {
 		countColName = "Count"
 	}
-	return timeseries.TimeSeriesToTable(ts, countColName, timeseries.TimeFormatRFC3339), nil
+	return ts.ToTable(hset.Name, "", countColName, timeseries.TimeFormatRFC3339), nil
 }
 
 func (hset *HistogramSet) HistogramSetTimeKeyCountWriteXLSX(filename string, interval timeutil.Interval, countColName string) error {
