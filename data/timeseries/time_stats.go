@@ -26,7 +26,7 @@ func (ts *TimeStats) UniqueCountsByQuarter() map[string]int {
 		}
 		wip[q][v] += 1
 	}
-	return MSS2MS(wip)
+	return mapSSIToMSICounts(wip)
 }
 
 func (ts *TimeStats) UniqueCountsByMonth() map[string]int {
@@ -43,10 +43,10 @@ func (ts *TimeStats) UniqueCountsByMonth() map[string]int {
 		}
 		wip[m][v] += 1
 	}
-	return MSS2MS(wip)
+	return mapSSIToMSICounts(wip)
 }
 
-func MSS2MS(in map[string]map[string]int) map[string]int {
+func mapSSIToMSICounts(in map[string]map[string]int) map[string]int {
 	out := map[string]int{}
 	for k, v := range in {
 		out[k] = len(v)
