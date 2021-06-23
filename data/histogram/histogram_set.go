@@ -1,7 +1,9 @@
 package histogram
 
 import (
+	"fmt"
 	"sort"
+	"strconv"
 	"strings"
 	"time"
 
@@ -10,6 +12,7 @@ import (
 	"github.com/grokify/gocharts/data/table"
 	"github.com/grokify/gocharts/data/timeseries"
 	"github.com/grokify/simplego/time/timeutil"
+	"github.com/grokify/simplego/type/stringsutil"
 )
 
 type HistogramSet struct {
@@ -108,6 +111,14 @@ func (hset *HistogramSet) BinNameExists(binName string) bool {
 	return false
 }
 
+func (hset *HistogramSet) BinNames() []string {
+	binNames := []string{}
+	for _, hist := range hset.HistogramMap {
+		binNames = append(binNames, hist.BinNames()...)
+	}
+	return stringsutil.SliceCondenseSpace(binNames, true, true)
+}
+
 func (hset *HistogramSet) HistogramBinNames(setName string) []string {
 	if hist, ok := hset.HistogramMap[setName]; ok {
 		return hist.BinNames()
@@ -144,13 +155,59 @@ func (hset *HistogramSet) ToTimeSeriesDistinct() (timeseries.TimeSeries, error) 
 	return ds, nil
 }
 
-func (hset *HistogramSet) WriteXLSX(path, colName1, colName2, colNameCount string) error {
+func (hset *HistogramSet) WriteXLSXMatrix(path, sheetName, histColName string) error {
+	tbl, err := hset.TableMatrix(sheetName, histColName)
+	if err != nil {
+		return err
+	}
+	return tbl.WriteXLSX(path, sheetName)
+}
+
+func (hset *HistogramSet) TableMatrix(tableName, histColName string) (*table.Table, error) {
+	if len(strings.TrimSpace(tableName)) == 0 {
+		tableName = strings.TrimSpace(hset.Name)
+	}
+	tbl := table.NewTable()
+	tbl.Name = tableName
+
+	if len(strings.TrimSpace(histColName)) == 0 {
+		histColName = "Histogram Name"
+	}
+	tbl.Columns = append(tbl.Columns, histColName)
+	tbl.FormatMap = map[int]string{
+		-1: table.FormatInt,
+		0:  table.FormatString}
+	binNames := hset.BinNames()
+	tbl.Columns = append(tbl.Columns, binNames...)
+
+	hnames := hset.HistogramNames()
+	for _, hname := range hnames {
+		row := []string{hname}
+		hist, ok := hset.HistogramMap[hname]
+		if !ok {
+			return nil, fmt.Errorf("histogram name present without histogram [%s]", hname)
+		}
+		for _, binName := range binNames {
+			if binVal, ok := hist.Bins[binName]; ok {
+				row = append(row, strconv.Itoa(binVal))
+			} else {
+				row = append(row, "0")
+			}
+		}
+		tbl.Rows = append(tbl.Rows, row)
+	}
+	return &tbl, nil
+}
+
+func (hset *HistogramSet) WriteXLSX(path, sheetName, colName1, colName2, colNameCount string) error {
 	// WriteXLSX writes a table as an Excel XLSX file with
 	// row formatter option.
 	f := excelize.NewFile()
 	// Create a new sheet.
 
-	sheetName := strings.TrimSpace(hset.Name)
+	if len(strings.TrimSpace(sheetName)) == 0 {
+		sheetName = strings.TrimSpace(hset.Name)
+	}
 	if len(sheetName) == 0 {
 		sheetName = "Sheet0"
 	}

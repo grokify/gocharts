@@ -2,10 +2,11 @@
 package table
 
 const (
-	FormatFloat = "float"
-	FormatInt   = "int"
-	FormatTime  = "time"
-	StyleSimple = "border:1px solid #000;border-collapse:collapse"
+	FormatFloat  = "float"
+	FormatInt    = "int"
+	FormatString = "string"
+	FormatTime   = "time"
+	StyleSimple  = "border:1px solid #000;border-collapse:collapse"
 )
 
 // Table is useful for working on CSV data. It stores
