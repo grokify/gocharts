@@ -173,12 +173,13 @@ func (hset *HistogramSet) TableMatrix(tableName, histColName string) (*table.Tab
 	if len(strings.TrimSpace(histColName)) == 0 {
 		histColName = "Histogram Name"
 	}
+
+	binNames := hset.BinNames()
 	tbl.Columns = append(tbl.Columns, histColName)
+	tbl.Columns = append(tbl.Columns, binNames...)
 	tbl.FormatMap = map[int]string{
 		-1: table.FormatInt,
 		0:  table.FormatString}
-	binNames := hset.BinNames()
-	tbl.Columns = append(tbl.Columns, binNames...)
 
 	hnames := hset.HistogramNames()
 	for _, hname := range hnames {
