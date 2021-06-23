@@ -47,6 +47,8 @@ func (hset *HistogramSet) AddDateUidCount(dt time.Time, uid string, count int) {
 	}
 }
 
+// Add provides an easy method to add a histogram bin name
+// and count for an existing or new histogram in the set.
 func (hset *HistogramSet) Add(histName, binName string, count int) {
 	hist, ok := hset.HistogramMap[histName]
 	if !ok {
@@ -87,6 +89,8 @@ func (hset *HistogramSet) HistogramNames() []string {
 	return names
 }
 
+// HistogramNameExists returns a boolean indicating if
+// the supplied histogram name exists.
 func (hset *HistogramSet) HistogramNameExists(histName string) bool {
 	if _, ok := hset.HistogramMap[histName]; ok {
 		return true
@@ -94,6 +98,7 @@ func (hset *HistogramSet) HistogramNameExists(histName string) bool {
 	return false
 }
 
+// ValueSum returns the sum of all the histogram bin values.
 func (hset *HistogramSet) ValueSum() int {
 	valueSum := 0
 	for _, hist := range hset.HistogramMap {
@@ -102,6 +107,8 @@ func (hset *HistogramSet) ValueSum() int {
 	return valueSum
 }
 
+// BinNameExists returns a boolean indicating if a bin name
+// exists in any histogram.
 func (hset *HistogramSet) BinNameExists(binName string) bool {
 	for _, hist := range hset.HistogramMap {
 		if hist.BinNameExists(binName) {
@@ -111,6 +118,8 @@ func (hset *HistogramSet) BinNameExists(binName string) bool {
 	return false
 }
 
+// BinNames returns all the bin names used across all the
+// histograms.
 func (hset *HistogramSet) BinNames() []string {
 	binNames := []string{}
 	for _, hist := range hset.HistogramMap {
@@ -119,6 +128,8 @@ func (hset *HistogramSet) BinNames() []string {
 	return stringsutil.SliceCondenseSpace(binNames, true, true)
 }
 
+// HistogramBinNames returns the bin names for a single
+// histogram whose name is provided as a function parameter.
 func (hset *HistogramSet) HistogramBinNames(setName string) []string {
 	if hist, ok := hset.HistogramMap[setName]; ok {
 		return hist.BinNames()
@@ -126,6 +137,8 @@ func (hset *HistogramSet) HistogramBinNames(setName string) []string {
 	return []string{}
 }
 
+// LeafStats returns a histogram by combining the histogram
+// bins across histograms, removing the histogram distinction.
 func (hset *HistogramSet) LeafStats(name string) *Histogram {
 	if len(name) == 0 {
 		name = "leaf stats"
@@ -155,6 +168,10 @@ func (hset *HistogramSet) ToTimeSeriesDistinct() (timeseries.TimeSeries, error) 
 	return ds, nil
 }
 
+// WriteXLSXMatrix creates an XLSX file where the first column is the
+// histogram name and the other columns are the bin names. This is
+// useful for easy visualization of a table and also creating
+// charts such as grouped bar charts.
 func (hset *HistogramSet) WriteXLSXMatrix(path, sheetName, histColName string) error {
 	tbl, err := hset.TableMatrix(sheetName, histColName)
 	if err != nil {
@@ -163,6 +180,10 @@ func (hset *HistogramSet) WriteXLSXMatrix(path, sheetName, histColName string) e
 	return tbl.WriteXLSX(path, sheetName)
 }
 
+// TableMatrix returns a `*table.Table` where the first column is the
+// histogram name and the other columns are the bin names. This is
+// useful for easy visualization of a table and also creating
+// charts such as grouped bar charts.
 func (hset *HistogramSet) TableMatrix(tableName, histColName string) (*table.Table, error) {
 	if len(strings.TrimSpace(tableName)) == 0 {
 		tableName = strings.TrimSpace(hset.Name)
@@ -178,8 +199,12 @@ func (hset *HistogramSet) TableMatrix(tableName, histColName string) (*table.Tab
 	tbl.Columns = append(tbl.Columns, histColName)
 	tbl.Columns = append(tbl.Columns, binNames...)
 	tbl.FormatMap = map[int]string{
-		-1: table.FormatInt,
-		0:  table.FormatString}
+		-1: table.FormatInt}
+	if hset.KeyIsTime {
+		tbl.FormatMap[0] = table.FormatTime
+	} else {
+		tbl.FormatMap[0] = table.FormatString
+	}
 
 	hnames := hset.HistogramNames()
 	for _, hname := range hnames {
@@ -200,6 +225,9 @@ func (hset *HistogramSet) TableMatrix(tableName, histColName string) (*table.Tab
 	return &tbl, nil
 }
 
+// WriteXLSX creates an XLSX file where the first column is the
+// histogram name, the second column is the bin name and the
+// third column is the bin count.
 func (hset *HistogramSet) WriteXLSX(path, sheetName, colName1, colName2, colNameCount string) error {
 	// WriteXLSX writes a table as an Excel XLSX file with
 	// row formatter option.
@@ -268,7 +296,7 @@ func (hset *HistogramSet) WriteXLSX(path, sheetName, colName1, colName2, colName
 }
 
 // DatetimeKeyToQuarter converts a HistogramSet
-// by date to one by quarter.s.
+// by date to one by quarters.
 func (hset *HistogramSet) DatetimeKeyToQuarter(name string) (*HistogramSet, error) {
 	fsetQtr := NewHistogramSet(name)
 	for rfc3339, hist := range hset.HistogramMap {
