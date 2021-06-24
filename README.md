@@ -6,7 +6,7 @@ GoCharts
 [![Docs][docs-godoc-svg]][docs-godoc-url]
 [![License][license-svg]][license-url]
 
-GoCharts is a library to assist with building charts, by directly working with charting libraries generating tabular data for Excel XLSX files and CSV files, or to transfer data to/from analytics solutions like [Metabase](https://pkg.go.dev/github.com/grokify/go-metabase/metabaseutil) and [SimpleKPI](https://pkg.go.dev/github.com/grokify/go-simplekpi/simplekpiutil).
+GoCharts is a library to assist with building charts, by directly working with charting libraries, generating tabular data for Excel XLSX files and CSV files, or to transfer data to/from analytics solutions like [Metabase](https://pkg.go.dev/github.com/grokify/go-metabase/metabaseutil) and [SimpleKPI](https://pkg.go.dev/github.com/grokify/go-simplekpi/simplekpiutil).
 
 It includes two sets of packages:
 
