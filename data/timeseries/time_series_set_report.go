@@ -125,7 +125,7 @@ func ReportGrowthPct(rows []RowInt64) []RowFloat64 {
 	return grows
 }
 
-type TssTableOpts struct {
+type TimeSeriesSetTableOpts struct {
 	TimeColumnTitle string
 	FuncFormatTime  func(time.Time) string
 	TotalInclude    bool
@@ -134,14 +134,14 @@ type TssTableOpts struct {
 	PercentSuffix   string
 }
 
-func (opts *TssTableOpts) TotalTitleOrDefault() string {
+func (opts *TimeSeriesSetTableOpts) TotalTitleOrDefault() string {
 	if len(opts.TotalTitle) > 0 {
 		return opts.TotalTitle
 	}
 	return "Total"
 }
 
-func (opts *TssTableOpts) PercentSuffixOrDefault() string {
+func (opts *TimeSeriesSetTableOpts) PercentSuffixOrDefault() string {
 	if len(opts.PercentSuffix) > 0 {
 		return opts.PercentSuffix
 	}
@@ -149,9 +149,9 @@ func (opts *TssTableOpts) PercentSuffixOrDefault() string {
 }
 
 // ToTable returns a `table.TableData`.
-func (set *TimeSeriesSet) ToTable(opts *TssTableOpts) (table.Table, error) {
+func (set *TimeSeriesSet) ToTable(opts *TimeSeriesSetTableOpts) (table.Table, error) {
 	if opts == nil {
-		opts = &TssTableOpts{}
+		opts = &TimeSeriesSetTableOpts{}
 	}
 	tbl := table.NewTable()
 	seriesNames := set.SeriesNames()
@@ -235,7 +235,7 @@ func (set *TimeSeriesSet) ToTable(opts *TssTableOpts) (table.Table, error) {
 	return tbl, nil
 }
 
-func (set *TimeSeriesSet) WriteXLSX(filename string, opts *TssTableOpts) error {
+func (set *TimeSeriesSet) WriteXLSX(filename string, opts *TimeSeriesSetTableOpts) error {
 	tbl, err := set.ToTable(opts)
 	if err != nil {
 		return err
