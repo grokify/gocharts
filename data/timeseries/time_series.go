@@ -13,33 +13,68 @@ import (
 )
 
 type TimeSeries struct {
-	SeriesName string
-	ItemMap    map[string]TimeItem
-	IsFloat    bool
-	Interval   timeutil.Interval // Informational
+	SeriesName    string
+	SeriesSetName string
+	ItemMap       map[string]TimeItem
+	IsFloat       bool
+	Interval      timeutil.Interval // Informational
 }
 
 func NewTimeSeries() TimeSeries {
 	return TimeSeries{ItemMap: map[string]TimeItem{}}
 }
 
-// AddItem adds data item. It will sum values when
-// existing time unit is encountered.
-func (ts *TimeSeries) AddItem(item TimeItem) {
-	if ts.ItemMap == nil {
-		ts.ItemMap = map[string]TimeItem{}
-	}
-	if len(item.SeriesName) == 0 {
-		item.SeriesName = ts.SeriesName
-	}
-	item.Time = item.Time.UTC()
-	rfc := item.Time.Format(time.RFC3339)
-	if existingItem, ok := ts.ItemMap[rfc]; ok {
-		existingItem.Value += item.Value
-		existingItem.ValueFloat += item.ValueFloat
-		ts.ItemMap[rfc] = existingItem
+// AddInt64 adds a time value, converting it to a float on
+// the series type.
+func (ts *TimeSeries) AddInt64(dt time.Time, value int64) {
+	item := TimeItem{
+		SeriesName:    ts.SeriesName,
+		SeriesSetName: ts.SeriesSetName,
+		Time:          dt,
+		IsFloat:       ts.IsFloat}
+	if ts.IsFloat {
+		item.ValueFloat = float64(value)
 	} else {
-		ts.ItemMap[rfc] = item
+		item.Value = value
+	}
+	ts.AddItems(item)
+}
+
+// AddFloat64 adds a time value, converting it to a int64 on
+// the series type.
+func (ts *TimeSeries) AddFloat64(dt time.Time, value float64) {
+	item := TimeItem{
+		SeriesName:    ts.SeriesName,
+		SeriesSetName: ts.SeriesSetName,
+		Time:          dt,
+		IsFloat:       ts.IsFloat}
+	if ts.IsFloat {
+		item.ValueFloat = value
+	} else {
+		item.Value = int64(value)
+	}
+	ts.AddItems(item)
+}
+
+// AddItems adds a `TimeItem`. It will sum values when
+// existing time unit is encountered.
+func (ts *TimeSeries) AddItems(items ...TimeItem) {
+	for _, item := range items {
+		if ts.ItemMap == nil {
+			ts.ItemMap = map[string]TimeItem{}
+		}
+		if len(item.SeriesName) == 0 {
+			item.SeriesName = ts.SeriesName
+		}
+		item.Time = item.Time.UTC()
+		rfc := item.Time.Format(time.RFC3339)
+		if existingItem, ok := ts.ItemMap[rfc]; ok {
+			existingItem.Value += item.Value
+			existingItem.ValueFloat += item.ValueFloat
+			ts.ItemMap[rfc] = existingItem
+		} else {
+			ts.ItemMap[rfc] = item
+		}
 	}
 }
 
@@ -220,7 +255,7 @@ func (ts *TimeSeries) ToMonth(inflate bool) TimeSeries {
 		IsFloat:    ts.IsFloat,
 		Interval:   timeutil.Month}
 	for _, item := range ts.ItemMap {
-		newTimeSeries.AddItem(TimeItem{
+		newTimeSeries.AddItems(TimeItem{
 			SeriesName: item.SeriesName,
 			Time:       month.MonthBegin(item.Time, 0),
 			IsFloat:    item.IsFloat,
@@ -232,7 +267,7 @@ func (ts *TimeSeries) ToMonth(inflate bool) TimeSeries {
 			timeutil.Month,
 			newTimeSeries.ItemTimes())
 		for _, dt := range timeSeries {
-			newTimeSeries.AddItem(TimeItem{
+			newTimeSeries.AddItems(TimeItem{
 				SeriesName: newTimeSeries.SeriesName,
 				Time:       dt,
 				IsFloat:    newTimeSeries.IsFloat,
@@ -305,7 +340,7 @@ func (ts *TimeSeries) ToMonthCumulative(inflate bool, timesInput ...time.Time) (
 		}
 	}
 	for _, cItem := range cItems {
-		newTimeSeries.AddItem(cItem)
+		newTimeSeries.AddItems(cItem)
 	}
 	return newTimeSeries, nil
 }
@@ -317,7 +352,7 @@ func (ts *TimeSeries) ToQuarter() TimeSeries {
 		IsFloat:    ts.IsFloat,
 		Interval:   timeutil.Quarter}
 	for _, item := range ts.ItemMap {
-		newTimeSeries.AddItem(TimeItem{
+		newTimeSeries.AddItems(TimeItem{
 			SeriesName: item.SeriesName,
 			Time:       timeutil.QuarterStart(item.Time),
 			IsFloat:    item.IsFloat,
@@ -338,7 +373,7 @@ func AggregateSeries(series TimeSeries) TimeSeries {
 			Value:      atomicItem.Value + sum,
 		}
 		sum = aggregateItem.Value
-		aggregate.AddItem(aggregateItem)
+		aggregate.AddItems(aggregateItem)
 	}
 	return aggregate
 }
@@ -395,7 +430,7 @@ func TimeSeriesDivide(numer, denom TimeSeries) (TimeSeries, error) {
 			return ts, fmt.Errorf("E_DENOM_MISSING_OR_ZERO TIME [%s] NUMERATOR [%v]",
 				dKey, nItem.Value)
 		}
-		ts.AddItem(TimeItem{
+		ts.AddItems(TimeItem{
 			Time:       dItem.Time,
 			ValueFloat: float64(nItem.Value) / float64(dItem.Value),
 			IsFloat:    true,

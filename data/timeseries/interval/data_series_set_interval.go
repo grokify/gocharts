@@ -53,7 +53,7 @@ func (set *TimeSeriesSet) AddItem(item timeseries.TimeItem) {
 				ItemMap:    map[string]timeseries.TimeItem{}}
 	}
 	series := set.SourceSeriesMap[item.SeriesName]
-	series.AddItem(item)
+	series.AddItems(item)
 	set.SourceSeriesMap[item.SeriesName] = series
 }
 
@@ -97,7 +97,7 @@ func (set *TimeSeriesSet) addAllSeries(allSeriesName string) {
 	for _, series := range set.SourceSeriesMap {
 		for _, item := range series.ItemMap {
 			item.SeriesName = allSeriesName
-			allSeries.AddItem(item)
+			allSeries.AddItems(item)
 		}
 	}
 
@@ -139,13 +139,13 @@ func (set *TimeSeriesSet) BuildOutputSeries(source timeseries.TimeSeries) (times
 		if err != nil {
 			return output, err
 		}
-		output.AddItem(timeseries.TimeItem{
+		output.AddItems(timeseries.TimeItem{
 			SeriesName: item.SeriesName,
 			Time:       ivalStart,
 			Value:      item.Value})
 	}
 	for _, dt := range set.SeriesIntervals.CanonicalSeries {
-		output.AddItem(timeseries.TimeItem{
+		output.AddItems(timeseries.TimeItem{
 			SeriesName: output.SeriesName,
 			Time:       dt,
 			Value:      0})

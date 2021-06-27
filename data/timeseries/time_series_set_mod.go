@@ -7,38 +7,38 @@ import (
 )
 
 func (set *TimeSeriesSet) ToMonth(inflate bool) TimeSeriesSet {
-	newDss := TimeSeriesSet{
+	newTss := TimeSeriesSet{
 		Name:     set.Name,
 		Series:   map[string]TimeSeries{},
 		Times:    set.Times,
 		Interval: timeutil.Month,
 		Order:    set.Order}
 	for name, ds := range set.Series {
-		newDss.Series[name] = ds.ToMonth(inflate)
+		newTss.Series[name] = ds.ToMonth(inflate)
 	}
-	newDss.Times = newDss.TimeSlice(true)
-	return newDss
+	newTss.Times = newTss.TimeSlice(true)
+	return newTss
 }
 
 func (set *TimeSeriesSet) ToMonthCumulative(popLast, inflate bool) (TimeSeriesSet, error) {
-	newDss := TimeSeriesSet{
+	newTss := TimeSeriesSet{
 		Name:     set.Name,
 		Series:   map[string]TimeSeries{},
 		Times:    set.Times,
 		Interval: timeutil.Month,
 		Order:    set.Order}
 	for name, ds := range set.Series {
-		newDs, err := ds.ToMonthCumulative(inflate, newDss.Times...)
+		newDs, err := ds.ToMonthCumulative(inflate, newTss.Times...)
 		if err != nil {
-			return newDss, err
+			return newTss, err
 		}
-		newDss.Series[name] = newDs
+		newTss.Series[name] = newDs
 	}
 	if popLast {
-		newDss.PopLast()
+		newTss.PopLast()
 	}
-	newDss.Times = newDss.TimeSlice(true)
-	return newDss, nil
+	newTss.Times = newTss.TimeSlice(true)
+	return newTss, nil
 }
 
 func (set *TimeSeriesSet) PopLast() {
@@ -58,15 +58,15 @@ func (set *TimeSeriesSet) DeleteTime(dt time.Time) {
 }
 
 func (set *TimeSeriesSet) ToNewSeriesNames(seriesNames, seriesSetNames map[string]string) TimeSeriesSet {
-	newDss := TimeSeriesSet{
+	newTss := TimeSeriesSet{
 		Name:     set.Name,
 		Series:   map[string]TimeSeries{},
 		Times:    set.Times,
 		IsFloat:  set.IsFloat,
 		Interval: timeutil.Month,
 		Order:    []string{}}
-	for _, ds := range set.Series {
-		for _, item := range ds.ItemMap {
+	for _, ts := range set.Series {
+		for _, item := range ts.ItemMap {
 			if len(seriesNames) > 0 {
 				if newSeriesName, ok := seriesNames[item.SeriesName]; ok {
 					item.SeriesName = newSeriesName
@@ -77,9 +77,9 @@ func (set *TimeSeriesSet) ToNewSeriesNames(seriesNames, seriesSetNames map[strin
 					item.SeriesSetName = newSeriesSetName
 				}
 			}
-			newDss.AddItem(item)
+			newTss.AddItems(item)
 		}
 	}
-	newDss.Inflate()
-	return newDss
+	newTss.Inflate()
+	return newTss
 }

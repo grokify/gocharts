@@ -21,15 +21,15 @@ func NewTimeSeriesSimple(name, displayName string) TimeSeriesSimple {
 }
 
 func (tss *TimeSeriesSimple) ToTimeSeriesQuarter() TimeSeries {
-	ds := NewTimeSeries()
-	ds.SeriesName = tss.Name
+	ts := NewTimeSeries()
+	ts.SeriesName = tss.Name
 	for _, t := range tss.Times {
-		ds.AddItem(TimeItem{
+		ts.AddItems(TimeItem{
 			SeriesName: tss.Name,
 			Time:       tu.QuarterStart(t),
 			Value:      int64(1)})
 	}
-	return ds
+	return ts
 }
 
 type TimeSeriesFunnel struct {
@@ -83,7 +83,7 @@ func (tsf *TimeSeriesFunnel) TimeSeriesSetByQuarter() (TimeSeriesSet, error) {
 			q = q.UTC()
 			rfc := q.Format(time.RFC3339)
 			if _, ok := timeSeries.ItemMap[rfc]; !ok {
-				timeSeries.AddItem(TimeItem{
+				timeSeries.AddItems(TimeItem{
 					SeriesName: tss.Name,
 					Time:       q,
 					Value:      int64(0)})

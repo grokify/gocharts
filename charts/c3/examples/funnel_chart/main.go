@@ -20,8 +20,8 @@ import (
 )
 
 func TestData() timeseries.TimeSeriesSet {
-	dss := timeseries.NewTimeSeriesSet("Funnel Chart Data")
-	dss.Interval = timeutil.Month
+	tss := timeseries.NewTimeSeriesSet("Funnel Chart Data")
+	tss.Interval = timeutil.Month
 	for i := 0; i < 12; i++ {
 		dt := month.MonthBegin(time.Now().UTC(), i)
 		//dt := timeutil.DeltaQuarters(time.Now().UTC(), i)
@@ -29,20 +29,20 @@ func TestData() timeseries.TimeSeriesSet {
 		val2 := int64(float64(val1)*1 - (float64(5) * rand.Float64()))
 		val3 := int64(float64(val1)*1 - (float64(2) * rand.Float64()))
 
-		dss.AddItem(timeseries.TimeItem{
+		tss.AddItems(timeseries.TimeItem{
 			SeriesName: "Funnel Stage 1",
 			Time:       dt,
 			Value:      val1})
-		dss.AddItem(timeseries.TimeItem{
+		tss.AddItems(timeseries.TimeItem{
 			SeriesName: "Funnel Stage 2",
 			Time:       dt,
 			Value:      val2})
-		dss.AddItem(timeseries.TimeItem{
+		tss.AddItems(timeseries.TimeItem{
 			SeriesName: "Funnel Stage 3",
 			Time:       dt,
 			Value:      val3})
 	}
-	return dss
+	return tss
 }
 
 func main() {

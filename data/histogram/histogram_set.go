@@ -160,7 +160,7 @@ func (hset *HistogramSet) ToTimeSeriesDistinct() (timeseries.TimeSeries, error) 
 		if err != nil {
 			return ds, err
 		}
-		ds.AddItem(timeseries.TimeItem{
+		ds.AddItems(timeseries.TimeItem{
 			SeriesName: hset.Name,
 			Time:       dt,
 			Value:      int64(len(hist.Bins))})
@@ -324,7 +324,7 @@ func (hset *HistogramSet) DatetimeKeyCount() (timeseries.TimeSeries, error) {
 		if err != nil {
 			return ts, err
 		}
-		ts.AddItem(timeseries.TimeItem{
+		ts.AddItems(timeseries.TimeItem{
 			SeriesName: hset.Name,
 			Time:       dt,
 			Value:      int64(len(hist.Bins))})

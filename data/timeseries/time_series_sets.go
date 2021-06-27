@@ -20,21 +20,17 @@ func NewTimeSeriesSets(name string) TimeSeriesSets {
 
 func (sets *TimeSeriesSets) AddItems(items ...TimeItem) {
 	for _, item := range items {
-		sets.AddItem(item)
-	}
-}
-
-func (sets *TimeSeriesSets) AddItem(item TimeItem) {
-	set, ok := sets.SetsMap[item.SeriesSetName]
-	if !ok {
-		set = NewTimeSeriesSet(item.SeriesSetName)
-		set.Interval = sets.Interval
-		if len(item.SeriesName) > 0 {
-			set.Name = item.SeriesName
+		set, ok := sets.SetsMap[item.SeriesSetName]
+		if !ok {
+			set = NewTimeSeriesSet(item.SeriesSetName)
+			set.Interval = sets.Interval
+			if len(item.SeriesName) > 0 {
+				set.Name = item.SeriesName
+			}
 		}
+		set.AddItems(item)
+		sets.SetsMap[item.SeriesSetName] = set
 	}
-	set.AddItem(item)
-	sets.SetsMap[item.SeriesSetName] = set
 }
 
 func (sets *TimeSeriesSets) SetNamesSorted() []string {

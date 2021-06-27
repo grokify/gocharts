@@ -37,19 +37,19 @@ func getData(numQuarters int) []timeseries.TimeItem {
 }
 
 func getTimeSeriesSetSimple(numQuarters int) timeseries.TimeSeriesSet {
-	dataItems := getData(numQuarters)
+	timeItems := getData(numQuarters)
 
-	ds3 := timeseries.NewTimeSeriesSet("Bar Chart Data")
+	tss := timeseries.NewTimeSeriesSet("Bar Chart Data")
 
 	// Add timeseries.DataItem slice in 1 function call
-	ds3.AddItems(dataItems...)
+	tss.AddItems(timeItems...)
 
 	// Add individual timeseries.DataItem items
-	for _, di := range dataItems {
-		ds3.AddItem(di)
+	for _, ti := range timeItems {
+		tss.AddItems(ti)
 	}
-	ds3.Inflate()
-	return ds3
+	tss.Inflate()
+	return tss
 }
 
 func buildBarChart(ds3 timeseries.TimeSeriesSet, numCols int, lowFirst bool) (c3.C3Chart, []timeseries.RowInt64) {

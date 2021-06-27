@@ -17,7 +17,7 @@ import (
 )
 
 func drawChartTSSSimple(res http.ResponseWriter, req *http.Request) {
-	ds3 := timeseries.NewTimeSeriesSet("Example Data Series Set")
+	tss := timeseries.NewTimeSeriesSet("Example Data Series Set")
 
 	j := 0
 	for i := -10; i <= 0; i++ {
@@ -27,11 +27,11 @@ func drawChartTSSSimple(res http.ResponseWriter, req *http.Request) {
 			SeriesName: "A Series",
 			Time:       month.MonthBegin(time.Now().AddDate(0, i, 0), 0),
 			Value:      int64(j)}
-		ds3.AddItem(item)
+		tss.AddItems(item)
 	}
-	fmtutil.PrintJSON(ds3)
+	fmtutil.PrintJSON(tss)
 	graph, err := sts2wchart.TimeSeriesSetToLineChart(
-		ds3,
+		tss,
 		&sts2wchart.LineChartOpts{
 			XAxisTickFunc: func(t time.Time) string {
 				return t.Format("Jan '06")

@@ -30,25 +30,52 @@ func NewTimeSeriesSet(name string) TimeSeriesSet {
 		Order:  []string{}}
 }
 
-func (set *TimeSeriesSet) AddItems(items ...TimeItem) {
-	for _, item := range items {
-		set.AddItem(item)
+func (set *TimeSeriesSet) AddInt64(seriesName string, dt time.Time, value int64) {
+	item := TimeItem{
+		SeriesSetName: set.Name,
+		SeriesName:    seriesName,
+		Time:          dt,
+		IsFloat:       set.IsFloat}
+	if set.IsFloat {
+		item.ValueFloat = float64(value)
+	} else {
+		item.Value = value
 	}
+	set.AddItems(item)
 }
 
-func (set *TimeSeriesSet) AddItem(item TimeItem) {
-	if _, ok := set.Series[item.SeriesName]; !ok {
-		set.Series[item.SeriesName] =
-			TimeSeries{
-				SeriesName: item.SeriesName,
-				ItemMap:    map[string]TimeItem{},
-				IsFloat:    item.IsFloat,
-				Interval:   set.Interval}
+// AddFloat64 adds a time value, converting it to a int64 on
+// the series type.
+func (set *TimeSeriesSet) AddFloat64(seriesName string, dt time.Time, value float64) {
+	item := TimeItem{
+		SeriesSetName: set.Name,
+		SeriesName:    seriesName,
+		Time:          dt,
+		IsFloat:       set.IsFloat}
+	if set.IsFloat {
+		item.ValueFloat = value
+	} else {
+		item.Value = int64(value)
 	}
-	dataSeries := set.Series[item.SeriesName]
-	dataSeries.AddItem(item)
-	set.Series[item.SeriesName] = dataSeries
-	set.Times = append(set.Times, item.Time)
+	set.AddItems(item)
+}
+
+func (set *TimeSeriesSet) AddItems(items ...TimeItem) {
+	for _, item := range items {
+		if _, ok := set.Series[item.SeriesName]; !ok {
+			set.Series[item.SeriesName] =
+				TimeSeries{
+					SeriesSetName: set.Name,
+					SeriesName:    item.SeriesName,
+					ItemMap:       map[string]TimeItem{},
+					IsFloat:       item.IsFloat,
+					Interval:      set.Interval}
+		}
+		ts := set.Series[item.SeriesName]
+		ts.AddItems(item)
+		set.Series[item.SeriesName] = ts
+		set.Times = append(set.Times, item.Time)
+	}
 }
 
 func (set *TimeSeriesSet) AddSeries(timeSeries ...TimeSeries) error {
@@ -61,7 +88,7 @@ func (set *TimeSeriesSet) AddSeries(timeSeries ...TimeSeries) error {
 			if len(item.SeriesName) == 0 || item.SeriesName != ts.SeriesName {
 				item.SeriesName = ts.SeriesName
 			}
-			set.AddItem(item)
+			set.AddItems(item)
 		}
 	}
 	return nil
