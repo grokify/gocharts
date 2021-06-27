@@ -18,9 +18,20 @@ func (hist *Histogram) TransformBinNames(xfFunc func(input string) string) *Hist
 	return newHist
 }
 
-// TransformBinNamesExactMatch modifies bin names and returns a new
+// TransformBinNamesMap modifies bin names and returns a new
+// histogram. `matchType` can be set to `prefix` to match name
+// prefixes instead of exact match.
+func (hist *Histogram) TransformBinNamesMap(xfMap map[string]string, matchType string) *Histogram {
+	matchType = strings.ToLower(strings.TrimSpace(matchType))
+	if matchType == "prefix" {
+		return hist.transformBinNamesPrefix(xfMap)
+	}
+	return hist.transformBinNamesExactMatch(xfMap)
+}
+
+// transformBinNamesExactMatch modifies bin names and returns a new
 // histogram.
-func (hist *Histogram) TransformBinNamesExactMatch(xfMap map[string]string) *Histogram {
+func (hist *Histogram) transformBinNamesExactMatch(xfMap map[string]string) *Histogram {
 	if hist == nil {
 		return nil
 	}
@@ -36,9 +47,9 @@ func (hist *Histogram) TransformBinNamesExactMatch(xfMap map[string]string) *His
 	)
 }
 
-// TransformBinNamesPrefix modifies bin names and returns a new
+// transformBinNamesPrefix modifies bin names and returns a new
 // histogram.
-func (hist *Histogram) TransformBinNamesPrefix(xfMap map[string]string) *Histogram {
+func (hist *Histogram) transformBinNamesPrefix(xfMap map[string]string) *Histogram {
 	if hist == nil {
 		return nil
 	}

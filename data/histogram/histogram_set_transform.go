@@ -19,9 +19,20 @@ func (hset *HistogramSet) TransformHistogramNames(xfFunc func(input string) stri
 	return newHset
 }
 
-// TransformHistogramNamesExactMatch modifies bin names and returns a new
+// TransformHistogramNamesMap modifies bin names and returns a new
+// `HistogramSet`. `matchType` can be set to `prefix` to match name
+// prefixes instead of exact match.
+func (hset *HistogramSet) TransformHistogramNamesMap(xfMap map[string]string, matchType string) *HistogramSet {
+	matchType = strings.ToLower(strings.TrimSpace(matchType))
+	if matchType == "prefix" {
+		return hset.transformHistogramNamesPrefix(xfMap)
+	}
+	return hset.transformHistogramNamesExactMatch(xfMap)
+}
+
+// transformHistogramNamesExactMatch modifies bin names and returns a new
 // histogram.
-func (hset *HistogramSet) TransformHistogramNamesExactMatch(xfMap map[string]string) *HistogramSet {
+func (hset *HistogramSet) transformHistogramNamesExactMatch(xfMap map[string]string) *HistogramSet {
 	if hset == nil {
 		return nil
 	}
@@ -37,9 +48,9 @@ func (hset *HistogramSet) TransformHistogramNamesExactMatch(xfMap map[string]str
 	)
 }
 
-// TransformHistogramNamesPrefix modifies bin names and returns a new
+// transformHistogramNamesPrefix modifies bin names and returns a new
 // histogram.
-func (hset *HistogramSet) TransformHistogramNamesPrefix(xfMap map[string]string) *HistogramSet {
+func (hset *HistogramSet) transformHistogramNamesPrefix(xfMap map[string]string) *HistogramSet {
 	if hset == nil {
 		return nil
 	}
