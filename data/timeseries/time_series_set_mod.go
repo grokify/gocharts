@@ -27,16 +27,17 @@ func (set *TimeSeriesSet) ToMonthCumulative(popLast, inflate bool) (TimeSeriesSe
 		Times:    set.Times,
 		Interval: timeutil.Month,
 		Order:    set.Order}
-	for name, ds := range set.Series {
-		newDs, err := ds.ToMonthCumulative(inflate, newTss.Times...)
+	for seriesName, ts := range set.Series {
+		newTs, err := ts.ToMonthCumulative(inflate, newTss.Times...)
 		if err != nil {
 			return newTss, err
 		}
-		newTss.Series[name] = newDs
+		newTss.Series[seriesName] = newTs
 	}
 	if popLast {
 		newTss.PopLast()
 	}
+	newTss.Inflate()
 	newTss.Times = newTss.TimeSlice(true)
 	return newTss, nil
 }

@@ -284,7 +284,7 @@ func (ts *TimeSeries) ToMonthCumulative(inflate bool, timesInput ...time.Time) (
 		ItemMap:    map[string]TimeItem{},
 		IsFloat:    ts.IsFloat,
 		Interval:   timeutil.Month}
-	dsMonth := ts.ToMonth(inflate)
+	tsMonth := ts.ToMonth(inflate)
 	var min time.Time
 	var max time.Time
 	var err error
@@ -294,7 +294,7 @@ func (ts *TimeSeries) ToMonthCumulative(inflate bool, timesInput ...time.Time) (
 			return newTimeSeries, err
 		}
 	} else {
-		min, max, err = timeutil.TimeSliceMinMax(dsMonth.TimeSlice(false))
+		min, max, err = timeutil.TimeSliceMinMax(tsMonth.TimeSlice(false))
 		if err != nil {
 			return newTimeSeries, err
 		}
@@ -303,7 +303,7 @@ func (ts *TimeSeries) ToMonthCumulative(inflate bool, timesInput ...time.Time) (
 	cItems := []TimeItem{}
 	for _, t := range times {
 		rfc := t.Format(time.RFC3339)
-		if item, ok := dsMonth.ItemMap[rfc]; ok {
+		if item, ok := tsMonth.ItemMap[rfc]; ok {
 			if len(cItems) > 0 {
 				prevCItem := cItems[len(cItems)-1]
 				cItems = append(cItems, TimeItem{
