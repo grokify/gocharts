@@ -7,7 +7,7 @@ require (
 	github.com/blend/go-sdk v1.20210518.1 // indirect
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/grokify/elastirad-go v0.1.1
-	github.com/grokify/simplego v0.26.8
+	github.com/grokify/simplego v0.27.1
 	github.com/jessevdk/go-flags v1.5.0
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/pkg/errors v0.9.1
