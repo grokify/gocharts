@@ -188,8 +188,7 @@ func (hset *HistogramSet) TableMatrix(tableName, histColName string) (*table.Tab
 	if len(strings.TrimSpace(tableName)) == 0 {
 		tableName = strings.TrimSpace(hset.Name)
 	}
-	tbl := table.NewTable()
-	tbl.Name = tableName
+	tbl := table.NewTable(tableName)
 
 	if len(strings.TrimSpace(histColName)) == 0 {
 		histColName = "Histogram Name"
@@ -335,7 +334,7 @@ func (hset *HistogramSet) DatetimeKeyCount() (timeseries.TimeSeries, error) {
 func (hset *HistogramSet) DatetimeKeyCountTable(interval timeutil.Interval, countColName string) (table.Table, error) {
 	ts, err := hset.DatetimeKeyCount()
 	if err != nil {
-		return table.NewTable(), err
+		return table.NewTable(hset.Name), err
 	}
 	ts.Interval = interval
 	if len(strings.TrimSpace(countColName)) == 0 {

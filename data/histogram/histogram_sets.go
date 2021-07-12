@@ -9,8 +9,10 @@ type HistogramSets struct {
 	HistogramSetMap map[string]*HistogramSet
 }
 
-func NewHistogramSets() *HistogramSets {
-	return &HistogramSets{HistogramSetMap: map[string]*HistogramSet{}}
+func NewHistogramSets(name string) *HistogramSets {
+	return &HistogramSets{
+		Name:            name,
+		HistogramSetMap: map[string]*HistogramSet{}}
 }
 
 func (hsets *HistogramSets) Add(setKey1, setKey2, binName string, binValue int, trimSpace bool) {

@@ -11,17 +11,17 @@ import (
 
 // NewHistogramSetsCSVs expects multiple files to have same columns.
 func NewHistogramSetsCSVs(filenames []string, key1ColIdx, key2ColIdx, uidColIdx uint) (*HistogramSets, table.Table, error) {
-	fsets := NewHistogramSets()
+	hsets := NewHistogramSets("")
 	tbl, err := table.ReadFiles(filenames, ',', true)
 	if err != nil {
-		return fsets, tbl, err
+		return hsets, tbl, err
 	}
-	fsets, err = NewHistogramSetsTable(tbl, key1ColIdx, key2ColIdx, uidColIdx)
-	return fsets, tbl, err
+	hsets, err = NewHistogramSetsTable(tbl, key1ColIdx, key2ColIdx, uidColIdx)
+	return hsets, tbl, err
 }
 
 func NewHistogramSetsTable(tbl table.Table, key1ColIdx, key2ColIdx, uidColIdx uint) (*HistogramSets, error) {
-	hsets := NewHistogramSets()
+	hsets := NewHistogramSets(tbl.Name)
 	_, maxIdx := mathutil.MinMaxUint(key1ColIdx, key2ColIdx, uidColIdx)
 	for _, row := range tbl.Rows {
 		if len(stringsutil.SliceCondenseSpace(row, true, false)) == 0 {

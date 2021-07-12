@@ -148,8 +148,7 @@ func (hist *Histogram) WriteTableASCII(writer io.Writer, header []string, sortBy
 }
 
 func (hist *Histogram) ToTable(colNameBinName, colNameBinCount string) *table.Table {
-	tbl := table.NewTable()
-	tbl.Name = hist.Name
+	tbl := table.NewTable(hist.Name)
 	tbl.Columns = []string{colNameBinName, colNameBinCount}
 	for binName, binCount := range hist.Bins {
 		tbl.Rows = append(tbl.Rows,
