@@ -5,7 +5,7 @@ import (
 )
 
 func (tbl *Table) NewTableFilterColDistinctFirst(colIdx int) *Table {
-	newTbl := NewTable()
+	newTbl := NewTable("")
 	newTbl.Columns = tbl.Columns
 
 	seen := map[string]int{}

@@ -26,8 +26,9 @@ type Table struct {
 
 // NewTable returns a new empty `Table` struct with
 // slices and maps set to empty (non-nil) values.
-func NewTable() Table {
+func NewTable(name string) Table {
 	return Table{
+		Name:      name,
 		Columns:   []string{},
 		Rows:      [][]string{},
 		FormatMap: map[int]string{}}

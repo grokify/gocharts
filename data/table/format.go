@@ -10,7 +10,7 @@ import (
 // FormatStraightToTabular takes a "straight table" wheere the columnn names
 // and values are in a single column and lays it out as a standard tabular data.
 func FormatStraightToTabular(tbl Table, colCount uint) (Table, error) {
-	newTbl := NewTable()
+	newTbl := NewTable(tbl.Name)
 	if len(tbl.Columns) != 0 {
 		return newTbl, fmt.Errorf("Has Defined Columns Count [%d]", len(tbl.Columns))
 	}

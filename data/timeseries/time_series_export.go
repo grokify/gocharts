@@ -37,8 +37,7 @@ func (ts *TimeSeries) ToTable(tableName, dateColumnName, countColumnName string,
 	if len(strings.TrimSpace(countColumnName)) == 0 {
 		countColumnName = "Count"
 	}
-	tbl := table.NewTable()
-	tbl.Name = tableName
+	tbl := table.NewTable(tableName)
 	tbl.Columns = []string{dateColumnName, countColumnName}
 	tbl.FormatMap = map[int]string{}
 	if ts.IsFloat {

@@ -17,7 +17,7 @@ var debugReadCSV = false // should not need to use this.
 // ReadFiles reads in a list of delimited files and returns a merged `Table` struct.
 // An error is returned if the columns count differs between files.
 func ReadFiles(filenames []string, comma rune, hasHeader bool) (Table, error) {
-	tbl := NewTable()
+	tbl := NewTable("")
 	for i, filename := range filenames {
 		tblx, err := ReadFile(filename, comma, hasHeader)
 		if err != nil {
@@ -33,7 +33,7 @@ func ReadFiles(filenames []string, comma rune, hasHeader bool) (Table, error) {
 
 // ReadFile reads in a delimited file and returns a `Table` struct.
 func ReadFile(filename string, comma rune, hasHeader bool) (Table, error) {
-	tbl := NewTable()
+	tbl := NewTable("")
 	csvReader, f, err := csvutil.NewReader(filename, comma)
 	if err != nil {
 		return tbl, err
@@ -115,7 +115,7 @@ func ParseBytes(data []byte, delimiter rune, hasHeaderRow bool) (Table, error) {
 }
 
 func ParseReader(reader io.Reader, delimiter rune, hasHeaderRow bool) (Table, error) {
-	tbl := NewTable()
+	tbl := NewTable("")
 	csvReader := csv.NewReader(reader)
 	csvReader.Comma = delimiter
 	csvReader.TrimLeadingSpace = true

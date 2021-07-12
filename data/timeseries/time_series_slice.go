@@ -25,7 +25,7 @@ func TimeSeriesSliceNames(dsSlice []TimeSeries) []string {
 }
 
 func TimeSeriesSliceTable(dsSlice []TimeSeries) table.Table {
-	tbl := table.NewTable()
+	tbl := table.NewTable("")
 	names := TimeSeriesSliceNames(dsSlice)
 	tbl.Columns = []string{"Date"}
 	tbl.Columns = append(tbl.Columns, names...)

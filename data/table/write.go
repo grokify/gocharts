@@ -41,7 +41,7 @@ func writeCSV(path string, t *Table) error {
 
 // WriteCSVSimple writes a file with cols and rows data.
 func WriteCSVSimple(cols []string, rows [][]string, filename string) error {
-	tbl := NewTable()
+	tbl := NewTable("")
 	tbl.Columns = cols
 	tbl.Rows = rows
 	return tbl.WriteCSV(filename)

@@ -153,7 +153,7 @@ func (set *TimeSeriesSet) ToTable(opts *TimeSeriesSetTableOpts) (table.Table, er
 	if opts == nil {
 		opts = &TimeSeriesSetTableOpts{}
 	}
-	tbl := table.NewTable()
+	tbl := table.NewTable(set.Name)
 	seriesNames := set.SeriesNames()
 	timeColumnTitle := strings.TrimSpace(opts.TimeColumnTitle)
 	if len(timeColumnTitle) == 0 {
