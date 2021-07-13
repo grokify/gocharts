@@ -49,12 +49,12 @@ func (hset *HistogramSet) AddDateUidCount(dt time.Time, uid string, count int) {
 
 // Add provides an easy method to add a histogram bin name
 // and count for an existing or new histogram in the set.
-func (hset *HistogramSet) Add(histName, binName string, count int) {
+func (hset *HistogramSet) Add(histName, binName string, binCount int) {
 	hist, ok := hset.HistogramMap[histName]
 	if !ok {
 		hist = NewHistogram(histName)
 	}
-	hist.Add(binName, count)
+	hist.Add(binName, binCount)
 	hset.HistogramMap[histName] = hist
 }
 

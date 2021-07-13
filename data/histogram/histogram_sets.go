@@ -20,18 +20,18 @@ func NewHistogramSets(name string) *HistogramSets {
 		HistogramSetMap: map[string]*HistogramSet{}}
 }
 
-func (hsets *HistogramSets) Add(setKey1, setKey2, binName string, binValue int, trimSpace bool) {
+func (hsets *HistogramSets) Add(hsetName, histName, binName string, binCount int, trimSpace bool) {
 	if trimSpace {
-		setKey1 = strings.TrimSpace(setKey1)
-		setKey2 = strings.TrimSpace(setKey2)
+		hsetName = strings.TrimSpace(hsetName)
+		histName = strings.TrimSpace(histName)
 		binName = strings.TrimSpace(binName)
 	}
-	fset, ok := hsets.HistogramSetMap[setKey1]
+	hset, ok := hsets.HistogramSetMap[hsetName]
 	if !ok {
-		fset = NewHistogramSet(setKey1)
+		hset = NewHistogramSet(hsetName)
 	}
-	fset.Add(setKey2, binName, binValue)
-	hsets.HistogramSetMap[setKey1] = fset
+	hset.Add(histName, binName, binCount)
+	hsets.HistogramSetMap[hsetName] = hset
 }
 
 func (hsets *HistogramSets) Flatten(name string) *HistogramSet {
