@@ -48,7 +48,7 @@ func (hsets *HistogramSets) Flatten(name string) *HistogramSet {
 
 func (hsets *HistogramSets) BinNames() []string {
 	binNamesMap := map[string]int{}
-	hsets.VisitEach(func(hsetName, histName, binName string, binCount int) {
+	hsets.Visit(func(hsetName, histName, binName string, binCount int) {
 		binNamesMap[binName] = 1
 	})
 	binNames := []string{}
@@ -68,7 +68,7 @@ func (hsets *HistogramSets) Counts() *HistogramSetsCounts {
 	return NewHistogramSetsCounts(*hsets)
 }
 
-func (hsets *HistogramSets) VisitEach(visit func(hsetName, histName, binName string, binCount int)) {
+func (hsets *HistogramSets) Visit(visit func(hsetName, histName, binName string, binCount int)) {
 	for hsetName, hset := range hsets.HistogramSetMap {
 		for histName, hist := range hset.HistogramMap {
 			for binName, binCount := range hist.Bins {
@@ -85,7 +85,7 @@ func (hsets *HistogramSets) Table(tableName, colNameHSet, colNameHist, colNameBi
 		stringsutil.FirstNonEmpty(colNameHist, "Histogram"),
 		stringsutil.FirstNonEmpty(colNameBinName, "Bin Name"),
 		stringsutil.FirstNonEmpty(colNameBinCount, "Bin Count")}
-	hsets.VisitEach(func(hsetName, histName, binName string, binCount int) {
+	hsets.Visit(func(hsetName, histName, binName string, binCount int) {
 		tbl.Rows = append(tbl.Rows, []string{
 			hsetName, histName, binName, strconv.Itoa(binCount)})
 	})
