@@ -147,7 +147,7 @@ func (hist *Histogram) WriteTableASCII(writer io.Writer, header []string, sortBy
 	table.Render()
 }
 
-func (hist *Histogram) ToTable(colNameBinName, colNameBinCount string) *table.Table {
+func (hist *Histogram) Table(colNameBinName, colNameBinCount string) *table.Table {
 	tbl := table.NewTable(hist.Name)
 	tbl.Columns = []string{colNameBinName, colNameBinCount}
 	for binName, binCount := range hist.Bins {
@@ -159,6 +159,6 @@ func (hist *Histogram) ToTable(colNameBinName, colNameBinCount string) *table.Ta
 }
 
 func (hist *Histogram) WriteXLSX(filename, sheetname, colNameBinName, colNameBinCount string) error {
-	tbl := hist.ToTable(colNameBinName, colNameBinCount)
+	tbl := hist.Table(colNameBinName, colNameBinCount)
 	return tbl.WriteXLSX(filename, sheetname)
 }
