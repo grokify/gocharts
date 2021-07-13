@@ -172,12 +172,12 @@ func (hset *HistogramSet) ToTimeSeriesDistinct() (timeseries.TimeSeries, error) 
 // histogram name and the other columns are the bin names. This is
 // useful for easy visualization of a table and also creating
 // charts such as grouped bar charts.
-func (hset *HistogramSet) WriteXLSXMatrix(path, sheetName, histColName string) error {
+func (hset *HistogramSet) WriteXLSXMatrix(filename, sheetName, histColName string) error {
 	tbl, err := hset.TableMatrix(sheetName, histColName)
 	if err != nil {
 		return err
 	}
-	return tbl.WriteXLSX(path, sheetName)
+	return tbl.WriteXLSX(filename, sheetName)
 }
 
 // TableMatrix returns a `*table.Table` where the first column is the
@@ -227,7 +227,7 @@ func (hset *HistogramSet) TableMatrix(tableName, histColName string) (*table.Tab
 // WriteXLSX creates an XLSX file where the first column is the
 // histogram name, the second column is the bin name and the
 // third column is the bin count.
-func (hset *HistogramSet) WriteXLSX(path, sheetName, colName1, colName2, colNameCount string) error {
+func (hset *HistogramSet) WriteXLSX(filename, sheetName, colName1, colName2, colNameCount string) error {
 	// WriteXLSX writes a table as an Excel XLSX file with
 	// row formatter option.
 	f := excelize.NewFile()
@@ -290,7 +290,7 @@ func (hset *HistogramSet) WriteXLSX(path, sheetName, colName1, colName2, colName
 	// Delete Original Sheet
 	f.DeleteSheet(f.GetSheetName(0))
 	// Save xlsx file by the given path.
-	return f.SaveAs(path)
+	return f.SaveAs(filename)
 
 }
 
