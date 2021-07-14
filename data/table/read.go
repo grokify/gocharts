@@ -8,7 +8,6 @@ import (
 	"strings"
 
 	"github.com/grokify/simplego/encoding/csvutil"
-	"github.com/grokify/simplego/type/stringsutil"
 	"github.com/pkg/errors"
 )
 
@@ -204,6 +203,7 @@ func (opts *ParseOptions) Filter(cols []string, rows [][]string, errorOutofBound
 	return newRows, nil
 }
 
+/*
 func ReadCSVFilesSingleColumnValuesString(files []string, col uint, condenseUniqueSort bool) ([]string, error) {
 	values := []string{}
 	for _, file := range files {
@@ -236,6 +236,7 @@ func ReadCSVFileSingleColumnValuesString(filename string, col uint, condenseUniq
 	}
 	return values, nil
 }
+*/
 
 func ParseBytes(data []byte, delimiter rune, hasHeaderRow bool) (Table, error) {
 	return ParseReader(bytes.NewReader(data), delimiter, hasHeaderRow)
