@@ -8,8 +8,8 @@ import (
 	"time"
 
 	"github.com/360EntSecGroup-Skylar/excelize"
-	"github.com/grokify/gocharts/data/excelizeutil"
 	"github.com/grokify/gocharts/data/table"
+	"github.com/grokify/gocharts/data/table/sheet"
 	"github.com/grokify/gocharts/data/timeseries"
 	"github.com/grokify/simplego/time/timeutil"
 	"github.com/grokify/simplego/type/stringsutil"
@@ -264,7 +264,7 @@ func (hset *HistogramSet) WriteXLSX(filename, sheetName, colName1, colName2, col
 	}
 	header := []interface{}{colName1, colName2, colNameCount}
 
-	excelizeutil.SetRowValues(f, sheetName, 0, header)
+	sheet.SetRowValues(f, sheetName, 0, header)
 	var err error
 	rowIdx := uint(1)
 	for fstatsName, fstats := range hset.HistogramMap {
@@ -282,7 +282,7 @@ func (hset *HistogramSet) WriteXLSX(filename, sheetName, colName1, colName2, col
 			} else {
 				rowVals = []interface{}{fstatsName, binName, binCount}
 			}
-			excelizeutil.SetRowValues(f, sheetName, rowIdx, rowVals)
+			sheet.SetRowValues(f, sheetName, rowIdx, rowVals)
 			rowIdx++
 		}
 	}

@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/360EntSecGroup-Skylar/excelize"
+	"github.com/grokify/gocharts/data/table/sheet"
 	"github.com/grokify/simplego/encoding/jsonutil"
 	"github.com/grokify/simplego/time/timeutil"
 	"github.com/pkg/errors"
@@ -203,14 +204,14 @@ func WriteXLSX(path string, tables ...*Table) error {
 		if len(tbl.Columns) > 0 {
 			rowBase++
 			for i, cellValue := range tbl.Columns {
-				cellLocation := CoordinatesToSheetLocation(uint32(i), 0)
+				cellLocation := sheet.CoordinatesToSheetLocation(uint32(i), 0)
 				f.SetCellValue(sheetname, cellLocation, cellValue)
 			}
 		}
 		fmtFunc := tbl.FormatterFunc()
 		for y, row := range tbl.Rows {
 			for x, cellValue := range row {
-				cellLocation := CoordinatesToSheetLocation(uint32(x), uint32(y+rowBase))
+				cellLocation := sheet.CoordinatesToSheetLocation(uint32(x), uint32(y+rowBase))
 				formattedVal, err := fmtFunc(cellValue, uint(x))
 				if err != nil {
 					return errors.Wrap(err, "gocharts/data/tables/write.go/WriteXLSXFormatted.Error.FormatCellValue")
@@ -253,7 +254,7 @@ func WriteXLSXInterface(filename string, sheetdatas ...SheetData) error {
 		index := f.NewSheet(sheetname)
 		for y, row := range sheetdata.Rows {
 			for x, cellValue := range row {
-				cellLocation := CoordinatesToSheetLocation(uint32(x), uint32(y))
+				cellLocation := sheet.CoordinatesToSheetLocation(uint32(x), uint32(y))
 				f.SetCellValue(sheetname, cellLocation, cellValue)
 			}
 		}
