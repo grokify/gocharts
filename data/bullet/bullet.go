@@ -4,8 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/grokify/gocharts/data"
-	tu "github.com/grokify/simplego/time/timeutil"
+	"github.com/grokify/simplego/time/timeutil"
 )
 
 type BulletCharts struct {
@@ -20,7 +19,7 @@ func NewBulletCharts() BulletCharts {
 }
 
 func (charts *BulletCharts) AddTimeDt8(dt8 int32) error {
-	dtCur, err := tu.TimeForDt8(dt8)
+	dtCur, err := timeutil.TimeForDt8(dt8)
 	if err != nil {
 		return err
 	}
@@ -30,15 +29,15 @@ func (charts *BulletCharts) AddTimeDt8(dt8 int32) error {
 func (charts *BulletCharts) AddTimeCurrent(dtCur time.Time) error {
 	dtCur = dtCur.UTC()
 	charts.TimeCurrent = dtCur
-	charts.TimeStart = tu.QuarterStart(dtCur)
-	charts.TimeEnd = tu.QuarterEnd(dtCur)
+	charts.TimeStart = timeutil.QuarterStart(dtCur)
+	charts.TimeEnd = timeutil.QuarterEnd(dtCur)
 	return nil
 }
 
 func (charts *BulletCharts) InflateChart(key string) error {
 	chart, ok := charts.Charts[key]
 	if !ok {
-		return fmt.Errorf("Chart [%v] not found.", key)
+		return fmt.Errorf("chart [%v] not found.", key)
 	}
 
 	chart.ProjectionData.CreateProjection(
@@ -54,7 +53,7 @@ func (charts *BulletCharts) InflateChart(key string) error {
 type BulletChart struct {
 	Title          string
 	Subtitle       string
-	ProjectionData data.ProjectionDataInt64
+	ProjectionData ProjectionDataInt64
 }
 
 func (bc *BulletChart) Inflate(start, current, end time.Time) {

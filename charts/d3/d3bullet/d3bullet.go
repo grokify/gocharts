@@ -7,7 +7,6 @@ import (
 	"os"
 	"path"
 
-	"github.com/grokify/gocharts/data"
 	"github.com/grokify/gocharts/data/bullet"
 )
 
@@ -35,7 +34,7 @@ func (d3builder *D3BulletChartBuilder) D3Bullet() BulletInt64 {
 func (d3builder *D3BulletChartBuilder) Bullet() bullet.BulletChart {
 	thisBulletChart := bullet.BulletChart{
 		Title: d3builder.Title,
-		ProjectionData: data.ProjectionDataInt64{
+		ProjectionData: bullet.ProjectionDataInt64{
 			Start:   d3builder.YStart,
 			Target:  d3builder.YTarget,
 			Current: d3builder.YCurrent,
@@ -71,7 +70,7 @@ func BulletChartToD3Bullet(bullet bullet.BulletChart) BulletInt64 {
 	return ProjectionToBulletInt64(bullet.ProjectionData, bullet.Title, bullet.Subtitle)
 }
 
-func ProjectionToBulletInt64(prjData data.ProjectionDataInt64, title string, subtitle string) BulletInt64 {
+func ProjectionToBulletInt64(prjData bullet.ProjectionDataInt64, title string, subtitle string) BulletInt64 {
 	rangeMax := int64(float64(prjData.Target) * 1.2)
 	if prjData.Projection > rangeMax {
 		rangeMax = int64(float64(prjData.Projection) * 1.2)
@@ -102,7 +101,7 @@ type Bullet struct {
 	Markers  []int  `json:"markers,omitempty"`
 }
 
-func ProjectionToBullet(prjData data.ProjectionDataInt, title string, subtitle string) Bullet {
+func ProjectionToBullet(prjData bullet.ProjectionDataInt, title string, subtitle string) Bullet {
 	rangeMax := int(float64(prjData.Target) * 1.2)
 	if prjData.Projection > rangeMax {
 		rangeMax = int(float64(prjData.Projection) * 1.2)
