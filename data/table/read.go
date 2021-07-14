@@ -16,10 +16,10 @@ var debugReadCSV = false // should not need to use this.
 
 // ReadFiles reads in a list of delimited files and returns a merged `Table` struct.
 // An error is returned if the columns count differs between files.
-func ReadFiles(filenames []string, comma rune, hasHeader bool) (Table, error) {
+func ReadFiles(filenames []string, comma rune, hasHeader bool, opts *ParseOptions) (Table, error) {
 	tbl := NewTable("")
 	for i, filename := range filenames {
-		tblx, err := ReadFile(filename, comma, hasHeader)
+		tblx, err := ReadFile(filename, comma, hasHeader, opts)
 		if err != nil {
 			return tblx, err
 		}
@@ -32,7 +32,7 @@ func ReadFiles(filenames []string, comma rune, hasHeader bool) (Table, error) {
 }
 
 // ReadFile reads in a delimited file and returns a `Table` struct.
-func ReadFile(filename string, comma rune, hasHeader bool) (Table, error) {
+func ReadFile(filename string, comma rune, hasHeader bool, opts *ParseOptions) (Table, error) {
 	tbl := NewTable("")
 	csvReader, f, err := csvutil.NewReader(filename, comma)
 	if err != nil {
@@ -59,22 +59,136 @@ func ReadFile(filename string, comma rune, hasHeader bool) (Table, error) {
 			}
 		}
 	} else {
+		errorOutofBounds := true
+		if opts != nil {
+			csvReader.FieldsPerRecord = opts.FieldsPerRecord
+			if csvReader.FieldsPerRecord < 0 {
+				errorOutofBounds = false
+			}
+		}
 		lines, err := csvReader.ReadAll()
 		if err != nil {
-			return tbl, err
+			return tbl, errors.Wrap(err, "csv.Reader.ReadAll()")
 		}
-		byteOrderMarkAsString := string('\uFEFF')
-		if len(lines) > 0 && len(lines[0]) > 0 &&
-			strings.HasPrefix(lines[0][0], byteOrderMarkAsString) {
-			lines[0][0] = strings.TrimPrefix(lines[0][0], byteOrderMarkAsString)
+		if len(lines) == 0 {
+			return tbl, errors.New("no content")
+		}
+		if len(lines) > 0 && len(lines[0]) > 0 {
+			lines[0][0] = trimUTF8ByteOrderMarkString(lines[0][0])
 		}
 		if hasHeader {
-			tbl.LoadMergedRows(lines)
+			if opts == nil || !opts.HasFilter() {
+				tbl.LoadMergedRows(lines)
+			} else {
+				if len(opts.ColNames) > 0 {
+					tbl.Columns = Columns(opts.ColNames)
+				} else {
+					cols := lines[0]
+					wantColNames := []string{}
+					for _, idx := range opts.ColIndices {
+						if int(idx) < len(cols) {
+							wantColNames = append(wantColNames, cols[int(idx)])
+						} else {
+							return tbl, fmt.Errorf("want column index not found [%d]", idx)
+						}
+					}
+					tbl.Columns = wantColNames
+				}
+
+				rows, err := opts.Filter(lines[0], lines[1:], errorOutofBounds)
+				if err != nil {
+					return tbl, err
+				}
+				tbl.Rows = rows
+			}
 		} else {
-			tbl.Rows = lines
+			if opts == nil || len(opts.ColIndices) == 0 {
+				tbl.Rows = lines
+			} else {
+				rows, err := opts.Filter([]string{}, lines, errorOutofBounds)
+				if err != nil {
+					return tbl, err
+				}
+				tbl.Rows = rows
+			}
 		}
 	}
 	return tbl, nil
+}
+
+func trimUTF8ByteOrderMarkString(s string) string {
+	byteOrderMarkAsString := string('\uFEFF')
+	if strings.HasPrefix(s, byteOrderMarkAsString) {
+		return strings.TrimPrefix(s, byteOrderMarkAsString)
+	}
+	return s
+}
+
+type ParseOptions struct {
+	Comma           rune
+	FieldsPerRecord int
+	ColNames        []string
+	ColIndices      []uint
+}
+
+func (opts *ParseOptions) HasFilter() bool {
+	if len(opts.ColNames) > 0 || len(opts.ColIndices) > 0 {
+		return true
+	}
+	return false
+}
+
+func (opts *ParseOptions) Filter(cols []string, rows [][]string, errorOutofBounds bool) ([][]string, error) {
+	newRows := [][]string{}
+	indices := opts.ColIndices
+
+	if !opts.HasFilter() {
+		return rows, nil
+	}
+
+	if len(opts.ColIndices) == 0 &&
+		len(opts.ColNames) > 0 && len(cols) > 0 {
+		colsPlus := Columns(cols)
+		indicesTry := []uint{}
+		wantColNamesNotFound := []string{}
+		for _, wantColName := range opts.ColNames {
+			idx := colsPlus.Index(wantColName)
+			if idx < 0 {
+				wantColNamesNotFound = append(wantColNamesNotFound, wantColName)
+			} else {
+				indicesTry = append(indicesTry, uint(idx))
+			}
+		}
+		if len(wantColNamesNotFound) > 0 {
+			return newRows, fmt.Errorf(
+				"filter columns not found [%s]",
+				strings.Join(wantColNamesNotFound, ","))
+		}
+		indices = indicesTry
+	}
+
+	if len(indices) == 0 {
+		return newRows, fmt.Errorf(
+			"no colIndices or row match: colNameFilter [%s] colNames [%s]",
+			strings.Join(opts.ColNames, ","),
+			strings.Join(cols, ","))
+	}
+
+	for _, row := range rows {
+		newRow := []string{}
+		for _, idx := range indices {
+			if int(idx) <= len(row) {
+				newRow = append(newRow, row[int(idx)])
+			} else if errorOutofBounds {
+				return newRows, fmt.Errorf("desired index out of bounds: index[%d] row len [%d]", idx, len(row))
+			} else {
+				newRow = append(newRow, "")
+			}
+		}
+		newRows = append(newRows, newRow)
+	}
+
+	return newRows, nil
 }
 
 func ReadCSVFilesSingleColumnValuesString(files []string, sep rune, hasHeader bool, col uint, condenseUniqueSort bool) ([]string, error) {
@@ -94,7 +208,7 @@ func ReadCSVFilesSingleColumnValuesString(files []string, sep rune, hasHeader bo
 }
 
 func ReadCSVFileSingleColumnValuesString(filename string, sep rune, hasHeader bool, col uint, condenseUniqueSort bool) ([]string, error) {
-	tbl, err := ReadFile(filename, sep, hasHeader)
+	tbl, err := ReadFile(filename, sep, hasHeader, nil)
 	if err != nil {
 		return []string{}, err
 	}
