@@ -16,10 +16,10 @@ var debugReadCSV = false // should not need to use this.
 
 // ReadFiles reads in a list of delimited files and returns a merged `Table` struct.
 // An error is returned if the columns count differs between files.
-func ReadFiles(filenames []string, comma rune, hasHeader bool, opts *ParseOptions) (Table, error) {
+func ReadFiles(filenames []string, opts *ParseOptions) (Table, error) {
 	tbl := NewTable("")
 	for i, filename := range filenames {
-		tblx, err := ReadFile(filename, comma, hasHeader, opts)
+		tblx, err := ReadFile(filename, opts)
 		if err != nil {
 			return tblx, err
 		}
@@ -32,8 +32,12 @@ func ReadFiles(filenames []string, comma rune, hasHeader bool, opts *ParseOption
 }
 
 // ReadFile reads in a delimited file and returns a `Table` struct.
-func ReadFile(filename string, comma rune, hasHeader bool, opts *ParseOptions) (Table, error) {
+func ReadFile(filename string, opts *ParseOptions) (Table, error) {
 	tbl := NewTable("")
+	comma := ','
+	if opts != nil {
+		comma = opts.CommaValue()
+	}
 	csvReader, f, err := csvutil.NewReader(filename, comma)
 	if err != nil {
 		return tbl, err
@@ -49,7 +53,7 @@ func ReadFile(filename string, comma rune, hasHeader bool, opts *ParseOptions) (
 				return tbl, err
 			}
 			i++
-			if i == 0 && hasHeader {
+			if i == 0 && (opts == nil || !opts.NoHeader) {
 				tbl.Columns = line
 				continue
 			}
@@ -76,16 +80,16 @@ func ReadFile(filename string, comma rune, hasHeader bool, opts *ParseOptions) (
 		if len(lines) > 0 && len(lines[0]) > 0 {
 			lines[0][0] = trimUTF8ByteOrderMarkString(lines[0][0])
 		}
-		if hasHeader {
+		if opts == nil || !opts.NoHeader {
 			if opts == nil || !opts.HasFilter() {
 				tbl.LoadMergedRows(lines)
 			} else {
-				if len(opts.ColNames) > 0 {
-					tbl.Columns = Columns(opts.ColNames)
+				if len(opts.FilterColNames) > 0 {
+					tbl.Columns = Columns(opts.FilterColNames)
 				} else {
 					cols := lines[0]
 					wantColNames := []string{}
-					for _, idx := range opts.ColIndices {
+					for _, idx := range opts.FilterColIndices {
 						if int(idx) < len(cols) {
 							wantColNames = append(wantColNames, cols[int(idx)])
 						} else {
@@ -102,7 +106,7 @@ func ReadFile(filename string, comma rune, hasHeader bool, opts *ParseOptions) (
 				tbl.Rows = rows
 			}
 		} else {
-			if opts == nil || len(opts.ColIndices) == 0 {
+			if opts == nil || len(opts.FilterColIndices) == 0 {
 				tbl.Rows = lines
 			} else {
 				rows, err := opts.Filter([]string{}, lines, errorOutofBounds)
@@ -125,14 +129,23 @@ func trimUTF8ByteOrderMarkString(s string) string {
 }
 
 type ParseOptions struct {
-	Comma           rune
-	FieldsPerRecord int
-	ColNames        []string
-	ColIndices      []uint
+	UseComma         bool
+	Comma            rune
+	NoHeader         bool // HasHeader is default (false)
+	FieldsPerRecord  int
+	FilterColNames   []string
+	FilterColIndices []uint
+}
+
+func (opts *ParseOptions) CommaValue() rune {
+	if opts.UseComma {
+		return opts.Comma
+	}
+	return ','
 }
 
 func (opts *ParseOptions) HasFilter() bool {
-	if len(opts.ColNames) > 0 || len(opts.ColIndices) > 0 {
+	if len(opts.FilterColNames) > 0 || len(opts.FilterColIndices) > 0 {
 		return true
 	}
 	return false
@@ -140,18 +153,18 @@ func (opts *ParseOptions) HasFilter() bool {
 
 func (opts *ParseOptions) Filter(cols []string, rows [][]string, errorOutofBounds bool) ([][]string, error) {
 	newRows := [][]string{}
-	indices := opts.ColIndices
+	indices := opts.FilterColIndices
 
 	if !opts.HasFilter() {
 		return rows, nil
 	}
 
-	if len(opts.ColIndices) == 0 &&
-		len(opts.ColNames) > 0 && len(cols) > 0 {
+	if len(opts.FilterColIndices) == 0 &&
+		len(opts.FilterColNames) > 0 && len(cols) > 0 {
 		colsPlus := Columns(cols)
 		indicesTry := []uint{}
 		wantColNamesNotFound := []string{}
-		for _, wantColName := range opts.ColNames {
+		for _, wantColName := range opts.FilterColNames {
 			idx := colsPlus.Index(wantColName)
 			if idx < 0 {
 				wantColNamesNotFound = append(wantColNamesNotFound, wantColName)
@@ -170,7 +183,7 @@ func (opts *ParseOptions) Filter(cols []string, rows [][]string, errorOutofBound
 	if len(indices) == 0 {
 		return newRows, fmt.Errorf(
 			"no colIndices or row match: colNameFilter [%s] colNames [%s]",
-			strings.Join(opts.ColNames, ","),
+			strings.Join(opts.FilterColNames, ","),
 			strings.Join(cols, ","))
 	}
 
@@ -191,11 +204,11 @@ func (opts *ParseOptions) Filter(cols []string, rows [][]string, errorOutofBound
 	return newRows, nil
 }
 
-func ReadCSVFilesSingleColumnValuesString(files []string, sep rune, hasHeader bool, col uint, condenseUniqueSort bool) ([]string, error) {
+func ReadCSVFilesSingleColumnValuesString(files []string, col uint, condenseUniqueSort bool) ([]string, error) {
 	values := []string{}
 	for _, file := range files {
 		fileValues, err := ReadCSVFileSingleColumnValuesString(
-			file, sep, hasHeader, col, false)
+			file, col, false)
 		if err != nil {
 			return values, err
 		}
@@ -207,8 +220,8 @@ func ReadCSVFilesSingleColumnValuesString(files []string, sep rune, hasHeader bo
 	return values, nil
 }
 
-func ReadCSVFileSingleColumnValuesString(filename string, sep rune, hasHeader bool, col uint, condenseUniqueSort bool) ([]string, error) {
-	tbl, err := ReadFile(filename, sep, hasHeader, nil)
+func ReadCSVFileSingleColumnValuesString(filename string, col uint, condenseUniqueSort bool) ([]string, error) {
+	tbl, err := ReadFile(filename, nil)
 	if err != nil {
 		return []string{}, err
 	}

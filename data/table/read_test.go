@@ -16,7 +16,7 @@ var readFileTests = []struct {
 // TestReadFile reads a CSV file.
 func TestReadFile(t *testing.T) {
 	for _, tt := range readFileTests {
-		tbl, err := ReadFile(tt.filename, ',', true, nil)
+		tbl, err := ReadFile(tt.filename, nil)
 		if err != nil {
 			t.Errorf("table.ReadFile(\"%s\",...) Error: [%v]",
 				tt.filename, err.Error())
