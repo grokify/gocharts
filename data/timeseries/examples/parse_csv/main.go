@@ -23,7 +23,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	tbl, err := table.ReadFile(opts.File, nil)
+	tbl, err := table.ReadFiles(nil, opts.File)
 	if err != nil {
 		log.Fatal(err)
 	}

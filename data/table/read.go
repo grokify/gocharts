@@ -15,23 +15,30 @@ var debugReadCSV = false // should not need to use this.
 
 // ReadFiles reads in a list of delimited files and returns a merged `Table` struct.
 // An error is returned if the columns count differs between files.
-func ReadFiles(filenames []string, opts *ParseOptions) (Table, error) {
+func ReadFiles(opts *ParseOptions, filenames ...string) (Table, error) {
 	tbl := NewTable("")
+	if len(filenames) == 0 {
+		return tbl, errors.New("no filenames provided")
+	}
 	for i, filename := range filenames {
-		tblx, err := ReadFile(filename, opts)
-		if err != nil {
+		tblx, err := readSingleFile(opts, filename)
+		if err != nil || len(filenames) == 1 {
 			return tblx, err
 		}
-		if i > 0 && len(tbl.Columns) != len(tblx.Columns) {
+		if i == 0 {
+			tbl = tblx
+			continue
+		} else if !tbl.Columns.Equal(tblx.Columns) {
 			return tbl, fmt.Errorf("csv column count mismatch earlier files count [%d] file [%s] count [%d]",
 				len(tbl.Columns), filename, len(tblx.Columns))
 		}
+		tbl.Rows = append(tbl.Rows, tblx.Rows...)
 	}
 	return tbl, nil
 }
 
 // ReadFile reads in a delimited file and returns a `Table` struct.
-func ReadFile(filename string, opts *ParseOptions) (Table, error) {
+func readSingleFile(opts *ParseOptions, filename string) (Table, error) {
 	tbl := NewTable("")
 	comma := ','
 	if opts != nil {

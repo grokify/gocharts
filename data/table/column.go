@@ -19,6 +19,18 @@ func (cols Columns) Index(colName string) int {
 	return -1
 }
 
+func (cols Columns) Equal(c Columns) bool {
+	if len(cols) != len(c) {
+		return false
+	}
+	for i, v := range cols {
+		if v != c[i] {
+			return false
+		}
+	}
+	return true
+}
+
 // MustRowVal returns a single row value.
 func (cols Columns) MustRowVal(colName string, row []string) string {
 	val, err := cols.RowVal(colName, row)
