@@ -29,8 +29,9 @@ func ReadFiles(opts *ParseOptions, filenames ...string) (Table, error) {
 			tbl = tblx
 			continue
 		} else if !tbl.Columns.Equal(tblx.Columns) {
-			return tbl, fmt.Errorf("csv column count mismatch earlier files count [%d] file [%s] count [%d]",
-				len(tbl.Columns), filename, len(tblx.Columns))
+			return tbl, fmt.Errorf("csv column mismatch earlier files cols1 [%s] cols2 [%s]",
+				strings.Join(tbl.Columns, ","),
+				strings.Join(tblx.Columns, ","))
 		}
 		tbl.Rows = append(tbl.Rows, tblx.Rows...)
 	}
