@@ -1,4 +1,6 @@
-package table
+// tabulator provides helper methods for rendering HTML
+// with Tabulator (http://tabulator.info/)
+package tabulator
 
 import "encoding/json"
 
