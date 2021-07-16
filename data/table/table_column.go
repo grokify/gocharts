@@ -75,7 +75,7 @@ func (tbl *Table) ColumnValuesForColumnName(colName string, dedupeValues, sortVa
 	return tbl.ColumnValues(uint(colIdx), dedupeValues, sortValues)
 }
 
-func (tbl *Table) ColumnValuesDistinct(colIdx uint) (map[string]int, error) {
+func (tbl *Table) columnValuesDistinct(colIdx uint) (map[string]int, error) {
 	data := map[string]int{}
 	idx := int(colIdx)
 
@@ -93,7 +93,7 @@ func (tbl *Table) ColumnValuesDistinct(colIdx uint) (map[string]int, error) {
 }
 
 func (tbl *Table) ColumnValuesMinMax(colIdx uint) (string, string, error) {
-	vals, err := tbl.ColumnValuesDistinct(colIdx)
+	vals, err := tbl.columnValuesDistinct(colIdx)
 	if err != nil {
 		return "", "", err
 	}
