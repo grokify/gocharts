@@ -6,6 +6,8 @@ import (
 	"github.com/grokify/simplego/time/timeutil"
 )
 
+// ToMonth aggregates time values into months. `inflate`
+// is used to add months with `0` values.
 func (set *TimeSeriesSet) ToMonth(inflate bool) TimeSeriesSet {
 	newTss := TimeSeriesSet{
 		Name:     set.Name,

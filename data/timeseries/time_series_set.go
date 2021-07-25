@@ -195,29 +195,6 @@ func (set *TimeSeriesSet) MinMaxValuesFloat64() (float64, float64) {
 	return values[0], values[len(values)-1]
 }
 
-func (set *TimeSeriesSet) SplitTimesLowerBound(times ...time.Time) (TimeSeriesSets, error) {
-	min, _ := set.MinMaxTimes()
-	times = append(times, min)
-	timeSlice := timeslice.TimeSlice(times)
-	sort.Sort(timeSlice)
-	timeSlice = timeSlice.Dedupe()
-	sets := NewTimeSeriesSets("time sets by times")
-	sets.KeyIsTime = true
-	for seriesName, ts := range set.Series {
-		for _, timeItem := range ts.ItemMap {
-			timeBucket, err := timeSlice.RangeLower(timeItem.Time)
-			if err != nil {
-				return sets, err
-			}
-			timeItem.SeriesName = seriesName
-			timeItem.SeriesSetName = timeBucket.Format(time.RFC3339)
-			timeItem.Time = timeBucket
-			sets.AddItems(timeItem)
-		}
-	}
-	return sets, nil
-}
-
 type RowInt64 struct {
 	Name         string
 	DisplayName  string

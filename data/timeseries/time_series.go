@@ -249,6 +249,8 @@ func (ts *TimeSeries) DeleteTime(dt time.Time) {
 	delete(ts.ItemMap, dt.Format(time.RFC3339))
 }
 
+// ToMonth aggregates time values into months. `inflate`
+// is used to add months with `0` values.
 func (ts *TimeSeries) ToMonth(inflate bool) TimeSeries {
 	newTimeSeries := TimeSeries{
 		SeriesName: ts.SeriesName,
