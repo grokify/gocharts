@@ -8,6 +8,7 @@ import (
 
 	"github.com/grokify/simplego/sort/sortutil"
 	"github.com/grokify/simplego/time/month"
+	"github.com/grokify/simplego/time/timeslice"
 	"github.com/grokify/simplego/time/timeutil"
 	"github.com/grokify/simplego/type/stringsutil"
 	"github.com/pkg/errors"
@@ -143,7 +144,7 @@ func (set *TimeSeriesSet) Item(seriesName, rfc3339 string) (TimeItem, error) {
 	return item, nil
 }
 
-func (set *TimeSeriesSet) TimeSlice(sortAsc bool) sortutil.TimeSlice {
+func (set *TimeSeriesSet) TimeSlice(sortAsc bool) timeslice.TimeSlice {
 	times := []time.Time{}
 	for _, ds := range set.Series {
 		for _, item := range ds.ItemMap {
@@ -165,7 +166,7 @@ func (set *TimeSeriesSet) TimeStrings() []string {
 }
 
 func (set *TimeSeriesSet) MinMaxTimes() (time.Time, time.Time) {
-	values := sortutil.TimeSlice{}
+	values := timeslice.TimeSlice{}
 	for _, ds := range set.Series {
 		min, max := ds.MinMaxTimes()
 		values = append(values, min, max)
@@ -192,6 +193,29 @@ func (set *TimeSeriesSet) MinMaxValuesFloat64() (float64, float64) {
 	}
 	sort.Sort(values)
 	return values[0], values[len(values)-1]
+}
+
+func (set *TimeSeriesSet) SplitTimesLowerBound(times ...time.Time) (TimeSeriesSets, error) {
+	min, _ := set.MinMaxTimes()
+	times = append(times, min)
+	timeSlice := timeslice.TimeSlice(times)
+	sort.Sort(timeSlice)
+	timeSlice = timeSlice.Dedupe()
+	sets := NewTimeSeriesSets("time sets by times")
+	sets.KeyIsTime = true
+	for seriesName, ts := range set.Series {
+		for _, timeItem := range ts.ItemMap {
+			timeBucket, err := timeSlice.RangeLower(timeItem.Time)
+			if err != nil {
+				return sets, err
+			}
+			timeItem.SeriesName = seriesName
+			timeItem.SeriesSetName = timeBucket.Format(time.RFC3339)
+			timeItem.Time = timeBucket
+			sets.AddItems(timeItem)
+		}
+	}
+	return sets, nil
 }
 
 type RowInt64 struct {

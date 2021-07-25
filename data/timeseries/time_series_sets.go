@@ -7,9 +7,10 @@ import (
 )
 
 type TimeSeriesSets struct {
-	Name     string
-	SetsMap  map[string]TimeSeriesSet
-	Interval timeutil.Interval
+	Name      string
+	SetsMap   map[string]TimeSeriesSet
+	KeyIsTime bool
+	Interval  timeutil.Interval
 }
 
 func NewTimeSeriesSets(name string) TimeSeriesSets {
