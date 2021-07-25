@@ -8,6 +8,7 @@ import (
 	"github.com/grokify/gocharts/data/point"
 	"github.com/grokify/simplego/sort/sortutil"
 	"github.com/grokify/simplego/time/month"
+	"github.com/grokify/simplego/time/timeslice"
 	"github.com/grokify/simplego/time/timeutil"
 	"github.com/pkg/errors"
 )
@@ -233,8 +234,8 @@ func (ts *TimeSeries) OneItemMaxValue() (TimeItem, error) {
 	return max, nil
 }
 
-func (ts *TimeSeries) TimeSlice(sortSlice bool) timeutil.TimeSlice {
-	times := timeutil.TimeSlice{}
+func (ts *TimeSeries) TimeSlice(sortSlice bool) timeslice.TimeSlice {
+	times := timeslice.TimeSlice{}
 	for _, item := range ts.ItemMap {
 		times = append(times, item.Time)
 	}

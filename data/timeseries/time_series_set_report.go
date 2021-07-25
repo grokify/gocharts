@@ -8,12 +8,13 @@ import (
 	"time"
 
 	"github.com/grokify/gocharts/data/table"
+	"github.com/grokify/simplego/time/timeslice"
 	"github.com/grokify/simplego/time/timeutil"
 )
 
 // ReportAxisX generates data for use with `C3Chart.C3Axis.C3AxisX.Categories`.
 func ReportAxisX(set TimeSeriesSet, cols int, conv func(time.Time) string) []string {
-	var times timeutil.TimeSlice
+	var times timeslice.TimeSlice
 	if cols < len(set.Times) {
 		min := len(set.Times) - cols
 		times = set.Times[min:]
@@ -30,7 +31,7 @@ func ReportAxisX(set TimeSeriesSet, cols int, conv func(time.Time) string) []str
 // Report generates data for use with `C3Chart.C3ChartData.Columns`.
 func Report(set TimeSeriesSet, cols int, lowFirst bool) []RowInt64 {
 	rows := []RowInt64{}
-	var times timeutil.TimeSlice
+	var times timeslice.TimeSlice
 	var timePlus1 time.Time
 	havePlus1 := false
 	if cols < len(set.Times) {
@@ -48,7 +49,7 @@ func Report(set TimeSeriesSet, cols int, lowFirst bool) []RowInt64 {
 	}
 	timePlus1Rfc := timePlus1.UTC().Format(time.RFC3339)
 	if !lowFirst {
-		times = sort.Reverse(times).(timeutil.TimeSlice)
+		times = sort.Reverse(times).(timeslice.TimeSlice)
 	}
 	for _, seriesName := range set.Order {
 		row := RowInt64{
