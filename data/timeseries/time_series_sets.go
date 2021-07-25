@@ -4,11 +4,13 @@ import (
 	"sort"
 
 	"github.com/grokify/simplego/time/timeutil"
+	"github.com/grokify/simplego/type/stringsutil"
 )
 
 type TimeSeriesSets struct {
 	Name      string
 	SetsMap   map[string]TimeSeriesSet
+	Order     []string
 	KeyIsTime bool
 	Interval  timeutil.Interval
 }
@@ -34,11 +36,21 @@ func (sets *TimeSeriesSets) AddItems(items ...TimeItem) {
 	}
 }
 
-func (sets *TimeSeriesSets) SetNamesSorted() []string {
+func (sets *TimeSeriesSets) SetNames() []string {
 	names := []string{}
 	for name := range sets.SetsMap {
 		names = append(names, name)
 	}
 	sort.Strings(names)
 	return names
+}
+
+func (sets *TimeSeriesSets) SeriesNames() []string {
+	seriesNames := []string{}
+	for _, set := range sets.SetsMap {
+		for seriesName := range set.Series {
+			seriesNames = append(seriesNames, seriesName)
+		}
+	}
+	return stringsutil.SliceCondenseSpace(seriesNames, true, true)
 }
