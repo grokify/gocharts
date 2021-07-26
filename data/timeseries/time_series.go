@@ -21,8 +21,10 @@ type TimeSeries struct {
 	Interval      timeutil.Interval // Informational
 }
 
-func NewTimeSeries() TimeSeries {
-	return TimeSeries{ItemMap: map[string]TimeItem{}}
+func NewTimeSeries(name string) TimeSeries {
+	return TimeSeries{
+		SeriesName: name,
+		ItemMap:    map[string]TimeItem{}}
 }
 
 // AddInt64 adds a time value, converting it to a float on
@@ -366,7 +368,7 @@ func (ts *TimeSeries) ToQuarter() TimeSeries {
 }
 
 func AggregateSeries(series TimeSeries) TimeSeries {
-	aggregate := NewTimeSeries()
+	aggregate := NewTimeSeries(series.SeriesName)
 	sortedItems := series.ItemsSorted()
 	sum := int64(0)
 	for _, atomicItem := range sortedItems {
@@ -418,7 +420,7 @@ func (ts *TimeSeries) Stats() point.PointSet {
 
 func TimeSeriesDivide(numer, denom TimeSeries) (TimeSeries, error) {
 	denomKeys := denom.Keys()
-	ts := NewTimeSeries()
+	ts := NewTimeSeries(denom.SeriesName)
 	ts.IsFloat = true
 	if numer.Interval == denom.Interval {
 		ts.Interval = denom.Interval

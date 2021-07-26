@@ -21,7 +21,7 @@ func NewTimeSeriesSimple(name, displayName string) TimeSeriesSimple {
 }
 
 func (tss *TimeSeriesSimple) ToTimeSeriesQuarter() TimeSeries {
-	ts := NewTimeSeries()
+	ts := NewTimeSeries(tss.Name)
 	ts.SeriesName = tss.Name
 	for _, t := range tss.Times {
 		ts.AddItems(TimeItem{
