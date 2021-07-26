@@ -33,7 +33,7 @@ func (set *TimeSeriesSet) NewTimesLowerBound(times ...time.Time) (TimeSeriesSets
 }
 */
 
-func (set *TimeSeriesSet) NewTimesUpperBound(times ...time.Time) (TimeSeriesSet, error) {
+func (set *TimeSeriesSet) ToSetTimesRangeUpper(inclusive bool, times ...time.Time) (TimeSeriesSet, error) {
 	_, max := set.MinMaxTimes()
 	times = append(times, max)
 	timeSlice := timeslice.TimeSlice(times)
@@ -48,7 +48,7 @@ func (set *TimeSeriesSet) NewTimesUpperBound(times ...time.Time) (TimeSeriesSet,
 			if timeItem.SeriesName != seriesName {
 				return newSet, errors.New("timeItem.SeriesName != TimeSeriesSet seriesName")
 			}
-			tRangeUpper, err := timeSlice.RangeUpper(timeItem.Time, true)
+			tRangeUpper, err := timeSlice.RangeUpper(timeItem.Time, inclusive)
 			if err != nil {
 				panic("time item greater than set max time")
 			}
