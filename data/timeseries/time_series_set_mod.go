@@ -8,7 +8,10 @@ import (
 
 // ToMonth aggregates time values into months. `inflate`
 // is used to add months with `0` values.
-func (set *TimeSeriesSet) ToMonth(inflate bool) TimeSeriesSet {
+func (set *TimeSeriesSet) ToMonth(cumulative, inflate, popLast bool) (TimeSeriesSet, error) {
+	if cumulative {
+		return set.toMonthCumulative(inflate, popLast)
+	}
 	newTss := TimeSeriesSet{
 		Name:     set.Name,
 		Series:   map[string]TimeSeries{},
@@ -18,11 +21,15 @@ func (set *TimeSeriesSet) ToMonth(inflate bool) TimeSeriesSet {
 	for name, ds := range set.Series {
 		newTss.Series[name] = ds.ToMonth(inflate)
 	}
+	if popLast {
+		newTss.PopLast()
+	}
+	newTss.Inflate()
 	newTss.Times = newTss.TimeSlice(true)
-	return newTss
+	return newTss, nil
 }
 
-func (set *TimeSeriesSet) ToMonthCumulative(popLast, inflate bool) (TimeSeriesSet, error) {
+func (set *TimeSeriesSet) toMonthCumulative(inflate, popLast bool) (TimeSeriesSet, error) {
 	newTss := TimeSeriesSet{
 		Name:     set.Name,
 		Series:   map[string]TimeSeries{},
