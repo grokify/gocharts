@@ -31,17 +31,18 @@ func (cols Columns) Equal(c Columns) bool {
 	return true
 }
 
-// MustRowVal returns a single row value.
-func (cols Columns) MustRowVal(colName string, row []string) string {
-	val, err := cols.RowVal(colName, row)
+// MustCellString returns a single row value or empty string if the column
+// name doesn't exist.
+func (cols Columns) MustCellString(colName string, row []string) string {
+	val, err := cols.CellString(colName, row)
 	if err != nil {
 		return ""
 	}
 	return val
 }
 
-// RowVal returns a single row value.
-func (cols Columns) RowVal(colName string, row []string) (string, error) {
+// CellString returns a single row value.
+func (cols Columns) CellString(colName string, row []string) (string, error) {
 	for colIdx, colNameTry := range cols {
 		if colNameTry == colName {
 			if colIdx < len(row) {
@@ -52,28 +53,28 @@ func (cols Columns) RowVal(colName string, row []string) (string, error) {
 	return "", fmt.Errorf("columnName [%s] not found", colName)
 }
 
-// RowValFloat64 returns a single row value.
-func (cols Columns) RowValFloat64(colName string, row []string) (float64, error) {
-	val, err := cols.RowVal(colName, row)
+// CellFloat64 returns a single row value.
+func (cols Columns) CellFloat64(colName string, row []string) (float64, error) {
+	val, err := cols.CellString(colName, row)
 	if err != nil {
 		return 0, err
 	}
 	return strconv.ParseFloat(val, 64)
 }
 
-// RowValInt returns a single row value.
-func (cols Columns) RowValInt(colName string, row []string) (int, error) {
-	val, err := cols.RowVal(colName, row)
+// CellInt returns a single row value.
+func (cols Columns) CellInt(colName string, row []string) (int, error) {
+	val, err := cols.CellString(colName, row)
 	if err != nil {
 		return 0, err
 	}
 	return strconv.Atoi(val)
 }
 
-// RowValTime returns a single row value. If no
+// CellTime returns a single row value. If no
 // `timeFormat` is provided `time.RFC3339` is used.
-func (cols Columns) RowValTime(colName, timeFormat string, row []string) (time.Time, error) {
-	val, err := cols.RowVal(colName, row)
+func (cols Columns) CellTime(colName, timeFormat string, row []string) (time.Time, error) {
+	val, err := cols.CellString(colName, row)
 	if err != nil {
 		return time.Now(), err
 	}
@@ -83,21 +84,21 @@ func (cols Columns) RowValTime(colName, timeFormat string, row []string) (time.T
 	return time.Parse(timeFormat, val)
 }
 
-// MustRowVals returns a slice of values.
-func (cols Columns) MustRowVals(colNames []string, row []string) []string {
+// MustCellsString returns a slice of values.
+func (cols Columns) MustCellsString(colNames []string, row []string) []string {
 	vals := []string{}
 	for _, colName := range colNames {
-		vals = append(vals, cols.MustRowVal(colName, row))
+		vals = append(vals, cols.MustCellString(colName, row))
 	}
 	return vals
 }
 
-// RowVals returns a slice of values.
-func (cols Columns) RowVals(colNames []string, row []string) ([]string, error) {
+// CellsString returns a slice of values.
+func (cols Columns) CellsString(colNames []string, row []string) ([]string, error) {
 	missingColumnNames := []string{}
 	vals := []string{}
 	for _, colName := range colNames {
-		val, err := cols.RowVal(colName, row)
+		val, err := cols.CellString(colName, row)
 		if err != nil {
 			missingColumnNames = append(missingColumnNames, colName)
 		} else {
