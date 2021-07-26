@@ -189,8 +189,8 @@ github.com/grokify/bitcoinmath v0.0.0-20171208015713-6ef5b53bef73/go.mod h1:FrFk
 github.com/grokify/elastirad-go v0.1.2 h1:cXolzcNPKT+1/5uYZ7L+xEXpNWTsXYaaEF86aBcmmjM=
 github.com/grokify/elastirad-go v0.1.2/go.mod h1:EKkozVVN3RkQ7neSu974z4BNSeuhRqPy9ZSGD13+P3A=
 github.com/grokify/simplego v0.27.2/go.mod h1:UKobvO2/X3aFy5fwNUxaW6YFK8A3IKCoIRqtVNhsdZU=
-github.com/grokify/simplego v0.29.2 h1:IW3C0fDDcufa+RdAdVGvs9SvfZWRH8sZ8g1LKTTDV1I=
-github.com/grokify/simplego v0.29.2/go.mod h1:UKobvO2/X3aFy5fwNUxaW6YFK8A3IKCoIRqtVNhsdZU=
+github.com/grokify/simplego v0.29.3 h1:S5BuEm+Kqy1KsqlZtiAXzc7E54r6CYbsrvz8iqipHdc=
+github.com/grokify/simplego v0.29.3/go.mod h1:UKobvO2/X3aFy5fwNUxaW6YFK8A3IKCoIRqtVNhsdZU=
 github.com/grpc-ecosystem/go-grpc-middleware v1.0.0/go.mod h1:FiyG127CGDf3tlThmgyCl78X/SZQqEOJBCDaAfeWzPs=
 github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0/go.mod h1:8NvIoxWQoOIhqOTXgfV/d3M/q6VIi02HzZEHgUlZvzk=
 github.com/grpc-ecosystem/grpc-gateway v1.9.0/go.mod h1:vNeuVxBJEsws4ogUvrchl83t/GYV9WGTSLVdBhOQFDY=
