@@ -153,8 +153,7 @@ func (hset *HistogramSet) LeafStats(name string) *Histogram {
 }
 
 func (hset *HistogramSet) ToTimeSeriesDistinct() (timeseries.TimeSeries, error) {
-	ds := timeseries.NewTimeSeries()
-	ds.SeriesName = hset.Name
+	ds := timeseries.NewTimeSeries(hset.Name)
 	for rfc3339, hist := range hset.HistogramMap {
 		dt, err := time.Parse(time.RFC3339, rfc3339)
 		if err != nil {
@@ -312,12 +311,10 @@ func (hset *HistogramSet) DatetimeKeyToQuarter(name string) (*HistogramSet, erro
 	return fsetQtr, nil
 }
 
-// DatetimeKeyCount returns a TimeSeries when
-// the first key is a RFC3339 time and a sum of items
-// is desired per time.
+// DatetimeKeyCount returns a TimeSeries when the first key is a RFC3339 time
+// and a sum of items is desired per time.
 func (hset *HistogramSet) DatetimeKeyCount() (timeseries.TimeSeries, error) {
-	ts := timeseries.NewTimeSeries()
-	ts.SeriesName = hset.Name
+	ts := timeseries.NewTimeSeries(hset.Name)
 	for rfc3339, hist := range hset.HistogramMap {
 		dt, err := time.Parse(time.RFC3339, rfc3339)
 		if err != nil {

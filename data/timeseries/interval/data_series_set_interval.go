@@ -91,8 +91,7 @@ func (set *TimeSeriesSet) addAllSeries(allSeriesName string) {
 	if len(strings.TrimSpace(allSeriesName)) == 0 {
 		allSeriesName = "All"
 	}
-	allSeries := timeseries.NewTimeSeries()
-	allSeries.SeriesName = allSeriesName
+	allSeries := timeseries.NewTimeSeries(allSeriesName)
 
 	for _, series := range set.SourceSeriesMap {
 		for _, item := range series.ItemMap {
@@ -129,7 +128,7 @@ func (set *TimeSeriesSet) GetTimeSeries(seriesName string, seriesType SeriesType
 }
 
 func (set *TimeSeriesSet) BuildOutputSeries(source timeseries.TimeSeries) (timeseries.TimeSeries, error) {
-	output := timeseries.NewTimeSeries()
+	output := timeseries.NewTimeSeries(set.AllSeriesName)
 	for _, item := range source.ItemMap {
 		output.SeriesName = item.SeriesName
 		ivalStart, err := timeutil.IntervalStart(
