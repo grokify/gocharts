@@ -38,6 +38,15 @@ func ReadFiles(opts *ParseOptions, filenames ...string) (Table, error) {
 	return tbl, nil
 }
 
+func trimSpaceSliceSliceString(s [][]string) [][]string {
+	for i, row := range s {
+		for j, cell := range row {
+			s[i][j] = strings.TrimSpace(cell)
+		}
+	}
+	return s
+}
+
 // ReadFile reads in a delimited file and returns a `Table` struct.
 func readSingleFile(opts *ParseOptions, filename string) (Table, error) {
 	tbl := NewTable("")
@@ -78,6 +87,9 @@ func readSingleFile(opts *ParseOptions, filename string) (Table, error) {
 			}
 		}
 		lines, err := csvReader.ReadAll()
+		if opts != nil && opts.TrimSpace {
+			lines = trimSpaceSliceSliceString(lines)
+		}
 		if err != nil {
 			return tbl, errors.Wrap(err, "csv.Reader.ReadAll()")
 		}
