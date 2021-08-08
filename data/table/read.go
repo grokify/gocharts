@@ -84,9 +84,6 @@ func readSingleFile(opts *ParseOptions, filename string) (Table, error) {
 		if len(lines) == 0 {
 			return tbl, errors.New("no content")
 		}
-		if len(lines) > 0 && len(lines[0]) > 0 {
-			lines[0][0] = trimUTF8ByteOrderMarkString(lines[0][0])
-		}
 		if opts == nil || !opts.NoHeader {
 			if opts == nil || !opts.HasFilter() {
 				tbl.LoadMergedRows(lines)
@@ -127,14 +124,6 @@ func readSingleFile(opts *ParseOptions, filename string) (Table, error) {
 	return tbl, nil
 }
 
-func trimUTF8ByteOrderMarkString(s string) string {
-	byteOrderMarkAsString := string('\uFEFF')
-	if strings.HasPrefix(s, byteOrderMarkAsString) {
-		return strings.TrimPrefix(s, byteOrderMarkAsString)
-	}
-	return s
-}
-
 type ParseOptions struct {
 	UseComma         bool
 	Comma            rune
@@ -142,6 +131,7 @@ type ParseOptions struct {
 	FieldsPerRecord  int
 	FilterColNames   []string
 	FilterColIndices []uint
+	TrimSpace        bool
 }
 
 func (opts *ParseOptions) CommaValue() rune {
@@ -210,41 +200,6 @@ func (opts *ParseOptions) Filter(cols []string, rows [][]string, errorOutofBound
 
 	return newRows, nil
 }
-
-/*
-func ReadCSVFilesSingleColumnValuesString(files []string, col uint, condenseUniqueSort bool) ([]string, error) {
-	values := []string{}
-	for _, file := range files {
-		fileValues, err := ReadCSVFileSingleColumnValuesString(
-			file, col, false)
-		if err != nil {
-			return values, err
-		}
-		values = append(values, fileValues...)
-	}
-	if condenseUniqueSort {
-		values = stringsutil.SliceCondenseSpace(values, true, true)
-	}
-	return values, nil
-}
-
-func ReadCSVFileSingleColumnValuesString(filename string, col uint, condenseUniqueSort bool) ([]string, error) {
-	tbl, err := ReadFile(filename, nil)
-	if err != nil {
-		return []string{}, err
-	}
-	values := []string{}
-	for _, row := range tbl.Rows {
-		if len(row) > int(col) {
-			values = append(values, row[col])
-		}
-	}
-	if condenseUniqueSort {
-		values = stringsutil.SliceCondenseSpace(values, true, true)
-	}
-	return values, nil
-}
-*/
 
 func ParseBytes(data []byte, delimiter rune, hasHeaderRow bool) (Table, error) {
 	return ParseReader(bytes.NewReader(data), delimiter, hasHeaderRow)
