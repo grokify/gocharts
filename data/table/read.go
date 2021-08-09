@@ -50,11 +50,10 @@ func trimSpaceSliceSliceString(s [][]string) [][]string {
 // ReadFile reads in a delimited file and returns a `Table` struct.
 func readSingleFile(opts *ParseOptions, filename string) (Table, error) {
 	tbl := NewTable("")
-	comma := ','
-	if opts != nil {
-		comma = opts.CommaValue()
+	if opts == nil {
+		opts = &ParseOptions{}
 	}
-	csvReader, f, err := csvutil.NewReader(filename, comma)
+	csvReader, f, err := csvutil.NewReader(filename, opts.CommaValue())
 	if err != nil {
 		return tbl, err
 	}
@@ -79,15 +78,13 @@ func readSingleFile(opts *ParseOptions, filename string) (Table, error) {
 			}
 		}
 	} else {
+		csvReader.FieldsPerRecord = opts.FieldsPerRecord
 		errorOutofBounds := true
-		if opts != nil {
-			csvReader.FieldsPerRecord = opts.FieldsPerRecord
-			if csvReader.FieldsPerRecord < 0 {
-				errorOutofBounds = false
-			}
+		if csvReader.FieldsPerRecord < 0 {
+			errorOutofBounds = false
 		}
 		lines, err := csvReader.ReadAll()
-		if opts != nil && opts.TrimSpace {
+		if opts.TrimSpace {
 			lines = trimSpaceSliceSliceString(lines)
 		}
 		if err != nil {
@@ -96,8 +93,8 @@ func readSingleFile(opts *ParseOptions, filename string) (Table, error) {
 		if len(lines) == 0 {
 			return tbl, errors.New("no content")
 		}
-		if opts == nil || !opts.NoHeader {
-			if opts == nil || !opts.HasFilter() {
+		if !opts.NoHeader { // hasHeader
+			if !opts.HasFilter() {
 				tbl.LoadMergedRows(lines)
 			} else {
 				if len(opts.FilterColNames) > 0 {
@@ -122,7 +119,7 @@ func readSingleFile(opts *ParseOptions, filename string) (Table, error) {
 				tbl.Rows = rows
 			}
 		} else {
-			if opts == nil || len(opts.FilterColIndices) == 0 {
+			if len(opts.FilterColIndices) == 0 {
 				tbl.Rows = lines
 			} else {
 				rows, err := opts.Filter([]string{}, lines, errorOutofBounds)
