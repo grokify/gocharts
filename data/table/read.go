@@ -133,6 +133,10 @@ func readSingleFile(opts *ParseOptions, filename string) (Table, error) {
 	return tbl, nil
 }
 
+// ParseOptions provides a set of configuraation parameters
+// for parsing a CSV file. If an empty or nil `ParseOptions`
+// is provided to `ReadFile`, default options for reading
+// files will be used.
 type ParseOptions struct {
 	UseComma         bool
 	Comma            rune
