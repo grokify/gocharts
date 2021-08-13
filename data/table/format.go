@@ -56,6 +56,22 @@ func (tbl *Table) Pivot(colCount uint, haveColumns bool) (Table, error) {
 	return newTbl, nil
 }
 
+// FormatColumn takes a function to format all cell values.
+func (tbl *Table) FormatColumn(colIdx uint, conv func(cellVal string) (string, error)) error {
+	colInt := int(colIdx)
+	for i, row := range tbl.Rows {
+		if colInt >= len(row) {
+			return fmt.Errorf("row [%d] is len [%d] without col index [%d]", i, len(row), colInt)
+		}
+		newVal, err := conv(row[colInt])
+		if err != nil {
+			return err
+		}
+		tbl.Rows[i][colInt] = newVal
+	}
+	return nil
+}
+
 // String writes the table out to a CSV string.
 func (tbl *Table) String(comma rune, useCRLF bool) (string, error) {
 	var b bytes.Buffer
