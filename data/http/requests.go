@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/grokify/simplego/encoding/csvutil"
-	"github.com/grokify/simplego/type/stringsutil/join"
+	"github.com/grokify/simplego/type/stringsutil"
 )
 
 // Endpoints writes a CSV with request data. Use Endpoints.Add(),
@@ -209,7 +209,9 @@ func (si *StatusInfo) StatusText() string {
 }
 
 func (si *StatusInfo) FullStatus() string {
-	return join.JoinCondenseTrimSpace([]string{strconv.Itoa(si.Status), si.SubStatus}, " ")
+	return strings.Join(stringsutil.SliceCondenseSpace([]string{strconv.Itoa(si.Status), si.SubStatus},
+		false, false), " ")
+	// join.JoinCondenseTrimSpace([]string{strconv.Itoa(si.Status), si.SubStatus}, " ")
 }
 
 func StatusMapToTimesArray(statuses map[string]StatusInfo) []StatusTime {

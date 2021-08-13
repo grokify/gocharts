@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/grokify/simplego/type/stringsutil/join"
+	"github.com/grokify/simplego/type/stringsutil"
 )
 
 type SessionSet struct {
@@ -114,5 +114,8 @@ func (req *Request) Endpoint() string {
 }
 
 func (req *Request) FullStatus() string {
-	return join.JoinCondenseTrimSpace([]string{strconv.Itoa(req.StatusCode), req.SubStatusCode}, " ")
+	return strings.Join(
+		stringsutil.SliceCondenseSpace([]string{strconv.Itoa(req.StatusCode), req.SubStatusCode}, false, false),
+		" ")
+	// join.JoinCondenseTrimSpace([]string{strconv.Itoa(req.StatusCode), req.SubStatusCode}, " ")
 }
