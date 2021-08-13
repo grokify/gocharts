@@ -77,7 +77,6 @@ func (tbl *Table) String(comma rune, useCRLF bool) (string, error) {
 	w := csv.NewWriter(&b)
 	w.Comma = comma
 	w.UseCRLF = useCRLF
-	defer w.Flush()
 
 	if len(tbl.Columns) > 0 {
 		if err := w.Write(tbl.Columns); err != nil {
