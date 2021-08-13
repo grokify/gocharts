@@ -1,18 +1,21 @@
 package table
 
 import (
+	"bytes"
+	"encoding/csv"
 	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/grokify/simplego/math/mathutil"
 )
 
-// FormatStraightToTabular takes a "straight table" wheere the columnn names
+// Pivot takes a "straight table" where the columnn names
 // and values are in a single column and lays it out as a standard tabular data.
-func FormatStraightToTabular(tbl Table, colCount uint) (Table, error) {
+func (tbl *Table) Pivot(colCount uint) (Table, error) {
 	newTbl := NewTable(tbl.Name)
 	if len(tbl.Columns) != 0 {
-		return newTbl, fmt.Errorf("Has Defined Columns Count [%d]", len(tbl.Columns))
+		return newTbl, fmt.Errorf("has defined columns count [%d]", len(tbl.Columns))
 	}
 	isWellFormed, colCountActual := tbl.IsWellFormed()
 	if !isWellFormed {
@@ -40,4 +43,30 @@ func FormatStraightToTabular(tbl Table, colCount uint) (Table, error) {
 		newTbl.Rows = append(newTbl.Rows, newRow)
 	}
 	return newTbl, nil
+}
+
+// String writes the table out to a CSV string.
+func (tbl *Table) String(comma rune, useCRLF bool) (string, error) {
+	var b bytes.Buffer
+	w := csv.NewWriter(&b)
+	w.Comma = comma
+	w.UseCRLF = useCRLF
+	defer w.Flush()
+
+	if len(tbl.Columns) > 0 {
+		if err := w.Write(tbl.Columns); err != nil {
+			return "", fmt.Errorf("error writing columns to csv [%s]",
+				strings.Join(tbl.Columns, ","))
+		}
+	}
+
+	for _, row := range tbl.Rows {
+		if err := w.Write(row); err != nil {
+			return "", fmt.Errorf("error writing row to csv [%s]",
+				strings.Join(row, ","))
+		}
+	}
+
+	w.Flush()
+	return b.String(), w.Error()
 }
