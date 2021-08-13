@@ -48,7 +48,6 @@ func (tbl *Table) Pivot(colCount uint, haveColumns bool) (Table, error) {
 	if len(newRow) > 0 {
 		if haveColumns && !addedColumns {
 			newTbl.Columns = newRow
-			addedColumns = true
 		} else {
 			newTbl.Rows = append(newTbl.Rows, newRow)
 		}
