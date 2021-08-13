@@ -12,7 +12,7 @@ import (
 
 // Pivot takes a "straight table" where the columnn names
 // and values are in a single column and lays it out as a standard tabular data.
-func (tbl *Table) Pivot(colCount uint) (Table, error) {
+func (tbl *Table) Pivot(colCount uint, haveColumns bool) (Table, error) {
 	newTbl := NewTable(tbl.Name)
 	if len(tbl.Columns) != 0 {
 		return newTbl, fmt.Errorf("has defined columns count [%d]", len(tbl.Columns))
@@ -28,19 +28,30 @@ func (tbl *Table) Pivot(colCount uint) (Table, error) {
 	if remainder != 0 {
 		return newTbl, fmt.Errorf("row count [%d] is not a multiple of col count [%d]", rowCount, colCount)
 	}
+	addedColumns := false
 	newRow := []string{}
 	for i, row := range tbl.Rows {
 		_, remainder := mathutil.DivideInt64(int64(i), int64(colCount))
 		if remainder == 0 {
 			if len(newRow) > 0 {
-				newTbl.Rows = append(newTbl.Rows, newRow)
+				if haveColumns && !addedColumns {
+					newTbl.Columns = newRow
+					addedColumns = true
+				} else {
+					newTbl.Rows = append(newTbl.Rows, newRow)
+				}
 				newRow = []string{}
 			}
 		}
 		newRow = append(newRow, row[0])
 	}
 	if len(newRow) > 0 {
-		newTbl.Rows = append(newTbl.Rows, newRow)
+		if haveColumns && !addedColumns {
+			newTbl.Columns = newRow
+			addedColumns = true
+		} else {
+			newTbl.Rows = append(newTbl.Rows, newRow)
+		}
 	}
 	return newTbl, nil
 }
