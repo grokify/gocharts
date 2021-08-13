@@ -79,6 +79,9 @@ func readSingleFile(opts *ParseOptions, filename string) (Table, error) {
 		}
 	} else {
 		csvReader.FieldsPerRecord = opts.FieldsPerRecord
+		if opts.NoHeader {
+			csvReader.FieldsPerRecord = -1
+		}
 		errorOutofBounds := true
 		if csvReader.FieldsPerRecord < 0 {
 			errorOutofBounds = false
