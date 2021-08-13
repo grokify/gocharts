@@ -12,7 +12,7 @@ import (
 // NewHistogramSetsCSVs expects multiple files to have same columns.
 func NewHistogramSetsCSVs(filenames []string, key1ColIdx, key2ColIdx, uidColIdx uint) (*HistogramSets, table.Table, error) {
 	hsets := NewHistogramSets("")
-	tbl, err := table.ReadFiles(nil, filenames...)
+	tbl, err := table.ReadFile(nil, filenames...)
 	if err != nil {
 		return hsets, tbl, err
 	}

@@ -13,9 +13,9 @@ import (
 
 var debugReadCSV = false // should not need to use this.
 
-// ReadFiles reads in a list of delimited files and returns a merged `Table` struct.
+// ReadFile reads one or more delimited files and returns a merged `Table` struct.
 // An error is returned if the columns count differs between files.
-func ReadFiles(opts *ParseOptions, filenames ...string) (Table, error) {
+func ReadFile(opts *ParseOptions, filenames ...string) (Table, error) {
 	tbl := NewTable("")
 	if len(filenames) == 0 {
 		return tbl, errors.New("no filenames provided")

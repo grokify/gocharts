@@ -14,7 +14,7 @@ import (
 // have other configurations, use `table.ReadFile()` directly
 // and call `HistogramFromTable()`.
 func ParseFileCSV(file string, name string, binNameColIdx, binFrequencyColIdx uint) (*Histogram, error) {
-	tbl, err := table.ReadFiles(nil, file)
+	tbl, err := table.ReadFile(nil, file)
 	if err != nil {
 		return nil, err
 	}
