@@ -10,6 +10,8 @@ import (
 // Columns represents a slice of string with tabular functions.
 type Columns []string
 
+// Index returns the column index of the requested column name.
+// A value of `-1` is returned if the coliumn name is not found.
 func (cols Columns) Index(colName string) int {
 	for idx, colNameTry := range cols {
 		if colNameTry == colName {
@@ -19,6 +21,8 @@ func (cols Columns) Index(colName string) int {
 	return -1
 }
 
+// Equal returns true if the number of elements or the
+// element values of the Columns do not match.
 func (cols Columns) Equal(c Columns) bool {
 	if len(cols) != len(c) {
 		return false
