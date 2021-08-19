@@ -85,10 +85,10 @@ func (tbl *Table) String(comma rune, useCRLF bool) (string, error) {
 		}
 	}
 
-	for _, row := range tbl.Rows {
+	for i, row := range tbl.Rows {
 		if err := w.Write(row); err != nil {
-			return "", fmt.Errorf("error writing row to csv [%s]",
-				strings.Join(row, ","))
+			return "", fmt.Errorf("error writing row to csv: idx [%d] content [%s]",
+				i, strings.Join(row, ","))
 		}
 	}
 
