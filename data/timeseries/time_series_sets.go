@@ -1,8 +1,10 @@
 package timeseries
 
 import (
+	"os"
 	"sort"
 
+	"github.com/grokify/simplego/io/ioutilmore"
 	"github.com/grokify/simplego/time/timeutil"
 	"github.com/grokify/simplego/type/stringsutil"
 )
@@ -53,4 +55,10 @@ func (sets *TimeSeriesSets) SeriesNames() []string {
 		}
 	}
 	return stringsutil.SliceCondenseSpace(seriesNames, true, true)
+}
+
+// WriteJSON writes the data to a JSON file. To write a minimized JSON
+// file use an empty string for `prefix` and `indent`.
+func (sets *TimeSeriesSets) WriteJSON(filename string, perm os.FileMode, prefix, indent string) error {
+	return ioutilmore.WriteFileJSON(filename, sets, perm, prefix, indent)
 }

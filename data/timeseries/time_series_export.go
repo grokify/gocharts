@@ -1,11 +1,13 @@
 package timeseries
 
 import (
+	"os"
 	"strconv"
 	"strings"
 	"time"
 
 	"github.com/grokify/gocharts/data/table"
+	"github.com/grokify/simplego/io/ioutilmore"
 	"github.com/grokify/simplego/time/timeutil"
 )
 
@@ -63,6 +65,12 @@ func (ts *TimeSeries) ToTable(tableName, dateColumnName, countColumnName string,
 		tbl.Rows = append(tbl.Rows, row)
 	}
 	return tbl
+}
+
+// WriteJSON writes the data to a JSON file. To write a minimized JSON
+// file use an empty string for `prefix` and `indent`.
+func (ts *TimeSeries) WriteJSON(filename string, perm os.FileMode, prefix, indent string) error {
+	return ioutilmore.WriteFileJSON(filename, ts, perm, prefix, indent)
 }
 
 // WriteXLSX writes an XSLX file given a `TimeSeries`
