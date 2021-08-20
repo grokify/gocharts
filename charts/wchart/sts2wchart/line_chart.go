@@ -54,7 +54,7 @@ func (opts *LineChartOpts) WantTitleSuffix() bool {
 		opts.TitleSuffixCurrentDateFunc != nil
 }
 
-var defaultLineChartOpts = &LineChartOpts{
+var defaultLineChartOpts = LineChartOpts{
 	Legend:            true,
 	RegressionDegree:  0,
 	XAxisGridInterval: timeutil.Quarter,
@@ -70,7 +70,7 @@ var defaultLineChartOpts = &LineChartOpts{
 	Interval:          timeutil.Month}
 
 func DefaultLineChartOpts() *LineChartOpts {
-	return defaultLineChartOpts
+	return &defaultLineChartOpts
 }
 
 func TimeSeriesToLineChart(ds timeseries.TimeSeries, opts *LineChartOpts) (chart.Chart, error) {
@@ -82,8 +82,16 @@ func TimeSeriesToLineChart(ds timeseries.TimeSeries, opts *LineChartOpts) (chart
 	return TimeSeriesSetToLineChart(dss, opts)
 }
 
-func WriteLineChartTimeSeriesSet(filename string, dss timeseries.TimeSeriesSet, opts *LineChartOpts) error {
-	chart, err := TimeSeriesSetToLineChart(dss, opts)
+func WriteLineChartTimeSeries(filename string, ts timeseries.TimeSeries, opts *LineChartOpts) error {
+	chart, err := TimeSeriesToLineChart(ts, opts)
+	if err != nil {
+		return err
+	}
+	return wchart.WritePNG(filename, chart)
+}
+
+func WriteLineChartTimeSeriesSet(filename string, tset timeseries.TimeSeriesSet, opts *LineChartOpts) error {
+	chart, err := TimeSeriesSetToLineChart(tset, opts)
 	if err != nil {
 		return err
 	}
@@ -92,7 +100,7 @@ func WriteLineChartTimeSeriesSet(filename string, dss timeseries.TimeSeriesSet, 
 
 func TimeSeriesSetToLineChart(dss timeseries.TimeSeriesSet, opts *LineChartOpts) (chart.Chart, error) {
 	if opts == nil {
-		opts = defaultLineChartOpts
+		opts = &defaultLineChartOpts
 	}
 	titleParts := []string{dss.Name}
 	if opts.WantTitleSuffix() && len(dss.Series) == 1 {
