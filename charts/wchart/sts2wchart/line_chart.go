@@ -98,13 +98,13 @@ func WriteLineChartTimeSeriesSet(filename string, tset timeseries.TimeSeriesSet,
 	return wchart.WritePNG(filename, chart)
 }
 
-func TimeSeriesSetToLineChart(dss timeseries.TimeSeriesSet, opts *LineChartOpts) (chart.Chart, error) {
+func TimeSeriesSetToLineChart(tset timeseries.TimeSeriesSet, opts *LineChartOpts) (chart.Chart, error) {
 	if opts == nil {
 		opts = &defaultLineChartOpts
 	}
-	titleParts := []string{dss.Name}
-	if opts.WantTitleSuffix() && len(dss.Series) == 1 {
-		ds, err := dss.GetSeriesByIndex(0)
+	titleParts := []string{tset.Name}
+	if opts.WantTitleSuffix() && len(tset.Series) == 1 {
+		ds, err := tset.GetSeriesByIndex(0)
 		if err != nil {
 			return chart.Chart{}, err
 		}
@@ -156,18 +156,18 @@ func TimeSeriesSetToLineChart(dss timeseries.TimeSeriesSet, opts *LineChartOpts)
 
 	mainSeries := chart.ContinuousSeries{}
 	if opts.Interval == timeutil.Quarter || opts.Interval == timeutil.Month {
-		if opts.Interval != dss.Interval {
-			return chart.Chart{}, fmt.Errorf("E_INTERVAL_MISMATCH INPUT_INTERVAL [%s]", dss.Interval)
+		if opts.Interval != tset.Interval {
+			return chart.Chart{}, fmt.Errorf("E_INTERVAL_MISMATCH INPUT_INTERVAL [%s]", tset.Interval)
 			//panic("opts.Interval dss.Interval mismatch")
 		}
 	}
 
-	if len(dss.Order) == 0 {
-		dss.Inflate()
+	if len(tset.Order) == 0 {
+		tset.Inflate()
 	}
-	for _, seriesName := range dss.Order {
-		if ds, ok := dss.Series[seriesName]; ok {
-			mainSeries = wchart.TimeSeriesToContinuousSeries(ds)
+	for _, seriesName := range tset.Order {
+		if ts, ok := tset.Series[seriesName]; ok {
+			mainSeries = wchart.TimeSeriesToContinuousSeries(ts)
 
 			mainSeries.Style = chart.Style{StrokeWidth: float64(3)}
 
@@ -204,7 +204,7 @@ func TimeSeriesSetToLineChart(dss timeseries.TimeSeriesSet, opts *LineChartOpts)
 
 	fmtXTickFunc := opts.XAxisTickFunc
 	if fmtXTickFunc == nil {
-		fmtXTickFunc = FormatXTickTimeFunc(dss.Interval)
+		fmtXTickFunc = FormatXTickTimeFunc(tset.Interval)
 	}
 
 	axesCreator := AxesCreator{
@@ -220,20 +220,20 @@ func TimeSeriesSetToLineChart(dss timeseries.TimeSeriesSet, opts *LineChartOpts)
 		XAxisTickFormatFunc:        fmtXTickFunc,
 		YNumTicks:                  7,
 		YAxisTickFormatFuncFloat64: opts.YAxisTickFunc}
-	//YAxisTickFormatFuncFloat64: FormatYTickFunc(dss.Name)}
+	//YAxisTickFormatFuncFloat64: FormatYTickFunc(tset.Name)}
 
-	minTime, maxTime := dss.MinMaxTimes()
-	if !dss.IsFloat {
-		minValue, maxValue := dss.MinMaxValues()
+	minTime, maxTime := tset.MinMaxTimes()
+	if !tset.IsFloat {
+		minValue, maxValue := tset.MinMaxValues()
 		if opts.YAxisMinEnable {
 			minValue = int64(opts.YAxisMin)
 		}
 		graph = axesCreator.ChartAddAxesDataSeries(
-			graph, dss.Interval, minTime, maxTime, minValue, maxValue)
+			graph, tset.Interval, minTime, maxTime, minValue, maxValue)
 	} else {
 		graph = axesCreator.AddBackground(graph)
-		graph = axesCreator.AddXAxis(graph, dss.Interval, minTime, maxTime)
-		minValue, maxValue := dss.MinMaxValuesFloat64()
+		graph = axesCreator.AddXAxis(graph, tset.Interval, minTime, maxTime)
+		minValue, maxValue := tset.MinMaxValuesFloat64()
 		if opts.YAxisMinEnable {
 			minValue = opts.YAxisMin
 		}
@@ -241,7 +241,7 @@ func TimeSeriesSetToLineChart(dss timeseries.TimeSeriesSet, opts *LineChartOpts)
 	}
 
 	if opts.Interval == timeutil.Month {
-		for _, ds := range dss.Series {
+		for _, ds := range tset.Series {
 			annoSeries, err := timeSeriesMonthToAnnotations(ds, *opts)
 			if err == nil && len(annoSeries.Annotations) > 0 {
 				graph.Series = append(graph.Series, annoSeries)
@@ -251,7 +251,7 @@ func TimeSeriesSetToLineChart(dss timeseries.TimeSeriesSet, opts *LineChartOpts)
 	return graph, nil
 }
 
-func timeSeriesMonthToAnnotations(ds timeseries.TimeSeries, opts LineChartOpts) (chart.AnnotationSeries, error) {
+func timeSeriesMonthToAnnotations(ts timeseries.TimeSeries, opts LineChartOpts) (chart.AnnotationSeries, error) {
 	annoSeries := chart.AnnotationSeries{
 		Annotations: []chart.Value2{},
 		Style: chart.Style{
@@ -263,7 +263,7 @@ func timeSeriesMonthToAnnotations(ds timeseries.TimeSeries, opts LineChartOpts) 
 		return annoSeries, nil
 	}
 
-	xox, err := interval.NewXoXTimeSeries(ds)
+	xox, err := interval.NewXoXTimeSeries(ts)
 	if err != nil {
 		return annoSeries, err
 	}
