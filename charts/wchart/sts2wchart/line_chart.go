@@ -99,9 +99,6 @@ func WriteLineChartTimeSeriesSet(filename string, tset timeseries.TimeSeriesSet,
 }
 
 func TimeSeriesSetToLineChart(tset timeseries.TimeSeriesSet, opts *LineChartOpts) (chart.Chart, error) {
-	if opts == nil {
-		opts = &defaultLineChartOpts
-	}
 	titleParts := []string{tset.Name}
 	if opts.WantTitleSuffix() && len(tset.Series) == 1 {
 		ds, err := tset.GetSeriesByIndex(0)
