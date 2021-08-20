@@ -4,6 +4,7 @@ import (
 	"strconv"
 
 	"github.com/grokify/gocharts/data/table"
+	"github.com/grokify/gocharts/data/table/format"
 	"github.com/grokify/simplego/type/stringsutil"
 )
 
@@ -52,6 +53,6 @@ func TimeSeriesSliceTable(dsSlice []TimeSeries) table.Table {
 // Excel XLSX file for easy consumption.
 func TimeSeriesSliceWriteXLSX(filename string, dsSlice []TimeSeries) error {
 	tbl := TimeSeriesSliceTable(dsSlice)
-	tbl.FormatFunc = table.FormatTimeAndFloats
+	tbl.FormatFunc = format.FormatTimeAndFloats
 	return table.WriteXLSX(filename, &tbl)
 }

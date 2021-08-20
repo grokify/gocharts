@@ -11,9 +11,9 @@ import (
 	"time"
 
 	"github.com/360EntSecGroup-Skylar/excelize"
+	"github.com/grokify/gocharts/data/table/format"
 	"github.com/grokify/gocharts/data/table/sheet"
 	"github.com/grokify/simplego/encoding/jsonutil"
-	"github.com/grokify/simplego/time/timeutil"
 	"github.com/pkg/errors"
 )
 
@@ -48,6 +48,7 @@ func WriteCSVSimple(cols []string, rows [][]string, filename string) error {
 	return tbl.WriteCSV(filename)
 }
 
+/*
 func FormatStrings(val string, col uint) (interface{}, error) {
 	return val, nil
 }
@@ -137,11 +138,12 @@ func FormatTimeAndFloats(val string, colIdx uint) (interface{}, error) {
 	}
 	return num, nil
 }
+*/
 
 func (tbl *Table) FormatterFunc() func(val string, colIdx uint) (interface{}, error) {
 	if tbl.FormatMap == nil || len(tbl.FormatMap) == 0 {
 		if tbl.FormatFunc == nil {
-			return FormatStrings
+			return format.FormatStrings
 		}
 		return tbl.FormatFunc
 	}

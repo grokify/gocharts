@@ -9,6 +9,7 @@ import (
 
 	"github.com/360EntSecGroup-Skylar/excelize"
 	"github.com/grokify/gocharts/data/table"
+	"github.com/grokify/gocharts/data/table/format"
 	"github.com/grokify/gocharts/data/table/sheet"
 	"github.com/grokify/gocharts/data/timeseries"
 	"github.com/grokify/simplego/time/timeutil"
@@ -345,6 +346,6 @@ func (hset *HistogramSet) HistogramSetTimeKeyCountWriteXLSX(filename string, int
 	if err != nil {
 		return err
 	}
-	tbl.FormatFunc = table.FormatTimeAndInts
+	tbl.FormatFunc = format.FormatTimeAndInts
 	return table.WriteXLSX(filename, &tbl)
 }

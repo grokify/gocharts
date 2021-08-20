@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/grokify/gocharts/data/table"
+	"github.com/grokify/gocharts/data/table/format"
 	"github.com/grokify/simplego/io/ioutilmore"
 	"github.com/grokify/simplego/time/timeslice"
 	"github.com/grokify/simplego/time/timeutil"
@@ -251,9 +252,9 @@ func (set *TimeSeriesSet) WriteXLSX(filename string, opts *TimeSeriesSetTableOpt
 		return err
 	}
 	if set.Interval == timeutil.Month {
-		tbl.FormatFunc = table.FormatMonthAndFloats
+		tbl.FormatFunc = format.FormatMonthAndFloats
 	} else {
-		tbl.FormatFunc = table.FormatDateAndFloats
+		tbl.FormatFunc = format.FormatDateAndFloats
 	}
 	return table.WriteXLSX(filename, &tbl)
 }
