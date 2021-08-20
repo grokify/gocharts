@@ -127,6 +127,17 @@ func (ts *TimeSeries) ItemsSorted() []TimeItem {
 	return itemsSorted
 }
 
+// Get returns a `TimeItem` given a `time.Time`.
+func (ts *TimeSeries) Get(dt time.Time) (TimeItem, error) {
+	for _, ti := range ts.ItemMap {
+		if ti.Time.Equal(dt) {
+			return ti, nil
+		}
+	}
+	return TimeItem{}, fmt.Errorf("time not found [%s]",
+		dt.Format(time.RFC3339))
+}
+
 func (ts *TimeSeries) Last() (TimeItem, error) {
 	items := ts.ItemsSorted()
 	if len(items) == 0 {
