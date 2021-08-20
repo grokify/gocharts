@@ -1,7 +1,9 @@
 package timeseries
 
 import (
+	"encoding/json"
 	"fmt"
+	"os"
 	"sort"
 	"time"
 
@@ -21,10 +23,21 @@ type TimeSeries struct {
 	Interval      timeutil.Interval // Informational
 }
 
+// NewTimeSeries instantiates a `TimeSeries` struct.
 func NewTimeSeries(name string) TimeSeries {
 	return TimeSeries{
 		SeriesName: name,
 		ItemMap:    map[string]TimeItem{}}
+}
+
+// ReadFileTimeSeries reads a time series file in JSON.
+func ReadFileTimeSeries(filename string) (TimeSeries, error) {
+	data, err := os.ReadFile(filename)
+	if err != nil {
+		return TimeSeries{}, err
+	}
+	var ts TimeSeries
+	return ts, json.Unmarshal(data, &ts)
 }
 
 // AddInt64 adds a time value, converting it to a float on
