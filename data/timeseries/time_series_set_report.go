@@ -214,8 +214,8 @@ func (set *TimeSeriesSet) ToTable(opts *TimeSeriesSetTableOpts) (table.Table, er
 				} else {
 					line = append(line, strconv.Itoa(int(item.Value)))
 				}
-				lineTotal += item.ValueFloat64()
-				seriesValues = append(seriesValues, item.ValueFloat64())
+				lineTotal += item.Float64()
+				seriesValues = append(seriesValues, item.Float64())
 			}
 		}
 		if opts.TotalInclude {

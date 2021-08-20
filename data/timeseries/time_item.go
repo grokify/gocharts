@@ -15,14 +15,14 @@ type TimeItem struct {
 	ValueFloat    float64
 }
 
-func (item *TimeItem) ValueInt64() int64 {
+func (item *TimeItem) Int64() int64 {
 	if item.IsFloat {
 		return int64(item.ValueFloat)
 	}
 	return item.Value
 }
 
-func (item *TimeItem) ValueFloat64() float64 {
+func (item *TimeItem) Float64() float64 {
 	if item.IsFloat {
 		return item.ValueFloat
 	}

@@ -4,7 +4,6 @@ import (
 	"time"
 
 	"github.com/grokify/gocharts/data/timeseries"
-	"github.com/grokify/simplego/fmt/fmtutil"
 	"github.com/grokify/simplego/time/timeutil"
 )
 
@@ -12,7 +11,6 @@ import (
 // XoX statistics.
 func TimeSeriesXoX(ts timeseries.TimeSeries) (XOXFloat64, error) {
 	tsMonth := ts.ToMonth(true)
-	fmtutil.PrintJSON(tsMonth)
 
 	xox := XOXFloat64{}
 	tiNow, err := tsMonth.Last()
@@ -22,15 +20,15 @@ func TimeSeriesXoX(ts timeseries.TimeSeries) (XOXFloat64, error) {
 	xox.Now = Compare{
 		XoX:   "NOW",
 		Time:  tiNow.Time,
-		Value: tiNow.ValueFloat64()}
+		Value: tiNow.Float64()}
 	mago, err := tsMonth.Get(timeutil.TimeDt6SubNMonths(tiNow.Time, 1))
 	if err == nil {
 		xox.Month = Compare{
 			XoX:   "MOM",
 			Time:  mago.Time,
-			Value: mago.ValueFloat64()}
-		if mago.ValueFloat64() != 0 {
-			xox.Month.Change = (tiNow.ValueFloat64() - mago.ValueFloat64()) / mago.ValueFloat64()
+			Value: mago.Float64()}
+		if mago.Float64() != 0 {
+			xox.Month.Change = (tiNow.Float64() - mago.Float64()) / mago.Float64()
 		}
 	}
 	qago, err := tsMonth.Get(timeutil.TimeDt6SubNMonths(tiNow.Time, 3))
@@ -38,9 +36,9 @@ func TimeSeriesXoX(ts timeseries.TimeSeries) (XOXFloat64, error) {
 		xox.Quarter = Compare{
 			XoX:   "QOQ",
 			Time:  qago.Time,
-			Value: qago.ValueFloat64()}
-		if qago.ValueFloat64() != 0 {
-			xox.Quarter.Change = (tiNow.ValueFloat64() - qago.ValueFloat64()) / qago.ValueFloat64()
+			Value: qago.Float64()}
+		if qago.Float64() != 0 {
+			xox.Quarter.Change = (tiNow.Float64() - qago.Float64()) / qago.Float64()
 		}
 	}
 	yago, err := tsMonth.Get(timeutil.TimeDt6SubNMonths(tiNow.Time, 12))
@@ -48,9 +46,9 @@ func TimeSeriesXoX(ts timeseries.TimeSeries) (XOXFloat64, error) {
 		xox.Year = Compare{
 			XoX:   "YOY",
 			Time:  yago.Time,
-			Value: yago.ValueFloat64()}
-		if yago.ValueFloat64() != 0 {
-			xox.Year.Change = (tiNow.ValueFloat64() - yago.ValueFloat64()) / yago.ValueFloat64()
+			Value: yago.Float64()}
+		if yago.Float64() != 0 {
+			xox.Year.Change = (tiNow.Float64() - yago.Float64()) / yago.Float64()
 		}
 	}
 	return xox, nil

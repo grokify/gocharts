@@ -178,7 +178,7 @@ func (ts *TimeSeries) LastItem(skipIfTimePartialValueLessPrev bool) (TimeItem, e
 			dtNow = month.MonthBegin(dtNow, 0)
 		}
 		if itemLast.Time.Equal(dtNow) {
-			if itemLast.ValueInt64() > itemPrev.ValueInt64() {
+			if itemLast.Int64() > itemPrev.Int64() {
 				return itemLast, nil
 			} else {
 				return itemPrev, nil
