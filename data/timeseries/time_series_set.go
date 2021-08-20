@@ -1,7 +1,9 @@
 package timeseries
 
 import (
+	"encoding/json"
 	"fmt"
+	"os"
 	"sort"
 	"strings"
 	"time"
@@ -29,6 +31,16 @@ func NewTimeSeriesSet(name string) TimeSeriesSet {
 		Series: map[string]TimeSeries{},
 		Times:  []time.Time{},
 		Order:  []string{}}
+}
+
+// ReadFileTimeSeriesSet reads a time series set file in JSON.
+func ReadFileTimeSeriesSet(filename string) (TimeSeriesSet, error) {
+	data, err := os.ReadFile(filename)
+	if err != nil {
+		return TimeSeriesSet{}, err
+	}
+	var tset TimeSeriesSet
+	return tset, json.Unmarshal(data, &tset)
 }
 
 func (set *TimeSeriesSet) AddInt64(seriesName string, dt time.Time, value int64) {
