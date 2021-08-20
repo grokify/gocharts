@@ -58,8 +58,8 @@ github.com/beorn7/perks v0.0.0-20180321164747-3a771d992973/go.mod h1:Dwedo/Wpr24
 github.com/beorn7/perks v1.0.0/go.mod h1:KWe93zE9D1o94FZ5RNwFwVgaQK1VOXiVxmqh+CedLV8=
 github.com/bgentry/speakeasy v0.1.0/go.mod h1:+zsyZBPWlz7T6j88CTgSN5bM796AkVf0kBD4zp0CCIs=
 github.com/bketelsen/crypt v0.0.3-0.20200106085610-5cbc8cc4026c/go.mod h1:MKsuJmJgSg28kpZDP6UIiPt0e0Oz0kqKNGyRaWEPv84=
-github.com/blend/go-sdk v1.20210818.6 h1:YaPRJO+ybwTsCUjZFpkPDFcxH2a3/7D1RSFgrBwggs0=
-github.com/blend/go-sdk v1.20210818.6/go.mod h1:rGIavv+yoXOAXW8xszPlbXVNpwOunzR2Y/Ihr//mcb4=
+github.com/blend/go-sdk v1.20210819.9 h1:7+MHhZqB16eZpf45MeXFbOsgbONPFV9sV7+HSJ/aI6Q=
+github.com/blend/go-sdk v1.20210819.9/go.mod h1:rGIavv+yoXOAXW8xszPlbXVNpwOunzR2Y/Ihr//mcb4=
 github.com/blend/sentry-go v1.0.0/go.mod h1:hgyX3WXen2YBiA0NitlfsXsvS+9ly2YlEBmmmYDgrWY=
 github.com/buaazp/fasthttprouter v0.1.1/go.mod h1:h/Ap5oRVLeItGKTVBb+heQPks+HdIUtGmI4H5WCYijM=
 github.com/buger/jsonparser v1.1.1 h1:2PnMjfWD7wBILjqQbt530v576A/cAbQvEW9gGIpYMUs=
