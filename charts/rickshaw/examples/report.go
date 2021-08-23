@@ -14,7 +14,7 @@ func main() {
 	inputfile := "data.csv"
 	outputfile := "report.html"
 
-	csv, fi, err := csvutil.NewReader(inputfile, rune(','))
+	csv, fi, err := csvutil.NewReaderFile(inputfile, rune(','))
 	if err != nil {
 		panic(fmt.Sprintf("ERROR %v\n", err))
 	}

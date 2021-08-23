@@ -1,10 +1,9 @@
 package table
 
 import (
-	"bytes"
-	"encoding/csv"
 	"fmt"
 	"io"
+	"os"
 	"strings"
 
 	"github.com/grokify/simplego/encoding/csvutil"
@@ -47,17 +46,29 @@ func trimSpaceSliceSliceString(s [][]string) [][]string {
 	return s
 }
 
-// ReadFile reads in a delimited file and returns a `Table` struct.
 func readSingleFile(opts *ParseOptions, filename string) (Table, error) {
+	f, err := os.Open(filename)
+	if err != nil {
+		return NewTable(""), err
+	}
+	defer f.Close()
+	tbl, err := ParseReadSeeker(opts, f)
+	if err != nil {
+		return tbl, err
+	}
+	return tbl, f.Close()
+}
+
+// ParseReadSeeker parses an `io.ReadSeeker` and returns a `Table` struct.
+func ParseReadSeeker(opts *ParseOptions, rs io.ReadSeeker) (Table, error) {
 	tbl := NewTable("")
 	if opts == nil {
 		opts = &ParseOptions{}
 	}
-	csvReader, f, err := csvutil.NewReader(filename, opts.CommaValue())
+	csvReader, err := csvutil.NewReader(rs, opts.CommaValue())
 	if err != nil {
 		return tbl, err
 	}
-	defer f.Close()
 	if debugReadCSV {
 		i := -1
 		for {
@@ -217,6 +228,7 @@ func (opts *ParseOptions) Filter(cols []string, rows [][]string, errorOutofBound
 	return newRows, nil
 }
 
+/*
 func ParseBytes(data []byte, delimiter rune, hasHeaderRow bool) (Table, error) {
 	return ParseReader(bytes.NewReader(data), delimiter, hasHeaderRow)
 }
@@ -244,6 +256,7 @@ func ParseReader(reader io.Reader, delimiter rune, hasHeaderRow bool) (Table, er
 	}
 	return tbl, nil
 }
+*/
 
 // Unmarshal is a convenience function to provide a simple interface to
 // unmarshal table contents into any desired output.

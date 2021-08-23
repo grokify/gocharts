@@ -15,7 +15,7 @@ func ReadMergeFilterCSVFiles(inPaths []string, outPath string, inComma rune, and
 	data := NewDocumentsSet()
 
 	for _, inPath := range inPaths {
-		reader, inFile, err := csvutil.NewReader(inPath, inComma)
+		reader, inFile, err := csvutil.NewReaderFile(inPath, inComma)
 		if err != nil {
 			return data, err
 		}
