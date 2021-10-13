@@ -18,7 +18,7 @@ It includes two sets of packages:
 
 Commonly used data structures include:
 
-* [Table](https://pkg.go.dev/github.com/grokify/gocharts/data/table) - Easy manipulation including [writing to CSV and XLSX](data/table/write.go).
+* [Table](https://pkg.go.dev/github.com/grokify/gocharts/data/table) - easy manipulation of tabular data including [writing to CSV and XLSX](data/table/write.go).
 * [Time Series](https://pkg.go.dev/github.com/grokify/gocharts/data/timeseries) - for building time-based line charts and bar charts.
 * [Histogram](https://pkg.go.dev/github.com/grokify/gocharts/data/histogram) - for building histograms and bar charts.
 
