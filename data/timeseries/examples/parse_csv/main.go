@@ -7,8 +7,8 @@ import (
 
 	"github.com/grokify/gocharts/data/table"
 	"github.com/grokify/gocharts/data/timeseries"
-	"github.com/grokify/simplego/fmt/fmtutil"
-	"github.com/grokify/simplego/time/timeutil"
+	"github.com/grokify/mogo/fmt/fmtutil"
+	"github.com/grokify/mogo/time/timeutil"
 	"github.com/jessevdk/go-flags"
 )
 

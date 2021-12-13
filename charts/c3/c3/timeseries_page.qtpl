@@ -1,4 +1,4 @@
-{% import "github.com/grokify/simplego/time/timeutil" %}
+{% import "github.com/grokify/mogo/time/timeutil" %}
 {% func TimeseriesPage(pageData TimeseriesPageData) %}
 <!DOCTYPE html>
 <html>

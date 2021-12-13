@@ -7,8 +7,8 @@ import (
 	"time"
 
 	"github.com/grokify/gocharts/data/timeseries"
-	"github.com/grokify/simplego/time/timeutil"
-	"github.com/grokify/simplego/type/maputil"
+	"github.com/grokify/mogo/time/timeutil"
+	"github.com/grokify/mogo/type/maputil"
 	"github.com/pkg/errors"
 )
 

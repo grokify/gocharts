@@ -5,9 +5,9 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/grokify/simplego/encoding/csvutil"
-	"github.com/grokify/simplego/encoding/jsonutil"
-	"github.com/grokify/simplego/type/stringsutil"
+	"github.com/grokify/mogo/encoding/csvutil"
+	"github.com/grokify/mogo/encoding/jsonutil"
+	"github.com/grokify/mogo/type/stringsutil"
 )
 
 func ReadMergeFilterCSVFiles(inPaths []string, outPath string, inComma rune, andFilter map[string]stringsutil.MatchInfo) (DocumentsSet, error) {

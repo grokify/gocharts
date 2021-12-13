@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/grokify/simplego/time/timeutil"
+	"github.com/grokify/mogo/time/timeutil"
 )
 
 type BulletCharts struct {

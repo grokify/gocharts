@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 
 	"github.com/grokify/gocharts/data/timeseries/interval"
-	tu "github.com/grokify/simplego/time/timeutil"
+	"github.com/grokify/mogo/time/timeutil"
 )
 
 type TimeseriesData struct {
@@ -40,7 +40,7 @@ type TimeseriesPageData struct {
 	XoxPoints []interval.XoxPoint
 }
 
-func (data *TimeseriesData) AddTimeSeriesSet(set *interval.TimeSeriesSet, interval tu.Interval, seriesType interval.SeriesType) error {
+func (data *TimeseriesData) AddTimeSeriesSet(set *interval.TimeSeriesSet, interval timeutil.Interval, seriesType interval.SeriesType) error {
 	data.TimeSeriesSet = set
 	columns := [][]interface{}{}
 	xValues := []interface{}{"x"}
@@ -57,15 +57,15 @@ func (data *TimeseriesData) AddTimeSeriesSet(set *interval.TimeSeriesSet, interv
 
 		items := timeSeries.ItemsSorted()
 		for j, item := range items {
-			if i == 0 && interval == tu.Quarter {
-				xValues = append(xValues, item.Time.Format(tu.RFC3339FullDate))
+			if i == 0 && interval == timeutil.Quarter {
+				xValues = append(xValues, item.Time.Format(timeutil.RFC3339FullDate))
 			}
 			yValues = append(yValues, item.Value)
 			if j == len(totals) {
 				totals = append(totals, int64(0))
 			}
 			totals[j] += item.Value
-			rfc3339ym := item.Time.Format(tu.ISO8601YM)
+			rfc3339ym := item.Time.Format(timeutil.ISO8601YM)
 			if _, ok := totalsMap[rfc3339ym]; ok {
 				totalsMap[rfc3339ym] += item.Value
 			} else {

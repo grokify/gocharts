@@ -5,7 +5,7 @@ import (
 	"log"
 
 	"github.com/grokify/gocharts/data/histogram"
-	"github.com/grokify/simplego/fmt/fmtutil"
+	"github.com/grokify/mogo/fmt/fmtutil"
 )
 
 func main() {

@@ -8,7 +8,7 @@ import (
 
 	"github.com/grokify/gocharts/data/point"
 	"github.com/grokify/gocharts/data/table"
-	"github.com/grokify/simplego/type/maputil"
+	"github.com/grokify/mogo/type/maputil"
 	"github.com/olekukonko/tablewriter"
 )
 

@@ -8,10 +8,10 @@ import (
 	"time"
 
 	"github.com/grokify/gocharts/data/point"
-	"github.com/grokify/simplego/sort/sortutil"
-	"github.com/grokify/simplego/time/month"
-	"github.com/grokify/simplego/time/timeslice"
-	"github.com/grokify/simplego/time/timeutil"
+	"github.com/grokify/mogo/sort/sortutil"
+	"github.com/grokify/mogo/time/month"
+	"github.com/grokify/mogo/time/timeslice"
+	"github.com/grokify/mogo/time/timeutil"
 	"github.com/pkg/errors"
 )
 

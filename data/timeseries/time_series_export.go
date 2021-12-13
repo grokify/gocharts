@@ -7,8 +7,8 @@ import (
 	"time"
 
 	"github.com/grokify/gocharts/data/table"
-	"github.com/grokify/simplego/io/ioutilmore"
-	"github.com/grokify/simplego/time/timeutil"
+	"github.com/grokify/mogo/io/ioutilmore"
+	"github.com/grokify/mogo/time/timeutil"
 )
 
 func TimeFormatRFC3339(dt time.Time) string {

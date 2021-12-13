@@ -10,9 +10,9 @@ import (
 
 	"github.com/grokify/gocharts/data/table"
 	"github.com/grokify/gocharts/data/table/format"
-	"github.com/grokify/simplego/io/ioutilmore"
-	"github.com/grokify/simplego/time/timeslice"
-	"github.com/grokify/simplego/time/timeutil"
+	"github.com/grokify/mogo/io/ioutilmore"
+	"github.com/grokify/mogo/time/timeslice"
+	"github.com/grokify/mogo/time/timeutil"
 )
 
 // ReportAxisX generates data for use with `C3Chart.C3Axis.C3AxisX.Categories`.

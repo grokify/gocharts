@@ -3,7 +3,7 @@ package timeseries
 import (
 	"strconv"
 
-	tu "github.com/grokify/simplego/time/timeutil"
+	tu "github.com/grokify/mogo/time/timeutil"
 )
 
 // TimeStats is used to generate unique counts stats

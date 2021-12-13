@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/grokify/gocharts/data/timeseries"
-	"github.com/grokify/simplego/time/timeutil"
+	"github.com/grokify/mogo/time/timeutil"
 
 	v5 "github.com/grokify/elastirad-go/models/v5"
 )

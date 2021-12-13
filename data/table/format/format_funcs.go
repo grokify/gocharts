@@ -4,7 +4,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/grokify/simplego/time/timeutil"
+	"github.com/grokify/mogo/time/timeutil"
 )
 
 func FormatStrings(val string, col uint) (interface{}, error) {

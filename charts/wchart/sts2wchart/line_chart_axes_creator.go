@@ -5,9 +5,9 @@ import (
 
 	"github.com/grokify/gocharts/charts/wchart"
 
-	"github.com/grokify/simplego/math/mathutil"
-	"github.com/grokify/simplego/time/timeutil"
-	"github.com/grokify/simplego/type/number"
+	"github.com/grokify/mogo/math/mathutil"
+	"github.com/grokify/mogo/time/timeutil"
+	"github.com/grokify/mogo/type/number"
 	"github.com/wcharczuk/go-chart"
 )
 

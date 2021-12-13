@@ -11,7 +11,7 @@ import (
 	"github.com/grokify/gocharts/data"
 	"github.com/grokify/gocharts/data/timeseries/interval"
 
-	"github.com/grokify/simplego/time/timeutil"
+	"github.com/grokify/mogo/time/timeutil"
 )
 
 // DataInfoJS is the series item to be sent to the

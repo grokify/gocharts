@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/grokify/simplego/encoding/csvutil"
+	"github.com/grokify/mogo/encoding/csvutil"
 	"github.com/pkg/errors"
 )
 

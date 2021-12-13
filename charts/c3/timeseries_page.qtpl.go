@@ -8,7 +8,7 @@ package c3
 import (
 	qtio422016 "io"
 
-	"github.com/grokify/simplego/time/timeutil"
+	"github.com/grokify/mogo/time/timeutil"
 	qt422016 "github.com/valyala/quicktemplate" //line timeseries_page.qtpl:1
 
 	//line timeseries_page.qtpl:2

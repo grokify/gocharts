@@ -1,8 +1,8 @@
 package roadmap
 
 import (
-	"github.com/grokify/simplego/math/mathutil"
-	"github.com/grokify/simplego/time/timeutil"
+	"github.com/grokify/mogo/math/mathutil"
+	"github.com/grokify/mogo/time/timeutil"
 )
 
 // QuarterInt32sBeginEnd converts relative and

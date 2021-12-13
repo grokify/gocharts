@@ -1,6 +1,6 @@
 package histogram
 
-import "github.com/grokify/simplego/type/stringsutil"
+import "github.com/grokify/mogo/type/stringsutil"
 
 // HistogramSetsCounts returns UID counts. When used with
 // NewHistogramSetsCSV(), it can provide a sanity check

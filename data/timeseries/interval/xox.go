@@ -4,7 +4,7 @@ import (
 	"sort"
 	"time"
 
-	tu "github.com/grokify/simplego/time/timeutil"
+	tu "github.com/grokify/mogo/time/timeutil"
 )
 
 type XoxPoint struct {

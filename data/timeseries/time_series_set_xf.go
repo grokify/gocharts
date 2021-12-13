@@ -4,7 +4,7 @@ import (
 	"sort"
 	"time"
 
-	"github.com/grokify/simplego/time/timeslice"
+	"github.com/grokify/mogo/time/timeslice"
 	"github.com/pkg/errors"
 )
 

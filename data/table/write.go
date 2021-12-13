@@ -13,7 +13,7 @@ import (
 	"github.com/360EntSecGroup-Skylar/excelize"
 	"github.com/grokify/gocharts/data/table/format"
 	"github.com/grokify/gocharts/data/table/sheet"
-	"github.com/grokify/simplego/encoding/jsonutil"
+	"github.com/grokify/mogo/encoding/jsonutil"
 	"github.com/pkg/errors"
 )
 

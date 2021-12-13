@@ -4,9 +4,9 @@ package roadmap
 import (
 	"time"
 
-	"github.com/grokify/simplego/fmt/fmtutil"
-	"github.com/grokify/simplego/math/mathutil"
-	tu "github.com/grokify/simplego/time/timeutil"
+	"github.com/grokify/mogo/fmt/fmtutil"
+	"github.com/grokify/mogo/math/mathutil"
+	tu "github.com/grokify/mogo/time/timeutil"
 )
 
 type Feature struct {

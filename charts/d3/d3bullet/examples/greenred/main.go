@@ -7,7 +7,7 @@ import (
 
 	"github.com/grokify/gocharts/charts/d3/d3bullet"
 	"github.com/grokify/gocharts/charts/d3/d3bullet/examples/greenred/templates"
-	tu "github.com/grokify/simplego/time/timeutil"
+	tu "github.com/grokify/mogo/time/timeutil"
 )
 
 func main() {

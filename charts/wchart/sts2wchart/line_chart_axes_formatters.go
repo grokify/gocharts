@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"regexp"
 
-	"github.com/grokify/simplego/strconv/strconvutil"
+	"github.com/grokify/mogo/strconv/strconvutil"
 )
 
 func YAxisTickFormatSimple(raw float64) string {

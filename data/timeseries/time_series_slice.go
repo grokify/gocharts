@@ -5,7 +5,7 @@ import (
 
 	"github.com/grokify/gocharts/data/table"
 	"github.com/grokify/gocharts/data/table/format"
-	"github.com/grokify/simplego/type/stringsutil"
+	"github.com/grokify/mogo/type/stringsutil"
 )
 
 func TimeSeriesSliceTimes(dsSlice []TimeSeries) []string {

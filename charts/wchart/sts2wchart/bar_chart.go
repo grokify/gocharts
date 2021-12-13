@@ -7,9 +7,9 @@ import (
 	"github.com/grokify/gocharts/charts/wchart"
 	"github.com/grokify/gocharts/data/timeseries"
 
-	"github.com/grokify/simplego/math/mathutil"
-	"github.com/grokify/simplego/strconv/strconvutil"
-	"github.com/grokify/simplego/type/maputil"
+	"github.com/grokify/mogo/math/mathutil"
+	"github.com/grokify/mogo/strconv/strconvutil"
+	"github.com/grokify/mogo/type/maputil"
 	"github.com/wcharczuk/go-chart"
 )
 

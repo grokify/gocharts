@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/grokify/simplego/math/mathutil"
-	tu "github.com/grokify/simplego/time/timeutil"
+	"github.com/grokify/mogo/math/mathutil"
+	tu "github.com/grokify/mogo/time/timeutil"
 )
 
 const canvasLogName string = "roadmap.Canvas"

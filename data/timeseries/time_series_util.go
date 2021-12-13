@@ -3,7 +3,7 @@ package timeseries
 import (
 	"time"
 
-	"github.com/grokify/simplego/time/timeutil"
+	"github.com/grokify/mogo/time/timeutil"
 	"github.com/pkg/errors"
 )
 

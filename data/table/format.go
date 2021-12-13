@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/grokify/simplego/math/mathutil"
+	"github.com/grokify/mogo/math/mathutil"
 )
 
 // Pivot takes a "straight table" where the columnn names

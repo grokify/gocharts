@@ -3,10 +3,10 @@ package wchart
 import (
 	"time"
 
-	"github.com/grokify/simplego/strconv/strconvutil"
-	"github.com/grokify/simplego/time/month"
-	"github.com/grokify/simplego/time/quarter"
-	"github.com/grokify/simplego/time/timeutil"
+	"github.com/grokify/mogo/strconv/strconvutil"
+	"github.com/grokify/mogo/time/month"
+	"github.com/grokify/mogo/time/quarter"
+	"github.com/grokify/mogo/time/timeutil"
 	"github.com/wcharczuk/go-chart"
 )
 

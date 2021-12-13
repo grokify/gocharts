@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/grokify/gocharts/data/table"
-	"github.com/grokify/simplego/type/stringsutil"
+	"github.com/grokify/mogo/type/stringsutil"
 )
 
 // ParseFileCSV reads a CSV using default settings of
