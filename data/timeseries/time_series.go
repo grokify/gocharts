@@ -2,6 +2,7 @@ package timeseries
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"os"
 	"sort"
@@ -12,7 +13,6 @@ import (
 	"github.com/grokify/mogo/time/month"
 	"github.com/grokify/mogo/time/timeslice"
 	"github.com/grokify/mogo/time/timeutil"
-	"github.com/pkg/errors"
 )
 
 type TimeSeries struct {

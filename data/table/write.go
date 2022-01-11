@@ -13,8 +13,8 @@ import (
 	"github.com/360EntSecGroup-Skylar/excelize"
 	"github.com/grokify/gocharts/data/table/format"
 	"github.com/grokify/gocharts/data/table/sheet"
+	"github.com/grokify/gocharts/util"
 	"github.com/grokify/mogo/encoding/jsonutil"
-	"github.com/pkg/errors"
 )
 
 func writeCSV(path string, t *Table) error {
@@ -216,7 +216,7 @@ func WriteXLSX(path string, tables ...*Table) error {
 				cellLocation := sheet.CoordinatesToSheetLocation(uint32(x), uint32(y+rowBase))
 				formattedVal, err := fmtFunc(cellValue, uint(x))
 				if err != nil {
-					return errors.Wrap(err, "gocharts/data/tables/write.go/WriteXLSXFormatted.Error.FormatCellValue")
+					return util.ErrorWrap(err, "gocharts/data/tables/write.go/WriteXLSXFormatted.Error.FormatCellValue")
 				}
 				f.SetCellValue(sheetname, cellLocation, formattedVal)
 				if tbl.FormatAutoLink {

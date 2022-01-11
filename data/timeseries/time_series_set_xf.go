@@ -1,11 +1,11 @@
 package timeseries
 
 import (
+	"errors"
 	"sort"
 	"time"
 
 	"github.com/grokify/mogo/time/timeslice"
-	"github.com/pkg/errors"
 )
 
 /*

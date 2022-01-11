@@ -1,10 +1,10 @@
 package timeseries
 
 import (
+	"errors"
 	"time"
 
 	"github.com/grokify/mogo/time/timeutil"
-	"github.com/pkg/errors"
 )
 
 func TimeSeriesMapMinMaxTimes(dsm map[string]TimeSeries) (time.Time, time.Time, error) {

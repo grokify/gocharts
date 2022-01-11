@@ -1,13 +1,14 @@
 package table
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"os"
 	"strings"
 
+	"github.com/grokify/gocharts/util"
 	"github.com/grokify/mogo/encoding/csvutil"
-	"github.com/pkg/errors"
 )
 
 var debugReadCSV = false // should not need to use this.
@@ -102,7 +103,7 @@ func ParseReadSeeker(opts *ParseOptions, rs io.ReadSeeker) (Table, error) {
 			lines = trimSpaceSliceSliceString(lines)
 		}
 		if err != nil {
-			return tbl, errors.Wrap(err, "csv.Reader.ReadAll()")
+			return tbl, util.ErrorWrap(err, "csv.Reader.ReadAll()")
 		}
 		if len(lines) == 0 {
 			return tbl, errors.New("no content")
@@ -264,7 +265,7 @@ func (tbl *Table) Unmarshal(funcRow func(row []string) error) error {
 	for i, row := range tbl.Rows {
 		err := funcRow(row)
 		if err != nil {
-			return errors.Wrap(err, fmt.Sprintf("Error on Record Index [%d]", i))
+			return util.ErrorWrap(err, fmt.Sprintf("Error on Record Index [%d]", i))
 		}
 	}
 	return nil

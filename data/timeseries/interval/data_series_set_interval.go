@@ -1,6 +1,7 @@
 package interval
 
 import (
+	"errors"
 	"fmt"
 	"sort"
 	"strings"
@@ -9,7 +10,6 @@ import (
 	"github.com/grokify/gocharts/data/timeseries"
 	"github.com/grokify/mogo/time/timeutil"
 	"github.com/grokify/mogo/type/maputil"
-	"github.com/pkg/errors"
 )
 
 type SeriesType int
