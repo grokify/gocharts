@@ -7,13 +7,13 @@ import (
 	"strings"
 	"time"
 
-	"github.com/360EntSecGroup-Skylar/excelize"
 	"github.com/grokify/gocharts/data/table"
 	"github.com/grokify/gocharts/data/table/format"
 	"github.com/grokify/gocharts/data/table/sheet"
 	"github.com/grokify/gocharts/data/timeseries"
 	"github.com/grokify/mogo/time/timeutil"
 	"github.com/grokify/mogo/type/stringsutil"
+	"github.com/xuri/excelize/v2"
 )
 
 type HistogramSet struct {

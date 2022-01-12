@@ -1,7 +1,7 @@
 package sheet
 
 import (
-	"github.com/360EntSecGroup-Skylar/excelize"
+	"github.com/xuri/excelize/v2"
 )
 
 func SetRowValues(f *excelize.File, sheetName string, rowIndex uint, rowValues []interface{}) {
