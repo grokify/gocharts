@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/grokify/gocharts/data/timeseries"
-	"github.com/grokify/gocharts/util"
+	"github.com/grokify/mogo/errors/errorsutil"
 	"github.com/grokify/mogo/math/mathutil"
 	"github.com/grokify/mogo/time/month"
 	"github.com/grokify/mogo/time/timeutil"
@@ -22,7 +22,7 @@ func NewXoXTimeSeries(ds timeseries.TimeSeries) (XoXGrowth, error) {
 	for dateNowRfc, itemNow := range ds.ItemMap {
 		dateNow, err := time.Parse(time.RFC3339, dateNowRfc)
 		if err != nil {
-			return xox, util.ErrorWrap(err, "timeseries.NewXoXTimeSeries")
+			return xox, errorsutil.Wrap(err, "timeseries.NewXoXTimeSeries")
 		}
 		xoxPoint := XoxPoint{Time: dateNow, Value: itemNow.Int64()}
 

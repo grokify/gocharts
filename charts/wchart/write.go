@@ -4,7 +4,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/grokify/gocharts/util"
+	"github.com/grokify/mogo/errors/errorsutil"
 	"github.com/wcharczuk/go-chart"
 )
 
@@ -20,7 +20,7 @@ func WritePNG(filename string, thisChart ChartType) error {
 	err = thisChart.Render(chart.PNG, f)
 	err2 := f.Close()
 	if err != nil && err2 != nil {
-		return util.ErrorWrap(err, err2.Error())
+		return errorsutil.Wrap(err, err2.Error())
 	} else if err != nil {
 		return err
 	}
