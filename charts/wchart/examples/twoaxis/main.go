@@ -6,15 +6,12 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/wcharczuk/go-chart"
+	"github.com/wcharczuk/go-chart/v2"
 )
 
 func main() {
-
-	/*
-	   In this example we add a second series, and assign it to the secondary y axis, giving that series it's own range.
-	   We also enable all of the axes by setting the `Show` propery of their respective styles to `true`.
-	*/
+	// In this example we add a second series, and assign it to the secondary y axis, giving that series it's own range.
+	// We also enable all of the axes by setting the `Show` propery of their respective styles to `true`.
 
 	graph := chart.Chart{
 		Background: chart.Style{
@@ -30,10 +27,9 @@ func main() {
 				return fmt.Sprintf("%v", typed)
 				//			m := timeutil.MonthBegin(time.Now(), int(typed))
 				//			return m.Format(timeutil.RFC3339FullDate)
-				/*typed := v.(float64)
-				typedDate := chart.TimeFromFloat64(typed)
-				return fmt.Sprintf("%d-%d\n%d", typedDate.Month(), typedDate.Day(), typedDate.Year())
-				*/
+				//typed := v.(float64)
+				//typedDate := chart.TimeFromFloat64(typed)
+				//return fmt.Sprintf("%d-%d\n%d", typedDate.Month(), typedDate.Day(), typedDate.Year())
 			},
 		},
 		Series: []chart.Series{

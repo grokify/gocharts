@@ -4,16 +4,17 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
-
-	"github.com/grokify/gocharts/charts/wchart"
-	"github.com/grokify/gocharts/charts/wchart/sts2wchart"
-	"github.com/grokify/gocharts/data/timeseries"
 
 	"github.com/grokify/mogo/fmt/fmtutil"
 	"github.com/grokify/mogo/time/month"
 	"github.com/grokify/mogo/time/timeutil"
-	chart "github.com/wcharczuk/go-chart"
+	"github.com/wcharczuk/go-chart/v2"
+
+	"github.com/grokify/gocharts/charts/wchart"
+	"github.com/grokify/gocharts/charts/wchart/sts2wchart"
+	"github.com/grokify/gocharts/data/timeseries"
 )
 
 func drawChartTSSSimple(res http.ResponseWriter, req *http.Request) {
@@ -46,10 +47,8 @@ func drawChartTSSSimple(res http.ResponseWriter, req *http.Request) {
 }
 
 func drawChart(res http.ResponseWriter, req *http.Request) {
-	/*
-	   This is an example of using the `TimeSeries` to automatically coerce time.Time values into a continuous xrange.
-	   Note: chart.TimeSeries implements `ValueFormatterProvider` and as a result gives the XAxis the appropriate formatter to use for the ticks.
-	*/
+	// This is an example of using the `TimeSeries` to automatically coerce time.Time values into a continuous xrange.
+	// Note: chart.TimeSeries implements `ValueFormatterProvider` and as a result gives the XAxis the appropriate formatter to use for the ticks.
 	formatter := wchart.TimeFormatter{Layout: "Jan '06"}
 	graph := chart.Chart{
 		XAxis: chart.XAxis{
@@ -140,18 +139,6 @@ func GetChartExampleMonths() chart.Chart {
 					month.MonthBegin(time.Now(), -2),
 					month.MonthBegin(time.Now(), -1),
 					month.MonthBegin(time.Now(), 0),
-					/*
-						time.Now().AddDate(0, -10, 0),
-						time.Now().AddDate(0, -9, 0),
-						time.Now().AddDate(0, -8, 0),
-						time.Now().AddDate(0, -7, 0),
-						time.Now().AddDate(0, -6, 0),
-						time.Now().AddDate(0, -5, 0),
-						time.Now().AddDate(0, -4, 0),
-						time.Now().AddDate(0, -3, 0),
-						time.Now().AddDate(0, -2, 0),
-						time.Now().AddDate(0, -1, 0),
-						time.Now(),*/
 				},
 				YValues: []float64{1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0},
 			},
@@ -160,9 +147,7 @@ func GetChartExampleMonths() chart.Chart {
 }
 
 func drawCustomChart(res http.ResponseWriter, req *http.Request) {
-	/*
-	   This is basically the other timeseries example, except we switch to hour intervals and specify a different formatter from default for the xaxis tick labels.
-	*/
+	// This is basically the other timeseries example, except we switch to hour intervals and specify a different formatter from default for the xaxis tick labels.
 	graph := chart.Chart{
 		XAxis: chart.XAxis{
 			ValueFormatter: chart.TimeHourValueFormatter,
@@ -205,13 +190,14 @@ func main() {
 		log.Fatal(err)
 	}
 
-	/*
+	if 1 == 0 {
 		f, err := os.Create("test.png")
 		if err != nil {
 			log.Fatal(err)
 		}
 		chart1.Render(chart.PNG, f)
-		f.Close()*/
+		f.Close()
+	}
 
 	http.ListenAndServe(":8080", nil)
 }

@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"github.com/grokify/gocharts/charts/wchart"
-	"github.com/wcharczuk/go-chart"
+	"github.com/wcharczuk/go-chart/v2"
 )
 
 func main() {

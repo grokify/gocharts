@@ -6,15 +6,16 @@ import (
 	"strings"
 	"time"
 
-	"github.com/grokify/gocharts/charts/wchart"
-	"github.com/grokify/gocharts/data/timeseries"
-	"github.com/grokify/gocharts/data/timeseries/interval"
 	"github.com/grokify/mogo/math/ratio"
 	"github.com/grokify/mogo/strconv/strconvutil"
 	"github.com/grokify/mogo/time/month"
 	"github.com/grokify/mogo/time/timeutil"
-	"github.com/wcharczuk/go-chart"
-	"github.com/wcharczuk/go-chart/drawing"
+	"github.com/wcharczuk/go-chart/v2"
+	"github.com/wcharczuk/go-chart/v2/drawing"
+
+	"github.com/grokify/gocharts/charts/wchart"
+	"github.com/grokify/gocharts/data/timeseries"
+	"github.com/grokify/gocharts/data/timeseries/interval"
 )
 
 const RatioTwoCol = ratio.RatioAcademy

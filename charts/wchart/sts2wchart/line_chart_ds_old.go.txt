@@ -16,8 +16,8 @@ import (
 	"github.com/grokify/mogo/time/month"
 	"github.com/grokify/mogo/time/timeutil"
 	"github.com/grokify/mogo/type/number"
-	"github.com/wcharczuk/go-chart"
-	"github.com/wcharczuk/go-chart/drawing"
+	"github.com/wcharczuk/go-chart/v2"
+	"github.com/wcharczuk/go-chart/v2/drawing"
 )
 
 const RatioTwoCol = ratio.RatioAcademy

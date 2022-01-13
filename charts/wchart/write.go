@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/grokify/mogo/errors/errorsutil"
-	"github.com/wcharczuk/go-chart"
+	"github.com/wcharczuk/go-chart/v2"
 )
 
 type ChartType interface {

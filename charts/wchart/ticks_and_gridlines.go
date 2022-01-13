@@ -7,23 +7,12 @@ import (
 	"github.com/grokify/mogo/time/month"
 	"github.com/grokify/mogo/time/quarter"
 	"github.com/grokify/mogo/time/timeutil"
-	"github.com/wcharczuk/go-chart"
+	"github.com/wcharczuk/go-chart/v2"
 )
 
-/*
 // Ticks converts a slice of `float64` to a slice of `chart.Tick`. Common
 // formatting functions include `strconvutil.Commify` and
 // `strconvutil.Int64Abbreviation`.
-func Ticks(tickValues []float64, fn strconvutil.Float64ToString) []chart.Tick {
-	ticks := []chart.Tick{}
-	for _, tickVal := range tickValues {
-		ticks = append(ticks, chart.Tick{
-			Value: tickVal,
-			Label: fn(tickVal)})
-	}
-	return ticks
-}*/
-
 func Ticks(tickValues []float64, fn strconvutil.Float64ToString) []chart.Tick {
 	ticks := []chart.Tick{}
 	for _, tickVal := range tickValues {
@@ -63,7 +52,6 @@ func GridLines(values []float64, style chart.Style) []chart.GridLine {
 // `[]chart.Tick` and `[]chart.GridLine.`.
 func TicksAndGridlinesTime(interval timeutil.Interval, timeBegin, timeEnd time.Time, styleMajor, styleMinor chart.Style, timeFormat func(time.Time) string, tickInterval, gridInterval timeutil.Interval) ([]chart.Tick, []chart.GridLine) {
 	//fmt.Printf("TICK [%v] GRID [%v]\n", tickInterval, gridInterval)
-	//	panic("Z")
 
 	timecBegin := uint64(0)
 	timecEnd := uint64(0)
