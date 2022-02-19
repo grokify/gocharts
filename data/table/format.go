@@ -17,7 +17,7 @@ func (tbl *Table) Pivot(colCount uint, haveColumns bool) (Table, error) {
 	if len(tbl.Columns) != 0 {
 		return newTbl, fmt.Errorf("has defined columns count [%d]", len(tbl.Columns))
 	}
-	isWellFormed, colCountActual := tbl.IsWellFormed()
+	isWellFormed, colCountActual, _ := tbl.IsWellFormed()
 	if !isWellFormed {
 		return newTbl, errors.New("table is not well-defined")
 	} else if colCountActual != 1 {

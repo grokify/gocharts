@@ -61,23 +61,25 @@ func (tbl *Table) UpsertRowColumnValue(rowIdx, colIdx uint, value string) {
 	tbl.Rows[rowIdxInt] = row
 }
 
-func (tbl *Table) IsWellFormed() (isWellFormed bool, columnCount uint) {
-	columnCount = uint(len(tbl.Columns))
+// IsWellFormed returns true when the number of columns equals
+// the lenght of each row. If columns is empty, the length of the
+// first row is used for comparison.
+func (tbl *Table) IsWellFormed() (isWellFormed bool, columnCount int, mismatchRows []int) {
+	isWellFormed = true
+	columnCount = len(tbl.Columns)
 	if len(tbl.Rows) == 0 {
-		isWellFormed = true
-		return
+		return isWellFormed, columnCount, []int{}
 	}
 	for i, row := range tbl.Rows {
-		if i == 0 && len(tbl.Columns) == 0 {
-			columnCount = uint(len(row))
+		if i == 0 && columnCount == 0 {
+			columnCount = len(row)
 			continue
 		}
-		if uint(len(row)) != columnCount {
+		if len(row) != columnCount {
 			isWellFormed = false
-			return
+			mismatchRows = append(mismatchRows, i)
 		}
 	}
-	isWellFormed = true
 	return
 }
 
