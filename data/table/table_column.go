@@ -43,14 +43,55 @@ func (tbl *Table) ColumnsValuesDistinct(wantCols []string, stripSpace bool) (map
 	return data, nil
 }
 
-func (tbl *Table) ColumnValues(colIdx uint, dedupeValues, sortResults bool) ([]string, error) {
-	idx := int(colIdx)
+func (tbl *Table) ColumnValuesSplit(colIdx uint, split bool, sep string, unique, sortResults bool) ([]string, map[string]int, error) {
+	msi := map[string]int{}
+	vals := []string{}
+	for _, row := range tbl.Rows {
+		if int(colIdx) < len(row) {
+			v := row[colIdx]
+			if split {
+				valsi := strings.Split(v, sep)
+				vals = append(vals, valsi...)
+				for _, v := range valsi {
+					msi[v] += 1
+				}
+			} else {
+				vals = append(vals, v)
+				msi[v] += 1
+			}
+		} else {
+			return vals, msi, fmt.Errorf("column index not found for index [%d] row length [%d]", colIdx, len(row))
+		}
+	}
+	if unique {
+		vals = SliceDedupe(vals)
+	}
+	if sortResults {
+		sort.Strings(vals)
+	}
+	return vals, msi, nil
+}
 
+func SliceDedupe(s []string) []string {
+	seen := map[string]int{}
+	vals := []string{}
+	for _, si := range s {
+		if _, ok := seen[si]; ok {
+			continue
+		}
+		vals = append(vals, si)
+		seen[si] += 1
+	}
+	return vals
+}
+
+func (tbl *Table) ColumnValues(colIdx uint, unique, sortResults bool) ([]string, error) {
+	//idx := int(colIdx)
 	seen := map[string]int{}
 	vals := []string{}
 	for _, row := range tbl.Rows {
-		if idx < len(row) {
-			if dedupeValues {
+		if int(colIdx) < len(row) {
+			if unique {
 				if _, ok := seen[row[colIdx]]; ok {
 					continue
 				}
