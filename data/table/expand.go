@@ -9,7 +9,7 @@ import (
 
 // ColumnExpand adds columns to the table representing
 // each value in the provided column.
-func (tbl *Table) ColumnExpand(colIdx uint, split bool, sep, existString, notExistString string) error {
+func (tbl *Table) ColumnExpand(colIdx uint, split bool, sep, colNamePrefix, noneColName, existString, notExistString string) error {
 	if int(colIdx) >= len(tbl.Columns) {
 		return errors.New("colIdx is too large")
 	}
@@ -21,9 +21,16 @@ func (tbl *Table) ColumnExpand(colIdx uint, split bool, sep, existString, notExi
 	if err != nil {
 		return err
 	}
-	colName := tbl.Columns[colIdx]
+	colNamePrefix = strings.TrimSpace(colNamePrefix)
+	if len(colNamePrefix) == 0 {
+		colNamePrefix = tbl.Columns[colIdx]
+	}
 	for _, v := range newColVals {
-		newColName := colName + ": " + v
+		v = strings.TrimSpace(v)
+		if len(v) == 0 {
+			v = noneColName
+		}
+		newColName := colNamePrefix + ": " + v
 		tbl.Columns = append(tbl.Columns, newColName)
 	}
 	for i, row := range tbl.Rows {
