@@ -5,6 +5,7 @@ GoCharts
 [![Go Report Card][goreport-svg]][goreport-url]
 [![Used By][used-by-svg]][used-by-url]
 [![Docs][docs-godoc-svg]][docs-godoc-url]
+[![SLOC][loc-svg]][repo-url]
 [![License][license-svg]][license-url]
 
 GoCharts is a library to assist with building charts, by directly working with charting libraries, generating tabular data for Excel XLSX files and CSV files, or to transfer data to/from analytics solutions like [Metabase](https://pkg.go.dev/github.com/grokify/go-metabase/metabaseutil) and [SimpleKPI](https://pkg.go.dev/github.com/grokify/go-simplekpi/simplekpiutil).
@@ -59,3 +60,5 @@ See the example here:
  [license-url]: https://github.com/grokify/gocharts/blob/master/LICENSE
  [used-by-svg]: https://sourcegraph.com/github.com/grokify/gocharts/-/badge.svg
  [used-by-url]: https://sourcegraph.com/github.com/grokify/gocharts?badge
+ [loc-svg]: https://tokei.rs/b1/github/grokify/gocharts
+ [repo-url]: https://github.com/grokify/gocharts
