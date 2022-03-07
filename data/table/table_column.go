@@ -15,7 +15,7 @@ func (tbl *Table) ColumnsValuesDistinct(wantCols []string, stripSpace bool) (map
 	for _, wantCol := range wantCols {
 		wantIdx := tbl.Columns.Index(wantCol)
 		if wantIdx < 0 {
-			return data, fmt.Errorf("Column Not Found [%v]", wantCol)
+			return data, fmt.Errorf("column not found [%v]", wantCol)
 		}
 		wantIdxs = append(wantIdxs, wantIdx)
 		if wantIdx > maxIdx {

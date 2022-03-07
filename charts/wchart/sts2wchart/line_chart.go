@@ -240,7 +240,7 @@ func TimeSeriesSetToLineChart(tset timeseries.TimeSeriesSet, opts *LineChartOpts
 
 	if opts.Interval == timeutil.Month {
 		for _, ds := range tset.Series {
-			annoSeries, err := timeSeriesMonthToAnnotations(ds, *opts)
+			annoSeries, err := TimeSeriesMonthToAnnotations(ds, *opts)
 			if err == nil && len(annoSeries.Annotations) > 0 {
 				graph.Series = append(graph.Series, annoSeries)
 			}
@@ -249,7 +249,7 @@ func TimeSeriesSetToLineChart(tset timeseries.TimeSeriesSet, opts *LineChartOpts
 	return graph, nil
 }
 
-func timeSeriesMonthToAnnotations(ts timeseries.TimeSeries, opts LineChartOpts) (chart.AnnotationSeries, error) {
+func TimeSeriesMonthToAnnotations(ts timeseries.TimeSeries, opts LineChartOpts) (chart.AnnotationSeries, error) {
 	annoSeries := chart.AnnotationSeries{
 		Annotations: []chart.Value2{},
 		Style: chart.Style{
@@ -302,6 +302,7 @@ func timeSeriesMonthToAnnotations(ts timeseries.TimeSeries, opts LineChartOpts) 
 	return annoSeries, nil
 }
 
+/*
 func DataSeriesQuarterToAnnotations(ds timeseries.TimeSeries, opts LineChartOpts) (chart.AnnotationSeries, error) {
 	annoSeries := chart.AnnotationSeries{
 		Annotations: []chart.Value2{},
@@ -354,6 +355,7 @@ func DataSeriesQuarterToAnnotations(ds timeseries.TimeSeries, opts LineChartOpts
 	}
 	return annoSeries, nil
 }
+*/
 
 func FormatXTickTimeFunc(interval timeutil.Interval) func(time.Time) string {
 	if interval == timeutil.Month {
