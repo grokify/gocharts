@@ -58,14 +58,14 @@ func ParseRecordsTimeItems(records [][]string, cfg TableConfig) ([]TimeItem, err
 			if cfg.SeriesSetNameColIdx >= len(rec) {
 				return items, fmt.Errorf("row [%d] missing group1 index [%d]", i, cfg.SeriesSetNameColIdx)
 			}
-			item.SeriesSetName = rec[int(cfg.SeriesSetNameColIdx)]
+			item.SeriesSetName = rec[cfg.SeriesSetNameColIdx]
 		}
 
 		if cfg.SeriesNameColIdx >= 0 {
 			if cfg.SeriesNameColIdx >= len(rec) {
 				return items, fmt.Errorf("row [%d] missing group2 index [%d]", i, cfg.SeriesNameColIdx)
 			}
-			item.SeriesName = rec[int(cfg.SeriesNameColIdx)]
+			item.SeriesName = rec[cfg.SeriesNameColIdx]
 		}
 
 		items = append(items, item)

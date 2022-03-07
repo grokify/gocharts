@@ -29,6 +29,7 @@ func quotient26ToPrefix(quotient uint32) string {
 	return prefix
 }
 
+/*
 func quotient25ToPrefix(quotient uint32) string {
 	// " ABCDEF"
 	// "0123456"
@@ -41,6 +42,7 @@ func quotient25ToPrefix(quotient uint32) string {
 	prefix := alphabetSlice[quotient] // A=1
 	return prefix
 }
+*/
 
 func remainder26ToSuffix(remainder uint32) string {
 	if remainder == 0 {

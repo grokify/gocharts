@@ -302,7 +302,7 @@ func timeSeriesMonthToAnnotations(ts timeseries.TimeSeries, opts LineChartOpts) 
 	return annoSeries, nil
 }
 
-func dataSeriesQuarterToAnnotations(ds timeseries.TimeSeries, opts LineChartOpts) (chart.AnnotationSeries, error) {
+func DataSeriesQuarterToAnnotations(ds timeseries.TimeSeries, opts LineChartOpts) (chart.AnnotationSeries, error) {
 	annoSeries := chart.AnnotationSeries{
 		Annotations: []chart.Value2{},
 		Style: chart.Style{

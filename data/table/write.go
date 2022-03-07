@@ -266,7 +266,10 @@ func WriteXLSXInterface(filename string, sheetdatas ...SheetData) error {
 		for y, row := range sheetdata.Rows {
 			for x, cellValue := range row {
 				cellLocation := sheet.CoordinatesToSheetLocation(uint32(x), uint32(y))
-				f.SetCellValue(sheetname, cellLocation, cellValue)
+				err := f.SetCellValue(sheetname, cellLocation, cellValue)
+				if err != nil {
+					return err
+				}
 			}
 		}
 		// Set active sheet of the workbook.

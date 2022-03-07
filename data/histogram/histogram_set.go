@@ -264,8 +264,10 @@ func (hset *HistogramSet) WriteXLSX(filename, sheetName, colName1, colName2, col
 	}
 	header := []interface{}{colName1, colName2, colNameCount}
 
-	sheet.SetRowValues(f, sheetName, 0, header)
-	var err error
+	err := sheet.SetRowValues(f, sheetName, 0, header)
+	if err != nil {
+		return err
+	}
 	rowIdx := uint(1)
 	for fstatsName, fstats := range hset.HistogramMap {
 		fstatsNameDt := time.Now()
@@ -282,7 +284,10 @@ func (hset *HistogramSet) WriteXLSX(filename, sheetName, colName1, colName2, col
 			} else {
 				rowVals = []interface{}{fstatsName, binName, binCount}
 			}
-			sheet.SetRowValues(f, sheetName, rowIdx, rowVals)
+			err := sheet.SetRowValues(f, sheetName, rowIdx, rowVals)
+			if err != nil {
+				return err
+			}
 			rowIdx++
 		}
 	}
