@@ -10,6 +10,7 @@ import (
 
 	"github.com/grokify/gocharts/data"
 	"github.com/grokify/gocharts/data/timeseries/interval"
+	"github.com/grokify/gocharts/util"
 
 	"github.com/grokify/mogo/time/timeutil"
 )
@@ -55,15 +56,19 @@ func (am *MonthData) Inflate() error {
 		}
 	}
 	if monthn < 1 {
-		panic("E_DATA_ERROR")
+		return fmt.Errorf("invalid month [%d]", monthn)
 	}
 	dt6s := fmt.Sprintf("%v%02d", am.YearS, monthn)
 
 	i, err := strconv.Atoi(dt6s)
 	if err != nil {
-		panic("E_DATE_CONVERSION_ERROR")
+		return err
 	} else {
-		am.Dt6 = int32(i)
+		dt6, err := util.Int32(i)
+		if err != nil {
+			return err
+		}
+		am.Dt6 = dt6
 	}
 
 	i2, err := strconv.Atoi(am.ValueS)
