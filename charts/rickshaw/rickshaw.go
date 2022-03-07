@@ -10,9 +10,9 @@ import (
 
 	"github.com/grokify/gocharts/data"
 	"github.com/grokify/gocharts/data/timeseries/interval"
-	"github.com/grokify/gocharts/util"
 
 	"github.com/grokify/mogo/time/timeutil"
+	"github.com/grokify/mogo/type/number"
 )
 
 // DataInfoJS is the series item to be sent to the
@@ -64,7 +64,7 @@ func (am *MonthData) Inflate() error {
 	if err != nil {
 		return err
 	} else {
-		dt6, err := util.Int32(i)
+		dt6, err := number.Int32(i)
 		if err != nil {
 			return err
 		}
@@ -204,7 +204,7 @@ func (rd *RickshawData) Formatted() (RickshawDataFormatted, error) {
 			if err != nil {
 				return formatted, err
 			}
-			i32, err := util.Int32(i)
+			i32, err := number.Int32(i)
 			if err != nil {
 				return formatted, err
 			}
