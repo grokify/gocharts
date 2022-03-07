@@ -66,9 +66,9 @@ func DataRowsToTableRows(rep []sts.RowInt64, axis []string, addQoQPct, addFunnel
 
 func unshift(a []string, x string) []string { return append([]string{x}, a...) }
 
-func QoqDataToChart(domId string, axis c3.C3Axis, qoqData []sts.RowFloat64) c3.C3Chart {
+func QoqDataToChart(domID string, axis c3.C3Axis, qoqData []sts.RowFloat64) c3.C3Chart {
 	qoqChart := c3.C3Chart{
-		Bindto: "#" + domId,
+		Bindto: "#" + domID,
 		Data: c3.C3ChartData{
 			Columns: [][]interface{}{},
 		},

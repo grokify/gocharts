@@ -42,7 +42,7 @@ func (tbl *Table) FilterRecordsColumnValues(wantColNameValues map[string]string)
 	for wantColName := range wantColNameValues {
 		wantColIdx := tbl.Columns.Index(wantColName)
 		if wantColIdx < 0 {
-			return data, fmt.Errorf("Column Not Found [%v]", wantColName)
+			return data, fmt.Errorf("column not found [%v]", wantColName)
 		}
 		if wantColIdx > maxIdx {
 			maxIdx = wantColIdx
@@ -56,7 +56,7 @@ ROWS:
 				colValue := row[wantColIdx]
 				wantColValue, ok := wantColNameValues[wantColName]
 				if !ok {
-					return data, fmt.Errorf("Column Name [%v] has no desired value", wantColName)
+					return data, fmt.Errorf("column name [%v] has no desired value", wantColName)
 				}
 				if colValue != wantColValue {
 					continue ROWS

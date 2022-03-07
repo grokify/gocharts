@@ -218,7 +218,7 @@ func (ival *SeriesIntervals) Inflate() error {
 
 func (ival *SeriesIntervals) buildMinMaxEndpoints() error {
 	if !ival.areEndpointsSet() {
-		return errors.New("Cannot build canonical dates without initialized dates.")
+		return errors.New("cannot build canonical dates without initialized dates")
 	}
 	ival.Max = ival.Max.UTC()
 	ival.Min = ival.Min.UTC()

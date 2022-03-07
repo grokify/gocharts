@@ -60,7 +60,7 @@ func (tsf *TimeSeriesFunnel) TimeSeriesSetByQuarter() (TimeSeriesSet, error) {
 	}
 
 	if len(allTimes) == 0 {
-		return dss, errors.New("No times")
+		return dss, errors.New("no times")
 	}
 	earliest, err := tu.Earliest(allTimes, false)
 	if err != nil {

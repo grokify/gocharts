@@ -197,7 +197,7 @@ func (rd *RickshawData) Formatted() RickshawDataFormatted {
 
 			i, err := strconv.Atoi(dt.Format(timeutil.DT6))
 			if err != nil {
-				panic("E_STRCONV")
+				panic("err_strconv")
 			}
 			dt6 := int32(i)
 			if first {
@@ -216,7 +216,7 @@ func (rd *RickshawData) Formatted() RickshawDataFormatted {
 		}
 	}
 
-	timeutil.ParseDt6(minDt6)
+	// timeutil.ParseDt6(minDt6)
 
 	dt6Axis := timeutil.Dt6MinMaxSlice(minDt6, maxDt6)
 

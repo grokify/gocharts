@@ -243,7 +243,7 @@ func (ts *TimeSeries) MaxValue() int64 {
 func (ts *TimeSeries) OneItemMaxValue() (TimeItem, error) {
 	max := TimeItem{}
 	if len(ts.ItemMap) == 0 {
-		return max, errors.New("Empty Set has no Max Value Item")
+		return max, errors.New("empty set has no max value item")
 	}
 	first := true
 	for _, item := range ts.ItemMap {
