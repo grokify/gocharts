@@ -62,7 +62,7 @@ func (tbl *Table) UpsertRowColumnValue(rowIdx, colIdx uint, value string) {
 }
 
 // IsWellFormed returns true when the number of columns equals
-// the lenght of each row. If columns is empty, the length of the
+// the length of each row. If columns is empty, the length of the
 // first row is used for comparison.
 func (tbl *Table) IsWellFormed() (isWellFormed bool, columnCount int, mismatchRows []int) {
 	isWellFormed = true

@@ -41,12 +41,12 @@ type MonthData struct {
 }
 
 func (am *MonthData) Inflate() {
-	months_en := []string{}
-	json.Unmarshal([]byte(timeutil.MonthsEN), &months_en)
+	monthsEn := []string{}
+	json.Unmarshal([]byte(timeutil.MonthsEN), &monthsEn)
 
 	mon := strings.ToLower(am.MonthS)
 	monthn := 0
-	for i, try := range months_en {
+	for i, try := range monthsEn {
 		if mon == strings.ToLower(try) {
 			monthn = i + 1
 		}

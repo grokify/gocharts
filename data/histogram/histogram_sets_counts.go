@@ -7,9 +7,9 @@ import "github.com/grokify/mogo/type/stringsutil"
 // for raw record counts against aggregate query values,
 // e.g. compare counts of raw records to GROUP BY counts.
 type HistogramSetsCounts struct {
-	UidCounts     map[string]map[string]uint
-	UidCountsKey1 map[string]uint
-	UidCountsKey2 map[string]uint
+	UIDCounts     map[string]map[string]uint
+	UIDCountsKey1 map[string]uint
+	UIDCountsKey2 map[string]uint
 	Key1Names     []string
 	Key2Names     []string
 }
@@ -17,24 +17,24 @@ type HistogramSetsCounts struct {
 func (hcounts *HistogramSetsCounts) preflate() {
 	hcounts.Key1Names = []string{}
 	hcounts.Key2Names = []string{}
-	hcounts.UidCountsKey1 = map[string]uint{}
-	hcounts.UidCountsKey2 = map[string]uint{}
+	hcounts.UIDCountsKey1 = map[string]uint{}
+	hcounts.UIDCountsKey2 = map[string]uint{}
 }
 
 func (hcounts *HistogramSetsCounts) Inflate() {
 	hcounts.preflate()
-	for key1Name, key1Vals := range hcounts.UidCounts {
+	for key1Name, key1Vals := range hcounts.UIDCounts {
 		hcounts.Key1Names = append(hcounts.Key1Names, key1Name)
-		if _, ok := hcounts.UidCountsKey1[key1Name]; !ok {
-			hcounts.UidCountsKey1[key1Name] = uint(0)
+		if _, ok := hcounts.UIDCountsKey1[key1Name]; !ok {
+			hcounts.UIDCountsKey1[key1Name] = uint(0)
 		}
 		for key2Name, k1k2Count := range key1Vals {
 			hcounts.Key2Names = append(hcounts.Key2Names, key2Name)
-			if _, ok := hcounts.UidCountsKey1[key1Name]; !ok {
-				hcounts.UidCountsKey2[key2Name] = uint(0)
+			if _, ok := hcounts.UIDCountsKey1[key1Name]; !ok {
+				hcounts.UIDCountsKey2[key2Name] = uint(0)
 			}
-			hcounts.UidCountsKey1[key1Name] += k1k2Count
-			hcounts.UidCountsKey2[key2Name] += k1k2Count
+			hcounts.UIDCountsKey1[key1Name] += k1k2Count
+			hcounts.UIDCountsKey2[key2Name] += k1k2Count
 		}
 	}
 	hcounts.Key1Names = stringsutil.SliceCondenseSpace(
@@ -47,22 +47,22 @@ func NewHistogramSetsCounts(hsets HistogramSets) *HistogramSetsCounts {
 	hcounts := &HistogramSetsCounts{
 		Key1Names:     []string{},
 		Key2Names:     []string{},
-		UidCounts:     map[string]map[string]uint{},
-		UidCountsKey1: map[string]uint{},
-		UidCountsKey2: map[string]uint{}}
+		UIDCounts:     map[string]map[string]uint{},
+		UIDCountsKey1: map[string]uint{},
+		UIDCountsKey2: map[string]uint{}}
 	if len(hsets.HistogramSetMap) == 0 {
 		return hcounts
 	}
 
 	for hsetName, hset := range hsets.HistogramSetMap {
-		hcountsGroup, ok := hcounts.UidCounts[hsetName]
+		hcountsGroup, ok := hcounts.UIDCounts[hsetName]
 		if !ok {
 			hcountsGroup = map[string]uint{}
 		}
 		for histName, hist := range hset.HistogramMap {
 			hcountsGroup[histName] = uint(len(hist.Bins))
 		}
-		hcounts.UidCounts[hsetName] = hcountsGroup
+		hcounts.UIDCounts[hsetName] = hcountsGroup
 	}
 
 	hcounts.Inflate()

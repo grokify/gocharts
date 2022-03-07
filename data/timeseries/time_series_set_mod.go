@@ -12,43 +12,43 @@ func (set *TimeSeriesSet) ToMonth(cumulative, inflate, popLast bool) (TimeSeries
 	if cumulative {
 		return set.toMonthCumulative(inflate, popLast)
 	}
-	newTss := TimeSeriesSet{
+	newTSS := TimeSeriesSet{
 		Name:     set.Name,
 		Series:   map[string]TimeSeries{},
 		Times:    set.Times,
 		Interval: timeutil.Month,
 		Order:    set.Order}
 	for name, ds := range set.Series {
-		newTss.Series[name] = ds.ToMonth(inflate)
+		newTSS.Series[name] = ds.ToMonth(inflate)
 	}
 	if popLast {
-		newTss.PopLast()
+		newTSS.PopLast()
 	}
-	newTss.Inflate()
-	newTss.Times = newTss.TimeSlice(true)
-	return newTss, nil
+	newTSS.Inflate()
+	newTSS.Times = newTSS.TimeSlice(true)
+	return newTSS, nil
 }
 
 func (set *TimeSeriesSet) toMonthCumulative(inflate, popLast bool) (TimeSeriesSet, error) {
-	newTss := TimeSeriesSet{
+	newTSS := TimeSeriesSet{
 		Name:     set.Name,
 		Series:   map[string]TimeSeries{},
 		Times:    set.Times,
 		Interval: timeutil.Month,
 		Order:    set.Order}
 	for seriesName, ts := range set.Series {
-		newTs, err := ts.ToMonthCumulative(inflate, newTss.Times...)
+		newTS, err := ts.ToMonthCumulative(inflate, newTSS.Times...)
 		if err != nil {
-			return newTss, err
+			return newTSS, err
 		}
-		newTss.Series[seriesName] = newTs
+		newTSS.Series[seriesName] = newTS
 	}
 	if popLast {
-		newTss.PopLast()
+		newTSS.PopLast()
 	}
-	newTss.Inflate()
-	newTss.Times = newTss.TimeSlice(true)
-	return newTss, nil
+	newTSS.Inflate()
+	newTSS.Times = newTSS.TimeSlice(true)
+	return newTSS, nil
 }
 
 func (set *TimeSeriesSet) PopLast() {
@@ -68,7 +68,7 @@ func (set *TimeSeriesSet) DeleteTime(dt time.Time) {
 }
 
 func (set *TimeSeriesSet) ToNewSeriesNames(seriesNames, seriesSetNames map[string]string) TimeSeriesSet {
-	newTss := TimeSeriesSet{
+	newTSS := TimeSeriesSet{
 		Name:     set.Name,
 		Series:   map[string]TimeSeries{},
 		Times:    set.Times,
@@ -87,9 +87,9 @@ func (set *TimeSeriesSet) ToNewSeriesNames(seriesNames, seriesSetNames map[strin
 					item.SeriesSetName = newSeriesSetName
 				}
 			}
-			newTss.AddItems(item)
+			newTSS.AddItems(item)
 		}
 	}
-	newTss.Inflate()
-	return newTss
+	newTSS.Inflate()
+	return newTSS
 }

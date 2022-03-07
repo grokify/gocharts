@@ -2,8 +2,8 @@ package http
 
 func SessionsSetRequestsToEndpointsSet(ss SessionSet) map[string]Endpoints {
 	epMap := map[string]Endpoints{}
-	for sessionId, ses := range ss.SessionMap {
-		epMap[sessionId] = SessionToEndpoints(ses)
+	for sessionID, ses := range ss.SessionMap {
+		epMap[sessionID] = SessionToEndpoints(ses)
 	}
 	return epMap
 }
@@ -23,19 +23,3 @@ func SessionToEndpoints(ses Session) Endpoints {
 	}
 	return eps
 }
-
-//Endpoint
-//StatusTimes []
-
-/*
-func WriteSessionsSetToCSV() {
-SessionId
-RequestId
-	PathMethod
-Time
-Status
-
-
-}
-
-*/

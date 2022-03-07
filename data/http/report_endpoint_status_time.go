@@ -26,13 +26,13 @@ func (ss *SessionSet) AddRequest(r Request) {
 }
 
 type Session struct {
-	SessionId  string
+	SessionID  string
 	RequestSet RequestSet
 }
 
-func NewSession(sessionId string) Session {
+func NewSession(sessionID string) Session {
 	return Session{
-		SessionId:  sessionId,
+		SessionID:  sessionID,
 		RequestSet: NewRequestSet()}
 }
 

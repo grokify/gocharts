@@ -40,7 +40,7 @@ func NewHistogramSetWithData(name string, data map[string]map[string]int) *Histo
 	return hset
 }
 
-func (hset *HistogramSet) AddDateUidCount(dt time.Time, uid string, count int) {
+func (hset *HistogramSet) AddDateUIDCount(dt time.Time, uid string, count int) {
 	fName := dt.Format(time.RFC3339)
 	hset.Add(fName, uid, count)
 	if !hset.KeyIsTime {
