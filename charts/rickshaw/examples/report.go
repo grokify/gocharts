@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"log"
 
 	"github.com/grokify/mogo/encoding/csvutil"
 
@@ -46,7 +47,10 @@ func main() {
 
 	}
 	fi.Close()
-	rickshawDataFormatted := rickshawData.Formatted()
+	rickshawDataFormatted, err := rickshawData.Formatted()
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	tmplData := rickshaw.TemplateData{
 		ReportName:            "Fruit Report",

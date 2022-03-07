@@ -180,7 +180,7 @@ func (rd *RickshawData) seriesNames() []string {
 }
 
 // Formatted returns formatted information ready for Rickshaw
-func (rd *RickshawData) Formatted() RickshawDataFormatted {
+func (rd *RickshawData) Formatted() (RickshawDataFormatted, error) {
 	seriesNames := rd.seriesNames()
 	sort.Sort(sort.Reverse(sort.StringSlice(seriesNames)))
 	formatted := RickshawDataFormatted{
@@ -202,9 +202,13 @@ func (rd *RickshawData) Formatted() RickshawDataFormatted {
 
 			i, err := strconv.Atoi(dt.Format(timeutil.DT6))
 			if err != nil {
-				panic("err_strconv")
+				return formatted, err
 			}
-			dt6 := int32(i)
+			i32, err := util.Int32(i)
+			if err != nil {
+				return formatted, err
+			}
+			dt6 := i32
 			if first {
 				minDt6 = dt6
 				maxDt6 = dt6
@@ -231,7 +235,7 @@ func (rd *RickshawData) Formatted() RickshawDataFormatted {
 		for _, dt6 := range dt6Axis {
 			dt, err := timeutil.TimeForDt6(dt6)
 			if err != nil {
-				panic("DT6_PARSE_ERROR")
+				return formatted, err
 			}
 			dt6Epoch := dt.Unix()
 			if item, ok := thinSeries.ItemsMapX[dt6Epoch]; ok {
@@ -257,7 +261,7 @@ func (rd *RickshawData) Formatted() RickshawDataFormatted {
 
 	formatted.FormattedData = formattedSeries
 
-	return formatted
+	return formatted, nil
 }
 
 type Series struct {
