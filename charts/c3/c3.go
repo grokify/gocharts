@@ -120,6 +120,7 @@ func (cols *C3ColumnsInt) ToC3ChartData(chartType string) C3ChartData {
 		for _, val := range col.Values {
 			row = append(row, val)
 		}
+		columns = append(columns, row)
 	}
 
 	return C3ChartData{

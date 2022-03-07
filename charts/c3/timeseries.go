@@ -66,11 +66,7 @@ func (data *TimeseriesData) AddTimeSeriesSet(set *interval.TimeSeriesSet, interv
 			}
 			totals[j] += item.Value
 			rfc3339ym := item.Time.Format(timeutil.ISO8601YM)
-			if _, ok := totalsMap[rfc3339ym]; ok {
-				totalsMap[rfc3339ym] += item.Value
-			} else {
-				totalsMap[rfc3339ym] = item.Value
-			}
+			totalsMap[rfc3339ym] += item.Value
 		}
 		if i == 0 {
 			columns = append(columns, xValues)

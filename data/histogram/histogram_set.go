@@ -296,7 +296,6 @@ func (hset *HistogramSet) WriteXLSX(filename, sheetName, colName1, colName2, col
 	f.DeleteSheet(f.GetSheetName(0))
 	// Save xlsx file by the given path.
 	return f.SaveAs(filename)
-
 }
 
 // DatetimeKeyToQuarter converts a HistogramSet

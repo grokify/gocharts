@@ -82,7 +82,7 @@ func (am *MonthData) RickshawItem() (Item, error) {
 		SeriesName: am.SeriesName,
 		Time:       dt6Time,
 		ValueY:     am.Value,
-		ValueX:     int64(dt6Time.Unix())}
+		ValueX:     dt6Time.Unix()}
 	return item, nil
 }
 
