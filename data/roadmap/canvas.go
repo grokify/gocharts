@@ -27,7 +27,7 @@ type Canvas struct {
 
 func (can *Canvas) SetMinMaxQuarter(qtrMin, qtrMax int32) error {
 	if qtrMax < qtrMin {
-		return fmt.Errorf("Max is < min: min [%v] max [%v]", qtrMin, qtrMax)
+		return fmt.Errorf("max is < min: min [%v] max [%v]", qtrMin, qtrMax)
 	}
 	err := can.SetMinQuarter(qtrMin)
 	if err != nil {
@@ -96,11 +96,11 @@ func (can *Canvas) InflateItems() error {
 
 func (can *Canvas) InflateItem(item Item) (Item, error) {
 	if tu.IsZeroAny(item.MinTime) && tu.IsZeroAny(item.MaxTime) {
-		return item, fmt.Errorf("%s.InflateItem() Error: Need NonZero Time For [%v][%v][%v]", canvasLogName, item.Name, "item.MinTime", "item.MaxTime")
+		return item, fmt.Errorf("func %s.InflateItem() Error: Need NonZero Time For [%v][%v][%v]", canvasLogName, item.Name, "item.MinTime", "item.MaxTime")
 	} else if tu.IsZeroAny(item.MinTime) {
-		return item, fmt.Errorf("%s.InflateItem() Error: Need NonZero Time For [%v][%v]", canvasLogName, item.Name, "item.MinTime")
+		return item, fmt.Errorf("func %s.InflateItem() Error: Need NonZero Time For [%v][%v]", canvasLogName, item.Name, "item.MinTime")
 	} else if tu.IsZeroAny(item.MaxTime) {
-		return item, fmt.Errorf("%s.InflateItem() Error: Need NonZero Time For [%v][%v]", canvasLogName, item.Name, "item.MaxTime")
+		return item, fmt.Errorf("func %s.InflateItem() Error: Need NonZero Time For [%v][%v]", canvasLogName, item.Name, "item.MaxTime")
 	}
 
 	cellMargin := int32(1)

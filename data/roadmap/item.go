@@ -24,7 +24,7 @@ type Item struct {
 
 func (i *Item) SetMinMaxQuarter(qtrMin, qtrMax int32) error {
 	if qtrMax < qtrMin {
-		return fmt.Errorf("Max is < min: min [%v] max [%v]", qtrMin, qtrMax)
+		return fmt.Errorf("max is < min: min [%v] max [%v]", qtrMin, qtrMax)
 	}
 	err := i.SetMinQuarter(qtrMin)
 	if err != nil {

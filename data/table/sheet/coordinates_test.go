@@ -79,19 +79,17 @@ func TestColNumberToLetters(t *testing.T) {
 			t.Errorf("table.ColNumberToLetters(%v) want [%v] got [%v]",
 				tt.colNumber, tt.letters, letters)
 		}
-		if 1 == 1 {
-			sheetLocIdx := CoordinatesToSheetLocation(tt.colIndex, tt.rowIndex)
-			if sheetLocIdx != tt.sheetLocation {
-				t.Errorf("table.CoordinatesToSheetLocation(%v,%v) want [%v] got [%v]",
-					tt.colNumber, tt.rowNumber, tt.sheetLocation, sheetLocIdx)
-			}
+
+		sheetLocIdx := CoordinatesToSheetLocation(tt.colIndex, tt.rowIndex)
+		if sheetLocIdx != tt.sheetLocation {
+			t.Errorf("table.CoordinatesToSheetLocation(%v,%v) want [%v] got [%v]",
+				tt.colNumber, tt.rowNumber, tt.sheetLocation, sheetLocIdx)
 		}
-		if 1 == 1 {
-			sheetLocNum := CoordinateNumbersToSheetLocation(tt.colNumber, tt.rowNumber)
-			if sheetLocNum != tt.sheetLocation {
-				t.Errorf("table.CoordinateNumbersToSheetLocation(%v,%v) want [%v] got [%v]",
-					tt.colNumber, tt.rowNumber, tt.sheetLocation, sheetLocNum)
-			}
+
+		sheetLocNum := CoordinateNumbersToSheetLocation(tt.colNumber, tt.rowNumber)
+		if sheetLocNum != tt.sheetLocation {
+			t.Errorf("table.CoordinateNumbersToSheetLocation(%v,%v) want [%v] got [%v]",
+				tt.colNumber, tt.rowNumber, tt.sheetLocation, sheetLocNum)
 		}
 	}
 }

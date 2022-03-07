@@ -21,7 +21,7 @@ func quotient26ToPrefix(quotient uint32) string {
 	// "0123456"
 	// Max Quotient =26
 	if quotient > 27 {
-		panic(fmt.Sprintf("E_QUOTIENT26_OUT_OF_RANGE [0..26][%v]", quotient))
+		panic(fmt.Sprintf("quotient26 out of range [0..26][%v]", quotient))
 	} else if quotient == 0 {
 		return ""
 	}
@@ -34,7 +34,7 @@ func quotient25ToPrefix(quotient uint32) string {
 	// "0123456"
 	// Max Quotient =26
 	if quotient > 26 {
-		panic(fmt.Sprintf("E_QUOTIENT25_OUT_OF_RANGE [0..26][%v]", quotient))
+		panic(fmt.Sprintf("quotient25 out of range [0..26][%v]", quotient))
 	} else if quotient == 0 {
 		return ""
 	}
@@ -47,7 +47,7 @@ func remainder26ToSuffix(remainder uint32) string {
 		return "Z"
 	}
 	if remainder > 25 {
-		panic(fmt.Sprintf("E_REMAINDER_OUT_OF_RANGE: [%v]", remainder))
+		panic(fmt.Sprintf("remainder out of range: [%v]", remainder))
 	}
 	letter := alphabetSlice[remainder-1]
 	return letter
@@ -55,7 +55,7 @@ func remainder26ToSuffix(remainder uint32) string {
 
 func remainder25ToSuffix(remainder uint32) string {
 	if remainder > 25 {
-		panic(fmt.Sprintf("E_REMAINDER_OUT_OF_RANGE: [%v]", remainder))
+		panic(fmt.Sprintf("remainder out of range: [%v]", remainder))
 	}
 	letter := alphabetSlice[remainder]
 	return letter
@@ -63,9 +63,9 @@ func remainder25ToSuffix(remainder uint32) string {
 
 func ColNumberToLetters(colNumber uint32) string {
 	if colNumber == 0 {
-		panic("Row cannot be zero. Row is 1 indexed.")
+		panic("row cannot be zero. Row is 1 indexed.")
 	} else if colNumber > ZZ {
-		panic("ColNumber greater than 702 (ZZ) is not currently supported")
+		panic("colNumber greater than 702 (ZZ) is not currently supported")
 	}
 	quotient := int64(0)
 	if colNumber > 26 {
@@ -83,7 +83,7 @@ func ColNumberToLetters(colNumber uint32) string {
 func ColIndexToLetters(colIndex uint32) string {
 	if colIndex > ZZIndex {
 		panic(
-			fmt.Sprintf("ColIndex [%v] greater than index:701 (ZZ) is not currently supported",
+			fmt.Sprintf("colIndex [%v] greater than index:701 (ZZ) is not currently supported",
 				colIndex))
 	}
 	quotient := int64(0)

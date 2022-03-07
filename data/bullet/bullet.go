@@ -37,7 +37,7 @@ func (charts *BulletCharts) AddTimeCurrent(dtCur time.Time) error {
 func (charts *BulletCharts) InflateChart(key string) error {
 	chart, ok := charts.Charts[key]
 	if !ok {
-		return fmt.Errorf("chart [%v] not found.", key)
+		return fmt.Errorf("chart [%v] not found", key)
 	}
 
 	chart.ProjectionData.CreateProjection(

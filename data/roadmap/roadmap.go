@@ -4,7 +4,6 @@ package roadmap
 import (
 	"time"
 
-	"github.com/grokify/mogo/fmt/fmtutil"
 	"github.com/grokify/mogo/math/mathutil"
 	tu "github.com/grokify/mogo/time/timeutil"
 )
@@ -43,7 +42,7 @@ type Initiative struct {
 	Rows     [][]Feature // Array of array of non-overlapping features
 }
 
-func (init *Initiative) BuildRows(start, end time.Time, range64 mathutil.RangeInt64) error {
+func (init *Initiative) BuildRows(start, end time.Time, range64 mathutil.RangeInt64) ([][]Feature, error) {
 	start, end = tu.MinMax(start, end)
 	rows := [][]Feature{}
 	seen := map[string]int{}
@@ -58,7 +57,7 @@ func (init *Initiative) BuildRows(start, end time.Time, range64 mathutil.RangeIn
 		}
 		err := f.AddIndexes(range64)
 		if err != nil {
-			return err
+			return rows, err
 		}
 		goodRow := -1
 		for j, row := range rows {
@@ -83,8 +82,7 @@ func (init *Initiative) BuildRows(start, end time.Time, range64 mathutil.RangeIn
 			rows[goodRow] = append(rows[goodRow], f)
 		}
 	}
-	fmtutil.PrintJSON(rows)
-	return nil
+	return rows, nil
 }
 
 type Roadmap struct {
@@ -110,11 +108,15 @@ func NewRoadmap(reportStartTime, reportEndTime time.Time, numCells int32) Roadma
 	}
 }
 
-func (rm *Roadmap) Build() {
+func (rm *Roadmap) Build() error {
 	for i, init := range rm.Initiatives {
-		init.BuildRows(rm.ReportStartTime, rm.ReportEndTime, rm.Range64)
+		_, err := init.BuildRows(rm.ReportStartTime, rm.ReportEndTime, rm.Range64)
+		if err != nil {
+			return err
+		}
 		rm.Initiatives[i] = init
 	}
+	return nil
 }
 
 /*
