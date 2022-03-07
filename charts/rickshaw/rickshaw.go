@@ -40,9 +40,12 @@ type MonthData struct {
 	ValueS     string
 }
 
-func (am *MonthData) Inflate() {
+func (am *MonthData) Inflate() error {
 	monthsEn := []string{}
-	json.Unmarshal([]byte(timeutil.MonthsEN), &monthsEn)
+	err := json.Unmarshal([]byte(timeutil.MonthsEN), &monthsEn)
+	if err != nil {
+		return err
+	}
 
 	mon := strings.ToLower(am.MonthS)
 	monthn := 0
@@ -67,6 +70,7 @@ func (am *MonthData) Inflate() {
 	if err == nil {
 		am.Value = int64(i2)
 	}
+	return nil
 }
 
 func (am *MonthData) RickshawItem() (Item, error) {

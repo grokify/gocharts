@@ -91,7 +91,7 @@ func main() {
 				qoqChart.Data.Columns = append(qoqChart.Data.Columns, r2)
 			}
 
-			footerHTML += "<h2>QoQ Chart</h2>" + c3.C3ChartHtmlSimple(domID, qoqChart)
+			footerHTML += "<h2>QoQ Chart</h2>" + c3.C3ChartHTMLSimple(domID, qoqChart)
 		}
 		if 1 == 1 {
 			domID := "funchart"
@@ -112,7 +112,7 @@ func main() {
 				funChart.Data.Columns = append(funChart.Data.Columns, r2)
 			}
 
-			footerHTML += "<h2>Funnel Chart</h2>" + c3.C3ChartHtmlSimple(domID, funChart)
+			footerHTML += "<h2>Funnel Chart</h2>" + c3.C3ChartHTMLSimple(domID, funChart)
 		}
 
 		tbl := table.Table{

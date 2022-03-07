@@ -78,14 +78,14 @@ func buildMoreInfoHTML(ds3 timeseries.TimeSeriesSet, c3Bar c3.C3Chart, rep []tim
 		domId := "qoqChart"
 		qoqChart := c3sts.QoqDataToChart(domId, c3Bar.Axis, qoqData)
 
-		moreInfoHTML += "<h2>QoQ Chart</h2>" + c3.C3ChartHtmlSimple(domId, qoqChart)
+		moreInfoHTML += "<h2>QoQ Chart</h2>" + c3.C3ChartHTMLSimple(domId, qoqChart)
 	}
 
 	if addFunnelChart {
 		domId := "funnelChart"
 		funChart := c3sts.FunnelDataToChart(domId, c3Bar.Axis, funnelData)
 
-		moreInfoHTML += "<h2>Funnel Chart</h2>" + c3.C3ChartHtmlSimple(domId, funChart)
+		moreInfoHTML += "<h2>Funnel Chart</h2>" + c3.C3ChartHTMLSimple(domId, funChart)
 	}
 
 	if addStatsTable {

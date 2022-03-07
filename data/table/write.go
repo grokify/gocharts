@@ -207,7 +207,10 @@ func WriteXLSX(path string, tables ...*Table) error {
 			rowBase++
 			for i, cellValue := range tbl.Columns {
 				cellLocation := sheet.CoordinatesToSheetLocation(uint32(i), 0)
-				f.SetCellValue(sheetname, cellLocation, cellValue)
+				err := f.SetCellValue(sheetname, cellLocation, cellValue)
+				if err != nil {
+					return err
+				}
 			}
 		}
 		fmtFunc := tbl.FormatterFunc()
@@ -218,10 +221,16 @@ func WriteXLSX(path string, tables ...*Table) error {
 				if err != nil {
 					return errorsutil.Wrap(err, "gocharts/data/tables/write.go/WriteXLSXFormatted.Error.FormatCellValue")
 				}
-				f.SetCellValue(sheetname, cellLocation, formattedVal)
+				err = f.SetCellValue(sheetname, cellLocation, formattedVal)
+				if err != nil {
+					return err
+				}
 				if tbl.FormatAutoLink {
 					if rxURLHTTPOrHTTPS.MatchString(cellValue) {
-						f.SetCellHyperLink(sheetname, cellLocation, cellValue, "External")
+						err := f.SetCellHyperLink(sheetname, cellLocation, cellValue, "External")
+						if err != nil {
+							return err
+						}
 					}
 				}
 			}

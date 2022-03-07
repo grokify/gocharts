@@ -37,7 +37,7 @@ func NewSlotDataSeriesSet() SlotDataSeriesSet {
 func (set *SlotDataSeriesSet) AddData(data SlotData) error {
 	seriesName := strings.TrimSpace(data.SeriesName)
 	if len(seriesName) == 0 {
-		return errors.New("No Series Name")
+		return errors.New("no Series Name")
 	}
 	set.CreateSeriesIfNotExists(seriesName)
 	series := set.SeriesSet[seriesName]

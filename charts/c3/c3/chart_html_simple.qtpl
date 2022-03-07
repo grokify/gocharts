@@ -1,4 +1,4 @@
-{% func C3ChartHtmlSimple(id string, chart C3Chart) %}
+{% func C3ChartHTMLSimple(id string, chart C3Chart) %}
 <div id="{%s id %}"></div>
 <script>
 c3.generate({%z= chart.MustJSON() %});
