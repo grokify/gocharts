@@ -8,32 +8,32 @@ import (
 	"github.com/grokify/mogo/type/stringsutil"
 )
 
-func TimeSeriesSliceTimes(dsSlice []TimeSeries) []string {
+func TimeSeriesSliceTimes(tsSlice []TimeSeries) []string {
 	timeStrings := []string{}
-	for _, ds := range dsSlice {
+	for _, ds := range tsSlice {
 		keys := ds.Keys()
 		timeStrings = append(timeStrings, keys...)
 	}
 	return stringsutil.SliceCondenseSpace(timeStrings, true, true)
 }
 
-func TimeSeriesSliceNames(dsSlice []TimeSeries) []string {
+func TimeSeriesSliceNames(tsSlice []TimeSeries) []string {
 	names := []string{}
-	for _, ds := range dsSlice {
+	for _, ds := range tsSlice {
 		names = append(names, ds.SeriesName)
 	}
 	return stringsutil.SliceCondenseSpace(names, false, false)
 }
 
-func TimeSeriesSliceTable(dsSlice []TimeSeries) table.Table {
+func TimeSeriesSliceTable(tsSlice []TimeSeries) table.Table {
 	tbl := table.NewTable("")
-	names := TimeSeriesSliceNames(dsSlice)
+	// names := TimeSeriesSliceNames(tsSlice)
 	tbl.Columns = []string{"Date"}
-	tbl.Columns = append(tbl.Columns, names...)
-	timeStrings := TimeSeriesSliceTimes(dsSlice)
+	tbl.Columns = append(tbl.Columns, TimeSeriesSliceNames(tsSlice)...)
+	timeStrings := TimeSeriesSliceTimes(tsSlice)
 	for _, timeStr := range timeStrings {
 		row := []string{timeStr}
-		for _, ds := range dsSlice {
+		for _, ds := range tsSlice {
 			if item, ok := ds.ItemMap[timeStr]; ok {
 				if item.IsFloat {
 					row = append(row, strconv.FormatFloat(item.ValueFloat, 'f', -1, 64))
