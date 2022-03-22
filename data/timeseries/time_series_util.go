@@ -7,10 +7,10 @@ import (
 	"github.com/grokify/mogo/time/timeutil"
 )
 
-func TimeSeriesMapMinMaxTimes(dsm map[string]TimeSeries) (time.Time, time.Time, error) {
+func TimeSeriesMapMinMaxTimes(tsm map[string]TimeSeries) (time.Time, time.Time, error) {
 	times := []time.Time{}
-	for _, ds := range dsm {
-		min, max := ds.MinMaxTimes()
+	for _, ts := range tsm {
+		min, max := ts.MinMaxTimes()
 		if !timeutil.TimeIsZeroAny(min) && !timeutil.TimeIsZeroAny(max) {
 			times = append(times, min, max)
 		}

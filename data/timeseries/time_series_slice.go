@@ -51,8 +51,8 @@ func TimeSeriesSliceTable(tsSlice []TimeSeries) table.Table {
 
 // TimeSeries writes a slice of TimeSeries to an
 // Excel XLSX file for easy consumption.
-func TimeSeriesSliceWriteXLSX(filename string, dsSlice []TimeSeries) error {
-	tbl := TimeSeriesSliceTable(dsSlice)
+func TimeSeriesSliceWriteXLSX(filename string, tsSlice []TimeSeries) error {
+	tbl := TimeSeriesSliceTable(tsSlice)
 	tbl.FormatFunc = format.FormatTimeAndFloats
 	return table.WriteXLSX(filename, &tbl)
 }
