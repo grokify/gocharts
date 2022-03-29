@@ -19,9 +19,9 @@ It includes two sets of packages:
 
 Commonly used data structures include:
 
-* [Table](https://pkg.go.dev/github.com/grokify/gocharts/data/table) - easy manipulation of tabular data including [writing to CSV and XLSX](data/table/write.go).
-* [Time Series](https://pkg.go.dev/github.com/grokify/gocharts/data/timeseries) - for building time-based line charts and bar charts.
-* [Histogram](https://pkg.go.dev/github.com/grokify/gocharts/data/histogram) - for building histograms and bar charts.
+* [Table](https://pkg.go.dev/github.com/grokify/gocharts/v2/data/table) - easy manipulation of tabular data including [writing to CSV and XLSX](data/table/write.go).
+* [Time Series](https://pkg.go.dev/github.com/grokify/gocharts/v2/data/timeseries) - for building time-based line charts and bar charts.
+* [Histogram](https://pkg.go.dev/github.com/grokify/gocharts/v2/data/histogram) - for building histograms and bar charts.
 
 A full list is available in the [`data`](data) folder.
 
@@ -55,7 +55,7 @@ See the example here:
  [goreport-svg]: https://goreportcard.com/badge/github.com/grokify/gocharts
  [goreport-url]: https://goreportcard.com/report/github.com/grokify/gocharts
  [docs-godoc-svg]: https://pkg.go.dev/badge/github.com/grokify/gocharts
- [docs-godoc-url]: https://pkg.go.dev/github.com/grokify/gocharts
+ [docs-godoc-url]: https://pkg.go.dev/github.com/grokify/gocharts/v2
  [license-svg]: https://img.shields.io/badge/license-MIT-blue.svg
  [license-url]: https://github.com/grokify/gocharts/blob/master/LICENSE
  [used-by-svg]: https://sourcegraph.com/github.com/grokify/gocharts/-/badge.svg
