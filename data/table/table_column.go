@@ -6,6 +6,8 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+
+	"github.com/grokify/mogo/type/stringsutil"
 )
 
 func (tbl *Table) ColumnsValuesDistinct(wantCols []string, stripSpace bool) (map[string]int, error) {
@@ -64,25 +66,12 @@ func (tbl *Table) ColumnValuesSplit(colIdx uint, split bool, sep string, unique,
 		}
 	}
 	if unique {
-		vals = SliceDedupe(vals)
+		vals = stringsutil.SliceDedupe(vals)
 	}
 	if sortResults {
 		sort.Strings(vals)
 	}
 	return vals, msi, nil
-}
-
-func SliceDedupe(s []string) []string {
-	seen := map[string]int{}
-	vals := []string{}
-	for _, si := range s {
-		if _, ok := seen[si]; ok {
-			continue
-		}
-		vals = append(vals, si)
-		seen[si] += 1
-	}
-	return vals
 }
 
 func (tbl *Table) ColumnValues(colIdx uint, unique, sortResults bool) ([]string, error) {
