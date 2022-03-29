@@ -1,7 +1,7 @@
 package documents
 
 import (
-	"github.com/grokify/gocharts/data/histogram"
+	"github.com/grokify/gocharts/v2/data/histogram"
 )
 
 type DocumentsSet struct {

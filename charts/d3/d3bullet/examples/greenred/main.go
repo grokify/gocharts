@@ -5,9 +5,10 @@ import (
 	"io/ioutil"
 	"time"
 
-	"github.com/grokify/gocharts/charts/d3/d3bullet"
-	"github.com/grokify/gocharts/charts/d3/d3bullet/examples/greenred/templates"
-	tu "github.com/grokify/mogo/time/timeutil"
+	"github.com/grokify/mogo/time/timeutil"
+
+	"github.com/grokify/gocharts/v2/charts/d3/d3bullet"
+	"github.com/grokify/gocharts/v2/charts/d3/d3bullet/examples/greenred/templates"
 )
 
 func main() {
@@ -19,9 +20,9 @@ func main() {
 		Title:    "Progress QTD",
 		YTarget:  int64(50),
 		YCurrent: int64(100),
-		XStart:   tu.QuarterStart(timeNow).Unix(),
+		XStart:   timeutil.QuarterStart(timeNow).Unix(),
 		XCurrent: timeNow.Unix(),
-		XEnd:     tu.QuarterEnd(timeNow).Unix(),
+		XEnd:     timeutil.QuarterEnd(timeNow).Unix(),
 	}
 
 	bulletsInt64 = append(bulletsInt64, bulletBuilderQTD.D3Bullet())
@@ -30,9 +31,9 @@ func main() {
 		Title:    "Progress YTD",
 		YTarget:  int64(50),
 		YCurrent: int64(200),
-		XStart:   tu.YearStart(timeNow).Unix(),
+		XStart:   timeutil.YearStart(timeNow).Unix(),
 		XCurrent: timeNow.Unix(),
-		XEnd:     tu.YearEnd(timeNow).Unix(),
+		XEnd:     timeutil.YearEnd(timeNow).Unix(),
 	}
 
 	bulletsInt64 = append(bulletsInt64, bulletBuilderYTD.D3Bullet())

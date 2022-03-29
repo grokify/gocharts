@@ -8,7 +8,7 @@ import (
 	"github.com/grokify/mogo/type/number"
 	"github.com/wcharczuk/go-chart/v2"
 
-	"github.com/grokify/gocharts/charts/wchart"
+	"github.com/grokify/gocharts/v2/charts/wchart"
 )
 
 type AxesCreator struct {

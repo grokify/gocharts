@@ -11,7 +11,7 @@ Here is a screenshot from the green red example:
 
 ## Usage
 
-See the [examples](https://github.com/grokify/gocharts/charts/d3/d3bullet/examples).
+See the [examples](https://github.com/grokify/gocharts/v2/charts/d3/d3bullet/examples).
 
 Here is a quick synopsis:
 

@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/grokify/gocharts/data/table"
+	"github.com/grokify/gocharts/v2/data/table"
 )
 
 func main() {

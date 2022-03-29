@@ -8,7 +8,7 @@ import (
 
 	"github.com/grokify/mogo/encoding/csvutil"
 
-	"github.com/grokify/gocharts/charts/rickshaw"
+	"github.com/grokify/gocharts/v2/charts/rickshaw"
 )
 
 func main() {

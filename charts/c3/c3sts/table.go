@@ -6,12 +6,11 @@ import (
 	//"math"
 	"strconv"
 
-	math "github.com/grokify/mogo/math/mathutil"
+	"github.com/grokify/mogo/math/mathutil"
+	"github.com/grokify/mogo/strconv/strconvutil"
 
-	sts "github.com/grokify/gocharts/data/timeseries"
-	scu "github.com/grokify/mogo/strconv/strconvutil"
-
-	"github.com/grokify/gocharts/charts/c3"
+	"github.com/grokify/gocharts/v2/charts/c3"
+	"github.com/grokify/gocharts/v2/data/timeseries"
 )
 
 // const StyleSimple = "border:1px solid #000;border-collapse:collapse"
@@ -30,7 +29,7 @@ type TableData struct {
 
 // DataRowsToTableRows Builds rows from the output of timeseries.Report,
 // array of []timeseries.RowInt64.
-func DataRowsToTableRows(rep []sts.RowInt64, axis []string, addQoQPct, addFunnelPct bool, countLabel, qoqLabel, funnelLabel string) ([][]string, []sts.RowFloat64, []sts.RowFloat64) {
+func DataRowsToTableRows(rep []timeseries.RowInt64, axis []string, addQoQPct, addFunnelPct bool, countLabel, qoqLabel, funnelLabel string) ([][]string, []timeseries.RowFloat64, []timeseries.RowFloat64) {
 	rows := [][]string{}
 	rows = append(rows, axis)
 	rows[len(rows)-1] = unshift(rows[len(rows)-1], countLabel)
@@ -41,24 +40,24 @@ func DataRowsToTableRows(rep []sts.RowInt64, axis []string, addQoQPct, addFunnel
 			},
 		))
 	}
-	qoq := []sts.RowFloat64{}
-	fun := []sts.RowFloat64{}
+	qoq := []timeseries.RowFloat64{}
+	fun := []timeseries.RowFloat64{}
 	if addQoQPct {
-		qoq = sts.ReportGrowthPct(rep)
+		qoq = timeseries.ReportGrowthPct(rep)
 		rows = append(rows, axis)
 		rows[len(rows)-1] = unshift(rows[len(rows)-1], qoqLabel)
 		for _, r := range qoq {
 			rows = append(rows,
-				r.Flatten(scu.FormatFloat64ToIntString, 1, "0%"))
+				r.Flatten(strconvutil.FormatFloat64ToIntString, 1, "0%"))
 		}
 	}
 	if addFunnelPct {
-		fun = sts.ReportFunnelPct(rep)
+		fun = timeseries.ReportFunnelPct(rep)
 		rows = append(rows, axis)
 		rows[len(rows)-1] = unshift(rows[len(rows)-1], funnelLabel)
 		for _, r := range fun {
 			rows = append(rows,
-				r.Flatten(scu.FormatFloat64ToIntStringFunnel, 0, ""))
+				r.Flatten(strconvutil.FormatFloat64ToIntStringFunnel, 0, ""))
 		}
 	}
 	return rows, qoq, fun
@@ -66,7 +65,7 @@ func DataRowsToTableRows(rep []sts.RowInt64, axis []string, addQoQPct, addFunnel
 
 func unshift(a []string, x string) []string { return append([]string{x}, a...) }
 
-func QoqDataToChart(domID string, axis c3.C3Axis, qoqData []sts.RowFloat64) c3.C3Chart {
+func QoqDataToChart(domID string, axis c3.C3Axis, qoqData []timeseries.RowFloat64) c3.C3Chart {
 	qoqChart := c3.C3Chart{
 		Bindto: "#" + domID,
 		Data: c3.C3ChartData{
@@ -79,14 +78,14 @@ func QoqDataToChart(domID string, axis c3.C3Axis, qoqData []sts.RowFloat64) c3.C
 		r2 := []interface{}{}
 		r2 = append(r2, r.Name)
 		for _, v := range r.Values {
-			r2 = append(r2, int(math.Round(scu.ChangeToXoXPct(v))))
+			r2 = append(r2, int(mathutil.Round(strconvutil.ChangeToXoXPct(v))))
 		}
 		qoqChart.Data.Columns = append(qoqChart.Data.Columns, r2)
 	}
 	return qoqChart
 }
 
-func FunnelDataToChart(domID string, axis c3.C3Axis, funnelData []sts.RowFloat64) c3.C3Chart {
+func FunnelDataToChart(domID string, axis c3.C3Axis, funnelData []timeseries.RowFloat64) c3.C3Chart {
 	funnelChart := c3.C3Chart{
 		Bindto: "#" + domID,
 		Data: c3.C3ChartData{
@@ -99,7 +98,7 @@ func FunnelDataToChart(domID string, axis c3.C3Axis, funnelData []sts.RowFloat64
 		r2 := []interface{}{}
 		r2 = append(r2, r.Name)
 		for _, v := range r.Values {
-			r2 = append(r2, int(math.Round(scu.ChangeToFunnelPct(v))))
+			r2 = append(r2, int(mathutil.Round(strconvutil.ChangeToFunnelPct(v))))
 		}
 		funnelChart.Data.Columns = append(funnelChart.Data.Columns, r2)
 	}

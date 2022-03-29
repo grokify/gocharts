@@ -3,9 +3,10 @@ package timeseries
 import (
 	"strconv"
 
-	"github.com/grokify/gocharts/data/table"
-	"github.com/grokify/gocharts/data/table/format"
 	"github.com/grokify/mogo/type/stringsutil"
+
+	"github.com/grokify/gocharts/v2/data/table"
+	"github.com/grokify/gocharts/v2/data/table/format"
 )
 
 func TimeSeriesSliceTimes(tsSlice []TimeSeries) []string {

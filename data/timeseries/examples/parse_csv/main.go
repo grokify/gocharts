@@ -5,11 +5,12 @@ import (
 	"log"
 	"time"
 
-	"github.com/grokify/gocharts/data/table"
-	"github.com/grokify/gocharts/data/timeseries"
 	"github.com/grokify/mogo/fmt/fmtutil"
 	"github.com/grokify/mogo/time/timeutil"
 	"github.com/jessevdk/go-flags"
+
+	"github.com/grokify/gocharts/v2/data/table"
+	"github.com/grokify/gocharts/v2/data/timeseries"
 )
 
 type Options struct {

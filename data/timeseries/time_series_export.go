@@ -6,9 +6,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/grokify/gocharts/data/table"
 	"github.com/grokify/mogo/io/ioutilmore"
 	"github.com/grokify/mogo/time/timeutil"
+
+	"github.com/grokify/gocharts/v2/data/table"
 )
 
 func TimeFormatRFC3339(dt time.Time) string {

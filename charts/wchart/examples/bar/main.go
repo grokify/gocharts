@@ -5,8 +5,9 @@ package main
 import (
 	"os"
 
-	"github.com/grokify/gocharts/charts/wchart"
 	"github.com/wcharczuk/go-chart/v2"
+
+	"github.com/grokify/gocharts/v2/charts/wchart"
 )
 
 func main() {

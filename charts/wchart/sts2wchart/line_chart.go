@@ -13,9 +13,9 @@ import (
 	"github.com/wcharczuk/go-chart/v2"
 	"github.com/wcharczuk/go-chart/v2/drawing"
 
-	"github.com/grokify/gocharts/charts/wchart"
-	"github.com/grokify/gocharts/data/timeseries"
-	"github.com/grokify/gocharts/data/timeseries/interval"
+	"github.com/grokify/gocharts/v2/charts/wchart"
+	"github.com/grokify/gocharts/v2/data/timeseries"
+	"github.com/grokify/gocharts/v2/data/timeseries/interval"
 )
 
 const RatioTwoCol = ratio.RatioAcademy

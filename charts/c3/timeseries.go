@@ -3,8 +3,9 @@ package c3
 import (
 	"encoding/json"
 
-	"github.com/grokify/gocharts/data/timeseries/interval"
 	"github.com/grokify/mogo/time/timeutil"
+
+	"github.com/grokify/gocharts/v2/data/timeseries/interval"
 )
 
 type TimeseriesData struct {

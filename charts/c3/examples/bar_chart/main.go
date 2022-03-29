@@ -10,10 +10,10 @@ import (
 	"github.com/grokify/mogo/fmt/fmtutil"
 	"github.com/grokify/mogo/time/timeutil"
 
-	"github.com/grokify/gocharts/charts/c3"
-	"github.com/grokify/gocharts/charts/c3/c3sts"
-	"github.com/grokify/gocharts/data/table"
-	"github.com/grokify/gocharts/data/timeseries"
+	"github.com/grokify/gocharts/v2/charts/c3"
+	"github.com/grokify/gocharts/v2/charts/c3/c3sts"
+	"github.com/grokify/gocharts/v2/data/table"
+	"github.com/grokify/gocharts/v2/data/timeseries"
 	// More Info
 )
 

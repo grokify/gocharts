@@ -1,4 +1,4 @@
-module github.com/grokify/gocharts
+module github.com/grokify/gocharts/v2
 
 go 1.16
 

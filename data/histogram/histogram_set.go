@@ -7,13 +7,14 @@ import (
 	"strings"
 	"time"
 
-	"github.com/grokify/gocharts/data/table"
-	"github.com/grokify/gocharts/data/table/format"
-	"github.com/grokify/gocharts/data/table/sheet"
-	"github.com/grokify/gocharts/data/timeseries"
 	"github.com/grokify/mogo/time/timeutil"
 	"github.com/grokify/mogo/type/stringsutil"
 	"github.com/xuri/excelize/v2"
+
+	"github.com/grokify/gocharts/v2/data/table"
+	"github.com/grokify/gocharts/v2/data/table/format"
+	"github.com/grokify/gocharts/v2/data/table/sheet"
+	"github.com/grokify/gocharts/v2/data/timeseries"
 )
 
 type HistogramSet struct {

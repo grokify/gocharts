@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 
-	"github.com/grokify/gocharts/charts/c3"
+	"github.com/grokify/gocharts/v2/charts/c3"
 )
 
 func main() {

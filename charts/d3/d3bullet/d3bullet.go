@@ -7,7 +7,7 @@ import (
 	"os"
 	"path"
 
-	"github.com/grokify/gocharts/data/bullet"
+	"github.com/grokify/gocharts/v2/data/bullet"
 )
 
 const (

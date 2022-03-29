@@ -8,11 +8,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/grokify/gocharts/data"
-	"github.com/grokify/gocharts/data/timeseries/interval"
-
 	"github.com/grokify/mogo/time/timeutil"
 	"github.com/grokify/mogo/type/number"
+
+	"github.com/grokify/gocharts/v2/data"
+	"github.com/grokify/gocharts/v2/data/timeseries/interval"
 )
 
 // DataInfoJS is the series item to be sent to the

@@ -7,9 +7,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/grokify/gocharts/data/timeseries"
 	"github.com/grokify/mogo/time/timeutil"
 	"github.com/grokify/mogo/type/maputil"
+
+	"github.com/grokify/gocharts/v2/data/timeseries"
 )
 
 type SeriesType int

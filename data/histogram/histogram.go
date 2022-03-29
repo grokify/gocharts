@@ -6,10 +6,11 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/grokify/gocharts/data/point"
-	"github.com/grokify/gocharts/data/table"
 	"github.com/grokify/mogo/type/maputil"
 	"github.com/olekukonko/tablewriter"
+
+	"github.com/grokify/gocharts/v2/data/point"
+	"github.com/grokify/gocharts/v2/data/table"
 )
 
 // Histogram stats is used to count how many times

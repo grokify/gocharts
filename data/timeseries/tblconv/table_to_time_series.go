@@ -6,8 +6,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/grokify/gocharts/data/table"
-	"github.com/grokify/gocharts/data/timeseries"
+	"github.com/grokify/gocharts/v2/data/table"
+	"github.com/grokify/gocharts/v2/data/timeseries"
 )
 
 type TableToTimeSeriesOpts struct {

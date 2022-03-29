@@ -12,9 +12,9 @@ import (
 	"github.com/grokify/mogo/time/timeutil"
 	"github.com/wcharczuk/go-chart/v2"
 
-	"github.com/grokify/gocharts/charts/wchart"
-	"github.com/grokify/gocharts/charts/wchart/sts2wchart"
-	"github.com/grokify/gocharts/data/timeseries"
+	"github.com/grokify/gocharts/v2/charts/wchart"
+	"github.com/grokify/gocharts/v2/charts/wchart/sts2wchart"
+	"github.com/grokify/gocharts/v2/data/timeseries"
 )
 
 func drawChartTSSSimple(res http.ResponseWriter, req *http.Request) {

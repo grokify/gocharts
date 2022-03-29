@@ -3,8 +3,9 @@ package xoxconv
 import (
 	"time"
 
-	"github.com/grokify/gocharts/data/timeseries"
 	"github.com/grokify/mogo/time/timeutil"
+
+	"github.com/grokify/gocharts/v2/data/timeseries"
 )
 
 // TimeSeriesXoX converts a `timeseries.TimeSeries`

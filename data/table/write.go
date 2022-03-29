@@ -10,8 +10,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/grokify/gocharts/data/table/format"
-	"github.com/grokify/gocharts/data/table/sheet"
+	"github.com/grokify/gocharts/v2/data/table/format"
+	"github.com/grokify/gocharts/v2/data/table/sheet"
 	"github.com/grokify/mogo/encoding/jsonutil"
 	"github.com/grokify/mogo/errors/errorsutil"
 	"github.com/xuri/excelize/v2"

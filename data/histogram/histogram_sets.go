@@ -5,8 +5,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/grokify/gocharts/data/table"
 	"github.com/grokify/mogo/type/stringsutil"
+
+	"github.com/grokify/gocharts/v2/data/table"
 )
 
 type HistogramSets struct {

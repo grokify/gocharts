@@ -1,4 +1,4 @@
-{% import "github.com/grokify/gocharts/charts/d3/d3bullet" %}
+{% import "github.com/grokify/gocharts/v2/charts/d3/d3bullet" %}
 {% func Charts(data ChartsData) %}
 <!doctype html>
 <html>

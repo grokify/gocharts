@@ -4,7 +4,7 @@ import (
 	"sort"
 	"time"
 
-	tu "github.com/grokify/mogo/time/timeutil"
+	"github.com/grokify/mogo/time/timeutil"
 )
 
 type XoxPoint struct {
@@ -85,9 +85,9 @@ func NewYoYQoQGrowth(set TimeSeriesSet) (YoYQoQGrowth, error) {
 	}
 
 	for key, point := range yoy.DateMap {
-		yearAgo := tu.PrevQuarters(point.Time, 4)
+		yearAgo := timeutil.PrevQuarters(point.Time, 4)
 		yearKey := yearAgo.Format(time.RFC3339)
-		quarterAgo := tu.PrevQuarter(point.Time)
+		quarterAgo := timeutil.PrevQuarter(point.Time)
 		quarterKey := quarterAgo.Format(time.RFC3339)
 		if yearPoint, ok := yoy.DateMap[yearKey]; ok {
 			if yearPoint.Value > 0 {
@@ -111,13 +111,13 @@ func AddYtdAndQtd(yoy YoYQoQGrowth) YoYQoQGrowth {
 	ytd := int64(0)
 	qtd := int64(0)
 	now := time.Now()
-	qt := tu.QuarterStart(now)
-	yr := tu.YearStart(now)
+	qt := timeutil.QuarterStart(now)
+	yr := timeutil.YearStart(now)
 	for _, point := range yoy.DateMap {
-		if tu.IsGreaterThan(point.Time, qt, true) {
+		if timeutil.IsGreaterThan(point.Time, qt, true) {
 			qtd += point.Value
 		}
-		if tu.IsGreaterThan(point.Time, yr, true) {
+		if timeutil.IsGreaterThan(point.Time, yr, true) {
 			ytd += point.Value
 		}
 	}

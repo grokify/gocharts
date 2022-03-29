@@ -1,7 +1,7 @@
 package templates
 
 import (
-	"github.com/grokify/gocharts/charts/d3/d3bullet"
+	"github.com/grokify/gocharts/v2/charts/d3/d3bullet"
 )
 
 type ChartsData struct {

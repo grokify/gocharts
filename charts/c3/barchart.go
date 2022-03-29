@@ -3,8 +3,8 @@ package c3
 import (
 	"fmt"
 
-	"github.com/grokify/gocharts/data"
-	"github.com/grokify/gocharts/data/timeseries"
+	"github.com/grokify/gocharts/v2/data"
+	"github.com/grokify/gocharts/v2/data/timeseries"
 )
 
 func TimeSeriesSetSimpleToC3ChartBar(data []timeseries.RowInt64, c3BarInfo C3Bar) C3Chart {

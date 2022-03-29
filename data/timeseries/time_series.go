@@ -8,11 +8,12 @@ import (
 	"sort"
 	"time"
 
-	"github.com/grokify/gocharts/data/point"
 	"github.com/grokify/mogo/sort/sortutil"
 	"github.com/grokify/mogo/time/month"
 	"github.com/grokify/mogo/time/timeslice"
 	"github.com/grokify/mogo/time/timeutil"
+
+	"github.com/grokify/gocharts/v2/data/point"
 )
 
 type TimeSeries struct {
