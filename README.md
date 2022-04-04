@@ -41,7 +41,7 @@ An example chart is the Rickshaw chart shown below:
 ## Installation
 
 ```bash
-$ go get github.com/grokify/gocharts/...
+$ go get github.com/grokify/gocharts/v2/...
 ```
 
 ## Usage
