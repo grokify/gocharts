@@ -10,6 +10,10 @@ func (ts *TimeSeries) TimeSeriesMonthQOQ() TimeSeries {
 	return ts.TimeSeriesMonthXOX(0, -3, 0, "QoQ")
 }
 
+func (ts *TimeSeries) TimeSeriesMonthMOM() TimeSeries {
+	return ts.TimeSeriesMonthXOX(0, -1, 0, "MoM")
+}
+
 func (ts *TimeSeries) TimeSeriesMonthXOX(years, months, days int, suffix string) TimeSeries {
 	tsm := ts.ToMonth(true)
 	tsXOX := NewTimeSeries(tsm.SeriesName)

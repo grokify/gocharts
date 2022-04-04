@@ -68,20 +68,22 @@ func (ts *TimeSeries) Table(tableName, dateColumnName, countColumnName string, d
 	return tbl
 }
 
-func (ts *TimeSeries) TableMonthXOX(timeFmtColName, seriesName, valuesName, yoyName, qoqName string) table.Table {
-	if len(seriesName) == 0 {
+func (ts *TimeSeries) TableMonthXOX(timeFmtColName, seriesName, valuesName, yoyName, qoqName, momName string) table.Table {
+	if len(strings.TrimSpace(seriesName)) == 0 {
 		seriesName = "Series"
 	}
-	if len(valuesName) == 0 {
+	if len(strings.TrimSpace(valuesName)) == 0 {
 		valuesName = "Values"
 	}
-	if len(yoyName) == 0 {
+	if len(strings.TrimSpace(yoyName)) == 0 {
 		yoyName = "YoY"
 	}
-	if len(qoqName) == 0 {
+	if len(strings.TrimSpace(qoqName)) == 0 {
 		qoqName = "QoQ"
 	}
-
+	if len(strings.TrimSpace(momName)) == 0 {
+		momName = "MoM"
+	}
 	tsm := ts.ToMonth(true)
 	tbl := table.NewTable("")
 	cols := []string{seriesName}
@@ -96,10 +98,12 @@ func (ts *TimeSeries) TableMonthXOX(timeFmtColName, seriesName, valuesName, yoyN
 
 	yoy := tsm.TimeSeriesMonthYOY()
 	qoq := tsm.TimeSeriesMonthQOQ()
+	mom := tsm.TimeSeriesMonthMOM()
 
 	valData := []string{valuesName}
 	yoyData := []string{yoyName}
 	qoqData := []string{qoqName}
+	momData := []string{momName}
 	for _, dt := range times {
 		tiVal, err := tsm.Get(dt)
 		if err != nil {
@@ -118,8 +122,14 @@ func (ts *TimeSeries) TableMonthXOX(timeFmtColName, seriesName, valuesName, yoyN
 		} else {
 			qoqData = append(qoqData, strconv.FormatFloat(tiQOQ.Float64(), 'f', -1, 64))
 		}
+		tiMOM, err := mom.Get(dt)
+		if err != nil {
+			momData = append(momData, "0")
+		} else {
+			momData = append(momData, strconv.FormatFloat(tiMOM.Float64(), 'f', -1, 64))
+		}
 	}
-	tbl.Rows = [][]string{valData, yoyData, qoqData}
+	tbl.Rows = [][]string{valData, yoyData, qoqData, momData}
 	return tbl
 }
 
