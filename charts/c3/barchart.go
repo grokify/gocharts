@@ -3,7 +3,7 @@ package c3
 import (
 	"fmt"
 
-	"github.com/grokify/gocharts/v2/data"
+	"github.com/grokify/gocharts/v2/data/slot"
 	"github.com/grokify/gocharts/v2/data/timeseries"
 )
 
@@ -26,7 +26,7 @@ func TimeSeriesSetSimpleToC3ChartBar(data []timeseries.RowInt64, c3BarInfo C3Bar
 	return c3Chart
 }
 
-func SlotDataSeriesSetSimpleToC3ChartBar(input data.SlotDataSeriesSetSimple, c3BarInfo C3Bar, hardMax int64) (C3Chart, error) {
+func SlotDataSeriesSetSimpleToC3ChartBar(input slot.SlotDataSeriesSetSimple, c3BarInfo C3Bar, hardMax int64) (C3Chart, error) {
 	output := C3Chart{
 		Data: C3ChartData{
 			Columns: [][]interface{}{},

@@ -11,7 +11,7 @@ import (
 	"github.com/grokify/mogo/time/timeutil"
 	"github.com/grokify/mogo/type/number"
 
-	"github.com/grokify/gocharts/v2/data"
+	"github.com/grokify/gocharts/v2/data/slot"
 	"github.com/grokify/gocharts/v2/data/timeseries/interval"
 )
 
@@ -97,7 +97,7 @@ type RickshawData struct {
 	MaxX      int64
 }
 
-func NewMonthlyRickshawDataFromSlotSeriesSet(set data.SlotDataSeriesSet) RickshawData {
+func NewMonthlyRickshawDataFromSlotSeriesSet(set slot.SlotDataSeriesSet) RickshawData {
 	rs := NewRickshawData()
 
 	for seriesName, seriesData := range set.SeriesSet {

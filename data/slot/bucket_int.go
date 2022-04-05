@@ -1,4 +1,4 @@
-package data
+package slot
 
 func BucketMinMax(size, index int64) (int64, int64) {
 	max := (index + 1) * size
