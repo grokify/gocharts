@@ -8,7 +8,7 @@ import (
 	"github.com/grokify/gocharts/v2/data/table"
 )
 
-func ParseTimeSeriesSetTable(tbl table.Table, timeColIdx, seriesNameColIdx, countColIdx uint, isFloat bool, timeParseFunc func(s string) (time.Time, error)) (TimeSeriesSet, error) {
+func ParseTableTimeSeriesSet(tbl table.Table, timeColIdx, seriesNameColIdx, countColIdx uint, isFloat bool, timeParseFunc func(s string) (time.Time, error)) (TimeSeriesSet, error) {
 	if timeParseFunc == nil {
 		timeParseFunc = ParseTimeFuncRFC3339
 	}
