@@ -153,8 +153,8 @@ func (opts *TimeSeriesSetTableOpts) PercentSuffixOrDefault() string {
 	return "%"
 }
 
-// ToTable returns a `table.TableData`.
-func (set *TimeSeriesSet) ToTable(opts *TimeSeriesSetTableOpts) (table.Table, error) {
+// Table returns a `table.Table`.
+func (set *TimeSeriesSet) Table(opts *TimeSeriesSetTableOpts) (table.Table, error) {
 	if opts == nil {
 		opts = &TimeSeriesSetTableOpts{}
 	}
@@ -248,7 +248,7 @@ func (set *TimeSeriesSet) WriteJSON(filename string, perm os.FileMode, prefix, i
 
 // WriteXLSX writes the TimeSeriesSet as a XLSX spreadsheet file.
 func (set *TimeSeriesSet) WriteXLSX(filename string, opts *TimeSeriesSetTableOpts) error {
-	tbl, err := set.ToTable(opts)
+	tbl, err := set.Table(opts)
 	if err != nil {
 		return err
 	}
