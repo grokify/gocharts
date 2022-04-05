@@ -8,6 +8,9 @@ import (
 	"github.com/grokify/gocharts/v2/data/table"
 )
 
+// ParseTableTimeSeriesSet create a `TimeSeriesSet` from a `table.Table` using the least
+// amount of input to populate the data structure. It does not set the following
+// parameters which must be set manually: `Name`, `Interval`.
 func ParseTableTimeSeriesSet(tbl table.Table, timeColIdx, seriesNameColIdx, countColIdx uint, isFloat bool, timeParseFunc func(s string) (time.Time, error)) (TimeSeriesSet, error) {
 	if timeParseFunc == nil {
 		timeParseFunc = ParseTimeFuncRFC3339

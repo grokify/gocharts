@@ -16,6 +16,8 @@ import (
 	"github.com/grokify/mogo/type/stringsutil"
 )
 
+// TimeSeriesSet is a data structure to manage a set of similar `TimeSeries`.
+// It is necessary for all `TimeSeries` to have the same value of `IsFloat`.
 type TimeSeriesSet struct {
 	Name     string
 	Series   map[string]TimeSeries
@@ -25,6 +27,7 @@ type TimeSeriesSet struct {
 	Interval timeutil.Interval
 }
 
+// NewTimeSeriesSet returns an initialized `TimeSeriesSet`.
 func NewTimeSeriesSet(name string) TimeSeriesSet {
 	return TimeSeriesSet{
 		Name:   name,
@@ -43,6 +46,8 @@ func ReadFileTimeSeriesSet(filename string) (TimeSeriesSet, error) {
 	return tset, json.Unmarshal(data, &tset)
 }
 
+// AddInt64 adds an `int64` value, converting it to a `float64` if necssary based on
+// set definition.
 func (set *TimeSeriesSet) AddInt64(seriesName string, dt time.Time, value int64) {
 	item := TimeItem{
 		SeriesSetName: set.Name,
@@ -57,8 +62,8 @@ func (set *TimeSeriesSet) AddInt64(seriesName string, dt time.Time, value int64)
 	set.AddItems(item)
 }
 
-// AddFloat64 adds a time value, converting it to a int64 on
-// the series type.
+// AddFloat64 adds an `int64` value, converting it to a `int64` if necssary based on
+// set definition.
 func (set *TimeSeriesSet) AddFloat64(seriesName string, dt time.Time, value float64) {
 	item := TimeItem{
 		SeriesSetName: set.Name,
