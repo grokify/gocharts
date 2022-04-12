@@ -55,6 +55,7 @@ func (tbl *Table) Pivot(colCount uint, haveColumns bool) (Table, error) {
 	return newTbl, nil
 }
 
+/*
 // FormatColumn takes a function to format all cell values.
 func (tbl *Table) FormatColumn(colIdx uint, conv func(cellVal string) (string, error)) error {
 	colInt := int(colIdx)
@@ -67,6 +68,44 @@ func (tbl *Table) FormatColumn(colIdx uint, conv func(cellVal string) (string, e
 			return err
 		}
 		tbl.Rows[i][colInt] = newVal
+	}
+	return nil
+}
+*/
+
+// FormatRows formats row cells using a start and ending column index and a convert function.
+// The `format.ConvertDecommify()` function is available to use.
+func (tbl *Table) FormatRows(colIdxMinInc, colIdxMaxInc uint, conv func(cellVal string) (string, error)) error {
+	err := tbl.formatRowsTry(colIdxMinInc, colIdxMaxInc, conv, false)
+	if err != nil {
+		return err
+	}
+	return tbl.formatRowsTry(colIdxMinInc, colIdxMaxInc, conv, true)
+}
+
+func (tbl *Table) formatRowsTry(colIdxMinInc, colIdxMaxInc uint, conv func(cellVal string) (string, error), exec bool) error {
+	if len(tbl.Rows) == 0 {
+		return nil
+	}
+	//testand return errors
+	for i, row := range tbl.Rows {
+		if int(colIdxMinInc) >= len(row) {
+			continue
+		}
+		rowMax := int(colIdxMaxInc)
+		if rowMax >= len(row) {
+			rowMax = len(row) - 1
+		}
+		for j := int(colIdxMinInc); j < rowMax; j++ {
+			val, err := conv(row[j])
+			if err != nil {
+				return err
+			}
+			row[j] = val
+		}
+		if exec {
+			tbl.Rows[i] = row
+		}
 	}
 	return nil
 }
