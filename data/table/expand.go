@@ -13,8 +13,7 @@ const (
 	ColNameCount = "(count)"
 )
 
-// ColumnExpandPivot adds columns to the table representing
-// each value in the provided column.
+// ColumnExpandPivot adds columns to the table representing each value in the provided column.
 func (tbl *Table) ColumnExpandPivot(colIdx uint, split bool, sep, colNamePrefix, colNameNone, existString, notExistString string, addCounts bool, colNameCounts string) (map[int]string, error) {
 	colFormats := map[int]string{}
 	if int(colIdx) >= len(tbl.Columns) {
