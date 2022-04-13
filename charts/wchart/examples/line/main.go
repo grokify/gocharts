@@ -173,7 +173,7 @@ func drawCustomChart(res http.ResponseWriter, req *http.Request) {
 		},
 	}
 
-	res.Header().Set(httputilmore.HeaderContentType, "image/png")
+	res.Header().Set(httputilmore.HeaderContentType, httputilmore.ContentTypeImagePNG)
 	graph.Render(chart.PNG, res)
 }
 
