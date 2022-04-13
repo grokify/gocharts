@@ -88,23 +88,23 @@ func (tbl *Table) formatRowsTry(colIdxMinInc, colIdxMaxInc uint, conv func(cellV
 		return nil
 	}
 	//testand return errors
-	for i, row := range tbl.Rows {
+	for y, row := range tbl.Rows {
 		if int(colIdxMinInc) >= len(row) {
 			continue
 		}
-		rowMax := int(colIdxMaxInc)
-		if rowMax >= len(row) {
-			rowMax = len(row) - 1
+		rowMaxIdxInc := int(colIdxMaxInc)
+		if rowMaxIdxInc >= len(row) {
+			rowMaxIdxInc = len(row) - 1
 		}
-		for j := int(colIdxMinInc); j < rowMax; j++ {
-			val, err := conv(row[j])
+		for x := int(colIdxMinInc); x <= rowMaxIdxInc; x++ {
+			val, err := conv(row[x])
 			if err != nil {
 				return err
 			}
-			row[j] = val
+			row[x] = val
 		}
 		if exec {
-			tbl.Rows[i] = row
+			tbl.Rows[y] = row
 		}
 	}
 	return nil
