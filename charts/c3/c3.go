@@ -69,7 +69,6 @@ type C3Donut struct {
 	Title string `json:"title,omitempty"`
 }
 
-/*
 func C3ChartForEsAggregationSimple(agg v5.AggregationResRad) C3Chart {
 	c3Chart := C3Chart{
 		Data: C3ChartData{
@@ -82,7 +81,6 @@ func C3ChartForEsAggregationSimple(agg v5.AggregationResRad) C3Chart {
 	}
 	return c3Chart
 }
-*/
 
 /*
 var chart = c3.generate({
