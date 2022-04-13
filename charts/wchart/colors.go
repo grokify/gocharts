@@ -5,7 +5,7 @@ import (
 
 	"github.com/grokify/mogo/image/colors"
 
-	"github.com/wcharczuk/go-chart/v2"
+	chart "github.com/wcharczuk/go-chart/v2"
 	"github.com/wcharczuk/go-chart/v2/drawing"
 )
 

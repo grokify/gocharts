@@ -7,7 +7,7 @@ import (
 	"github.com/grokify/mogo/time/month"
 	"github.com/grokify/mogo/time/quarter"
 	"github.com/grokify/mogo/time/timeutil"
-	"github.com/wcharczuk/go-chart/v2"
+	chart "github.com/wcharczuk/go-chart/v2"
 )
 
 // Ticks converts a slice of `float64` to a slice of `chart.Tick`. Common
