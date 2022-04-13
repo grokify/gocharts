@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/grokify/mogo/fmt/fmtutil"
+	"github.com/grokify/mogo/net/httputilmore"
 	"github.com/grokify/mogo/time/month"
 	"github.com/grokify/mogo/time/timeutil"
 	"github.com/wcharczuk/go-chart/v2"
@@ -172,7 +173,7 @@ func drawCustomChart(res http.ResponseWriter, req *http.Request) {
 		},
 	}
 
-	res.Header().Set("Content-Type", "image/png")
+	res.Header().Set(httputilmore.HeaderContentType, "image/png")
 	graph.Render(chart.PNG, res)
 }
 
@@ -190,7 +191,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	if 1 == 0 {
+	if 1 == 1 {
 		f, err := os.Create("test.png")
 		if err != nil {
 			log.Fatal(err)
