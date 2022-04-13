@@ -134,3 +134,28 @@ func (tbl *Table) String(comma rune, useCRLF bool) (string, error) {
 	w.Flush()
 	return b.String(), w.Error()
 }
+
+// Transpose creates a new table by transposing the matrix data.
+// In the new table, it does not set anything other than than `Name`, `Columns`, and `Rows`.
+func (tbl *Table) Transpose() (Table, error) {
+	tbl2 := NewTable(tbl.Name)
+	isWellFormed, _, _ := tbl.IsWellFormed()
+	if !isWellFormed {
+		return tbl2, errors.New("can only transpose well formed table")
+	}
+	for x := 0; x < len(tbl.Columns); x++ {
+		newRow := []string{}
+		if len(tbl.Columns) > 0 {
+			newRow = append(newRow, tbl.Columns[x])
+		}
+		for y := 0; y < len(tbl.Rows); y++ {
+			newRow = append(newRow, tbl.Rows[y][x])
+		}
+		if x == 0 {
+			tbl2.Columns = newRow
+		} else {
+			tbl2.Rows = append(tbl2.Rows, newRow)
+		}
+	}
+	return tbl2, nil
+}
