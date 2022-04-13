@@ -1,10 +1,9 @@
 package interval
 
-/*
 import (
 	"time"
 
-	"github.com/grokify/gocharts/data/timeseries"
+	"github.com/grokify/gocharts/v2/data/timeseries"
 	"github.com/grokify/mogo/time/timeutil"
 
 	v5 "github.com/grokify/elastirad-go/models/v5"
@@ -25,4 +24,3 @@ func EsAggsToTimeSeriesSet(aggs []v5.AggregationResRad, interval timeutil.Interv
 	set.Inflate()
 	return set
 }
-*/
