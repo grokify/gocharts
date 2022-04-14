@@ -25,14 +25,12 @@ type HistoricalDataYahoo struct {
 
 // ReadFileHistoricalDataYahoo reads a Yahoo! Finance Historical Data CSV file.
 func ReadFileHistoricalDataYahoo(filename string) (*HistoricalDataYahoo, error) {
-	hd := &HistoricalDataYahoo{}
 	tbl, err := table.ReadFile(nil, filename)
 	if err != nil {
-		return hd, err
+		return nil, err
 	}
 	tbl.Name = filename
-	hd.Table = tbl
-	return hd, nil
+	return &HistoricalDataYahoo{Table: tbl}, nil
 }
 
 func (hd *HistoricalDataYahoo) OpenData(interval timeutil.Interval) (timeseries.TimeSeries, error) {
