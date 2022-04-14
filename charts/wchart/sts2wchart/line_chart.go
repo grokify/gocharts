@@ -10,7 +10,7 @@ import (
 	"github.com/grokify/mogo/strconv/strconvutil"
 	"github.com/grokify/mogo/time/month"
 	"github.com/grokify/mogo/time/timeutil"
-	"github.com/wcharczuk/go-chart/v2"
+	chart "github.com/wcharczuk/go-chart/v2"
 	"github.com/wcharczuk/go-chart/v2/drawing"
 
 	"github.com/grokify/gocharts/v2/charts/wchart"
@@ -100,6 +100,9 @@ func WriteLineChartTimeSeriesSet(filename string, tset timeseries.TimeSeriesSet,
 }
 
 func TimeSeriesSetToLineChart(tset timeseries.TimeSeriesSet, opts *LineChartOpts) (chart.Chart, error) {
+	if opts == nil {
+		opts = DefaultLineChartOpts()
+	}
 	titleParts := []string{tset.Name}
 	if opts.WantTitleSuffix() && len(tset.Series) == 1 {
 		ds, err := tset.GetSeriesByIndex(0)
