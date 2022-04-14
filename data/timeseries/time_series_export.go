@@ -1,12 +1,15 @@
 package timeseries
 
 import (
+	"math"
 	"os"
 	"strconv"
 	"strings"
 	"time"
 
 	"github.com/grokify/mogo/io/ioutilmore"
+	"github.com/grokify/mogo/strconv/strconvutil"
+	"github.com/grokify/mogo/time/month"
 	"github.com/grokify/mogo/time/timeutil"
 
 	"github.com/grokify/gocharts/v2/data/table"
@@ -68,7 +71,18 @@ func (ts *TimeSeries) Table(tableName, dateColumnName, countColumnName string, d
 	return tbl
 }
 
-func (ts *TimeSeries) TableMonthXOX(timeFmtColName, seriesName, valuesName, yoyName, qoqName, momName string) table.Table {
+type TableMonthXOXOpts struct {
+	AddMOMGrowth           bool
+	MOMGrowthPct           float64
+	MOMBaseMonth           time.Time
+	MOMTargetName          string
+	MOMPerformanceName     string
+	momBaseMonthContinuous uint64
+	momBaseTimeItem        TimeItem
+	momBaseTimeItemExists  bool
+}
+
+func (ts *TimeSeries) TableMonthXOX(timeFmtColName, seriesName, valuesName, yoyName, qoqName, momName string, opts *TableMonthXOXOpts) table.Table {
 	if len(strings.TrimSpace(seriesName)) == 0 {
 		seriesName = "Series"
 	}
@@ -83,6 +97,30 @@ func (ts *TimeSeries) TableMonthXOX(timeFmtColName, seriesName, valuesName, yoyN
 	}
 	if len(strings.TrimSpace(momName)) == 0 {
 		momName = "MoM"
+	}
+	if opts == nil {
+		opts = &TableMonthXOXOpts{}
+	}
+	if opts.AddMOMGrowth {
+		minDt, _ := ts.MinMaxTimes()
+		if opts.MOMBaseMonth.Before(minDt) {
+			opts.MOMBaseMonth = minDt
+		}
+		opts.MOMBaseMonth = timeutil.MonthStart(opts.MOMBaseMonth.UTC())
+		opts.momBaseMonthContinuous = month.TimeToMonthContinuous(opts.MOMBaseMonth)
+		momBaseTimeItem, err := ts.Get(opts.MOMBaseMonth)
+		if err != nil {
+			opts.momBaseTimeItemExists = false
+		} else {
+			opts.momBaseTimeItemExists = true
+			opts.momBaseTimeItem = momBaseTimeItem
+		}
+		if len(strings.TrimSpace(opts.MOMTargetName)) == 0 {
+			opts.MOMTargetName = momName + " Target Value"
+		}
+		if len(strings.TrimSpace(opts.MOMPerformanceName)) == 0 {
+			opts.MOMPerformanceName = momName + " Performance"
+		}
 	}
 	tsm := ts.ToMonth(true)
 	tbl := table.NewTable("")
@@ -104,32 +142,54 @@ func (ts *TimeSeries) TableMonthXOX(timeFmtColName, seriesName, valuesName, yoyN
 	yoyData := []string{yoyName}
 	qoqData := []string{qoqName}
 	momData := []string{momName}
+	momGrowthTargets := []string{opts.MOMTargetName}
+	momGrowthPerform := []string{opts.MOMPerformanceName}
+
 	for _, dt := range times {
 		tiVal, err := tsm.Get(dt)
 		if err != nil {
 			panic("internal time not found")
 		}
-		valData = append(valData, strconv.FormatFloat(tiVal.Float64(), 'f', -1, 64))
+		valData = append(valData, strconvutil.FormatFloat64Simple(tiVal.Float64()))
 		tiYOY, err := yoy.Get(dt)
 		if err != nil {
 			yoyData = append(yoyData, "0")
 		} else {
-			yoyData = append(yoyData, strconv.FormatFloat(tiYOY.Float64(), 'f', -1, 64))
+			yoyData = append(yoyData, strconvutil.FormatFloat64Simple(tiYOY.Float64()))
 		}
 		tiQOQ, err := qoq.Get(dt)
 		if err != nil {
 			qoqData = append(qoqData, "0")
 		} else {
-			qoqData = append(qoqData, strconv.FormatFloat(tiQOQ.Float64(), 'f', -1, 64))
+			qoqData = append(qoqData, strconvutil.FormatFloat64Simple(tiQOQ.Float64()))
 		}
 		tiMOM, err := mom.Get(dt)
 		if err != nil {
 			momData = append(momData, "0")
 		} else {
-			momData = append(momData, strconv.FormatFloat(tiMOM.Float64(), 'f', -1, 64))
+			momData = append(momData, strconvutil.FormatFloat64Simple(tiMOM.Float64()))
+		}
+		if opts.AddMOMGrowth {
+			if dt.After(opts.MOMBaseMonth) && opts.momBaseTimeItemExists {
+				diffMonths := int(month.TimeToMonthContinuous(dt) - opts.momBaseMonthContinuous)
+				targetValue := opts.momBaseTimeItem.Float64() * math.Pow(1+opts.MOMGrowthPct, float64(diffMonths))
+				momGrowthTargets = append(momGrowthTargets, strconvutil.FormatFloat64Simple(targetValue))
+				actualValue := tiVal.Float64()
+				diff := 0.0
+				if targetValue != 0 {
+					diff = (actualValue - targetValue) / targetValue
+				}
+				momGrowthPerform = append(momGrowthPerform, strconvutil.FormatFloat64Simple(diff))
+			} else {
+				momGrowthTargets = append(momGrowthTargets, "0")
+				momGrowthPerform = append(momGrowthPerform, "0")
+			}
 		}
 	}
 	tbl.Rows = [][]string{valData, yoyData, qoqData, momData}
+	if opts.AddMOMGrowth {
+		tbl.Rows = append(tbl.Rows, momGrowthTargets, momGrowthPerform)
+	}
 	return tbl
 }
 
