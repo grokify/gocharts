@@ -31,8 +31,8 @@ github.com/grokify/bitcoinmath v0.1.0/go.mod h1:Y8OyDefB55NHGzi+uJshYmE4Hn5juIQq
 github.com/grokify/elastirad-go v0.1.10 h1:IGkSVwZ6JCv387kx7QrclTQcEErsk+1GOJTQ8Xoy0QU=
 github.com/grokify/elastirad-go v0.1.10/go.mod h1:xPKbZAeEQiBykAqRxdipnsyAa1+csHRccb45335CKiU=
 github.com/grokify/mogo v0.37.18/go.mod h1:emNx8mwkHHcn3bB/8z8542H/WY6IxrHWBeWnyYHRV9g=
-github.com/grokify/mogo v0.38.1 h1:QIcRUSLz00X/CnDQk97lFizI2nv5GHH+OoaQAUkkzZA=
-github.com/grokify/mogo v0.38.1/go.mod h1:C4rAfY6EmQe1jxESH+KND19PxHwy6EoG5n6yGVBSOgk=
+github.com/grokify/mogo v0.38.3 h1:h5LG26wvnZDW0WfbX7RGxIWkz2LLN9SLJW0cmyVyuJ8=
+github.com/grokify/mogo v0.38.3/go.mod h1:C4rAfY6EmQe1jxESH+KND19PxHwy6EoG5n6yGVBSOgk=
 github.com/huandu/xstrings v1.3.2 h1:L18LIDzqlW6xN2rEkpdV8+oL/IXWJ1APd+vsdYy4Wdw=
 github.com/huandu/xstrings v1.3.2/go.mod h1:y5/lhBue+AyNmUVz9RLU9xbLR0o4KIIExikq4ovT0aE=
 github.com/itchyny/base58-go v0.2.0/go.mod h1:uSBhd5brsJi5iG4IVb0egRS7SsGU1kgf+xO1AbKMCJE=
