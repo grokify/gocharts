@@ -25,8 +25,8 @@ func TableBTCUSDMonthly() table.Table {
 	return tbl
 }
 
-func HistoricalDataBTCUSDMonthly() *yahoohistorical.HistoricalDataYahoo {
-	return &yahoohistorical.HistoricalDataYahoo{Table: TableBTCUSDMonthly()}
+func HistoricalDataBTCUSDMonthly() *yahoohistorical.HistoricalData {
+	return &yahoohistorical.HistoricalData{Table: TableBTCUSDMonthly()}
 }
 
 func TableETHUSDMonthly() table.Table {
@@ -42,6 +42,6 @@ func TableETHUSDMonthly() table.Table {
 	return tbl
 }
 
-func HistoricalDataETHUSDMonthly() *yahoohistorical.HistoricalDataYahoo {
-	return &yahoohistorical.HistoricalDataYahoo{Table: TableETHUSDMonthly()}
+func HistoricalDataETHUSDMonthly() *yahoohistorical.HistoricalData {
+	return &yahoohistorical.HistoricalData{Table: TableETHUSDMonthly()}
 }

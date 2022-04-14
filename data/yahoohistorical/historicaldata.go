@@ -10,50 +10,50 @@ import (
 )
 
 const (
-	HistoricalDataYahooColumns = "Date,Open,High,Low,Close,Adj Close,Volume"
-	ColumnDate                 = "Date"
-	ColumnOpen                 = "Open"
-	ColumnHigh                 = "High"
-	ColumnClose                = "Close"
-	ColumnAdjClose             = "Adj Close"
-	ColumnVolume               = "Volume"
+	HistoricalDataColumns = "Date,Open,High,Low,Close,Adj Close,Volume"
+	ColumnDate            = "Date"
+	ColumnOpen            = "Open"
+	ColumnHigh            = "High"
+	ColumnClose           = "Close"
+	ColumnAdjClose        = "Adj Close"
+	ColumnVolume          = "Volume"
 )
 
-type HistoricalDataYahoo struct {
+type HistoricalData struct {
 	Table table.Table
 }
 
-// ReadFileHistoricalDataYahoo reads a Yahoo! Finance Historical Data CSV file.
-func ReadFileHistoricalDataYahoo(filename string) (*HistoricalDataYahoo, error) {
+// ReadFileHistoricalData reads a Yahoo! Finance Historical Data CSV file.
+func ReadFileHistoricalData(filename string) (*HistoricalData, error) {
 	tbl, err := table.ReadFile(nil, filename)
 	if err != nil {
 		return nil, err
 	}
 	tbl.Name = filename
-	return &HistoricalDataYahoo{Table: tbl}, nil
+	return &HistoricalData{Table: tbl}, nil
 }
 
-func (hd *HistoricalDataYahoo) OpenData(interval timeutil.Interval) (timeseries.TimeSeries, error) {
+func (hd *HistoricalData) OpenData(interval timeutil.Interval) (timeseries.TimeSeries, error) {
 	return hd.columnData(interval, ColumnOpen)
 }
 
-func (hd *HistoricalDataYahoo) HighData(interval timeutil.Interval) (timeseries.TimeSeries, error) {
+func (hd *HistoricalData) HighData(interval timeutil.Interval) (timeseries.TimeSeries, error) {
 	return hd.columnData(interval, ColumnHigh)
 }
 
-func (hd *HistoricalDataYahoo) CloseData(interval timeutil.Interval) (timeseries.TimeSeries, error) {
+func (hd *HistoricalData) CloseData(interval timeutil.Interval) (timeseries.TimeSeries, error) {
 	return hd.columnData(interval, ColumnClose)
 }
 
-func (hd *HistoricalDataYahoo) AdjCloseData(interval timeutil.Interval) (timeseries.TimeSeries, error) {
+func (hd *HistoricalData) AdjCloseData(interval timeutil.Interval) (timeseries.TimeSeries, error) {
 	return hd.columnData(interval, ColumnAdjClose)
 }
 
-func (hd *HistoricalDataYahoo) VolumenData(interval timeutil.Interval) (timeseries.TimeSeries, error) {
+func (hd *HistoricalData) VolumenData(interval timeutil.Interval) (timeseries.TimeSeries, error) {
 	return hd.columnData(interval, ColumnVolume)
 }
 
-func (hd *HistoricalDataYahoo) columnData(interval timeutil.Interval, columnName string) (timeseries.TimeSeries, error) {
+func (hd *HistoricalData) columnData(interval timeutil.Interval, columnName string) (timeseries.TimeSeries, error) {
 	ts := timeseries.NewTimeSeries(hd.Table.Name)
 	if columnName == ColumnVolume {
 		ts.IsFloat = false

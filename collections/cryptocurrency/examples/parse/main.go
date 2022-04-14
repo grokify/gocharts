@@ -24,7 +24,7 @@ func main() {
 	fmt.Println("DONE")
 }
 
-func procHistoricalData(hd *yahoohistorical.HistoricalDataYahoo) error {
+func procHistoricalData(hd *yahoohistorical.HistoricalData) error {
 	tbl := hd.Table
 	fmtutil.MustPrintJSON(tbl.Rows)
 	fmtutil.MustPrintJSON(tbl.Columns)
