@@ -101,7 +101,9 @@ func (tbl *Table) formatRowsTry(colIdxMinInc, colIdxMaxInc uint, conv func(cellV
 			if err != nil {
 				return err
 			}
-			row[x] = val
+			if exec {
+				row[x] = val
+			}
 		}
 		if exec {
 			tbl.Rows[y] = row
