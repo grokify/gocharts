@@ -34,7 +34,7 @@ func ReadFileHistoricalData(filename string) (*HistoricalData, error) {
 }
 
 func (hd *HistoricalData) TimeSeriesSet(interval timeutil.Interval) (timeseries.TimeSeriesSet, error) {
-	tss := timeseries.NewTimeSeriesSet("")
+	tss := timeseries.NewTimeSeriesSet(hd.Table.Name)
 	tsOpen, err := hd.OpenTimeSeries(interval)
 	if err != nil {
 		return tss, err
