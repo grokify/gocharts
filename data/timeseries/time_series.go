@@ -95,6 +95,30 @@ func (ts *TimeSeries) AddItems(items ...TimeItem) {
 	}
 }
 
+func (ts *TimeSeries) ConvertFloat64() {
+	for rfc, ti := range ts.ItemMap {
+		if ti.IsFloat {
+			continue
+		}
+		ti.ValueFloat = float64(ti.Value)
+		ti.IsFloat = true
+		ts.ItemMap[rfc] = ti
+	}
+	ts.IsFloat = true
+}
+
+func (ts *TimeSeries) ConvertInt64() {
+	for rfc, ti := range ts.ItemMap {
+		if !ti.IsFloat {
+			continue
+		}
+		ti.Value = int64(ti.ValueFloat)
+		ti.IsFloat = false
+		ts.ItemMap[rfc] = ti
+	}
+	ts.IsFloat = false
+}
+
 func (ts *TimeSeries) SetSeriesName(seriesName string) {
 	ts.SeriesName = seriesName
 	for k, v := range ts.ItemMap {
