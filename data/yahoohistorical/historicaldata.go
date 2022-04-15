@@ -33,28 +33,57 @@ func ReadFileHistoricalData(filename string) (*HistoricalData, error) {
 	return &HistoricalData{Table: tbl}, nil
 }
 
-func (hd *HistoricalData) OpenData(interval timeutil.Interval) (timeseries.TimeSeries, error) {
+func (hd *HistoricalData) TimeSeriesSet(interval timeutil.Interval) (timeseries.TimeSeriesSet, error) {
+	tss := timeseries.NewTimeSeriesSet("")
+	tsOpen, err := hd.OpenTimeSeries(interval)
+	if err != nil {
+		return tss, err
+	}
+	tsHigh, err := hd.HighTimeSeries(interval)
+	if err != nil {
+		return tss, err
+	}
+	tsClose, err := hd.CloseTimeSeries(interval)
+	if err != nil {
+		return tss, err
+	}
+	tsAdjClose, err := hd.AdjCloseTimeSeries(interval)
+	if err != nil {
+		return tss, err
+	}
+	tsVolume, err := hd.VolumeTimeSeries(interval)
+	if err != nil {
+		return tss, err
+	}
+	tsVolume.ConvertFloat64()
+	tss.Interval = interval
+	tss.IsFloat = true
+	tss.AddSeries(tsOpen, tsHigh, tsClose, tsAdjClose, tsVolume)
+	return tss, nil
+}
+
+func (hd *HistoricalData) OpenTimeSeries(interval timeutil.Interval) (timeseries.TimeSeries, error) {
 	return hd.columnData(interval, ColumnOpen)
 }
 
-func (hd *HistoricalData) HighData(interval timeutil.Interval) (timeseries.TimeSeries, error) {
+func (hd *HistoricalData) HighTimeSeries(interval timeutil.Interval) (timeseries.TimeSeries, error) {
 	return hd.columnData(interval, ColumnHigh)
 }
 
-func (hd *HistoricalData) CloseData(interval timeutil.Interval) (timeseries.TimeSeries, error) {
+func (hd *HistoricalData) CloseTimeSeries(interval timeutil.Interval) (timeseries.TimeSeries, error) {
 	return hd.columnData(interval, ColumnClose)
 }
 
-func (hd *HistoricalData) AdjCloseData(interval timeutil.Interval) (timeseries.TimeSeries, error) {
+func (hd *HistoricalData) AdjCloseTimeSeries(interval timeutil.Interval) (timeseries.TimeSeries, error) {
 	return hd.columnData(interval, ColumnAdjClose)
 }
 
-func (hd *HistoricalData) VolumenData(interval timeutil.Interval) (timeseries.TimeSeries, error) {
+func (hd *HistoricalData) VolumeTimeSeries(interval timeutil.Interval) (timeseries.TimeSeries, error) {
 	return hd.columnData(interval, ColumnVolume)
 }
 
 func (hd *HistoricalData) columnData(interval timeutil.Interval, columnName string) (timeseries.TimeSeries, error) {
-	ts := timeseries.NewTimeSeries(hd.Table.Name)
+	ts := timeseries.NewTimeSeries(columnName)
 	if columnName == ColumnVolume {
 		ts.IsFloat = false
 	} else {

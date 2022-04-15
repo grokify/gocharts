@@ -20,7 +20,7 @@ func WriteFilesHistoricalData(filePrefix string, hd *yahoohistorical.HistoricalD
 		fmtutil.MustPrintJSON(tbl.Rows)
 		fmtutil.MustPrintJSON(tbl.Columns)
 	}
-	ts, err := hd.CloseData(timeutil.Month)
+	ts, err := hd.CloseTimeSeries(timeutil.Month)
 	if err != nil {
 		return err
 	}
