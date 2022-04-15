@@ -3,7 +3,7 @@ package c3
 import (
 	"encoding/json"
 
-	"github.com/grokify/elastirad-go/models/v5"
+	v5 "github.com/grokify/elastirad-go/models/v5"
 )
 
 const (
