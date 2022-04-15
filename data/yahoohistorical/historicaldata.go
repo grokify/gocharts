@@ -58,8 +58,8 @@ func (hd *HistoricalData) TimeSeriesSet(interval timeutil.Interval) (timeseries.
 	tsVolume.ConvertFloat64()
 	tss.Interval = interval
 	tss.IsFloat = true
-	tss.AddSeries(tsOpen, tsHigh, tsClose, tsAdjClose, tsVolume)
-	return tss, nil
+	err = tss.AddSeries(tsOpen, tsHigh, tsClose, tsAdjClose, tsVolume)
+	return tss, err
 }
 
 func (hd *HistoricalData) OpenTimeSeries(interval timeutil.Interval) (timeseries.TimeSeries, error) {
