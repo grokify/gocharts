@@ -404,18 +404,21 @@ func (ts *TimeSeries) ToMonthCumulative(inflate bool, timesInput ...time.Time) (
 }
 
 func (ts *TimeSeries) ToQuarter() TimeSeries {
-	newTimeSeries := TimeSeries{
-		SeriesName: ts.SeriesName,
-		ItemMap:    map[string]TimeItem{},
-		IsFloat:    ts.IsFloat,
-		Interval:   timeutil.Quarter}
+	newTimeSeries := NewTimeSeries(ts.SeriesName)
+	newTimeSeries.IsFloat = ts.IsFloat
+	newTimeSeries.Interval = timeutil.Quarter
 	for _, item := range ts.ItemMap {
-		newTimeSeries.AddItems(TimeItem{
-			SeriesName: item.SeriesName,
-			Time:       timeutil.QuarterStart(item.Time),
-			IsFloat:    item.IsFloat,
-			Value:      item.Value,
-			ValueFloat: item.ValueFloat})
+		newTimeSeries.AddFloat64(timeutil.QuarterStart(item.Time), item.Float64())
+	}
+	return newTimeSeries
+}
+
+func (ts *TimeSeries) ToYear() TimeSeries {
+	newTimeSeries := NewTimeSeries(ts.SeriesName)
+	newTimeSeries.IsFloat = ts.IsFloat
+	newTimeSeries.Interval = timeutil.Year
+	for _, item := range ts.ItemMap {
+		newTimeSeries.AddFloat64(timeutil.YearStart(item.Time), item.Float64())
 	}
 	return newTimeSeries
 }
