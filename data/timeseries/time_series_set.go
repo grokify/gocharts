@@ -164,10 +164,12 @@ func (set *TimeSeriesSet) Item(seriesName, rfc3339 string) (TimeItem, error) {
 
 func (set *TimeSeriesSet) TimeSlice(sortAsc bool) timeslice.TimeSlice {
 	times := []time.Time{}
-	for _, ds := range set.Series {
-		for _, item := range ds.ItemMap {
-			if set.Interval == timeutil.Year {
-
+	for _, ts := range set.Series {
+		for _, item := range ts.ItemMap {
+			if set.Interval == timeutil.Year && !timeutil.IsYearStart(item.Time) {
+				panic("timeitem for TimeSeriesSet year is not a year start")
+			} else if set.Interval == timeutil.Month && !timeutil.IsMonthStart(item.Time) {
+				panic("timeitem for TimeSeriesSet month is not a month start")
 			}
 			times = append(times, item.Time)
 		}
