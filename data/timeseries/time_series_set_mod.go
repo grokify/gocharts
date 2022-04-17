@@ -6,8 +6,25 @@ import (
 	"github.com/grokify/mogo/time/timeutil"
 )
 
-// ToMonth aggregates time values into months. `inflate`
-// is used to add months with `0` values.
+// ToYear aggregates time values into months. `inflate` is used to add months with `0` values.
+func (set *TimeSeriesSet) ToYear(inflate, popLast bool) (TimeSeriesSet, error) {
+	newTSS := TimeSeriesSet{
+		Name:     set.Name,
+		Series:   map[string]TimeSeries{},
+		Interval: timeutil.Year,
+		Order:    set.Order}
+	for name, ts := range set.Series {
+		newTSS.Series[name] = ts.ToYear()
+	}
+	if popLast {
+		newTSS.PopLast()
+	}
+	newTSS.Inflate()
+	newTSS.Times = newTSS.TimeSlice(true)
+	return newTSS, nil
+}
+
+// ToMonth aggregates time values into months. `inflate` is used to add months with `0` values.
 func (set *TimeSeriesSet) ToMonth(cumulative, inflate, popLast bool, monthsFilter []time.Month) (TimeSeriesSet, error) {
 	if cumulative {
 		return set.toMonthCumulative(inflate, popLast)
@@ -18,8 +35,8 @@ func (set *TimeSeriesSet) ToMonth(cumulative, inflate, popLast bool, monthsFilte
 		Times:    set.Times,
 		Interval: timeutil.Month,
 		Order:    set.Order}
-	for name, ds := range set.Series {
-		newTSS.Series[name] = ds.ToMonth(inflate, monthsFilter...)
+	for name, ts := range set.Series {
+		newTSS.Series[name] = ts.ToMonth(inflate, monthsFilter...)
 	}
 	if popLast {
 		newTSS.PopLast()
