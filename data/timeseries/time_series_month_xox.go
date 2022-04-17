@@ -1,6 +1,11 @@
 package timeseries
 
-import "strings"
+import (
+	"errors"
+	"strings"
+
+	"github.com/grokify/mogo/time/timeutil"
+)
 
 func (ts *TimeSeries) TimeSeriesMonthYOY() TimeSeries {
 	return ts.TimeSeriesMonthXOX(-1, 0, 0, "YoY")
@@ -45,4 +50,40 @@ func (ts *TimeSeries) TimeSeriesMonthXOX(years, months, days int, suffix string)
 	}
 
 	return tsXOX
+}
+
+func (ts *TimeSeries) TimeSeriesYearYOY(suffix string) (TimeSeries, error) {
+	if ts.Interval != timeutil.Year {
+		return TimeSeries{}, errors.New("interval year is required")
+	}
+	// tsm := ts.ToMonth(true)
+	tsYOY := NewTimeSeries(ts.SeriesName)
+	suffix = strings.TrimSpace(suffix)
+	if len(suffix) > 0 {
+		if len(ts.SeriesName) > 0 {
+			tsYOY.SeriesName += " " + suffix
+		} else {
+			tsYOY.SeriesName = suffix
+		}
+	}
+	tsYOY.IsFloat = true
+	tsYOY.Interval = ts.Interval
+	times := ts.TimeSlice(true)
+	times.SortReverse()
+
+	for _, dt := range times {
+		dtThis := dt
+		dtPast := dt.AddDate(-1, 0, 0)
+		tiThis, err := ts.Get(dtThis)
+		if err != nil {
+			panic("cannot find this time")
+		}
+		tiPast, err := ts.Get(dtPast)
+		if err != nil {
+			continue
+		}
+		tsYOY.AddFloat64(dtThis, (tiThis.Float64()-tiPast.Float64())/tiPast.Float64())
+	}
+
+	return tsYOY, nil
 }
