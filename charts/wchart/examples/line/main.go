@@ -186,13 +186,13 @@ func main() {
 	http.HandleFunc("/custom2", drawChartTSSSimple)
 
 	chart1 := GetChartExampleMonths()
-	err := wchart.WritePNG("_wchart.png", chart1)
+	err := wchart.WritePNG("img_line_wrap.png", chart1)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	if 1 == 1 {
-		f, err := os.Create("test.png")
+		f, err := os.Create("img_line_direct.png")
 		if err != nil {
 			log.Fatal(err)
 		}
