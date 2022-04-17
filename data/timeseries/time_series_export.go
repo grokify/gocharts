@@ -193,6 +193,50 @@ func (ts *TimeSeries) TableMonthXOX(timeFmtColName, seriesName, valuesName, yoyN
 	return tbl
 }
 
+func (ts *TimeSeries) TableYearYOY(seriesName, valuesName, yoyName string) table.Table {
+	if len(strings.TrimSpace(seriesName)) == 0 {
+		seriesName = "Series"
+	}
+	if len(strings.TrimSpace(valuesName)) == 0 {
+		valuesName = "Values"
+	}
+	if len(strings.TrimSpace(yoyName)) == 0 {
+		yoyName = "YoY"
+	}
+	tbl := table.NewTable(ts.SeriesName)
+	cols := []string{seriesName}
+	times := ts.TimeSlice(true)
+	for _, dt := range times {
+		cols = append(cols, dt.Format("2006"))
+	}
+	tbl.Columns = cols
+	tbl.FormatMap = map[int]string{
+		-1: table.FormatFloat,
+		0:  table.FormatString}
+
+	yoy := ts.TimeSeriesMonthYOY()
+	valData := []string{valuesName}
+	yoyData := []string{yoyName}
+
+	for _, dt := range times {
+		tiVal, err := ts.Get(dt)
+		if err != nil {
+			tiVal = TimeItem{
+				Time:    dt,
+				IsFloat: ts.IsFloat}
+		}
+		valData = append(valData, strconvutil.FormatFloat64Simple(tiVal.Float64()))
+		tiYOY, err := yoy.Get(dt)
+		if err != nil {
+			yoyData = append(yoyData, "0")
+		} else {
+			yoyData = append(yoyData, strconvutil.FormatFloat64Simple(tiYOY.Float64()))
+		}
+	}
+	tbl.Rows = [][]string{valData, yoyData}
+	return tbl
+}
+
 // WriteJSON writes the data to a JSON file. To write a minimized JSON
 // file use an empty string for `prefix` and `indent`.
 func (ts *TimeSeries) WriteJSON(filename string, perm os.FileMode, prefix, indent string) error {
