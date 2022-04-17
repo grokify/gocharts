@@ -13,6 +13,7 @@ import (
 	"github.com/grokify/mogo/time/month"
 	"github.com/grokify/mogo/time/timeslice"
 	"github.com/grokify/mogo/time/timeutil"
+	"github.com/grokify/mogo/time/year"
 	"github.com/grokify/mogo/type/stringsutil"
 )
 
@@ -165,11 +166,20 @@ func (set *TimeSeriesSet) TimeSlice(sortAsc bool) timeslice.TimeSlice {
 	times := []time.Time{}
 	for _, ds := range set.Series {
 		for _, item := range ds.ItemMap {
+			if set.Interval == timeutil.Year {
+
+			}
 			times = append(times, item.Time)
 		}
 	}
 	times = timeutil.Sort(timeutil.Distinct(times))
-	return month.TimeSeriesMonth(sortAsc, times...)
+	switch set.Interval {
+	case timeutil.Month:
+		return month.TimeSeriesMonth(sortAsc, times...)
+	case timeutil.Year:
+		return year.TimeSeriesYear(sortAsc, times...)
+	}
+	return times
 }
 
 func (set *TimeSeriesSet) TimeStrings() []string {
