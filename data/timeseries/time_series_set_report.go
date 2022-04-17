@@ -240,6 +240,57 @@ func (set *TimeSeriesSet) Table(opts *TimeSeriesSetTableOpts) (table.Table, erro
 	return tbl, nil
 }
 
+func (set *TimeSeriesSet) TableYearYOY(seriesColName, valuesSuffix, yoySuffix string) table.Table {
+	if set.Interval != timeutil.Year {
+		panic("interval is not year")
+	}
+	if len(strings.TrimSpace(seriesColName)) == 0 {
+		seriesColName = "Series"
+	}
+	if len(strings.TrimSpace(valuesSuffix)) == 0 {
+		valuesSuffix = "Values"
+	}
+	if len(strings.TrimSpace(yoySuffix)) == 0 {
+		yoySuffix = "YoY"
+	}
+
+	tbl := table.NewTable(set.Name)
+	cols := []string{seriesColName}
+	times := set.TimeSlice(true)
+	for _, dt := range times {
+		cols = append(cols, dt.Format("2006"))
+	}
+	tbl.Columns = cols
+	tbl.FormatMap = map[int]string{
+		-1: table.FormatFloat,
+		0:  table.FormatString}
+
+	order := set.Order
+	if len(order) != len(set.Series) {
+		names := []string{}
+		for name := range set.Series {
+			names = append(names, name)
+		}
+		sort.Strings(names)
+	}
+
+	for _, seriesName := range order {
+		ts, ok := set.Series[seriesName]
+		if !ok {
+			panic(fmt.Sprintf("set not found [%s]", seriesName))
+		}
+		tblSeries := ts.TableYearYOY(seriesColName, seriesName+" "+valuesSuffix, seriesName+" "+yoySuffix)
+		if len(tbl.Columns) != len(tblSeries.Columns) {
+			panic("table length mismatch")
+		}
+		tbl.Rows = append(tbl.Rows, tblSeries.Rows...)
+	}
+
+	return tbl
+}
+
+// tblYoy := tsAnn.TableYearYOY("Series", "MAU", "YOY")
+
 // WriteJSON writes the TimeSeriesSet to a JSON file. To write a minimized JSON
 // file use an empty string for `prefix` and `indent`.
 func (set *TimeSeriesSet) WriteJSON(filename string, perm os.FileMode, prefix, indent string) error {
