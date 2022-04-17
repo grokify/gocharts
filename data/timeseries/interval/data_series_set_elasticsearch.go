@@ -1,5 +1,6 @@
 package interval
 
+/*
 import (
 	"time"
 
@@ -24,3 +25,4 @@ func EsAggsToTimeSeriesSet(aggs []v5.AggregationResRad, interval timeutil.Interv
 	err := set.Inflate()
 	return set, err
 }
+*/
