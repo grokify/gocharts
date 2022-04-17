@@ -57,7 +57,7 @@ func ParseTableTimeSeriesSetFlat(tbl table.Table, timeColIdx, seriesNameColIdx, 
 	if timeParseFunc == nil {
 		timeParseFunc = ParseTimeFuncRFC3339
 	}
-	tss := NewTimeSeriesSet("")
+	tss := NewTimeSeriesSet(tbl.Name)
 	tss.IsFloat = isFloat
 	for i, row := range tbl.Rows {
 		if int(seriesNameColIdx) >= len(row) {
@@ -70,21 +70,22 @@ func ParseTableTimeSeriesSetFlat(tbl table.Table, timeColIdx, seriesNameColIdx, 
 			return tss, fmt.Errorf("colIdx [%d] not present in row [%d]", countColIdx, i)
 		}
 		seriesName := row[seriesNameColIdx]
+
 		dt, err := timeParseFunc(row[timeColIdx])
 		if err != nil {
-			return tss, fmt.Errorf("cannot parse time [%s] in row [%d]", row[timeColIdx], i)
+			return tss, fmt.Errorf("cannot parse time [%s] in row [%d] err [%s]", row[timeColIdx], i, err.Error())
 		}
 		countString := row[countColIdx]
 		if isFloat {
 			countFloat, err := strconv.ParseFloat(countString, 64)
 			if err != nil {
-				return tss, fmt.Errorf("cannot parse count as float64 [%s] in row [%d]", row[timeColIdx], i)
+				return tss, fmt.Errorf("cannot parse count as float64 [%s] in row [%d] err [%s]", row[countColIdx], i, err.Error())
 			}
 			tss.AddFloat64(seriesName, dt, countFloat)
 		} else {
 			countInt, err := strconv.Atoi(countString)
 			if err != nil {
-				return tss, fmt.Errorf("cannot parse count as int [%s] in row [%d]", row[timeColIdx], i)
+				return tss, fmt.Errorf("cannot parse count as int [%s] in row [%d] err [%s]", row[countColIdx], i, err.Error())
 			}
 			tss.AddInt64(seriesName, dt, int64(countInt))
 		}
