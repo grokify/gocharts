@@ -23,7 +23,8 @@ func (ts *TimeSeries) LinearRegressionYear() (alpha, beta float64, err error) {
 	return
 }
 
-// LinearRegressionYearProjection only runs when interval=Year.
+// LinearRegressionYearProjection only runs when interval=Year for now.
+// Use this to build tables.
 func (ts *TimeSeries) LinearRegressionYearProjection(years uint, constantYOY bool) error {
 	if years == 0 {
 		return nil
