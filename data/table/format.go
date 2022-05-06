@@ -75,7 +75,7 @@ func (tbl *Table) FormatColumn(colIdx uint, conv func(cellVal string) (string, e
 
 // FormatRows formats row cells using a start and ending column index and a convert function.
 // The `format.ConvertDecommify()` function is available to use.
-func (tbl *Table) FormatRows(colIdxMinInc, colIdxMaxInc uint, conv func(cellVal string) (string, error)) error {
+func (tbl *Table) FormatRows(colIdxMinInc, colIdxMaxInc int, conv func(cellVal string) (string, error)) error {
 	err := tbl.formatRowsTry(colIdxMinInc, colIdxMaxInc, conv, false)
 	if err != nil {
 		return err
@@ -83,20 +83,23 @@ func (tbl *Table) FormatRows(colIdxMinInc, colIdxMaxInc uint, conv func(cellVal 
 	return tbl.formatRowsTry(colIdxMinInc, colIdxMaxInc, conv, true)
 }
 
-func (tbl *Table) formatRowsTry(colIdxMinInc, colIdxMaxInc uint, conv func(cellVal string) (string, error), exec bool) error {
+func (tbl *Table) formatRowsTry(colIdxMinInc, colIdxMaxInc int, conv func(cellVal string) (string, error), exec bool) error {
 	if len(tbl.Rows) == 0 {
 		return nil
+	}
+	if colIdxMinInc < 0 {
+		colIdxMinInc = 0
 	}
 	//testand return errors
 	for y, row := range tbl.Rows {
 		if int(colIdxMinInc) >= len(row) {
 			continue
 		}
-		rowMaxIdxInc := int(colIdxMaxInc)
-		if rowMaxIdxInc >= len(row) {
+		rowMaxIdxInc := colIdxMaxInc
+		if rowMaxIdxInc < 0 || rowMaxIdxInc >= len(row) {
 			rowMaxIdxInc = len(row) - 1
 		}
-		for x := int(colIdxMinInc); x <= rowMaxIdxInc; x++ {
+		for x := colIdxMinInc; x <= rowMaxIdxInc; x++ {
 			val, err := conv(row[x])
 			if err != nil {
 				return err
