@@ -92,7 +92,7 @@ func (tbl *Table) formatRowsTry(colIdxMinInc, colIdxMaxInc int, conv func(cellVa
 	}
 	//testand return errors
 	for y, row := range tbl.Rows {
-		if int(colIdxMinInc) >= len(row) {
+		if colIdxMinInc >= len(row) {
 			continue
 		}
 		rowMaxIdxInc := colIdxMaxInc
