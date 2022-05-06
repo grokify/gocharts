@@ -2,10 +2,15 @@ package format
 
 import (
 	"regexp"
+	"strings"
 )
 
-var rxComma = regexp.MustCompile(`,`)
+func ConvertDecommify(s string) (string, error) {
+	return strings.Replace(s, ",", "", -1), nil
+}
 
-func ConvertDecommify(input string) (string, error) {
-	return rxComma.ReplaceAllString(input, ""), nil
+func ConvertRemoveControls(s string) (string, error) {
+	// Tableau CSVs may have `\x00` control chars.
+	// use `Table.ForamatRows()` on all columns to remove.
+	return regexp.MustCompile(`\x00`).ReplaceAllString(s, ""), nil
 }
