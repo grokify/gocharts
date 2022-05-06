@@ -74,7 +74,7 @@ func (tbl *Table) FormatColumn(colIdx uint, conv func(cellVal string) (string, e
 */
 
 // FormatRows formats row cells using a start and ending column index and a convert function.
-// The `format.ConvertDecommify()` and `format.FormatStringRemoveControls()` functions are available to use.
+// The `format.ConvertDecommify()` and `format.ConvertRemoveControls()` functions are available to use.
 func (tbl *Table) FormatRows(colIdxMinInc, colIdxMaxInc int, conv func(cellVal string) (string, error)) error {
 	err := tbl.formatRowsTry(colIdxMinInc, colIdxMaxInc, conv, false)
 	if err != nil {
@@ -90,7 +90,7 @@ func (tbl *Table) formatRowsTry(colIdxMinInc, colIdxMaxInc int, conv func(cellVa
 	if colIdxMinInc < 0 {
 		colIdxMinInc = 0
 	}
-	//testand return errors
+	// test and return errors
 	for y, row := range tbl.Rows {
 		if colIdxMinInc >= len(row) {
 			continue
