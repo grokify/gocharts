@@ -1,0 +1,37 @@
+{% func LineChartMaterialPage(data LineChartMaterial) %}<!DOCTYPE html>
+<html>
+<head>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+</head>
+<body>
+  <h1>{%s data.Title %}</h1>
+  <div id="{%s= data.ChartDivOrDefault() %}"></div>
+  <script>
+      google.charts.load('current', {'packages':['line']});
+      google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+      var data = new google.visualization.DataTable();
+      {% for _, col := range data.Columns %}
+      data.addColumn('{%s col.Type %}', '{%s col.Name %}');
+      {% endfor %}
+
+      data.addRows({%z= data.DataMatrixJSON() %});
+
+      var options = {
+        chart: {
+          title: '{%s data.Title %}',
+          subtitle: '{%s data.Subtitle %}'
+        },
+        width: {%d= data.WidthOrDefault() %},
+        height: {%d= data.HeightOrDefault() %}
+      };
+
+      var chart = new google.charts.Line(document.getElementById('{%s= data.ChartDivOrDefault() %}'));
+
+      chart.draw(data, google.charts.Line.convertOptions(options));
+    }
+    </script>
+  </body>
+</html>
+{% endfunc %}
