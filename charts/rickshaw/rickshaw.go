@@ -15,8 +15,7 @@ import (
 	"github.com/grokify/gocharts/v2/data/timeseries/interval"
 )
 
-// DataInfoJS is the series item to be sent to the
-// Rickshaw extensions JS code.
+// DataInfoJS is the series item to be sent to the Rickshaw extensions JS code.
 type DataInfoJs struct {
 	Color string `json:"color,omitempty"`
 	Data  []Item `json:"data"`
@@ -30,8 +29,7 @@ type Item struct {
 	ValueY     int64     `json:"y"`
 }
 
-// AppMonth is the input value to be convered into
-// Rickshaw items
+// MonthData is the input value to be converted into Rickshaw items
 type MonthData struct {
 	SeriesName string
 	MonthS     string
@@ -118,7 +116,7 @@ func NewRickshawData() RickshawData {
 	return RickshawData{SeriesMap: map[string]Series{}}
 }
 
-// Add an item to the report
+// AddItem adds an item to the report
 func (rd *RickshawData) AddItem(item Item) {
 	item.SeriesName = strings.TrimSpace(item.SeriesName)
 	if len(item.SeriesName) < 1 {
