@@ -2,10 +2,12 @@ package google
 
 import (
 	"encoding/json"
+	"errors"
 	"strings"
 	"time"
 
 	"github.com/grokify/gocharts/v2/data/timeseries"
+	"github.com/grokify/mogo/time/timeutil"
 )
 
 const (
@@ -61,8 +63,12 @@ func (lcm *LineChartMaterial) WidthOrDefault() int {
 	return DefaultWidth
 }
 
-func LineChartMaterialFromTimeSeriesSet(tss timeseries.TimeSeriesSet, yearLabel string) LineChartMaterial {
+func LineChartMaterialFromTimeSeriesSet(tss timeseries.TimeSeriesSet, yearLabel string) (LineChartMaterial, error) {
 	lcm := LineChartMaterial{}
+	if tss.Interval != timeutil.Year {
+		return lcm, errors.New("interval not supported")
+	}
+
 	if len(strings.TrimSpace(yearLabel)) == 0 {
 		yearLabel = "Year"
 	}
@@ -93,5 +99,5 @@ func LineChartMaterialFromTimeSeriesSet(tss timeseries.TimeSeriesSet, yearLabel 
 
 	lcm.Data = rows
 
-	return lcm
+	return lcm, nil
 }
