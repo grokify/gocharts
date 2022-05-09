@@ -3,6 +3,7 @@ package google
 import (
 	"encoding/json"
 	"errors"
+	"strconv"
 	"strings"
 	"time"
 
@@ -15,6 +16,7 @@ const (
 	DefaultHeight   = 500
 	DefaultChartDiv = "chart_div"
 	TypeNumber      = "number"
+	TypeString      = "string"
 )
 
 // LineChartMaterial provides data for Google Material Line Charts described here:
@@ -73,7 +75,7 @@ func LineChartMaterialFromTimeSeriesSet(tss timeseries.TimeSeriesSet, yearLabel 
 		yearLabel = "Year"
 	}
 	lcmCols := []Column{
-		{Type: TypeNumber, Name: yearLabel},
+		{Type: TypeString, Name: yearLabel},
 	}
 	for _, seriesName := range tss.Order {
 		lcmCols = append(lcmCols, Column{Type: TypeNumber, Name: seriesName})
@@ -83,7 +85,7 @@ func LineChartMaterialFromTimeSeriesSet(tss timeseries.TimeSeriesSet, yearLabel 
 	rows := [][]interface{}{}
 
 	for _, dt := range tss.Times {
-		row := []interface{}{dt.Year()}
+		row := []interface{}{strconv.Itoa(dt.Year())}
 
 		for _, seriesName := range tss.Order {
 			item, err := tss.Item(seriesName, dt.Format(time.RFC3339))
