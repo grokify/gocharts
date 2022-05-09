@@ -20,7 +20,7 @@ func exampleData() google.LineChartMaterial {
 				Name: "Day"},
 			{
 				Type: "number",
-				Name: "Guardians of the Galaxy'"},
+				Name: "Guardians of the Galaxy"},
 			{
 				Type: "number",
 				Name: "The Avengers"},
