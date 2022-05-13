@@ -13,6 +13,15 @@ func (ts *TimeSeries) TimeUpdateIntervalStart() error {
 			}
 		}
 		return nil
+	case timeutil.Month:
+		for rfc3339, ti := range ts.ItemMap {
+			if !timeutil.IsMonthStart(ti.Time) {
+				delete(ts.ItemMap, rfc3339)
+				ti.Time = timeutil.MonthStart(ti.Time)
+				ts.AddItems(ti)
+			}
+		}
+		return nil
 	}
 	return ErrIntervalNotSupported
 }
