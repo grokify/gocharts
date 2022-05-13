@@ -27,10 +27,11 @@ A full list is available in the [`data`](data) folder.
 
 ## Chart Helpers
 
-* [C3](https://c3js.org/) - [code](charts/c3)
-* [D3](https://d3js.org/) - [code](charts/d3)
-* [Rickshaw](https://github.com/shutterstock/rickshaw) - [code](charts/rickshaw)
-* [wcharczuk/go-chart](https://github.com/wcharczuk/go-chart) - [code](charts/wchart)
+* [C3](https://pkg.go.dev/github.com/grokify/gocharts/v2/charts/c3) - [code](charts/c3), [project](https://c3js.org/)
+* [D3](https://pkg.go.dev/github.com/grokify/gocharts/v2/charts/d3) - [code](charts/d3), [project](https://d3js.org/)
+* [Google Charts](https://pkg.go.dev/github.com/grokify/gocharts/v2/charts/google) - [code](charts/google), [project](https://developers.google.com/chart/interactive/docs)
+* [Rickshaw](https://pkg.go.dev/github.com/grokify/gocharts/v2/charts/rickshaw) - [code](charts/rickshaw), [project](https://github.com/shutterstock/rickshaw)
+* [wcharczuk/go-chart](https://pkg.go.dev/github.com/grokify/gocharts/v2/charts/wchart) - [code](charts/wchart), [project](https://github.com/wcharczuk/go-chart)
 
 [`quicktemplate`](https://github.com/valyala/quicktemplate) is used for rendering some of the charts.
 
