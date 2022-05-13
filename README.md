@@ -38,6 +38,10 @@ An example chart is the Rickshaw chart shown below:
 
 ![](charts/rickshaw/graph_example_2.png)
 
+## Collections
+
+Data collections are provided in the [`collections`](collections) folder for the primary purpose of providing example data to run in the examples. Currently, cryptocurrency data from Yahoo! Finance is included.
+
 ## Installation
 
 ```bash
