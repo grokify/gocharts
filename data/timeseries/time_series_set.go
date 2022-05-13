@@ -20,12 +20,21 @@ import (
 // TimeSeriesSet is a data structure to manage a set of similar `TimeSeries`.
 // It is necessary for all `TimeSeries` to have the same value of `IsFloat`.
 type TimeSeriesSet struct {
-	Name     string
-	Series   map[string]TimeSeries
-	Times    []time.Time
-	Order    []string
-	IsFloat  bool
-	Interval timeutil.Interval
+	Name              string
+	Series            map[string]TimeSeries
+	Times             []time.Time
+	Order             []string
+	ActualTargetPairs []ActualTargetPair
+	IsFloat           bool
+	Interval          timeutil.Interval
+}
+
+// ActualTargetPair provides metadata on associating two series names that
+// represent actual and target data. This can be used to product additional
+// data in charts and tables.
+type ActualTargetPair struct {
+	ActualSeriesName string
+	TargetSeriesName string
 }
 
 // NewTimeSeriesSet returns an initialized `TimeSeriesSet`.
