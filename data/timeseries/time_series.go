@@ -300,8 +300,8 @@ func (ts *TimeSeries) DeleteTime(dt time.Time) {
 	delete(ts.ItemMap, dt.Format(time.RFC3339))
 }
 
-// ToMonth aggregates time values into months. `inflate` is used to add months with `0` values.
-func (ts *TimeSeries) ToMonth(inflate bool, monthsFilter ...time.Month) TimeSeries {
+// ToMonth aggregates time values into months. `addZeroValueMonths` is used to add months with `0` values.
+func (ts *TimeSeries) ToMonth(addZeroValueMonths bool, monthsFilter ...time.Month) TimeSeries {
 	newTimeSeries := NewTimeSeries(ts.SeriesName)
 	newTimeSeries.Interval = timeutil.Year
 	newTimeSeries.IsFloat = ts.IsFloat
@@ -310,7 +310,7 @@ func (ts *TimeSeries) ToMonth(inflate bool, monthsFilter ...time.Month) TimeSeri
 		monthsFilterMap[m] = 1
 	}
 	for _, item := range ts.ItemMap {
-		if len(monthsFilter) > 0 {
+		if len(monthsFilterMap) > 0 {
 			if _, ok := monthsFilterMap[item.Time.Month()]; !ok {
 				continue
 			}
@@ -322,7 +322,7 @@ func (ts *TimeSeries) ToMonth(inflate bool, monthsFilter ...time.Month) TimeSeri
 			Value:      item.Value,
 			ValueFloat: item.ValueFloat})
 	}
-	if inflate {
+	if addZeroValueMonths {
 		timeSeries := timeutil.TimeSeriesSlice(timeutil.Month, newTimeSeries.ItemTimes())
 		for _, dt := range timeSeries {
 			newTimeSeries.AddItems(TimeItem{
