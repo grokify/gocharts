@@ -1,14 +1,10 @@
 package timeseries
 
 import (
-	"errors"
-
 	"github.com/grokify/mogo/time/month"
 	"github.com/grokify/mogo/time/timeutil"
 	"gonum.org/v1/gonum/stat"
 )
-
-var ErrIntervalNotSupported = errors.New("interval not supported")
 
 // LinearRegression returns the `alpha` and `beta` for the data series.
 // It currently only supports `month` and `year` time intervals. When
