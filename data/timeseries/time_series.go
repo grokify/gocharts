@@ -21,7 +21,7 @@ type TimeSeries struct {
 	SeriesSetName string
 	ItemMap       map[string]TimeItem
 	IsFloat       bool
-	Interval      timeutil.Interval // Informational
+	Interval      timeutil.Interval
 }
 
 // NewTimeSeries instantiates a `TimeSeries` struct.
@@ -41,8 +41,7 @@ func ReadFileTimeSeries(filename string) (TimeSeries, error) {
 	return ts, json.Unmarshal(data, &ts)
 }
 
-// AddInt64 adds a time value, converting it to a float on
-// the series type.
+// AddInt64 adds a time value, converting it to a float on the series type.
 func (ts *TimeSeries) AddInt64(dt time.Time, value int64) {
 	item := TimeItem{
 		SeriesName:    ts.SeriesName,
@@ -57,8 +56,7 @@ func (ts *TimeSeries) AddInt64(dt time.Time, value int64) {
 	ts.AddItems(item)
 }
 
-// AddFloat64 adds a time value, converting it to a int64 on
-// the series type.
+// AddFloat64 adds a time value, converting it to a int64 on the series type.
 func (ts *TimeSeries) AddFloat64(dt time.Time, value float64) {
 	item := TimeItem{
 		SeriesName:    ts.SeriesName,
@@ -73,8 +71,7 @@ func (ts *TimeSeries) AddFloat64(dt time.Time, value float64) {
 	ts.AddItems(item)
 }
 
-// AddItems adds a `TimeItem`. It will sum values when
-// existing time unit is encountered.
+// AddItems adds a `TimeItem`. It will sum values when existing time unit is encountered.
 func (ts *TimeSeries) AddItems(items ...TimeItem) {
 	for _, item := range items {
 		if ts.ItemMap == nil {
@@ -119,6 +116,20 @@ func (ts *TimeSeries) ConvertInt64() {
 	ts.IsFloat = false
 }
 
+// Clone returns a copy of the `TimeSeries` struct.
+func (ts *TimeSeries) Clone() TimeSeries {
+	clone := TimeSeries{
+		SeriesName:    ts.SeriesName,
+		SeriesSetName: ts.SeriesSetName,
+		ItemMap:       map[string]TimeItem{},
+		IsFloat:       ts.IsFloat,
+		Interval:      ts.Interval}
+	for k, v := range ts.ItemMap {
+		clone.ItemMap[k] = v
+	}
+	return clone
+}
+
 func (ts *TimeSeries) SetSeriesName(seriesName string) {
 	ts.SeriesName = seriesName
 	for k, v := range ts.ItemMap {
@@ -159,14 +170,13 @@ func (ts *TimeSeries) Get(dt time.Time) (TimeItem, error) {
 			return ti, nil
 		}
 	}
-	return TimeItem{}, fmt.Errorf("time not found [%s]",
-		dt.Format(time.RFC3339))
+	return TimeItem{}, fmt.Errorf("time not found [%s]", dt.Format(time.RFC3339))
 }
 
 func (ts *TimeSeries) Last() (TimeItem, error) {
 	items := ts.ItemsSorted()
 	if len(items) == 0 {
-		return TimeItem{}, errors.New("E_NO_ITEMS")
+		return TimeItem{}, ErrNoTimeItem
 	}
 	return items[len(items)-1], nil
 }
@@ -179,7 +189,7 @@ func (ts *TimeSeries) Last() (TimeItem, error) {
 func (ts *TimeSeries) Pop() (TimeItem, error) {
 	items := ts.ItemsSorted()
 	if len(items) == 0 {
-		return TimeItem{}, errors.New("E_NO_ERROR")
+		return TimeItem{}, ErrNoTimeItem
 	}
 	last := items[len(items)-1]
 	rfc := last.Time.Format(time.RFC3339)
@@ -190,7 +200,7 @@ func (ts *TimeSeries) Pop() (TimeItem, error) {
 func (ts *TimeSeries) LastItem(skipIfTimePartialValueLessPrev bool) (TimeItem, error) {
 	items := ts.ItemsSorted()
 	if len(items) == 0 {
-		return TimeItem{}, errors.New("E_NO_ITEMS")
+		return TimeItem{}, ErrNoTimeItem
 	}
 	if len(items) == 1 {
 		return items[0], nil
