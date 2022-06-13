@@ -176,7 +176,7 @@ func (opts *ParseOptions) HasFilter() bool {
 	return false
 }
 
-func (opts *ParseOptions) Filter(cols []string, rows [][]string, errorOutofBounds bool) ([][]string, error) {
+func (opts *ParseOptions) Filter(cols []string, rows [][]string, errorOutOfBounds bool) ([][]string, error) {
 	newRows := [][]string{}
 	indices := opts.FilterColIndices
 
@@ -217,7 +217,7 @@ func (opts *ParseOptions) Filter(cols []string, rows [][]string, errorOutofBound
 		for _, idx := range indices {
 			if int(idx) <= len(row) {
 				newRow = append(newRow, row[int(idx)])
-			} else if errorOutofBounds {
+			} else if errorOutOfBounds {
 				return newRows, fmt.Errorf("desired index out of bounds: index[%d] row len [%d]", idx, len(row))
 			} else {
 				newRow = append(newRow, "")
