@@ -47,8 +47,8 @@ github.com/gorilla/css v1.0.0/go.mod h1:Dn721qIggHpt4+EFCcTLTU/vk5ySda2ReITrtgBl
 github.com/grokify/base36 v1.0.5 h1:iUgnt40hrPtn3M2gjU4Darow5ikf8xWXrTuMWTLziCk=
 github.com/grokify/base36 v1.0.5/go.mod h1:L+1aaUBGfp5Ctar7KCS5G9uPABo1Ccu1Ct2iQAuhOJ4=
 github.com/grokify/bitcoinmath v0.1.0/go.mod h1:Y8OyDefB55NHGzi+uJshYmE4Hn5juIQqJahsQJN5o2k=
-github.com/grokify/mogo v0.40.0 h1:sy9vUV4G85O4rh3RmySLz8S74WgT+23/1s6qxFcVCtM=
-github.com/grokify/mogo v0.40.0/go.mod h1:PAAiLdnLup80m3b7Q7n4O3+j5l7oYbWxzc8Y9LD/+48=
+github.com/grokify/mogo v0.40.2 h1:XBZnQLLc3lGnlg4yz+giRpDFz9yjlfDFPF7wwJd6rL0=
+github.com/grokify/mogo v0.40.2/go.mod h1:PAAiLdnLup80m3b7Q7n4O3+j5l7oYbWxzc8Y9LD/+48=
 github.com/huandu/xstrings v1.3.2 h1:L18LIDzqlW6xN2rEkpdV8+oL/IXWJ1APd+vsdYy4Wdw=
 github.com/huandu/xstrings v1.3.2/go.mod h1:y5/lhBue+AyNmUVz9RLU9xbLR0o4KIIExikq4ovT0aE=
 github.com/itchyny/base58-go v0.2.0/go.mod h1:uSBhd5brsJi5iG4IVb0egRS7SsGU1kgf+xO1AbKMCJE=

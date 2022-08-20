@@ -85,9 +85,9 @@ func NewYoYQoQGrowth(set TimeSeriesSet) (YoYQoQGrowth, error) {
 	}
 
 	for key, point := range yoy.DateMap {
-		yearAgo := timeutil.PrevQuarters(point.Time, 4)
+		yearAgo := timeutil.QuarterAdd(point.Time, -4)
 		yearKey := yearAgo.Format(time.RFC3339)
-		quarterAgo := timeutil.PrevQuarter(point.Time)
+		quarterAgo := timeutil.QuarterAdd(point.Time, -1)
 		quarterKey := quarterAgo.Format(time.RFC3339)
 		if yearPoint, ok := yoy.DateMap[yearKey]; ok {
 			if yearPoint.Value > 0 {
