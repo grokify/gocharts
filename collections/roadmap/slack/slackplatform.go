@@ -8,6 +8,9 @@ import (
 	"github.com/grokify/mogo/time/timeutil"
 )
 
+// GetRoadmapExample returns a roamdap copied from public Slack's Platform roadmap
+// posted on Trello as of August 20, 2022. The Trello roadmap is available here:
+// https://trello.com/b/ZnTQyumQ/slack-platform-roadmap
 func GetRoadmapExample() roadmap2.Roadmap {
 	qNow := timeutil.QuarterEnd(time.Now().UTC())
 	qPrev1 := timeutil.QuarterAdd(qNow, -1)
