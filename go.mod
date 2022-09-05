@@ -9,7 +9,7 @@ require (
 	github.com/valyala/quicktemplate v1.7.0
 	github.com/wcharczuk/go-chart/v2 v2.1.0
 	github.com/xuri/excelize/v2 v2.6.1
-	gonum.org/v1/gonum v0.11.0
+	gonum.org/v1/gonum v0.12.0
 )
 
 require (
