@@ -11,6 +11,7 @@ type TableSet struct {
 	FormatMap  map[int]string
 	FormatFunc func(val string, colIdx uint) (interface{}, error)
 	TableMap   map[string]*Table
+	Order      []string
 }
 
 func NewTableSet(name string) TableSet {
@@ -31,8 +32,11 @@ func (ts *TableSet) TableNames() []string {
 }
 
 func (ts *TableSet) TablesSorted() []*Table {
+	return ts.Tables(ts.TableNames())
+}
+
+func (ts *TableSet) Tables(names []string) []*Table {
 	tbls := []*Table{}
-	names := ts.TableNames()
 	for _, name := range names {
 		if tbl, ok := ts.TableMap[name]; ok {
 			tbls = append(tbls, tbl)
@@ -52,4 +56,13 @@ func (ts *TableSet) AddRow(tableName string, row []string) {
 	}
 	tbl.Rows = append(tbl.Rows, row)
 	ts.TableMap[tableName] = tbl
+}
+
+func (ts *TableSet) WriteXLSX(filename string) error {
+	names := ts.Order
+	if len(names) == 0 {
+		names = ts.TableNames()
+	}
+	tbls := ts.Tables(names)
+	return WriteXLSX(filename, tbls...)
 }
