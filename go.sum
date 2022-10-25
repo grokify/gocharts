@@ -17,8 +17,8 @@ github.com/google/go-querystring v1.1.0/go.mod h1:Kcdr2DB4koayq7X8pmAG4sNG59So17
 github.com/google/gofuzz v1.0.0/go.mod h1:dBl0BpW6vV/+mYPU4Po3pmUjxk6FQPldtuIdl/M65Eg=
 github.com/grokify/base36 v1.0.5 h1:iUgnt40hrPtn3M2gjU4Darow5ikf8xWXrTuMWTLziCk=
 github.com/grokify/base36 v1.0.5/go.mod h1:L+1aaUBGfp5Ctar7KCS5G9uPABo1Ccu1Ct2iQAuhOJ4=
-github.com/grokify/mogo v0.40.9 h1:T6DW72ID8KbtyI6ztbXujk9sQY4huGLJv1lZ5DjqunI=
-github.com/grokify/mogo v0.40.9/go.mod h1:AGWKEvAttAy54LkiQdP1JDKapI20rgpTVZMFfirkMR0=
+github.com/grokify/mogo v0.40.10 h1:UJTkFDZmTAr6Iy6hNHr3CrZnPuDIFbZTMig4GolNDq0=
+github.com/grokify/mogo v0.40.10/go.mod h1:AGWKEvAttAy54LkiQdP1JDKapI20rgpTVZMFfirkMR0=
 github.com/huandu/xstrings v1.3.2 h1:L18LIDzqlW6xN2rEkpdV8+oL/IXWJ1APd+vsdYy4Wdw=
 github.com/huandu/xstrings v1.3.2/go.mod h1:y5/lhBue+AyNmUVz9RLU9xbLR0o4KIIExikq4ovT0aE=
 github.com/jessevdk/go-flags v1.5.0 h1:1jKYvbxEjfUl0fmqTCOfonvskHHXMjBySTLW4y9LFvc=
