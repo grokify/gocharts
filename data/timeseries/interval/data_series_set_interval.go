@@ -42,7 +42,7 @@ func NewTimeSeriesSet(interval timeutil.Interval, weekStart time.Weekday) TimeSe
 }
 
 func (set *TimeSeriesSet) SeriesNamesSorted() []string {
-	return maputil.StringKeysSorted(set.OutputSeriesMap)
+	return maputil.StringKeys(set.OutputSeriesMap, nil, true)
 }
 
 func (set *TimeSeriesSet) AddItem(item timeseries.TimeItem) {
