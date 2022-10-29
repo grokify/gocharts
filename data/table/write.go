@@ -3,7 +3,6 @@ package table
 import (
 	"encoding/csv"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"regexp"
 	"strconv"
@@ -291,5 +290,5 @@ func (tbl *Table) WriteJSON(path string, perm os.FileMode, jsonPrefix, jsonInden
 	if err != nil {
 		return err
 	}
-	return ioutil.WriteFile(path, bytes, perm)
+	return os.WriteFile(path, bytes, perm)
 }

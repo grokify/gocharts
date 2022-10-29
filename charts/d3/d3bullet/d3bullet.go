@@ -3,7 +3,6 @@ package d3bullet
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path"
 
@@ -117,7 +116,7 @@ func ProjectionToBullet(prjData bullet.ProjectionDataInt, title string, subtitle
 
 func GetJS() []byte {
 	filepath := path.Join(os.Getenv("GOPATH"), "src", JSPath)
-	bytes, err := ioutil.ReadFile(filepath)
+	bytes, err := os.ReadFile(filepath)
 	if err != nil {
 		return []byte("")
 	}

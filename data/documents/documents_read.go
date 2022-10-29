@@ -2,7 +2,6 @@ package documents
 
 import (
 	"io"
-	"io/ioutil"
 	"os"
 
 	"github.com/grokify/mogo/encoding/csvutil"
@@ -65,5 +64,5 @@ func MergeFilterCSVFilesToJSON(inPaths []string, outPath string, inComma rune, p
 	if err != nil {
 		return err
 	}
-	return ioutil.WriteFile(outPath, bytes, perm)
+	return os.WriteFile(outPath, bytes, perm)
 }
