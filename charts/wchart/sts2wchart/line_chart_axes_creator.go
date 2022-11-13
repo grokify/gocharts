@@ -42,7 +42,7 @@ func (ac *AxesCreator) AddXAxis(graph chart.Chart, interval timeutil.Interval, m
 }
 
 func (ac *AxesCreator) AddYAxis(graph chart.Chart, minValue, maxValue int64) chart.Chart {
-	tickValues := number.SliceInt64ToFloat64(mathutil.PrettyTicks(ac.YNumTicks, minValue, maxValue))
+	tickValues := number.SliceToFloat64(mathutil.PrettyTicks(ac.YNumTicks, minValue, maxValue))
 	graph.YAxis.Ticks = wchart.Ticks(tickValues, ac.YAxisTickFormatFuncFloat64)
 	graph.YAxis.GridLines = wchart.GridLines(tickValues, ac.GridMinorStyle)
 	graph.YAxis.GridMajorStyle = ac.GridMinorStyle
@@ -64,7 +64,7 @@ func (ac *AxesCreator) ChartAddAxesDataSeries(graph chart.Chart, interval timeut
 		graph.Background.Padding.Top = ac.PaddingTop
 	}
 
-	tickValues := number.SliceInt64ToFloat64(mathutil.PrettyTicks(ac.YNumTicks, minValue, maxValue))
+	tickValues := number.SliceToFloat64(mathutil.PrettyTicks(ac.YNumTicks, minValue, maxValue))
 	graph.YAxis.Ticks = wchart.Ticks(tickValues, ac.YAxisTickFormatFuncFloat64)
 	graph.YAxis.GridLines = wchart.GridLines(tickValues, ac.GridMinorStyle)
 	graph.YAxis.GridMajorStyle = ac.GridMinorStyle
