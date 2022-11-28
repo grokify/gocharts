@@ -7,7 +7,7 @@ import (
 	"github.com/grokify/mogo/math/mathutil"
 	"github.com/grokify/mogo/strconv/strconvutil"
 	"github.com/grokify/mogo/type/maputil"
-	"github.com/wcharczuk/go-chart/v2"
+	chart "github.com/wcharczuk/go-chart/v2"
 
 	"github.com/grokify/gocharts/v2/charts/wchart"
 	"github.com/grokify/gocharts/v2/data/timeseries"
