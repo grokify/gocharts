@@ -64,7 +64,7 @@ func (tbl *Table) ColumnExpandPivot(colIdx uint, split bool, sep, colNamePrefix,
 				}
 			} else {
 				rowVals := stringsutil.SliceCondenseSpace(strings.Split(row[colIdx], sep), true, true)
-				if stringsutil.SliceIndex(rowVals, newColVal) > -1 {
+				if stringsutil.SliceIndex(rowVals, newColVal, false, nil) > -1 {
 					exist = true
 				}
 				rowColVals = len(rowVals)
