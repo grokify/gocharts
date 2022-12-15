@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/grokify/mogo/type/stringsutil"
+	"github.com/grokify/mogo/type/slicesutil"
 )
 
 func (tbl *Table) ColumnsValuesDistinct(wantCols []string, stripSpace bool) (map[string]int, error) {
@@ -66,7 +66,7 @@ func (tbl *Table) ColumnValuesSplit(colIdx uint, split bool, sep string, unique,
 		}
 	}
 	if unique {
-		vals = stringsutil.SliceDedupe(vals)
+		vals = slicesutil.Dedupe(vals)
 	}
 	if sortResults {
 		sort.Strings(vals)
