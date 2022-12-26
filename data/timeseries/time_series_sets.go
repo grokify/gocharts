@@ -4,7 +4,7 @@ import (
 	"os"
 	"sort"
 
-	"github.com/grokify/mogo/io/ioutilmore"
+	"github.com/grokify/mogo/os/osutil"
 	"github.com/grokify/mogo/time/timeutil"
 	"github.com/grokify/mogo/type/stringsutil"
 )
@@ -60,5 +60,5 @@ func (sets *TimeSeriesSets) SeriesNames() []string {
 // WriteJSON writes the data to a JSON file. To write a minimized JSON
 // file use an empty string for `prefix` and `indent`.
 func (sets *TimeSeriesSets) WriteJSON(filename string, perm os.FileMode, prefix, indent string) error {
-	return ioutilmore.WriteFileJSON(filename, sets, perm, prefix, indent)
+	return osutil.WriteFileJSON(filename, sets, perm, prefix, indent)
 }

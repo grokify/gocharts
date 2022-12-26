@@ -6,7 +6,7 @@ import (
 
 	"github.com/grokify/gocharts/v2/data/table"
 	"github.com/grokify/mogo/errors/errorsutil"
-	"github.com/grokify/mogo/type/generics"
+	"github.com/grokify/mogo/type/slicesutil"
 	"github.com/grokify/mogo/type/stringsutil"
 )
 
@@ -138,7 +138,7 @@ func (r *Roadmap) Table(includeUnknown, includeUnassigned bool) (table.Table, er
 			continue
 		}
 
-		rows := generics.MakeMatrix2D[string](maxCellLength, len(tbl.Columns))
+		rows := slicesutil.MakeMatrix2D[string](maxCellLength, len(tbl.Columns))
 		for x, cell := range stream.Cells {
 			for _, item := range cell.Items {
 				y, err := stringsutil.Matrix2DColRowIndex(rows, uint(x+1), "")

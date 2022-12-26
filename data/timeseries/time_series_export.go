@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/grokify/mogo/io/ioutilmore"
+	"github.com/grokify/mogo/os/osutil"
 	"github.com/grokify/mogo/strconv/strconvutil"
 	"github.com/grokify/mogo/time/month"
 	"github.com/grokify/mogo/time/timeutil"
@@ -240,7 +240,7 @@ func (ts *TimeSeries) TableYearYOY(seriesName, valuesName, yoyName string) table
 // WriteJSON writes the data to a JSON file. To write a minimized JSON
 // file use an empty string for `prefix` and `indent`.
 func (ts *TimeSeries) WriteJSON(filename string, perm os.FileMode, prefix, indent string) error {
-	return ioutilmore.WriteFileJSON(filename, ts, perm, prefix, indent)
+	return osutil.WriteFileJSON(filename, ts, perm, prefix, indent)
 }
 
 // WriteXLSX writes an XSLX file given a `TimeSeries`
