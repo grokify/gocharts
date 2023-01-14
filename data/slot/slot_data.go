@@ -7,7 +7,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/grokify/mogo/time/timeutil"
 	"github.com/grokify/mogo/type/maputil"
 )
 
@@ -83,8 +82,8 @@ func (set *SlotDataSeriesSet) InflateMinMaxX() {
 		}
 	}
 	if haveSetMinMaxX {
-		minDt := timeutil.UnixMillis(minX).UTC()
-		maxDt := timeutil.UnixMillis(maxX).UTC()
+		minDt := time.UnixMilli(minX).UTC()
+		maxDt := time.UnixMilli(maxX).UTC()
 		set.MinSlotValue = TimeThin{EpochMs: minX, Time: minDt}
 		set.MaxSlotValue = TimeThin{EpochMs: maxX, Time: maxDt}
 	}

@@ -214,12 +214,12 @@ func (set *TimeSeriesSet) MinMaxTimes() (time.Time, time.Time) {
 }
 
 func (set *TimeSeriesSet) MinMaxValues() (int64, int64) {
-	values := sortutil.Int64Slice{}
+	values := []int64{} // sortutil.Int64Slice{}
 	for _, ds := range set.Series {
 		min, max := ds.MinMaxValues()
 		values = append(values, min, max)
 	}
-	sort.Sort(values)
+	sortutil.Slice(values)
 	return values[0], values[len(values)-1]
 }
 

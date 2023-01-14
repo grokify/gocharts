@@ -13,7 +13,7 @@ import (
 	"github.com/grokify/gocharts/v2/data/table/sheet"
 	"github.com/grokify/mogo/encoding/jsonutil"
 	"github.com/grokify/mogo/errors/errorsutil"
-	"github.com/xuri/excelize/v2"
+	excelize "github.com/xuri/excelize/v2"
 )
 
 func writeCSV(path string, t *Table) error {
@@ -198,7 +198,10 @@ func WriteXLSX(path string, tables ...*Table) error {
 		if len(sheetname) == 0 {
 			sheetname = fmt.Sprintf("Sheet%d", sheetNum)
 		}
-		index := f.NewSheet(sheetname)
+		index, err := f.NewSheet(sheetname)
+		if err != nil {
+			return errorsutil.Wrap(err, "excelize.File.NewShet()")
+		}
 		// Set value of a cell.
 		rowBase := 0
 		if len(tbl.Columns) > 0 {
@@ -252,7 +255,11 @@ type SheetData struct {
 func WriteXLSXInterface(filename string, sheetdatas ...SheetData) error {
 	f := excelize.NewFile()
 	// Delete default sheet.
-	f.DeleteSheet(f.GetSheetName(f.GetSheetIndex("Sheet1")))
+	shtIndex, err := f.GetSheetIndex("Sheet1")
+	if err != nil {
+		return errorsutil.Wrap(err, "excelize.File.GetSheetIndex()")
+	}
+	f.DeleteSheet(f.GetSheetName(shtIndex))
 	f.DeleteSheet("Sheet1")
 	// Create a new sheet.
 	for i, sheetdata := range sheetdatas {
@@ -260,7 +267,10 @@ func WriteXLSXInterface(filename string, sheetdatas ...SheetData) error {
 		if len(sheetname) == 0 {
 			sheetname = fmt.Sprintf("Sheet%d", i+1)
 		}
-		index := f.NewSheet(sheetname)
+		index, err := f.NewSheet(sheetname)
+		if err != nil {
+			return errorsutil.Wrap(err, "excelize.File.NewSheet()")
+		}
 		for y, row := range sheetdata.Rows {
 			for x, cellValue := range row {
 				cellLocation := sheet.CoordinatesToSheetLocation(uint32(x), uint32(y))

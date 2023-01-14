@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/grokify/mogo/fmt/fmtutil"
-	"github.com/grokify/mogo/net/httputilmore"
+	"github.com/grokify/mogo/net/http/httputilmore"
 	"github.com/grokify/mogo/time/month"
 	"github.com/grokify/mogo/time/timeutil"
 	chart "github.com/wcharczuk/go-chart/v2"

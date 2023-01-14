@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/grokify/mogo/errors/errorsutil"
 	"github.com/grokify/mogo/time/timeutil"
 	"github.com/grokify/mogo/type/stringsutil"
 	"github.com/xuri/excelize/v2"
@@ -240,7 +241,10 @@ func (hset *HistogramSet) WriteXLSX(filename, sheetName, colName1, colName2, col
 	if len(sheetName) == 0 {
 		sheetName = "Sheet0"
 	}
-	index := f.NewSheet(sheetName)
+	index, err := f.NewSheet(sheetName)
+	if err != nil {
+		return errorsutil.Wrap(err, "excelize")
+	}
 
 	colName1 = strings.TrimSpace(colName1)
 	if len(colName1) == 0 {
@@ -265,7 +269,7 @@ func (hset *HistogramSet) WriteXLSX(filename, sheetName, colName1, colName2, col
 	}
 	header := []interface{}{colName1, colName2, colNameCount}
 
-	err := sheet.SetRowValues(f, sheetName, 0, header)
+	err = sheet.SetRowValues(f, sheetName, 0, header)
 	if err != nil {
 		return err
 	}

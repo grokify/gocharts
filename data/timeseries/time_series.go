@@ -231,7 +231,7 @@ func (ts *TimeSeries) minMaxValuesInt64Only() (int64, int64) {
 	if len(int64s) == 0 {
 		return 0, 0
 	}
-	sort.Sort(sortutil.Int64Slice(int64s))
+	sortutil.Slice(int64s)
 	return int64s[0], int64s[len(int64s)-1]
 }
 
