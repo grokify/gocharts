@@ -4,7 +4,7 @@ import (
 	"errors"
 	"time"
 
-	tu "github.com/grokify/mogo/time/timeutil"
+	"github.com/grokify/mogo/time/timeutil"
 )
 
 type TimeSeriesSimple struct {
@@ -26,7 +26,7 @@ func (tss *TimeSeriesSimple) ToTimeSeriesQuarter() TimeSeries {
 	for _, t := range tss.Times {
 		ts.AddItems(TimeItem{
 			SeriesName: tss.Name,
-			Time:       tu.QuarterStart(t),
+			Time:       timeutil.NewTimeMore(t, 0).QuarterStart(),
 			Value:      int64(1)})
 	}
 	return ts
@@ -47,7 +47,7 @@ func (tsf *TimeSeriesFunnel) Times() []time.Time {
 
 func (tsf *TimeSeriesFunnel) TimesSorted() []time.Time {
 	times := tsf.Times()
-	return tu.Sort(times)
+	return timeutil.Sort(times)
 }
 
 func (tsf *TimeSeriesFunnel) TimeSeriesSetByQuarter() (TimeSeriesSet, error) {
@@ -62,18 +62,18 @@ func (tsf *TimeSeriesFunnel) TimeSeriesSetByQuarter() (TimeSeriesSet, error) {
 	if len(allTimes) == 0 {
 		return dss, errors.New("no times")
 	}
-	earliest, err := tu.Earliest(allTimes, false)
+	earliest, err := timeutil.Earliest(allTimes, false)
 	if err != nil {
 		return dss, err
 	}
-	latest, err := tu.Latest(allTimes, false)
+	latest, err := timeutil.Latest(allTimes, false)
 	if err != nil {
 		return dss, err
 	}
-	earliestQuarter := tu.QuarterStart(earliest)
-	latestQuarter := tu.QuarterStart(latest)
+	earliestQuarter := timeutil.NewTimeMore(earliest, 0).QuarterStart()
+	latestQuarter := timeutil.NewTimeMore(latest, 0).QuarterStart()
 
-	sliceQuarter := tu.QuarterSlice(earliestQuarter, latestQuarter)
+	sliceQuarter := timeutil.QuarterSlice(earliestQuarter, latestQuarter)
 	dss.Times = sliceQuarter
 
 	for name, tss := range tsf.Series {

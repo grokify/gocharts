@@ -11,7 +11,7 @@ func TimeSeriesMapMinMaxTimes(tsm map[string]TimeSeries) (time.Time, time.Time, 
 	times := []time.Time{}
 	for _, ts := range tsm {
 		min, max := ts.MinMaxTimes()
-		if !timeutil.TimeIsZeroAny(min) && !timeutil.TimeIsZeroAny(max) {
+		if !timeutil.NewTimeMore(min, 0).IsZeroAny() && !timeutil.NewTimeMore(max, 0).IsZeroAny() {
 			times = append(times, min, max)
 		}
 	}

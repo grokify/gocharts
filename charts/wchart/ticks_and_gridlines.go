@@ -48,56 +48,56 @@ func GridLines(values []float64, style chart.Style) []chart.GridLine {
 	return lines
 }
 
-// TicksAndGridlinesTime takes a begin and end time and converts it to
+// TicksAndGridlinesTime takes a start and end time and converts it to
 // `[]chart.Tick` and `[]chart.GridLine.`.
-func TicksAndGridlinesTime(interval timeutil.Interval, timeBegin, timeEnd time.Time, styleMajor, styleMinor chart.Style, timeFormat func(time.Time) string, tickInterval, gridInterval timeutil.Interval) ([]chart.Tick, []chart.GridLine) {
+func TicksAndGridlinesTime(interval timeutil.Interval, timeStart, timeEnd time.Time, styleMajor, styleMinor chart.Style, timeFormat func(time.Time) string, tickInterval, gridInterval timeutil.Interval) ([]chart.Tick, []chart.GridLine) {
 	//fmt.Printf("TICK [%v] GRID [%v]\n", tickInterval, gridInterval)
 
-	timecBegin := uint64(0)
+	timecStart := uint64(0)
 	timecEnd := uint64(0)
 	if interval == timeutil.Month {
-		timecBegin = month.TimeToMonthContinuous(timeBegin)
+		timecStart = month.TimeToMonthContinuous(timeStart)
 		timecEnd = month.TimeToMonthContinuous(timeEnd)
 	} else if interval == timeutil.Quarter {
-		timecBegin = quarter.TimeToQuarterContinuous(timeBegin)
+		timecStart = quarter.TimeToQuarterContinuous(timeStart)
 		timecEnd = quarter.TimeToQuarterContinuous(timeEnd)
 	}
 
 	ticks := []chart.Tick{}
 	gridlines := []chart.GridLine{}
-	if timecBegin > timecEnd {
-		tmp := timecBegin
-		timecBegin = timecEnd
+	if timecStart > timecEnd {
+		tmp := timecStart
+		timecStart = timecEnd
 		timecEnd = tmp
 	}
-	for i := timecBegin; i <= timecEnd; i++ {
+	for i := timecStart; i <= timecEnd; i++ {
 		iTime := time.Now()
 		if interval == timeutil.Month {
 			iTime = month.MonthContinuousToTime(i)
 		} else if interval == timeutil.Quarter {
 			iTime = quarter.QuarterContinuousToTime(i)
 		}
-		if i == timecBegin {
+		if i == timecStart {
 			ticks = append(ticks, chart.Tick{Value: float64(i)})
-			if (tickInterval == timeutil.Quarter && month.MonthContinuousIsQuarterBegin(i)) ||
-				(tickInterval == timeutil.Year && month.MonthContinuousIsYearBegin(i)) {
+			if (tickInterval == timeutil.Quarter && month.MonthContinuousIsQuarterStart(i)) ||
+				(tickInterval == timeutil.Year && month.MonthContinuousIsYearStart(i)) {
 				ticks[len(ticks)-1].Label = timeFormat(iTime)
 			}
 		} else if i == timecEnd {
 			ticks = append(ticks, chart.Tick{Value: float64(i)})
-			if (tickInterval == timeutil.Quarter && month.MonthContinuousIsQuarterBegin(i)) ||
-				(tickInterval == timeutil.Year && month.MonthContinuousIsYearBegin(i)) {
+			if (tickInterval == timeutil.Quarter && month.MonthContinuousIsQuarterStart(i)) ||
+				(tickInterval == timeutil.Year && month.MonthContinuousIsYearStart(i)) {
 				ticks[len(ticks)-1].Label = timeFormat(iTime)
 			}
 		} else {
-			if (tickInterval == timeutil.Quarter && month.MonthContinuousIsQuarterBegin(i)) ||
-				(tickInterval == timeutil.Year && month.MonthContinuousIsYearBegin(i)) ||
+			if (tickInterval == timeutil.Quarter && month.MonthContinuousIsQuarterStart(i)) ||
+				(tickInterval == timeutil.Year && month.MonthContinuousIsYearStart(i)) ||
 				(tickInterval != timeutil.Quarter && tickInterval != timeutil.Year) {
 				ticks = append(ticks, chart.Tick{Value: float64(i)})
 				ticks[len(ticks)-1].Label = timeFormat(iTime)
 			}
-			if (gridInterval == timeutil.Quarter && month.MonthContinuousIsQuarterBegin(i)) ||
-				(gridInterval == timeutil.Year && month.MonthContinuousIsYearBegin(i)) ||
+			if (gridInterval == timeutil.Quarter && month.MonthContinuousIsQuarterStart(i)) ||
+				(gridInterval == timeutil.Year && month.MonthContinuousIsYearStart(i)) ||
 				(gridInterval != timeutil.Quarter && gridInterval != timeutil.Year) {
 				if iTime.Month() == 1 {
 					gridlines = append(gridlines, chart.GridLine{
@@ -112,8 +112,8 @@ func TicksAndGridlinesTime(interval timeutil.Interval, timeBegin, timeEnd time.T
 		}
 
 		if 1 == 0 {
-			if interval == timeutil.Month && month.MonthContinuousIsYearBegin(i) {
-				//if interval == timeutil.Month && month.MonthContinuousIsQuarterBegin(i) {
+			if interval == timeutil.Month && month.MonthContinuousIsYearStart(i) {
+				//if interval == timeutil.Month && month.MonthContinuousIsQuarterStart(i) {
 				ticks = append(ticks, chart.Tick{Value: float64(i)})
 				ticks[len(ticks)-1].Label = timeFormat(iTime)
 				if iTime.Month() == 1 {

@@ -32,7 +32,7 @@ func (ts *TimeSeries) TimeSeriesMonthXOX(years, months, days int, suffix string)
 	}
 	tsXOX.IsFloat = true
 	tsXOX.Interval = tsm.Interval
-	times := tsm.TimeSlice(true)
+	times := tsm.Times(true)
 	times.SortReverse()
 
 	for _, dt := range times {
@@ -68,7 +68,7 @@ func (ts *TimeSeries) TimeSeriesYearYOY(suffix string) (TimeSeries, error) {
 	}
 	tsYOY.IsFloat = true
 	tsYOY.Interval = ts.Interval
-	times := ts.TimeSlice(true)
+	times := ts.Times(true)
 	times.SortReverse()
 
 	for _, dt := range times {

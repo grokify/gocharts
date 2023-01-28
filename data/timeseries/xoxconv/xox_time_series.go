@@ -22,7 +22,7 @@ func TimeSeriesXoX(ts timeseries.TimeSeries) (XOXFloat64, error) {
 		XoX:   "NOW",
 		Time:  tiNow.Time,
 		Value: tiNow.Float64()}
-	mago, err := tsMonth.Get(timeutil.TimeDt6SubNMonths(tiNow.Time, 1))
+	mago, err := tsMonth.Get(timeutil.TimeDT6SubNMonths(tiNow.Time, 1))
 	if err == nil {
 		xox.Month = Compare{
 			XoX:   "MOM",
@@ -32,7 +32,7 @@ func TimeSeriesXoX(ts timeseries.TimeSeries) (XOXFloat64, error) {
 			xox.Month.Change = (tiNow.Float64() - mago.Float64()) / mago.Float64()
 		}
 	}
-	qago, err := tsMonth.Get(timeutil.TimeDt6SubNMonths(tiNow.Time, 3))
+	qago, err := tsMonth.Get(timeutil.TimeDT6SubNMonths(tiNow.Time, 3))
 	if err == nil {
 		xox.Quarter = Compare{
 			XoX:   "QOQ",
@@ -42,7 +42,7 @@ func TimeSeriesXoX(ts timeseries.TimeSeries) (XOXFloat64, error) {
 			xox.Quarter.Change = (tiNow.Float64() - qago.Float64()) / qago.Float64()
 		}
 	}
-	yago, err := tsMonth.Get(timeutil.TimeDt6SubNMonths(tiNow.Time, 12))
+	yago, err := tsMonth.Get(timeutil.TimeDT6SubNMonths(tiNow.Time, 12))
 	if err == nil {
 		xox.Year = Compare{
 			XoX:   "YOY",

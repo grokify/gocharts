@@ -243,7 +243,7 @@ func (hset *HistogramSet) WriteXLSX(filename, sheetName, colName1, colName2, col
 	}
 	index, err := f.NewSheet(sheetName)
 	if err != nil {
-		return errorsutil.Wrap(err, "excelize")
+		return errorsutil.Wrap(err, "excelize.File.NewSheet()")
 	}
 
 	colName1 = strings.TrimSpace(colName1)
@@ -298,7 +298,11 @@ func (hset *HistogramSet) WriteXLSX(filename, sheetName, colName1, colName2, col
 	}
 	f.SetActiveSheet(index)
 	// Delete Original Sheet
-	f.DeleteSheet(f.GetSheetName(0))
+	err = f.DeleteSheet(f.GetSheetName(0))
+	if err != nil {
+		return errorsutil.Wrap(err, "excelize.File.DeleteSheet()")
+	}
+
 	// Save xlsx file by the given path.
 	return f.SaveAs(filename)
 }
@@ -312,7 +316,7 @@ func (hset *HistogramSet) DatetimeKeyToQuarter(name string) (*HistogramSet, erro
 		if err != nil {
 			return fsetQtr, err
 		}
-		dt = timeutil.QuarterStart(dt)
+		dt = timeutil.NewTimeMore(dt, 0).QuarterStart()
 		rfc3339Qtr := dt.Format(time.RFC3339)
 		for binName, binCount := range hist.Bins {
 			fsetQtr.Add(rfc3339Qtr, binName, binCount)

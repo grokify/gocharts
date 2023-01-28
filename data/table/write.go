@@ -242,7 +242,10 @@ func WriteXLSX(path string, tables ...*Table) error {
 		}
 	}
 	// Delete default sheet.
-	f.DeleteSheet(f.GetSheetName(0))
+	err := f.DeleteSheet(f.GetSheetName(0))
+	if err != nil {
+		return errorsutil.Wrap(err, "excelize.File.DeleteSheet()")
+	}
 	// Save xlsx file by the given path.
 	return f.SaveAs(path)
 }
@@ -259,8 +262,14 @@ func WriteXLSXInterface(filename string, sheetdatas ...SheetData) error {
 	if err != nil {
 		return errorsutil.Wrap(err, "excelize.File.GetSheetIndex()")
 	}
-	f.DeleteSheet(f.GetSheetName(shtIndex))
-	f.DeleteSheet("Sheet1")
+	err = f.DeleteSheet(f.GetSheetName(shtIndex))
+	if err != nil {
+		return errorsutil.Wrap(err, "excelize.File.DeleteSheet()")
+	}
+	err = f.DeleteSheet("Sheet1")
+	if err != nil {
+		return errorsutil.Wrap(err, "excelize.File.DeleteSheet()")
+	}
 	// Create a new sheet.
 	for i, sheetdata := range sheetdatas {
 		sheetname := strings.TrimSpace(sheetdata.SheetName)

@@ -7,24 +7,23 @@ import (
 	"github.com/grokify/gocharts/v2/data/table"
 	"github.com/grokify/mogo/strconv/strconvutil"
 	"github.com/grokify/mogo/time/month"
-	"github.com/grokify/mogo/time/timeslice"
 	"github.com/grokify/mogo/time/timeutil"
 	"github.com/grokify/mogo/time/year"
 )
 
 func (set *TimeSeriesSet) TableActualTarget() (*table.Table, error) {
-	var times timeslice.TimeSlice
+	var times timeutil.Times
 	set.Inflate()
 	tbl := table.NewTable("")
 	tbl.Columns = append(tbl.Columns, "Series")
 	tbl.FormatMap = map[int]string{0: table.FormatString, -1: table.FormatFloat}
 	if set.Interval == timeutil.Year {
-		times = year.TimeSeriesYear(true, set.Times...)
+		times = year.TimesYearStarts(set.Times...)
 		for _, dt := range times {
 			tbl.Columns = append(tbl.Columns, strconv.Itoa(dt.Year()))
 		}
 	} else if set.Interval == timeutil.Month {
-		times = month.TimeSeriesMonth(true, set.Times...)
+		times = month.TimesMonthStarts(set.Times...)
 		for _, dt := range times {
 			tbl.Columns = append(tbl.Columns, dt.Format("Jan 2006"))
 		}

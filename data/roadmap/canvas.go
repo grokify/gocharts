@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/grokify/mogo/math/mathutil"
-	tu "github.com/grokify/mogo/time/timeutil"
+	"github.com/grokify/mogo/time/timeutil"
 )
 
 const canvasLogName string = "roadmap.Canvas"
@@ -37,7 +37,7 @@ func (can *Canvas) SetMinMaxQuarter(qtrMin, qtrMax int32) error {
 }
 
 func (can *Canvas) SetMinQuarter(qtr int32) error {
-	qt, err := tu.QuarterInt32StartTime(qtr)
+	qt, err := timeutil.QuarterInt32StartTime(qtr)
 	if err != nil {
 		return err
 	}
@@ -47,7 +47,7 @@ func (can *Canvas) SetMinQuarter(qtr int32) error {
 }
 
 func (can *Canvas) SetMaxQuarter(qtr int32) error {
-	qt, err := tu.QuarterInt32EndTime(qtr)
+	qt, err := timeutil.QuarterInt32EndTime(qtr)
 	if err != nil {
 		return err
 	}
@@ -95,11 +95,13 @@ func (can *Canvas) InflateItems() error {
 }
 
 func (can *Canvas) InflateItem(item Item) (Item, error) {
-	if tu.IsZeroAny(item.MinTime) && tu.IsZeroAny(item.MaxTime) {
+	tmMin := timeutil.NewTimeMore(item.MinTime, 0)
+	tmMax := timeutil.NewTimeMore(item.MaxTime, 0)
+	if tmMin.IsZeroAny() && tmMax.IsZeroAny() {
 		return item, fmt.Errorf("func %s.InflateItem() Error: Need NonZero Time For [%v][%v][%v]", canvasLogName, item.Name, "item.MinTime", "item.MaxTime")
-	} else if tu.IsZeroAny(item.MinTime) {
+	} else if tmMin.IsZeroAny() {
 		return item, fmt.Errorf("func %s.InflateItem() Error: Need NonZero Time For [%v][%v]", canvasLogName, item.Name, "item.MinTime")
-	} else if tu.IsZeroAny(item.MaxTime) {
+	} else if tmMax.IsZeroAny() {
 		return item, fmt.Errorf("func %s.InflateItem() Error: Need NonZero Time For [%v][%v]", canvasLogName, item.Name, "item.MaxTime")
 	}
 
@@ -187,7 +189,7 @@ ITEMS:
 	}
 
 	func (i *Item) SetMinQuarter(qtr int32) error {
-		qt, err := tu.QuarterInt32StartTime(qtr)
+		qt, err := timeutil.QuarterInt32StartTime(qtr)
 		if err != nil {
 			return err
 		}
@@ -196,7 +198,7 @@ ITEMS:
 	}
 
 	func (i *Item) SetMaxQuarter(qtr int32) error {
-		qt, err := tu.QuarterInt32EndTime(qtr)
+		qt, err := timeutil.QuarterInt32EndTime(qtr)
 		if err != nil {
 			return err
 		}
@@ -206,11 +208,11 @@ ITEMS:
 */
 
 func GetCanvasQuarter(start, end int32) (Canvas, error) {
-	qs, err := tu.QuarterInt32StartTime(start)
+	qs, err := timeutil.QuarterInt32StartTime(start)
 	if err != nil {
 		return Canvas{}, err
 	}
-	qe, err := tu.QuarterInt32EndTime(end)
+	qe, err := timeutil.QuarterInt32EndTime(end)
 	if err != nil {
 		return Canvas{}, err
 	}

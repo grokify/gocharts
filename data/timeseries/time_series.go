@@ -10,7 +10,6 @@ import (
 
 	"github.com/grokify/mogo/sort/sortutil"
 	"github.com/grokify/mogo/time/month"
-	"github.com/grokify/mogo/time/timeslice"
 	"github.com/grokify/mogo/time/timeutil"
 
 	"github.com/grokify/gocharts/v2/data/point"
@@ -210,7 +209,7 @@ func (ts *TimeSeries) LastItem(skipIfTimePartialValueLessPrev bool) (TimeItem, e
 		itemPrev := items[len(items)-2]
 		dtNow := time.Now().UTC()
 		if ts.Interval == timeutil.Month {
-			dtNow = month.MonthBegin(dtNow, 0)
+			dtNow = month.MonthStart(dtNow, 0)
 		}
 		if itemLast.Time.Equal(dtNow) {
 			if itemLast.Int64() > itemPrev.Int64() {
@@ -295,8 +294,8 @@ func (ts *TimeSeries) OneItemMaxValue() (TimeItem, error) {
 	return max, nil
 }
 
-func (ts *TimeSeries) TimeSlice(sortSlice bool) timeslice.TimeSlice {
-	times := timeslice.TimeSlice{}
+func (ts *TimeSeries) Times(sortSlice bool) timeutil.Times {
+	times := timeutil.Times{}
 	for _, item := range ts.ItemMap {
 		times = append(times, item.Time)
 	}
@@ -327,7 +326,7 @@ func (ts *TimeSeries) ToMonth(addZeroValueMonths bool, monthsFilter ...time.Mont
 		}
 		newTimeSeries.AddItems(TimeItem{
 			SeriesName: item.SeriesName,
-			Time:       month.MonthBegin(item.Time, 0),
+			Time:       month.MonthStart(item.Time, 0),
 			IsFloat:    item.IsFloat,
 			Value:      item.Value,
 			ValueFloat: item.ValueFloat})
@@ -362,7 +361,7 @@ func (ts *TimeSeries) ToMonthCumulative(inflate bool, timesInput ...time.Time) (
 			return newTimeSeries, err
 		}
 	} else {
-		min, max, err = timeutil.TimeSliceMinMax(tsMonth.TimeSlice(false))
+		min, max, err = timeutil.TimeSliceMinMax(tsMonth.Times(false))
 		if err != nil {
 			return newTimeSeries, err
 		}
@@ -418,7 +417,7 @@ func (ts *TimeSeries) ToQuarter() TimeSeries {
 	newTimeSeries.IsFloat = ts.IsFloat
 	newTimeSeries.Interval = timeutil.Quarter
 	for _, item := range ts.ItemMap {
-		newTimeSeries.AddFloat64(timeutil.QuarterStart(item.Time), item.Float64())
+		newTimeSeries.AddFloat64(timeutil.NewTimeMore(item.Time, 0).QuarterStart(), item.Float64())
 	}
 	return newTimeSeries
 }
@@ -428,7 +427,7 @@ func (ts *TimeSeries) ToYear() TimeSeries {
 	newTimeSeries.IsFloat = ts.IsFloat
 	newTimeSeries.Interval = timeutil.Year
 	for _, item := range ts.ItemMap {
-		newTimeSeries.AddFloat64(timeutil.YearStart(item.Time), item.Float64())
+		newTimeSeries.AddFloat64(timeutil.NewTimeMore(item.Time, 0).YearStart(), item.Float64())
 	}
 	return newTimeSeries
 }

@@ -27,12 +27,12 @@ func NewXoXTimeSeries(ds timeseries.TimeSeries) (XoXGrowth, error) {
 		}
 		xoxPoint := XoxPoint{Time: dateNow, Value: itemNow.Int64()}
 
-		quarterAgo := month.MonthBegin(dateNow, -3)
-		yearAgo := month.MonthBegin(dateNow, -12)
+		quarterAgo := month.MonthStart(dateNow, -3)
+		yearAgo := month.MonthStart(dateNow, -12)
 		xoxPoint.TimeQuarterAgo = quarterAgo
 		xoxPoint.TimeYearAgo = yearAgo
 		if ds.Interval == timeutil.Month {
-			monthAgo := month.MonthBegin(dateNow, -1)
+			monthAgo := month.MonthStart(dateNow, -1)
 			xoxPoint.TimeMonthAgo = monthAgo
 			if itemMonthAgo, ok := ds.ItemMap[monthAgo.Format(time.RFC3339)]; ok {
 				xoxPoint.MMAgoValue = itemMonthAgo.Int64()
@@ -45,7 +45,7 @@ func NewXoXTimeSeries(ds timeseries.TimeSeries) (XoXGrowth, error) {
 		if itemMonthQuarterAgo, ok := ds.ItemMap[quarterAgo.Format(time.RFC3339)]; ok {
 			xoxPoint.MQAgoValue = itemMonthQuarterAgo.Int64()
 			xoxPoint.QNowValue = AggregatePriorMonths(ds, dateNow, 3)
-			xoxPoint.QOldValue = AggregatePriorMonths(ds, month.MonthBegin(dateNow, -3), 3)
+			xoxPoint.QOldValue = AggregatePriorMonths(ds, month.MonthStart(dateNow, -3), 3)
 			xoxPoint.QoQ = mathutil.PercentChangeToXoX(itemNow.Float64() / itemMonthQuarterAgo.Float64())
 			xoxPoint.QoQAggregate = mathutil.PercentChangeToXoX(
 				float64(xoxPoint.QNowValue) / float64(xoxPoint.QOldValue))
@@ -53,7 +53,7 @@ func NewXoXTimeSeries(ds timeseries.TimeSeries) (XoXGrowth, error) {
 		if itemMonthYearAgo, ok := ds.ItemMap[yearAgo.Format(time.RFC3339)]; ok {
 			xoxPoint.MYAgoValue = itemMonthYearAgo.Int64()
 			xoxPoint.YNowValue = AggregatePriorMonths(ds, dateNow, 12)
-			xoxPoint.YOldValue = AggregatePriorMonths(ds, month.MonthBegin(dateNow, -12), 12)
+			xoxPoint.YOldValue = AggregatePriorMonths(ds, month.MonthStart(dateNow, -12), 12)
 			xoxPoint.YoY = mathutil.PercentChangeToXoX(itemNow.Float64() / itemMonthYearAgo.Float64())
 			xoxPoint.YoYAggregate = mathutil.PercentChangeToXoX(
 				float64(xoxPoint.YNowValue) / float64(xoxPoint.YOldValue))
@@ -69,12 +69,12 @@ func NewXoXTimeSeries(ds timeseries.TimeSeries) (XoXGrowth, error) {
 
 func AggregatePriorMonths(ds timeseries.TimeSeries, start time.Time, months uint) int64 {
 	aggregateValue := int64(0)
-	monthBegin := month.MonthBegin(start, 0)
+	monthStart := month.MonthStart(start, 0)
 	for i := uint(1); i <= months; i++ {
 		subtractMonths := i - 1
-		thisMonth := monthBegin
+		thisMonth := monthStart
 		if subtractMonths > 0 {
-			thisMonth = month.MonthBegin(monthBegin, -1*int(subtractMonths))
+			thisMonth = month.MonthStart(monthStart, -1*int(subtractMonths))
 		}
 		key := thisMonth.Format(time.RFC3339)
 		if item, ok := ds.ItemMap[key]; ok {

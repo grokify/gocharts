@@ -15,14 +15,15 @@ func main() {
 	bulletsInt64 := []d3bullet.BulletInt64{}
 
 	timeNow := time.Now().UTC()
+	timeNowMore := timeutil.NewTimeMore(timeNow, 0)
 
 	bulletBuilderQTD := d3bullet.D3BulletChartBuilder{
 		Title:    "Progress QTD",
 		YTarget:  int64(50),
 		YCurrent: int64(100),
-		XStart:   timeutil.QuarterStart(timeNow).Unix(),
+		XStart:   timeNowMore.QuarterStart().Unix(),
 		XCurrent: timeNow.Unix(),
-		XEnd:     timeutil.QuarterEnd(timeNow).Unix(),
+		XEnd:     timeNowMore.QuarterEnd().Unix(),
 	}
 
 	bulletsInt64 = append(bulletsInt64, bulletBuilderQTD.D3Bullet())
@@ -31,9 +32,9 @@ func main() {
 		Title:    "Progress YTD",
 		YTarget:  int64(50),
 		YCurrent: int64(200),
-		XStart:   timeutil.YearStart(timeNow).Unix(),
+		XStart:   timeNowMore.YearStart().Unix(),
 		XCurrent: timeNow.Unix(),
-		XEnd:     timeutil.YearEnd(timeNow).Unix(),
+		XEnd:     timeNowMore.YearEnd().Unix(),
 	}
 
 	bulletsInt64 = append(bulletsInt64, bulletBuilderYTD.D3Bullet())

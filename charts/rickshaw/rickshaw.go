@@ -77,7 +77,7 @@ func (am *MonthData) Inflate() error {
 }
 
 func (am *MonthData) RickshawItem() (Item, error) {
-	dt6Time, err := timeutil.TimeForDt6(am.Dt6)
+	dt6Time, err := timeutil.TimeForDT6(am.Dt6)
 	if err != nil {
 		return Item{}, err
 	}
@@ -225,13 +225,13 @@ func (rd *RickshawData) Formatted() (RickshawDataFormatted, error) {
 
 	// timeutil.ParseDt6(minDt6)
 
-	dt6Axis := timeutil.Dt6MinMaxSlice(minDt6, maxDt6)
+	dt6Axis := timeutil.DT6MinMaxSlice(minDt6, maxDt6)
 
 	seriesSetInflatedSorted := [][]Item{}
 	for _, thinSeries := range seriesSet {
 		fullSeries := []Item{}
 		for _, dt6 := range dt6Axis {
-			dt, err := timeutil.TimeForDt6(dt6)
+			dt, err := timeutil.TimeForDT6(dt6)
 			if err != nil {
 				return formatted, err
 			}

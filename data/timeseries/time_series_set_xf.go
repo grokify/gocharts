@@ -5,14 +5,14 @@ import (
 	"sort"
 	"time"
 
-	"github.com/grokify/mogo/time/timeslice"
+	"github.com/grokify/mogo/time/timeutil"
 )
 
 /*
 func (set *TimeSeriesSet) NewTimesLowerBound(times ...time.Time) (TimeSeriesSets, error) {
 	min, _ := set.MinMaxTimes()
 	times = append(times, min)
-	timeSlice := timeslice.TimeSlice(times)
+	timeSlice := timeutil.Times(times)
 	sort.Sort(timeSlice)
 	timeSlice = timeSlice.Dedupe()
 	sets := NewTimeSeriesSets("time sets by times")
@@ -36,7 +36,7 @@ func (set *TimeSeriesSet) NewTimesLowerBound(times ...time.Time) (TimeSeriesSets
 func (set *TimeSeriesSet) ToSetTimesRangeUpper(inclusive bool, times ...time.Time) (TimeSeriesSet, error) {
 	_, max := set.MinMaxTimes()
 	times = append(times, max)
-	timeSlice := timeslice.TimeSlice(times)
+	timeSlice := timeutil.Times(times)
 	sort.Sort(timeSlice)
 	timeSlice = timeSlice.Dedupe()
 	newSet := NewTimeSeriesSet(set.Name)

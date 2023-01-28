@@ -45,14 +45,14 @@ func (ts *TimeSeries) LinearRegressionYearProjection(years uint, constantYOY boo
 		return err
 	}
 	_, maxYear := ts.MinMaxTimes()
-	maxYear = timeutil.YearStart(maxYear)
+	maxYear = timeutil.NewTimeMore(maxYear, 0).YearStart()
 	yoyProjectionFirstYear := 0.0
 	for i := 0; i < int(years); i++ {
 		dtThis := maxYear.AddDate(i+1, 0, 0)
 		tiPrev, err := ts.Get(dtThis.AddDate(-1, 0, 0))
 		if err != nil {
 			// times := ts.TimeSlice(true)
-			// fmtutil.PrintJSON(timeslice.TimeSlice(times).Format(time.RFC3339))
+			// fmtutil.PrintJSON(timeutil.Times(times).Format(time.RFC3339))
 			// fmt.Printf("TPREV [%s]\n", dtThis.AddDate(-1, 0, 0).Format(time.RFC3339))
 			panic("prev date do not, but should, exist")
 		}

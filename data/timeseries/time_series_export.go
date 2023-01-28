@@ -106,7 +106,7 @@ func (ts *TimeSeries) TableMonthXOX(timeFmtColName, seriesName, valuesName, yoyN
 		if opts.MOMBaseMonth.Before(minDt) {
 			opts.MOMBaseMonth = minDt
 		}
-		opts.MOMBaseMonth = timeutil.MonthStart(opts.MOMBaseMonth.UTC())
+		opts.MOMBaseMonth = timeutil.NewTimeMore(opts.MOMBaseMonth.UTC(), 0).MonthStart()
 		opts.momBaseMonthContinuous = month.TimeToMonthContinuous(opts.MOMBaseMonth)
 		momBaseTimeItem, err := ts.Get(opts.MOMBaseMonth)
 		if err != nil {
@@ -125,7 +125,7 @@ func (ts *TimeSeries) TableMonthXOX(timeFmtColName, seriesName, valuesName, yoyN
 	tsm := ts.ToMonth(true)
 	tbl := table.NewTable("")
 	cols := []string{seriesName}
-	times := tsm.TimeSlice(true)
+	times := tsm.Times(true)
 	for _, dt := range times {
 		cols = append(cols, dt.Format(timeFmtColName))
 	}
@@ -205,7 +205,7 @@ func (ts *TimeSeries) TableYearYOY(seriesName, valuesName, yoyName string) table
 	}
 	tbl := table.NewTable(ts.SeriesName)
 	cols := []string{seriesName}
-	times := ts.TimeSlice(true)
+	times := ts.Times(true)
 	for _, dt := range times {
 		cols = append(cols, dt.Format("2006"))
 	}

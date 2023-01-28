@@ -111,8 +111,9 @@ func AddYtdAndQtd(yoy YoYQoQGrowth) YoYQoQGrowth {
 	ytd := int64(0)
 	qtd := int64(0)
 	now := time.Now()
-	qt := timeutil.QuarterStart(now)
-	yr := timeutil.YearStart(now)
+	nowMore := timeutil.NewTimeMore(now, 0)
+	qt := nowMore.QuarterStart()
+	yr := nowMore.YearStart()
 	for _, point := range yoy.DateMap {
 		if timeutil.IsGreaterThan(point.Time, qt, true) {
 			qtd += point.Value

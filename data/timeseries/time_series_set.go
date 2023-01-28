@@ -11,7 +11,6 @@ import (
 
 	"github.com/grokify/mogo/sort/sortutil"
 	"github.com/grokify/mogo/time/month"
-	"github.com/grokify/mogo/time/timeslice"
 	"github.com/grokify/mogo/time/timeutil"
 	"github.com/grokify/mogo/time/year"
 	"github.com/grokify/mogo/type/stringsutil"
@@ -171,13 +170,14 @@ func (set *TimeSeriesSet) Item(seriesName, rfc3339 string) (TimeItem, error) {
 	return item, nil
 }
 
-func (set *TimeSeriesSet) TimeSlice(sortAsc bool) timeslice.TimeSlice {
+func (set *TimeSeriesSet) TimeSlice(sortAsc bool) timeutil.Times {
 	times := []time.Time{}
 	for _, ts := range set.Series {
 		for _, item := range ts.ItemMap {
-			if set.Interval == timeutil.Year && !timeutil.IsYearStart(item.Time) {
+			tm := timeutil.NewTimeMore(item.Time, 0)
+			if set.Interval == timeutil.Year && !tm.IsYearStart() {
 				panic("timeitem for TimeSeriesSet year is not a year start")
-			} else if set.Interval == timeutil.Month && !timeutil.IsMonthStart(item.Time) {
+			} else if set.Interval == timeutil.Month && !tm.IsMonthStart() {
 				panic("timeitem for TimeSeriesSet month is not a month start")
 			}
 			times = append(times, item.Time)
@@ -186,9 +186,9 @@ func (set *TimeSeriesSet) TimeSlice(sortAsc bool) timeslice.TimeSlice {
 	times = timeutil.Sort(timeutil.Distinct(times))
 	switch set.Interval {
 	case timeutil.Month:
-		return month.TimeSeriesMonth(sortAsc, times...)
+		return month.TimesMonthStarts(times...)
 	case timeutil.Year:
-		return year.TimeSeriesYear(sortAsc, times...)
+		return year.TimesYearStarts(times...)
 	}
 	return times
 }
@@ -204,7 +204,7 @@ func (set *TimeSeriesSet) TimeStrings() []string {
 }
 
 func (set *TimeSeriesSet) MinMaxTimes() (time.Time, time.Time) {
-	values := timeslice.TimeSlice{}
+	values := timeutil.Times{}
 	for _, ds := range set.Series {
 		min, max := ds.MinMaxTimes()
 		values = append(values, min, max)

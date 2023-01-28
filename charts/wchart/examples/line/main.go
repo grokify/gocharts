@@ -27,7 +27,7 @@ func drawChartTSSSimple(res http.ResponseWriter, req *http.Request) {
 		fmt.Println(i)
 		item := timeseries.TimeItem{
 			SeriesName: "A Series",
-			Time:       month.MonthBegin(time.Now().AddDate(0, i, 0), 0),
+			Time:       month.MonthStart(time.Now().AddDate(0, i, 0), 0),
 			Value:      int64(j)}
 		tss.AddItems(item)
 	}
@@ -129,17 +129,17 @@ func GetChartExampleMonths() chart.Chart {
 			chart.TimeSeries{
 				Name: "By Month",
 				XValues: []time.Time{
-					month.MonthBegin(time.Now(), -10),
-					month.MonthBegin(time.Now(), -9),
-					month.MonthBegin(time.Now(), -8),
-					month.MonthBegin(time.Now(), -7),
-					month.MonthBegin(time.Now(), -6),
-					month.MonthBegin(time.Now(), -5),
-					month.MonthBegin(time.Now(), -4),
-					month.MonthBegin(time.Now(), -3),
-					month.MonthBegin(time.Now(), -2),
-					month.MonthBegin(time.Now(), -1),
-					month.MonthBegin(time.Now(), 0),
+					month.MonthStart(time.Now(), -10),
+					month.MonthStart(time.Now(), -9),
+					month.MonthStart(time.Now(), -8),
+					month.MonthStart(time.Now(), -7),
+					month.MonthStart(time.Now(), -6),
+					month.MonthStart(time.Now(), -5),
+					month.MonthStart(time.Now(), -4),
+					month.MonthStart(time.Now(), -3),
+					month.MonthStart(time.Now(), -2),
+					month.MonthStart(time.Now(), -1),
+					month.MonthStart(time.Now(), 0),
 				},
 				YValues: []float64{1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0},
 			},

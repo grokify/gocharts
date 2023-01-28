@@ -12,7 +12,7 @@ import (
 // posted on Trello as of August 20, 2022. The Trello roadmap is available here:
 // https://trello.com/b/ZnTQyumQ/slack-platform-roadmap
 func GetRoadmapExample() roadmap2.Roadmap {
-	qNow := timeutil.QuarterEnd(time.Now().UTC())
+	qNow := timeutil.NewTimeMore(time.Now().UTC(), 0).QuarterEnd()
 	qPrev1 := timeutil.QuarterAdd(qNow, -1)
 	qNext1 := timeutil.QuarterAdd(qNow, 1)
 	qNext2 := timeutil.QuarterAdd(qNow, 2)
@@ -30,7 +30,7 @@ func GetRoadmapExample() roadmap2.Roadmap {
 			timeutil.FormatQuarterYYQ(qNext2),
 		},
 		ItemCellFunc: func(i roadmap2.Item) (colIdx int) {
-			rmStart := timeutil.QuarterStart(time.Now())
+			rmStart := timeutil.NewTimeMore(time.Now(), 0).QuarterStart()
 			rmStart = timeutil.QuarterAdd(rmStart, -1)
 			dt := i.ReleaseTime
 			if dt.Before(rmStart) {

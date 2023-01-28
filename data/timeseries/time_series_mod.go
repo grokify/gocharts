@@ -6,18 +6,20 @@ func (ts *TimeSeries) TimeUpdateIntervalStart() error {
 	switch ts.Interval {
 	case timeutil.Year:
 		for rfc3339, ti := range ts.ItemMap {
-			if !timeutil.IsYearStart(ti.Time) {
+			tm := timeutil.NewTimeMore(ti.Time, 0)
+			if !tm.IsYearStart() {
 				delete(ts.ItemMap, rfc3339)
-				ti.Time = timeutil.YearStart(ti.Time)
+				ti.Time = tm.YearStart()
 				ts.AddItems(ti)
 			}
 		}
 		return nil
 	case timeutil.Month:
 		for rfc3339, ti := range ts.ItemMap {
-			if !timeutil.IsMonthStart(ti.Time) {
+			tm := timeutil.NewTimeMore(ti.Time, 0)
+			if !tm.IsMonthStart() {
 				delete(ts.ItemMap, rfc3339)
-				ti.Time = timeutil.MonthStart(ti.Time)
+				ti.Time = tm.MonthStart()
 				ts.AddItems(ti)
 			}
 		}

@@ -18,20 +18,21 @@ func NewBulletCharts() BulletCharts {
 	return BulletCharts{Charts: map[string]BulletChart{}}
 }
 
-func (charts *BulletCharts) AddTimeDt8(dt8 int32) error {
-	dtCur, err := timeutil.TimeForDt8(dt8)
+func (charts *BulletCharts) AddTimeDT8(dt8 int32) error {
+	dtCur, err := timeutil.TimeForDT8(dt8)
 	if err != nil {
 		return err
 	}
-	return charts.AddTimeCurrent(dtCur)
+	charts.AddTimeCurrent(dtCur)
+	return nil
 }
 
-func (charts *BulletCharts) AddTimeCurrent(dtCur time.Time) error {
+func (charts *BulletCharts) AddTimeCurrent(dtCur time.Time) {
 	dtCur = dtCur.UTC()
+	dtCurMore := timeutil.NewTimeMore(dtCur, 0)
 	charts.TimeCurrent = dtCur
-	charts.TimeStart = timeutil.QuarterStart(dtCur)
-	charts.TimeEnd = timeutil.QuarterEnd(dtCur)
-	return nil
+	charts.TimeStart = dtCurMore.QuarterStart()
+	charts.TimeEnd = dtCurMore.QuarterEnd()
 }
 
 func (charts *BulletCharts) InflateChart(key string) error {

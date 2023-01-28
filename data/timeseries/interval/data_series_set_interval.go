@@ -132,10 +132,8 @@ func (set *TimeSeriesSet) BuildOutputSeries(source timeseries.TimeSeries) (times
 	output := timeseries.NewTimeSeries(set.AllSeriesName)
 	for _, item := range source.ItemMap {
 		output.SeriesName = item.SeriesName
-		ivalStart, err := timeutil.IntervalStart(
-			item.Time,
-			set.SeriesIntervals.Interval,
-			set.SeriesIntervals.WeekStart)
+		tm := timeutil.NewTimeMore(item.Time, set.SeriesIntervals.WeekStart)
+		ivalStart, err := tm.IntervalStart(set.SeriesIntervals.Interval)
 		if err != nil {
 			return output, err
 		}
@@ -223,27 +221,33 @@ func (ival *SeriesIntervals) buildMinMaxEndpoints() error {
 	}
 	ival.Max = ival.Max.UTC()
 	ival.Min = ival.Min.UTC()
+	tmMax := timeutil.NewTimeMore(ival.Max, ival.WeekStart)
+	tmMin := timeutil.NewTimeMore(ival.Min, ival.WeekStart)
 	switch ival.Interval.String() {
 	case "year":
-		ival.Max = timeutil.YearStart(ival.Max)
-		ival.Min = timeutil.YearStart(ival.Min)
+		ival.Max = tmMax.YearStart()
+		ival.Min = tmMin.YearStart()
 	case "quarter":
-		ival.Max = timeutil.QuarterStart(ival.Max)
-		ival.Min = timeutil.QuarterStart(ival.Min)
+		ival.Max = tmMax.QuarterStart()
+		ival.Min = tmMin.QuarterStart()
 	case "month":
-		ival.Max = timeutil.MonthStart(ival.Max)
-		ival.Min = timeutil.MonthStart(ival.Min)
+		ival.Max = tmMax.MonthStart()
+		ival.Min = tmMin.MonthStart()
 	case "week":
-		max, err := timeutil.WeekStart(ival.Max, ival.WeekStart)
-		if err != nil {
-			return err
-		}
-		ival.Max = max
-		min, err := timeutil.WeekStart(ival.Min, ival.WeekStart)
-		if err != nil {
-			return err
-		}
-		ival.Min = min
+		ival.Max = tmMax.WeekStart()
+		ival.Min = tmMin.WeekStart()
+		/*
+			max, err := timeutil.WeekStart(ival.Max, ival.WeekStart)
+			if err != nil {
+				return err
+			}
+			ival.Max = max
+			min, err := timeutil.WeekStart(ival.Min, ival.WeekStart)
+			if err != nil {
+				return err
+			}
+			ival.Min = min
+		*/
 	default:
 		panic(fmt.Sprintf("Interval [%v] not supported.", ival.Interval))
 	}
@@ -257,11 +261,11 @@ func (ival *SeriesIntervals) buildCanonicalSeries() {
 		canonicalSeries = append(canonicalSeries, curTime)
 		switch ival.Interval.String() {
 		case "year":
-			curTime = timeutil.TimeDt4AddNYears(curTime, 1)
+			curTime = timeutil.TimeDT4AddNYears(curTime, 1)
 		case "quarter":
-			curTime = timeutil.TimeDt6AddNMonths(curTime, 3)
+			curTime = timeutil.TimeDT6AddNMonths(curTime, 3)
 		case "month":
-			curTime = timeutil.TimeDt6AddNMonths(curTime, 1)
+			curTime = timeutil.TimeDT6AddNMonths(curTime, 1)
 		case "week":
 			dur, _ := time.ParseDuration(fmt.Sprintf("%vh", 24*7))
 			curTime = curTime.Add(dur)

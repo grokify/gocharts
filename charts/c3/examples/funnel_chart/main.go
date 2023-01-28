@@ -23,7 +23,7 @@ func TestData() timeseries.TimeSeriesSet {
 	tss := timeseries.NewTimeSeriesSet("Funnel Chart Data")
 	tss.Interval = timeutil.Month
 	for i := 0; i < 12; i++ {
-		dt := month.MonthBegin(time.Now().UTC(), i)
+		dt := month.MonthStart(time.Now().UTC(), i)
 		//dt := timeutil.DeltaQuarters(time.Now().UTC(), i)
 		val1 := int64(float64(i*20)*rand.Float64() + 10)
 		val2 := int64(float64(val1)*1 - (float64(5) * rand.Float64()))
