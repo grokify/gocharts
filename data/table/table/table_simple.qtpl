@@ -1,19 +1,44 @@
 {% func SimpleTable(table Table) %}
 
 <table id="{%s table.ID %}" style="{%s table.Style %}">
-{% if len(table.Rows)>0 %}
+{% if len(table.Columns)>0 %}
 <thead>
-    {% for _, item := range table.Rows[0] %}
-        <th>{%s item %}</th>
+    {% for _, colname := range table.Columns %}
+        <th>{%s colname %}</th>
     {% endfor %}
 </thead>
 {% endif %}
-{% if len(table.Rows)>1 %}
+{% if len(table.Rows)>0 %}
 <tbody>
 {% for _, r := range table.Rows[1:] %}
     <tr>
     {% for _, item := range r %}
         <td>{%s item %}</td>
+    {% endfor %}
+    </tr>
+{% endfor %}
+</tbody>
+{% endif %}
+</table>
+
+{% endfunc %}
+
+{% func SimpleTablePreescaped(table Table) %}
+
+<table id="{%s table.ID %}" style="{%s table.Style %}">
+{% if len(table.Columns)>0 %}
+<thead>
+    {% for _, colname := range table.Columns %}
+        <th>{%s colname %}</th>
+    {% endfor %}
+</thead>
+{% endif %}
+{% if len(table.Rows)>0 %}
+<tbody>
+{% for _, r := range table.Rows[1:] %}
+    <tr>
+    {% for _, item := range r %}
+        <td>{%s= item %}</td>
     {% endfor %}
     </tr>
 {% endfor %}

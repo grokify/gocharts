@@ -33,18 +33,18 @@ func StreamSimpleTable(qw422016 *qt422016.Writer, table Table) {
 	qw422016.N().S(`">
 `)
 //line table_simple.qtpl:4
-	if len(table.Rows) > 0 {
+	if len(table.Columns) > 0 {
 //line table_simple.qtpl:4
 		qw422016.N().S(`
 <thead>
     `)
 //line table_simple.qtpl:6
-		for _, item := range table.Rows[0] {
+		for _, colname := range table.Columns {
 //line table_simple.qtpl:6
 			qw422016.N().S(`
         <th>`)
 //line table_simple.qtpl:7
-			qw422016.E().S(item)
+			qw422016.E().S(colname)
 //line table_simple.qtpl:7
 			qw422016.N().S(`</th>
     `)
@@ -60,7 +60,7 @@ func StreamSimpleTable(qw422016 *qt422016.Writer, table Table) {
 	qw422016.N().S(`
 `)
 //line table_simple.qtpl:11
-	if len(table.Rows) > 1 {
+	if len(table.Rows) > 0 {
 //line table_simple.qtpl:11
 		qw422016.N().S(`
 <tbody>
@@ -127,4 +127,116 @@ func SimpleTable(table Table) string {
 //line table_simple.qtpl:24
 	return qs422016
 //line table_simple.qtpl:24
+}
+
+//line table_simple.qtpl:26
+func StreamSimpleTablePreescaped(qw422016 *qt422016.Writer, table Table) {
+//line table_simple.qtpl:26
+	qw422016.N().S(`
+
+<table id="`)
+//line table_simple.qtpl:28
+	qw422016.E().S(table.ID)
+//line table_simple.qtpl:28
+	qw422016.N().S(`" style="`)
+//line table_simple.qtpl:28
+	qw422016.E().S(table.Style)
+//line table_simple.qtpl:28
+	qw422016.N().S(`">
+`)
+//line table_simple.qtpl:29
+	if len(table.Columns) > 0 {
+//line table_simple.qtpl:29
+		qw422016.N().S(`
+<thead>
+    `)
+//line table_simple.qtpl:31
+		for _, colname := range table.Columns {
+//line table_simple.qtpl:31
+			qw422016.N().S(`
+        <th>`)
+//line table_simple.qtpl:32
+			qw422016.E().S(colname)
+//line table_simple.qtpl:32
+			qw422016.N().S(`</th>
+    `)
+//line table_simple.qtpl:33
+		}
+//line table_simple.qtpl:33
+		qw422016.N().S(`
+</thead>
+`)
+//line table_simple.qtpl:35
+	}
+//line table_simple.qtpl:35
+	qw422016.N().S(`
+`)
+//line table_simple.qtpl:36
+	if len(table.Rows) > 0 {
+//line table_simple.qtpl:36
+		qw422016.N().S(`
+<tbody>
+`)
+//line table_simple.qtpl:38
+		for _, r := range table.Rows[1:] {
+//line table_simple.qtpl:38
+			qw422016.N().S(`
+    <tr>
+    `)
+//line table_simple.qtpl:40
+			for _, item := range r {
+//line table_simple.qtpl:40
+				qw422016.N().S(`
+        <td>`)
+//line table_simple.qtpl:41
+				qw422016.N().S(item)
+//line table_simple.qtpl:41
+				qw422016.N().S(`</td>
+    `)
+//line table_simple.qtpl:42
+			}
+//line table_simple.qtpl:42
+			qw422016.N().S(`
+    </tr>
+`)
+//line table_simple.qtpl:44
+		}
+//line table_simple.qtpl:44
+		qw422016.N().S(`
+</tbody>
+`)
+//line table_simple.qtpl:46
+	}
+//line table_simple.qtpl:46
+	qw422016.N().S(`
+</table>
+
+`)
+//line table_simple.qtpl:49
+}
+
+//line table_simple.qtpl:49
+func WriteSimpleTablePreescaped(qq422016 qtio422016.Writer, table Table) {
+//line table_simple.qtpl:49
+	qw422016 := qt422016.AcquireWriter(qq422016)
+//line table_simple.qtpl:49
+	StreamSimpleTablePreescaped(qw422016, table)
+//line table_simple.qtpl:49
+	qt422016.ReleaseWriter(qw422016)
+//line table_simple.qtpl:49
+}
+
+//line table_simple.qtpl:49
+func SimpleTablePreescaped(table Table) string {
+//line table_simple.qtpl:49
+	qb422016 := qt422016.AcquireByteBuffer()
+//line table_simple.qtpl:49
+	WriteSimpleTablePreescaped(qb422016, table)
+//line table_simple.qtpl:49
+	qs422016 := string(qb422016.B)
+//line table_simple.qtpl:49
+	qt422016.ReleaseByteBuffer(qb422016)
+//line table_simple.qtpl:49
+	return qs422016
+//line table_simple.qtpl:49
 }
