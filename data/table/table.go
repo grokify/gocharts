@@ -1,10 +1,16 @@
 // table provides a struct to handle tabular data.
 package table
 
+import (
+	"encoding/csv"
+	"os"
+)
+
 const (
 	FormatFloat  = "float"
 	FormatInt    = "int"
 	FormatString = "string"
+	FormatDate   = "date"
 	FormatTime   = "time"
 	StyleSimple  = "border:1px solid #000;border-collapse:collapse"
 )
@@ -24,8 +30,7 @@ type Table struct {
 	Style          string
 }
 
-// NewTable returns a new empty `Table` struct with
-// slices and maps set to empty (non-nil) values.
+// NewTable returns a new empty `Table` struct with slices and maps set to empty (non-nil) values.
 func NewTable(name string) Table {
 	return Table{
 		Name:      name,
@@ -34,8 +39,7 @@ func NewTable(name string) Table {
 		FormatMap: map[int]string{}}
 }
 
-// LoadMergedRows is used to load data including both
-// column names and rows from `[][]string` sources
+// LoadMergedRows is used to load data including both column names and rows from `[][]string` sources
 // like `csv.ReadAll()`.
 func (tbl *Table) LoadMergedRows(data [][]string) {
 	if len(data) == 0 {
@@ -64,7 +68,7 @@ func (tbl *Table) UpsertRowColumnValue(rowIdx, colIdx uint, value string) {
 // IsWellFormed returns true when the number of columns equals
 // the length of each row. If columns is empty, the length of the
 // first row is used for comparison.
-func (tbl *Table) IsWellFormed() (isWellFormed bool, columnCount int, mismatchRows []int) {
+func (tbl Table) IsWellFormed() (isWellFormed bool, columnCount int, mismatchRows []int) {
 	isWellFormed = true
 	columnCount = len(tbl.Columns)
 	if len(tbl.Rows) == 0 {
@@ -88,8 +92,28 @@ func (tbl *Table) WriteXLSX(path, sheetname string) error {
 	return WriteXLSX(path, tbl)
 }
 
-func (tbl *Table) WriteCSV(path string) error {
-	return writeCSV(path, tbl)
+func (tbl Table) WriteCSV(path string) error {
+	// return writeCSV(path, tbl)
+	file, err := os.Create(path)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	writer := csv.NewWriter(file)
+
+	if len(tbl.Columns) > 0 {
+		err = writer.Write(tbl.Columns)
+		if err != nil {
+			return err
+		}
+	}
+	err = writer.WriteAll(tbl.Rows)
+	if err != nil {
+		return err
+	}
+	writer.Flush()
+	return writer.Error()
 }
 
 func (tbl *Table) ToSliceMSS() []map[string]string {

@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-func (tbl *Table) NewTableFilterColDistinctFirst(colIdx int) *Table {
+func (tbl Table) FilterColumnDistinctFirstTable(colIdx int) *Table {
 	newTbl := NewTable("")
 	newTbl.Columns = tbl.Columns
 
@@ -21,11 +21,10 @@ func (tbl *Table) NewTableFilterColDistinctFirst(colIdx int) *Table {
 	return &newTbl
 }
 
-// NewTableFilterColumnValues returns a Table filtered
-// by column names and column values.
-func (tbl *Table) NewTableFilterColumnValues(wantColNameValues map[string]string) (Table, error) {
+// NewTableFilterColumnValues returns a Table filtered by column names and column values.
+func (tbl *Table) FilterColumnValuesTable(wantColNameValues map[string]string) (Table, error) {
 	t2 := Table{Columns: tbl.Columns}
-	rows, err := tbl.FilterRecordsColumnValues(wantColNameValues)
+	rows, err := tbl.FilterColumnValuesRows(wantColNameValues)
 	if err != nil {
 		return t2, err
 	}
@@ -33,9 +32,8 @@ func (tbl *Table) NewTableFilterColumnValues(wantColNameValues map[string]string
 	return t2, nil
 }
 
-// FilterRecordsColumnValues returns a set of records filtered
-// by column names and column values.
-func (tbl *Table) FilterRecordsColumnValues(wantColNameValues map[string]string) ([][]string, error) {
+// FilterRecordsColumnValues returns a set of records filtered by column names and column values.
+func (tbl *Table) FilterColumnValuesRows(wantColNameValues map[string]string) ([][]string, error) {
 	data := [][]string{}
 	wantColIndexes := map[string]int{}
 	maxIdx := -1
@@ -56,7 +54,7 @@ ROWS:
 				colValue := row[wantColIdx]
 				wantColValue, ok := wantColNameValues[wantColName]
 				if !ok {
-					return data, fmt.Errorf("column name [%v] has no desired value", wantColName)
+					return data, fmt.Errorf("column name (%s) has no desired value", wantColName)
 				}
 				if colValue != wantColValue {
 					continue ROWS
