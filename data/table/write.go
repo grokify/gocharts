@@ -1,7 +1,6 @@
 package table
 
 import (
-	"encoding/csv"
 	"fmt"
 	"os"
 	"regexp"
@@ -13,9 +12,11 @@ import (
 	"github.com/grokify/gocharts/v2/data/table/sheet"
 	"github.com/grokify/mogo/encoding/jsonutil"
 	"github.com/grokify/mogo/errors/errorsutil"
+	"github.com/grokify/mogo/time/timeutil"
 	excelize "github.com/xuri/excelize/v2"
 )
 
+/*
 func writeCSV(path string, t *Table) error {
 	file, err := os.Create(path)
 	if err != nil {
@@ -38,6 +39,7 @@ func writeCSV(path string, t *Table) error {
 	writer.Flush()
 	return writer.Error()
 }
+*/
 
 // WriteCSVSimple writes a file with cols and rows data.
 func WriteCSVSimple(cols []string, rows [][]string, filename string) error {
@@ -47,106 +49,14 @@ func WriteCSVSimple(cols []string, rows [][]string, filename string) error {
 	return tbl.WriteCSV(filename)
 }
 
-/*
-func FormatStrings(val string, col uint) (interface{}, error) {
-	return val, nil
-}
-
-func FormatStringAndInts(val string, colIdx uint) (interface{}, error) {
-	if colIdx == 0 {
-		return val, nil
-	}
-	num, err := strconv.Atoi(val)
-	if err != nil {
-		return val, err
-	}
-	return num, nil
-}
-
-func FormatStringAndFloats(val string, colIdx uint) (interface{}, error) {
-	if colIdx == 0 {
-		return val, nil
-	}
-	num, err := strconv.ParseFloat(val, 64)
-	if err != nil {
-		return val, err
-	}
-	return num, nil
-}
-
-func FormatTimeAndInts(val string, colIdx uint) (interface{}, error) {
-	if colIdx == 0 {
-		dt, err := time.Parse(time.RFC3339, val)
-		if err != nil {
-			return val, err
-		} else {
-			return dt, nil
-		}
-	}
-	num, err := strconv.Atoi(val)
-	if err != nil {
-		return val, err
-	}
-	return num, nil
-}
-
-func FormatMonthAndFloats(val string, colIdx uint) (interface{}, error) {
-	if colIdx == 0 {
-		dt, err := time.Parse(time.RFC3339, val)
-		if err != nil {
-			return val, err
-		} else {
-			return dt.Format(timeutil.ISO8601YM), nil
-		}
-	}
-	num, err := strconv.ParseFloat(val, 64)
-	if err != nil {
-		return val, err
-	}
-	return num, nil
-}
-
-func FormatDateAndFloats(val string, colIdx uint) (interface{}, error) {
-	if colIdx == 0 {
-		dt, err := time.Parse(time.RFC3339, val)
-		if err != nil {
-			return val, err
-		} else {
-			return dt.Format(timeutil.DateMDY), nil
-		}
-	}
-	num, err := strconv.ParseFloat(val, 64)
-	if err != nil {
-		return val, err
-	}
-	return num, nil
-}
-
-func FormatTimeAndFloats(val string, colIdx uint) (interface{}, error) {
-	if colIdx == 0 {
-		dt, err := time.Parse(time.RFC3339, val)
-		if err != nil {
-			return val, err
-		} else {
-			return dt, nil
-		}
-	}
-	num, err := strconv.ParseFloat(val, 64)
-	if err != nil {
-		return val, err
-	}
-	return num, nil
-}
-*/
-
-func (tbl *Table) FormatterFunc() func(val string, colIdx uint) (interface{}, error) {
+func (tbl *Table) FormatterFunc() func(val string, colIdx uint) (any, error) {
 	if tbl.FormatMap == nil || len(tbl.FormatMap) == 0 {
 		if tbl.FormatFunc == nil {
 			return format.FormatStrings
 		}
 		return tbl.FormatFunc
 	}
-	return func(val string, colIdx uint) (interface{}, error) {
+	return func(val string, colIdx uint) (any, error) {
 		fmtType, ok := tbl.FormatMap[int(colIdx)]
 		if !ok || len(strings.TrimSpace(fmtType)) == 0 {
 			fmtType, ok = tbl.FormatMap[-1]
@@ -171,6 +81,12 @@ func (tbl *Table) FormatterFunc() func(val string, colIdx uint) (interface{}, er
 				return int(floatVal), nil
 			}
 			return intVal, nil
+		case FormatDate:
+			dtVal, err := time.Parse(time.RFC3339, val)
+			if err != nil {
+				return val, err
+			}
+			return dtVal.Format(timeutil.DateMDY), nil
 		case FormatTime:
 			dtVal, err := time.Parse(time.RFC3339, val)
 			if err != nil {
