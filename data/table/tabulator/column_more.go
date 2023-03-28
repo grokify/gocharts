@@ -1,8 +1,11 @@
-// tabulator provides helper methods for rendering HTML
-// with Tabulator (http://tabulator.info/)
+// tabulator provides helper methods for rendering HTML with Tabulator (http://tabulator.info/)
 package tabulator
 
-import "encoding/json"
+import (
+	"encoding/json"
+
+	"github.com/grokify/mogo/text/stringcase"
+)
 
 type Column struct {
 	Display string
@@ -10,11 +13,33 @@ type Column struct {
 	Width   float64
 }
 
+type Columns []Column
+
 type ColumnSet struct {
-	Columns []Column
+	Columns Columns
 }
 
-func (set *ColumnSet) DisplayTexts() []string {
+func NewColumnSetSimple(displaynames []string, totalWidth float64) *ColumnSet {
+	cs := &ColumnSet{Columns: []Column{}}
+	cw := float64(0)
+	if len(displaynames) > 0 {
+		if totalWidth < 0 {
+			totalWidth *= -1
+		}
+		cw = totalWidth / float64(len(displaynames))
+	}
+	for _, name := range displaynames {
+		col := Column{
+			Display: name,
+			Slug:    stringcase.ToCamelCase(name),
+			Width:   cw,
+		}
+		cs.Columns = append(cs.Columns, col)
+	}
+	return cs
+}
+
+func (set ColumnSet) DisplayTexts() []string {
 	displays := []string{}
 	for _, col := range set.Columns {
 		displays = append(displays, col.Display)
@@ -23,14 +48,20 @@ func (set *ColumnSet) DisplayTexts() []string {
 }
 
 type TabulatorColumn struct {
-	Title        string  `json:"title,omitempty"`
-	Field        string  `json:"field,omitempty"`
-	Width        float64 `json:"width,omitempty"`
-	HeaderFilter string  `json:"headerFilter,omitempty"`
+	Title           string           `json:"title,omitempty"`
+	Field           string           `json:"field,omitempty"`
+	Formatter       string           `json:"formatter,omitempty"`
+	FormatterParams *FormatterParams `json:"formatterParams,omitempty"`
+	Width           float64          `json:"width,omitempty"`
+	HeaderFilter    string           `json:"headerFilter,omitempty"`
 }
 
 type TabulatorColumnSet struct {
 	Columns []TabulatorColumn
+}
+
+func (columns Columns) TabulatorColumnSet() TabulatorColumnSet {
+	return BuildColumnsTabulator(columns)
 }
 
 func BuildColumnsTabulator(columns []Column) TabulatorColumnSet {
