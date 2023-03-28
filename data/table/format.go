@@ -5,14 +5,32 @@ import (
 	"encoding/csv"
 	"errors"
 	"fmt"
+	"os"
 	"strings"
 
 	"github.com/grokify/mogo/math/mathutil"
+	"github.com/grokify/mogo/text/markdown"
 )
+
+func (tbl Table) Markdown(newline string, escPipe bool) string {
+	var md string
+	if len(tbl.Columns) > 0 {
+		md += markdown.TableRowToMarkdown(tbl.Columns, escPipe) + newline
+		if len(tbl.Rows) > 0 {
+			md += markdown.TableSeparator(uint(len(tbl.Columns))) + newline
+		}
+	}
+	return md + markdown.TableRowsToMarkdown(tbl.Rows, newline, escPipe, false)
+}
+
+func (tbl Table) WriteMarkdown(filename string, perm os.FileMode, newline string, escPipe bool) error {
+	md := tbl.Markdown(newline, escPipe)
+	return os.WriteFile(filename, []byte(md), perm)
+}
 
 // Pivot takes a "straight table" where the columnn names
 // and values are in a single column and lays it out as a standard tabular data.
-func (tbl *Table) Pivot(colCount uint, haveColumns bool) (Table, error) {
+func (tbl Table) Pivot(colCount uint, haveColumns bool) (Table, error) {
 	newTbl := NewTable(tbl.Name)
 	if len(tbl.Columns) != 0 {
 		return newTbl, fmt.Errorf("has defined columns count [%d]", len(tbl.Columns))
@@ -116,7 +134,7 @@ func (tbl *Table) formatRowsTry(colIdxMinInc, colIdxMaxInc int, conv func(cellVa
 }
 
 // String writes the table out to a CSV string.
-func (tbl *Table) String(comma rune, useCRLF bool) (string, error) {
+func (tbl Table) String(comma rune, useCRLF bool) (string, error) {
 	var b bytes.Buffer
 	w := csv.NewWriter(&b)
 	w.Comma = comma
@@ -142,7 +160,7 @@ func (tbl *Table) String(comma rune, useCRLF bool) (string, error) {
 
 // Transpose creates a new table by transposing the matrix data.
 // In the new table, it does not set anything other than than `Name`, `Columns`, and `Rows`.
-func (tbl *Table) Transpose() (Table, error) {
+func (tbl Table) Transpose() (Table, error) {
 	tbl2 := NewTable(tbl.Name)
 	isWellFormed, _, _ := tbl.IsWellFormed()
 	if !isWellFormed {
