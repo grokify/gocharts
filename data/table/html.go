@@ -6,11 +6,11 @@ import (
 	"strings"
 )
 
-func (tbl *Table) ToDocuments() []map[string]interface{} {
-	docs := []map[string]interface{}{}
+func (tbl *Table) ToDocuments() []map[string]any {
+	docs := []map[string]any{}
 	fmtFunc := tbl.FormatterFunc()
 	for _, row := range tbl.Rows {
-		doc := map[string]interface{}{}
+		doc := map[string]any{}
 		for x, valStr := range row {
 			colName := fmt.Sprintf("col%d", x)
 			if x < len(tbl.Columns) {
@@ -88,4 +88,8 @@ func (tbl *Table) ToHTML(escapeHTML bool) string {
 	}
 	tHTML += "</table>"
 	return tHTML
+}
+
+func SimpleHTMLPage(body string) string {
+	return `<!DOCTYPE html><html><head><style>table,th,td{border:2px solid #000; border-collapse:collapse;}</style></head><body>` + body + `</body></html>`
 }
