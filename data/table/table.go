@@ -68,7 +68,7 @@ func (tbl *Table) UpsertRowColumnValue(rowIdx, colIdx uint, value string) {
 // IsWellFormed returns true when the number of columns equals
 // the length of each row. If columns is empty, the length of the
 // first row is used for comparison.
-func (tbl Table) IsWellFormed() (isWellFormed bool, columnCount int, mismatchRows []int) {
+func (tbl *Table) IsWellFormed() (isWellFormed bool, columnCount int, mismatchRows []int) {
 	isWellFormed = true
 	columnCount = len(tbl.Columns)
 	if len(tbl.Rows) == 0 {
@@ -92,7 +92,7 @@ func (tbl *Table) WriteXLSX(path, sheetname string) error {
 	return WriteXLSX(path, tbl)
 }
 
-func (tbl Table) WriteCSV(path string) error {
+func (tbl *Table) WriteCSV(path string) error {
 	// return writeCSV(path, tbl)
 	file, err := os.Create(path)
 	if err != nil {

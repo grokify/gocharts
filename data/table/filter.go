@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-func (tbl Table) FilterColumnDistinctFirstTable(colIdx int) *Table {
+func (tbl *Table) FilterColumnDistinctFirstTable(colIdx int) *Table {
 	newTbl := NewTable("")
 	newTbl.Columns = tbl.Columns
 
