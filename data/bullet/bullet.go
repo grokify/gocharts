@@ -19,7 +19,8 @@ func NewBulletCharts() BulletCharts {
 }
 
 func (charts *BulletCharts) AddTimeDT8(dt8 int32) error {
-	dtCur, err := timeutil.TimeForDT8(dt8)
+	dt8x := timeutil.DateTime8(dt8)
+	dtCur, err := dt8x.Time(time.UTC)
 	if err != nil {
 		return err
 	}
