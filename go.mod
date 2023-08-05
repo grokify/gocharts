@@ -3,13 +3,12 @@ module github.com/grokify/gocharts/v2
 go 1.18
 
 require (
-	github.com/grokify/mogo v0.51.0
+	github.com/grokify/mogo v0.52.0
 	github.com/jessevdk/go-flags v1.5.0
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/valyala/quicktemplate v1.7.0
 	github.com/wcharczuk/go-chart/v2 v2.1.0
 	github.com/xuri/excelize/v2 v2.7.1
-	golang.org/x/exp v0.0.0-20230728194245-b0cb94b80691
 	gonum.org/v1/gonum v0.13.0
 )
 
@@ -34,6 +33,7 @@ require (
 	github.com/xuri/efp v0.0.0-20230422071738-01f4e37c47e9 // indirect
 	github.com/xuri/nfp v0.0.0-20230723160540-a7d120392641 // indirect
 	golang.org/x/crypto v0.11.0 // indirect
+	golang.org/x/exp v0.0.0-20230728194245-b0cb94b80691 // indirect
 	golang.org/x/image v0.9.0 // indirect
 	golang.org/x/net v0.12.0 // indirect
 	golang.org/x/sys v0.10.0 // indirect
