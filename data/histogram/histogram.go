@@ -34,32 +34,34 @@ func NewHistogram(name string) *Histogram {
 		BinCount:    0}
 }
 
-/*
-func (hist *Histogram) AddInt(i int) {
-	hist.Add(strconv.Itoa(i), 1)
-}
-*/
-
 func (hist *Histogram) Add(binName string, binCount int) {
 	hist.Bins[binName] += binCount
+}
+
+func (hist *Histogram) BinSum() int {
+	binSum := 0
+	for _, c := range hist.Bins {
+		binSum += c
+	}
+	return binSum
 }
 
 func (hist *Histogram) Inflate() {
 	hist.Counts = map[string]int{}
 	sum := 0
-	for _, binCount := range hist.Bins {
-		countString := strconv.Itoa(binCount)
+	for _, binVal := range hist.Bins {
+		countString := strconv.Itoa(binVal)
 		if _, ok := hist.Counts[countString]; !ok {
 			hist.Counts[countString] = 0
 		}
 		hist.Counts[countString]++
-		sum += binCount
+		sum += binVal
 	}
 	hist.BinCount = uint(len(hist.Bins))
 
 	hist.Percentages = map[string]float64{}
-	for binName, binCount := range hist.Bins {
-		hist.Percentages[binName] = float64(binCount) / float64(sum)
+	for binName, binVal := range hist.Bins {
+		hist.Percentages[binName] = float64(binVal) / float64(sum)
 	}
 	hist.Sum = sum
 }

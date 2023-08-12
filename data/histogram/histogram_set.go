@@ -61,6 +61,16 @@ func (hset *HistogramSet) Add(histName, binName string, binCount int) {
 	hset.HistogramMap[histName] = hist
 }
 
+func (hset *HistogramSet) BinSum() int {
+	binCount := 0
+	for _, hist := range hset.HistogramMap {
+		for _, c := range hist.Bins {
+			binCount += c
+		}
+	}
+	return binCount
+}
+
 // ItemCount returns the number of histograms.
 func (hset *HistogramSet) ItemCount() uint {
 	return uint(len(hset.HistogramMap))
