@@ -9,6 +9,7 @@ require (
 	github.com/valyala/quicktemplate v1.7.0
 	github.com/wcharczuk/go-chart/v2 v2.1.0
 	github.com/xuri/excelize/v2 v2.7.1
+	golang.org/x/exp v0.0.0-20230811145659-89c5cff77bcb
 	gonum.org/v1/gonum v0.13.0
 )
 
@@ -30,15 +31,14 @@ require (
 	github.com/rivo/uniseg v0.4.4 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fastjson v1.6.4 // indirect
-	github.com/xuri/efp v0.0.0-20230422071738-01f4e37c47e9 // indirect
-	github.com/xuri/nfp v0.0.0-20230723160540-a7d120392641 // indirect
-	golang.org/x/crypto v0.11.0 // indirect
-	golang.org/x/exp v0.0.0-20230728194245-b0cb94b80691 // indirect
-	golang.org/x/image v0.9.0 // indirect
-	golang.org/x/net v0.12.0 // indirect
-	golang.org/x/sys v0.10.0 // indirect
-	golang.org/x/text v0.11.0 // indirect
+	github.com/xuri/efp v0.0.0-20230802181842-ad255f2331ca // indirect
+	github.com/xuri/nfp v0.0.0-20230802015359-2d5eeba905e9 // indirect
+	golang.org/x/crypto v0.12.0 // indirect
+	golang.org/x/image v0.11.0 // indirect
+	golang.org/x/net v0.14.0 // indirect
+	golang.org/x/sys v0.11.0 // indirect
+	golang.org/x/text v0.12.0 // indirect
 	gopkg.in/oleiade/reflections.v1 v1.0.0 // indirect
 )
 
-// replace github.com/grokify/mogo v0.50.0 => ..//mogo
+// replace github.com/grokify/mogo  => ..//mogo
