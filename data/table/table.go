@@ -6,15 +6,6 @@ import (
 	"os"
 )
 
-const (
-	FormatFloat  = "float"
-	FormatInt    = "int"
-	FormatString = "string"
-	FormatDate   = "date"
-	FormatTime   = "time"
-	StyleSimple  = "border:1px solid #000;border-collapse:collapse"
-)
-
 // Table is useful for working on CSV data. It stores
 // records as `[]string` with typed formatting information
 // per-column to facilitate transformations.
