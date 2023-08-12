@@ -60,13 +60,37 @@ func (hsets *HistogramSets) BinNames() []string {
 	return binNames
 }
 
-// ItemCount returns the number of histogram sets.
-func (hsets *HistogramSets) ItemCount() uint {
-	return uint(len(hsets.HistogramSetMap))
+func (hsets *HistogramSets) BinSum() int {
+	sum := 0
+	for _, hset := range hsets.HistogramSetMap {
+		for _, hist := range hset.HistogramMap {
+			for _, binSum := range hist.Bins {
+				sum += binSum
+			}
+		}
+	}
+	return sum
+}
+
+func (hsets *HistogramSets) BinSumsByHset() *Histogram {
+	sums := NewHistogram("Bin Sums")
+	for hsetName, hset := range hsets.HistogramSetMap {
+		for _, hist := range hset.HistogramMap {
+			for _, binVal := range hist.Bins {
+				sums.Add(hsetName, binVal)
+			}
+		}
+	}
+	return sums
 }
 
 func (hsets *HistogramSets) Counts() *HistogramSetsCounts {
 	return NewHistogramSetsCounts(*hsets)
+}
+
+// ItemCount returns the number of histogram sets.
+func (hsets *HistogramSets) ItemCount() uint {
+	return uint(len(hsets.HistogramSetMap))
 }
 
 func (hsets *HistogramSets) Visit(visit func(hsetName, histName, binName string, binCount int)) {
