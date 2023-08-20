@@ -13,9 +13,9 @@ import (
 	"github.com/grokify/gocharts/v2/data/table"
 )
 
-// Histogram stats is used to count how many times
-// an item appears and how many times number of
-// appearances appear.
+// Histogram stats is used to count how many times an item appears and
+// how many times number of appearances appear. It can be used with simple
+// string keys or map[string]string keys which are converted to soerted query strings.
 type Histogram struct {
 	Name        string
 	Bins        map[string]int
@@ -36,6 +36,14 @@ func NewHistogram(name string) *Histogram {
 
 func (hist *Histogram) Add(binName string, binCount int) {
 	hist.Bins[binName] += binCount
+}
+
+// AddMap provides a helper function to automatically create url encoded string keys.
+// This can be used with `TableMap` to generate tables with arbitrary columns easily.
+func (hist *Histogram) AddMap(binMap map[string]string, binCount int) {
+	m := maputil.MapStringString(binMap)
+	key := m.Encode()
+	hist.Add(key, binCount)
 }
 
 func (hist *Histogram) BinSum() int {
@@ -115,7 +123,7 @@ func (hist *Histogram) ItemCounts(sortBy string) []maputil.Record {
 }
 
 // WriteTable writes an ASCII Table. For CLI apps, pass `os.Stdout` for `io.Writer`.
-func (hist *Histogram) WriteTableASCII(writer io.Writer, header []string, sortBy string, inclTotal bool) {
+func (hist *Histogram) WriteTableASCII(w io.Writer, header []string, sortBy string, inclTotal bool) {
 	rows := [][]string{}
 	sortedItems := hist.ItemCounts(sortBy)
 	for _, sortedItem := range sortedItems {
@@ -137,7 +145,7 @@ func (hist *Histogram) WriteTableASCII(writer io.Writer, header []string, sortBy
 		header[1] = "Value"
 	}
 
-	table := tablewriter.NewWriter(writer)
+	table := tablewriter.NewWriter(w)
 	table.SetHeader(header)
 	if inclTotal {
 		table.SetFooter([]string{
@@ -159,6 +167,44 @@ func (hist *Histogram) Table(colNameBinName, colNameBinCount string) *table.Tabl
 	}
 	tbl.FormatMap = map[int]string{1: "int"}
 	return &tbl
+}
+
+// MapKeys returns a list of keys using query string keys.
+func (hist *Histogram) MapKeys() ([]string, error) {
+	keys := map[string]int{}
+	for qry := range hist.Bins {
+		m, err := maputil.ParseMapStringString(qry)
+		if err != nil {
+			return []string{}, err
+		}
+		for k := range m {
+			keys[k]++
+		}
+	}
+	return maputil.Keys(keys), nil
+}
+
+// TableMap is used to generate a table using map keys.
+func (hist *Histogram) TableMap(mapCols []string, colNameBinCount string) (*table.Table, error) {
+	tbl := table.NewTable(hist.Name)
+	if strings.TrimSpace(colNameBinCount) == "" {
+		colNameBinCount = "Count"
+	}
+	tbl.Columns = mapCols
+	tbl.Columns = append(mapCols, colNameBinCount)
+	for binName, binCount := range hist.Bins {
+		binMap, err := maputil.ParseMapStringString(binName)
+		if err != nil {
+			return nil, err
+		}
+		binVals := binMap.Gets(true, mapCols)
+
+		tbl.Rows = append(tbl.Rows,
+			append(binVals, strconv.Itoa(binCount)),
+		)
+	}
+	tbl.FormatMap = map[int]string{len(tbl.Columns) - 1: "int"}
+	return &tbl, nil
 }
 
 func (hist *Histogram) WriteXLSX(filename, sheetname, colNameBinName, colNameBinCount string) error {
