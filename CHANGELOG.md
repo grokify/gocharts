@@ -1,4 +1,5 @@
 - v2.10
-  - `histogram`: Add ability to add create tables with map keys
+  - `histogram`: Add map keys to `Histogram{}` to support arbitrary depth tables
+  - `histogram`: Add `BunSum()` func to `Histogram{}`, `HistogramSet{}`, and `HistogramSets{}`
   - `table`: Easy addition of Column names and formats via `ColumnDefnitions`
   - `table`: Hyperlinks for XLSX files via `FormatURL`
