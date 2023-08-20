@@ -13,9 +13,9 @@ import (
 	"github.com/grokify/gocharts/v2/data/table"
 )
 
-// Histogram stats is used to count how many times an item appears and
-// how many times number of appearances appear. It can be used with simple
-// string keys or map[string]string keys which are converted to soerted query strings.
+// Histogram is used to count how many times an item appears and how many times number
+// of appearances appear. It can be used with simple string keys or `map[string]string`
+// keys which are converted to soerted query strings.
 type Histogram struct {
 	Name        string
 	Bins        map[string]int
