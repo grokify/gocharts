@@ -1,6 +1,7 @@
 package table
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"regexp"
@@ -12,6 +13,7 @@ import (
 	"github.com/grokify/gocharts/v2/data/table/sheet"
 	"github.com/grokify/mogo/encoding/jsonutil"
 	"github.com/grokify/mogo/errors/errorsutil"
+	"github.com/grokify/mogo/text/markdown"
 	"github.com/grokify/mogo/time/timeutil"
 	excelize "github.com/xuri/excelize/v2"
 )
@@ -66,12 +68,18 @@ func (tbl *Table) FormatterFunc() func(val string, colIdx uint) (any, error) {
 		}
 		switch strings.ToLower(strings.TrimSpace(fmtType)) {
 		case FormatFloat:
+			if strings.TrimSpace(val) == "" {
+				return float64(0), nil
+			}
 			floatVal, err := strconv.ParseFloat(val, 64)
 			if err != nil {
 				return val, err
 			}
 			return floatVal, nil
 		case FormatInt:
+			if strings.TrimSpace(val) == "" {
+				return int(0), nil
+			}
 			intVal, err := strconv.Atoi(val)
 			if err != nil {
 				floatVal, err2 := strconv.ParseFloat(val, 64)
@@ -98,11 +106,30 @@ func (tbl *Table) FormatterFunc() func(val string, colIdx uint) (any, error) {
 	}
 }
 
-var rxURLHTTPOrHTTPS = regexp.MustCompile(`^(?i)https?://.`)
+var (
+	ErrSheetNameCollision  = errors.New("sheet name colllision")
+	ErrTablesCannotBeEmpty = errors.New("tables cannot be empty")
+	rxURLHTTPOrHTTPS       = regexp.MustCompile(`^(?i)https?://.`)
+)
+
+const excelizeLinkTypeExternal = "External"
 
 // WriteXLSX writes a table as an Excel XLSX file with row formatter option.
-func WriteXLSX(path string, tables ...*Table) error {
+func WriteXLSX(path string, tbls []*Table) error {
+	tables := []*Table{}
+	for _, tbl := range tbls {
+		if tbl != nil {
+			tables = append(tables, tbl)
+		}
+	}
+	if len(tables) == 0 {
+		return ErrTablesCannotBeEmpty
+	}
+
+	sheetNames := map[string]int{} // track to avoid collisions and overwriting sheets
+
 	f := excelize.NewFile()
+
 	// Create a new sheet.
 	sheetNum := 0
 	for i, tbl := range tables {
@@ -110,11 +137,16 @@ func WriteXLSX(path string, tables ...*Table) error {
 			continue
 		}
 		sheetNum++
-		sheetname := strings.TrimSpace(tbl.Name)
-		if len(sheetname) == 0 {
-			sheetname = fmt.Sprintf("Sheet%d", sheetNum)
+		sheetName := strings.TrimSpace(tbl.Name)
+		if len(sheetName) == 0 {
+			sheetName = fmt.Sprintf("Sheet%d", sheetNum)
 		}
-		index, err := f.NewSheet(sheetname)
+		if _, ok := sheetNames[sheetName]; ok {
+			return errorsutil.Wrap(ErrSheetNameCollision, "sheet name collision for (%s)", sheetName)
+		} else {
+			sheetNames[sheetName]++
+		}
+		sheetIndex, err := f.NewSheet(sheetName)
 		if err != nil {
 			return errorsutil.Wrap(err, "excelize.File.NewShet()")
 		}
@@ -124,7 +156,7 @@ func WriteXLSX(path string, tables ...*Table) error {
 			rowBase++
 			for i, cellValue := range tbl.Columns {
 				cellLocation := sheet.CoordinatesToSheetLocation(uint32(i), 0)
-				err := f.SetCellValue(sheetname, cellLocation, cellValue)
+				err := f.SetCellValue(sheetName, cellLocation, cellValue)
 				if err != nil {
 					return err
 				}
@@ -134,17 +166,43 @@ func WriteXLSX(path string, tables ...*Table) error {
 		for y, row := range tbl.Rows {
 			for x, cellValue := range row {
 				cellLocation := sheet.CoordinatesToSheetLocation(uint32(x), uint32(y+rowBase))
+				if fmttype, ok := tbl.FormatMap[x]; ok {
+					if fmttype == FormatURL {
+						txt, lnk := markdown.ParseLink(cellValue)
+						txt = strings.TrimSpace(txt)
+						lnk = strings.TrimSpace(lnk)
+						if txt == "" && lnk != "" {
+							txt = lnk
+						}
+						if txt != "" && lnk != "" {
+							if err := f.SetCellValue(sheetName, cellLocation, txt); err != nil {
+								return err
+							}
+							if err := f.SetCellHyperLink(sheetName, cellLocation, lnk, excelizeLinkTypeExternal); err != nil {
+								return err
+							}
+							continue
+						} else if rxURLHTTPOrHTTPS.MatchString(cellValue) {
+							if err := f.SetCellValue(sheetName, cellLocation, cellValue); err != nil {
+								return err
+							}
+							if err := f.SetCellHyperLink(sheetName, cellLocation, cellValue, excelizeLinkTypeExternal); err != nil {
+								return err
+							}
+							continue
+						}
+					}
+				}
 				formattedVal, err := fmtFunc(cellValue, uint(x))
 				if err != nil {
 					return errorsutil.Wrap(err, "gocharts/data/tables/write.go/WriteXLSXFormatted.Error.FormatCellValue")
 				}
-				err = f.SetCellValue(sheetname, cellLocation, formattedVal)
-				if err != nil {
+				if err = f.SetCellValue(sheetName, cellLocation, formattedVal); err != nil {
 					return err
 				}
 				if tbl.FormatAutoLink {
 					if rxURLHTTPOrHTTPS.MatchString(cellValue) {
-						err := f.SetCellHyperLink(sheetname, cellLocation, cellValue, "External")
+						err := f.SetCellHyperLink(sheetName, cellLocation, cellValue, excelizeLinkTypeExternal)
 						if err != nil {
 							return err
 						}
@@ -154,14 +212,16 @@ func WriteXLSX(path string, tables ...*Table) error {
 		}
 		// Set active sheet of the workbook.
 		if i == 0 {
-			f.SetActiveSheet(index)
+			f.SetActiveSheet(sheetIndex)
 		}
 	}
+
 	// Delete default sheet.
 	err := f.DeleteSheet(f.GetSheetName(0))
 	if err != nil {
 		return errorsutil.Wrap(err, "excelize.File.DeleteSheet()")
 	}
+
 	// Save xlsx file by the given path.
 	return f.SaveAs(path)
 }
@@ -226,4 +286,38 @@ func (tbl *Table) WriteJSON(path string, perm os.FileMode, jsonPrefix, jsonInden
 		return err
 	}
 	return os.WriteFile(path, bytes, perm)
+}
+
+/*
+func WriteXLSXMapStringInt(filename, sheetname, colNameKey, colNameVal string, m map[string]int) error {
+	tbl := NewTable("")
+	if strings.TrimSpace(colNameKey) == "" {
+		colNameKey = "Key"
+	}
+	if strings.TrimSpace(colNameVal) == "" {
+		colNameVal = "Count"
+	}
+	tbl.Columns = []string{colNameKey, colNameVal}
+	tbl.FormatMap = map[int]string{0: FormatString, 1: FormatInt}
+	for k, v := range m {
+		tbl.Rows = append(tbl.Rows, []string{k, strconv.Itoa(v)})
+	}
+	return tbl.WriteXLSX(filename, sheetname)
+}
+*/
+
+func NewTableMapStringInt(tableName, colNameKey, colNameVal string, m map[string]int) Table {
+	tbl := NewTable(tableName)
+	if strings.TrimSpace(colNameKey) == "" {
+		colNameKey = "Key"
+	}
+	if strings.TrimSpace(colNameVal) == "" {
+		colNameVal = "Value"
+	}
+	tbl.Columns = []string{colNameKey, colNameVal}
+	tbl.FormatMap = map[int]string{0: FormatString, 1: FormatInt}
+	for k, v := range m {
+		tbl.Rows = append(tbl.Rows, []string{k, strconv.Itoa(v)})
+	}
+	return tbl
 }
