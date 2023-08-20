@@ -17,6 +17,9 @@ type ColumnDefinition struct {
 	Format string
 }
 
+// LoadColumnDefinitions loads a set of column definitions with names and formats. It
+// can be used to add columns to a table without any existing columns or to add to a
+// table with existing columns.
 func (tbl *Table) LoadColumnDefinitions(colDefs *ColumnDefinitions) {
 	if colDefs == nil {
 		return
