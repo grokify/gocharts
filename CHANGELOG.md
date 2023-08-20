@@ -1,0 +1,4 @@
+- v2.10
+  - `histogram`: Add ability to add create tables with map keys
+  - `table`: Easy addition of Column names and formats via `ColumnDefnitions`
+  - `table`: Hyperlinks for XLSX files via `FormatURL`
