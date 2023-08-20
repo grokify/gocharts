@@ -307,5 +307,5 @@ func (set *TimeSeriesSet) WriteXLSX(filename string, opts *TimeSeriesSetTableOpt
 	} else {
 		tbl.FormatFunc = format.FormatDateAndFloats
 	}
-	return table.WriteXLSX(filename, &tbl)
+	return table.WriteXLSX(filename, []*table.Table{&tbl})
 }

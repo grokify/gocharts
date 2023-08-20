@@ -80,7 +80,7 @@ func (tbl *Table) IsWellFormed() (isWellFormed bool, columnCount int, mismatchRo
 
 func (tbl *Table) WriteXLSX(path, sheetname string) error {
 	tbl.Name = sheetname
-	return WriteXLSX(path, tbl)
+	return WriteXLSX(path, []*Table{tbl})
 }
 
 func (tbl *Table) WriteCSV(path string) error {

@@ -64,5 +64,5 @@ func (ts *TableSet) WriteXLSX(filename string) error {
 		names = ts.TableNames()
 	}
 	tbls := ts.Tables(names)
-	return WriteXLSX(filename, tbls...)
+	return WriteXLSX(filename, tbls)
 }

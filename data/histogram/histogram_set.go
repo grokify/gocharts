@@ -370,5 +370,5 @@ func (hset *HistogramSet) HistogramSetTimeKeyCountWriteXLSX(filename string, int
 		return err
 	}
 	tbl.FormatFunc = format.FormatTimeAndInts
-	return table.WriteXLSX(filename, &tbl)
+	return table.WriteXLSX(filename, []*table.Table{&tbl})
 }

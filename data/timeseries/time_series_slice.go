@@ -55,5 +55,5 @@ func TimeSeriesSliceTable(tsSlice []TimeSeries) table.Table {
 func TimeSeriesSliceWriteXLSX(filename string, tsSlice []TimeSeries) error {
 	tbl := TimeSeriesSliceTable(tsSlice)
 	tbl.FormatFunc = format.FormatTimeAndFloats
-	return table.WriteXLSX(filename, &tbl)
+	return table.WriteXLSX(filename, []*table.Table{&tbl})
 }
