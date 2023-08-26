@@ -45,6 +45,25 @@ func (tbl *Table) ColumnsValuesDistinct(wantCols []string, stripSpace bool) (map
 	return data, nil
 }
 
+func (tbl *Table) ColumnValuesCounts(colIdx uint, trimSpace, includeEmpty bool) map[string]int {
+	m := map[string]int{}
+	colIdxInt := int(colIdx)
+	for _, row := range tbl.Rows {
+		if colIdxInt >= len(row) {
+			continue
+		}
+		v := row[colIdxInt]
+		if trimSpace {
+			v = strings.TrimSpace(v)
+		}
+		if !includeEmpty && v == "" {
+			continue
+		}
+		m[v]++
+	}
+	return m
+}
+
 func (tbl *Table) ColumnValuesSplit(colIdx uint, split bool, sep string, unique, sortResults bool) ([]string, map[string]int, error) {
 	msi := map[string]int{}
 	vals := []string{}
