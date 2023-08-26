@@ -206,30 +206,6 @@ func (hist *Histogram) MayKeyValues(key string, dedupe bool) ([]string, error) {
 	return vals, nil
 }
 
-/*
-func mapStringStringSubset(m map[string]string, keys []string, inclUnknown, trimSpace, inclEmpty bool) map[string]string {
-	newMap := map[string]string{}
-	keyMap := map[string]int{}
-	for i, k := range keys {
-		keyMap[k] = i
-	}
-	for _, k := range keys {
-		if v, ok := m[k]; ok {
-			if trimSpace {
-				v = strings.TrimSpace(v)
-			}
-			if !inclEmpty && v == "" {
-				continue
-			}
-			newMap[k] = v
-		} else if inclEmpty {
-			newMap[k] = ""
-		}
-	}
-	return newMap
-}
-*/
-
 // TableMap is used to generate a table using map keys.
 func (hist *Histogram) TableMap(mapCols []string, colNameBinCount string) (*table.Table, error) {
 	if strings.TrimSpace(colNameBinCount) == "" {
@@ -268,31 +244,6 @@ func (hist *Histogram) TableMap(mapCols []string, colNameBinCount string) (*tabl
 	tbl.FormatMap = map[int]string{len(tbl.Columns) - 1: "int"}
 	return &tbl, nil
 }
-
-/*
-// TableMap is used to generate a table using map keys.
-func (hist *Histogram) TableMapOld(mapCols []string, colNameBinCount string) (*table.Table, error) {
-	tbl := table.NewTable(hist.Name)
-	if strings.TrimSpace(colNameBinCount) == "" {
-		colNameBinCount = "Count"
-	}
-	tbl.Columns = mapCols
-	tbl.Columns = append(mapCols, colNameBinCount)
-	for binName, binCount := range hist.Bins {
-		binMap, err := maputil.ParseMapStringString(binName)
-		if err != nil {
-			return nil, err
-		}
-		binVals := binMap.Gets(true, mapCols)
-
-		tbl.Rows = append(tbl.Rows,
-			append(binVals, strconv.Itoa(binCount)),
-		)
-	}
-	tbl.FormatMap = map[int]string{len(tbl.Columns) - 1: "int"}
-	return &tbl, nil
-}
-*/
 
 func (hist *Histogram) WriteXLSX(filename, sheetname, colNameBinName, colNameBinCount string) error {
 	tbl := hist.Table(colNameBinName, colNameBinCount)
