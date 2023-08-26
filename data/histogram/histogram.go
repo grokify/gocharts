@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/grokify/mogo/type/maputil"
+	"github.com/grokify/mogo/type/slicesutil"
 	"github.com/olekukonko/tablewriter"
 
 	"github.com/grokify/gocharts/v2/data/point"
@@ -21,8 +22,8 @@ type Histogram struct {
 	Bins        map[string]int
 	Counts      map[string]int // how many items have counts.
 	Percentages map[string]float64
-	BinCount    uint
-	Sum         int
+	// BinCount    uint
+	// Sum         int
 }
 
 func NewHistogram(name string) *Histogram {
@@ -31,11 +32,18 @@ func NewHistogram(name string) *Histogram {
 		Bins:        map[string]int{},
 		Counts:      map[string]int{},
 		Percentages: map[string]float64{},
-		BinCount:    0}
+		// BinCount:    0}
+	}
 }
 
 func (hist *Histogram) Add(binName string, binCount int) {
 	hist.Bins[binName] += binCount
+}
+
+func (hist *Histogram) AddBulk(m map[string]int) {
+	for k, v := range m {
+		hist.Add(k, v)
+	}
 }
 
 // AddMap provides a helper function to automatically create url encoded string keys.
@@ -44,14 +52,6 @@ func (hist *Histogram) AddMap(binMap map[string]string, binCount int) {
 	m := maputil.MapStringString(binMap)
 	key := m.Encode()
 	hist.Add(key, binCount)
-}
-
-func (hist *Histogram) BinSum() int {
-	binSum := 0
-	for _, c := range hist.Bins {
-		binSum += c
-	}
-	return binSum
 }
 
 func (hist *Histogram) Inflate() {
@@ -65,13 +65,13 @@ func (hist *Histogram) Inflate() {
 		hist.Counts[countString]++
 		sum += binVal
 	}
-	hist.BinCount = uint(len(hist.Bins))
+	// hist.BinCount = uint(len(hist.Bins))
 
 	hist.Percentages = map[string]float64{}
 	for binName, binVal := range hist.Bins {
 		hist.Percentages[binName] = float64(binVal) / float64(sum)
 	}
-	hist.Sum = sum
+	// hist.Sum = sum
 }
 
 func (hist *Histogram) BinNames() []string {
@@ -90,12 +90,16 @@ func (hist *Histogram) BinNameExists(binName string) bool {
 	return false
 }
 
-func (hist *Histogram) ValueSum() int {
-	totalCount := 0
-	for _, binCount := range hist.Bins {
-		totalCount += binCount
+func (hist *Histogram) Sum() int {
+	binSum := 0
+	for _, c := range hist.Bins {
+		binSum += c
 	}
-	return totalCount
+	return binSum
+}
+
+func (hist *Histogram) KeyCount() int {
+	return len(hist.Bins)
 }
 
 func (hist *Histogram) Stats() point.PointSet {
@@ -150,7 +154,7 @@ func (hist *Histogram) WriteTableASCII(w io.Writer, header []string, sortBy stri
 	if inclTotal {
 		table.SetFooter([]string{
 			"Total",
-			strconv.Itoa(hist.ValueSum()),
+			strconv.Itoa(hist.Sum()),
 		}) // Add Footer
 	}
 	table.SetBorder(false) // Set Border to false
@@ -184,8 +188,90 @@ func (hist *Histogram) MapKeys() ([]string, error) {
 	return maputil.Keys(keys), nil
 }
 
+// MayKeyValues returns a list of keys using query string keys.
+func (hist *Histogram) MayKeyValues(key string, dedupe bool) ([]string, error) {
+	vals := []string{}
+	for qry := range hist.Bins {
+		m, err := maputil.ParseMapStringString(qry)
+		if err != nil {
+			return []string{}, err
+		}
+		if v, ok := m[key]; ok {
+			vals = append(vals, v)
+		}
+	}
+	if dedupe {
+		vals = slicesutil.Dedupe(vals)
+	}
+	return vals, nil
+}
+
+/*
+func mapStringStringSubset(m map[string]string, keys []string, inclUnknown, trimSpace, inclEmpty bool) map[string]string {
+	newMap := map[string]string{}
+	keyMap := map[string]int{}
+	for i, k := range keys {
+		keyMap[k] = i
+	}
+	for _, k := range keys {
+		if v, ok := m[k]; ok {
+			if trimSpace {
+				v = strings.TrimSpace(v)
+			}
+			if !inclEmpty && v == "" {
+				continue
+			}
+			newMap[k] = v
+		} else if inclEmpty {
+			newMap[k] = ""
+		}
+	}
+	return newMap
+}
+*/
+
 // TableMap is used to generate a table using map keys.
 func (hist *Histogram) TableMap(mapCols []string, colNameBinCount string) (*table.Table, error) {
+	if strings.TrimSpace(colNameBinCount) == "" {
+		colNameBinCount = "Count"
+	}
+
+	// create histogram with minimized aggregate map keys to aggregate exclude non-desired
+	// properties from the key for aggregation.
+	histSubset := NewHistogram("")
+	for binName, binCount := range hist.Bins {
+		binMap, err := maputil.ParseMapStringString(binName)
+		if err != nil {
+			return nil, err
+		}
+		newBinMap := binMap.Subset(mapCols, false, true, true)
+		// newBinMap := mapStringStringSubset(binMap, mapCols, true, false, true)
+		// fmtutil.PrintJSON(newBinMap)
+		histSubset.AddMap(newBinMap, binCount)
+	}
+
+	tbl := table.NewTable(hist.Name)
+	tbl.Columns = append(mapCols, colNameBinCount)
+
+	for binName, binCount := range histSubset.Bins {
+		binMap, err := maputil.ParseMapStringString(binName)
+		if err != nil {
+			return nil, err
+		}
+		binVals := binMap.Gets(true, mapCols)
+
+		tbl.Rows = append(tbl.Rows,
+			append(binVals, strconv.Itoa(binCount)),
+		)
+	}
+
+	tbl.FormatMap = map[int]string{len(tbl.Columns) - 1: "int"}
+	return &tbl, nil
+}
+
+/*
+// TableMap is used to generate a table using map keys.
+func (hist *Histogram) TableMapOld(mapCols []string, colNameBinCount string) (*table.Table, error) {
 	tbl := table.NewTable(hist.Name)
 	if strings.TrimSpace(colNameBinCount) == "" {
 		colNameBinCount = "Count"
@@ -206,6 +292,7 @@ func (hist *Histogram) TableMap(mapCols []string, colNameBinCount string) (*tabl
 	tbl.FormatMap = map[int]string{len(tbl.Columns) - 1: "int"}
 	return &tbl, nil
 }
+*/
 
 func (hist *Histogram) WriteXLSX(filename, sheetname, colNameBinName, colNameBinCount string) error {
 	tbl := hist.Table(colNameBinName, colNameBinCount)
