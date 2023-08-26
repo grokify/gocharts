@@ -9,27 +9,31 @@ var histogramAnyTests = []struct {
 	sum int
 }{
 	{&Histogram{Bins: map[string]int{"foo": 10}}, 10},
-	{&HistogramSet{HistogramMap: map[string]*Histogram{"bar": &Histogram{Bins: map[string]int{"foo": 10}}}}, 10},
+	{&HistogramSet{
+		HistogramMap: map[string]*Histogram{
+			"bar": {Bins: map[string]int{"foo": 10}}}}, 10},
 	{
 		&HistogramSets{
 			HistogramSetMap: map[string]*HistogramSet{
-				"baz": &HistogramSet{
+				"baz": {
 					HistogramMap: map[string]*Histogram{
-						"bar": &Histogram{Bins: map[string]int{"foo": 10}}}},
+						"bar": {Bins: map[string]int{"foo": 10}}}},
 			},
 		},
 		10,
 	},
-	{&Histogram{Bins: map[string]int{"foo": 10, "bar": 2}}, 12},
-	{&HistogramSet{HistogramMap: map[string]*Histogram{
-		"bar": &Histogram{Bins: map[string]int{
-			"foo": 10,
-			"bar": 20,
-		}},
-		"baz": &Histogram{Bins: map[string]int{
-			"foo": 12,
-			"bar": 11,
-		}}},
+	{&Histogram{
+		Bins: map[string]int{"foo": 10, "bar": 2}}, 12},
+	{&HistogramSet{
+		HistogramMap: map[string]*Histogram{
+			"bar": {Bins: map[string]int{
+				"foo": 10,
+				"bar": 20,
+			}},
+			"baz": {Bins: map[string]int{
+				"foo": 12,
+				"bar": 11,
+			}}},
 	}, 53,
 	},
 }
