@@ -155,7 +155,7 @@ func WriteXLSX(path string, tbls []*Table) error {
 		if len(tbl.Columns) > 0 {
 			rowBase++
 			for i, cellValue := range tbl.Columns {
-				cellLocation := sheet.CoordinatesToSheetLocation(uint32(i), 0)
+				cellLocation := sheet.CoordinatesToSheetLocation(uint(i), 0)
 				err := f.SetCellValue(sheetName, cellLocation, cellValue)
 				if err != nil {
 					return err
@@ -165,7 +165,7 @@ func WriteXLSX(path string, tbls []*Table) error {
 		fmtFunc := tbl.FormatterFunc()
 		for y, row := range tbl.Rows {
 			for x, cellValue := range row {
-				cellLocation := sheet.CoordinatesToSheetLocation(uint32(x), uint32(y+rowBase))
+				cellLocation := sheet.CoordinatesToSheetLocation(uint(x), uint(y+rowBase))
 				if fmttype, ok := tbl.FormatMap[x]; ok {
 					if fmttype == FormatURL {
 						txt, lnk := markdown.ParseLink(cellValue)
@@ -258,7 +258,7 @@ func WriteXLSXInterface(filename string, sheetdatas ...SheetData) error {
 		}
 		for y, row := range sheetdata.Rows {
 			for x, cellValue := range row {
-				cellLocation := sheet.CoordinatesToSheetLocation(uint32(x), uint32(y))
+				cellLocation := sheet.CoordinatesToSheetLocation(uint(x), uint(y))
 				err := f.SetCellValue(sheetname, cellLocation, cellValue)
 				if err != nil {
 					return err
