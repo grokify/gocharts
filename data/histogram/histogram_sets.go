@@ -60,7 +60,7 @@ func (hsets *HistogramSets) BinNames() []string {
 	return binNames
 }
 
-func (hsets *HistogramSets) BinSum() int {
+func (hsets *HistogramSets) Sum() int {
 	sum := 0
 	for _, hset := range hsets.HistogramSetMap {
 		for _, hist := range hset.HistogramMap {

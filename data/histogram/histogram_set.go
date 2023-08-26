@@ -10,11 +10,11 @@ import (
 	"github.com/grokify/mogo/errors/errorsutil"
 	"github.com/grokify/mogo/time/timeutil"
 	"github.com/grokify/mogo/type/stringsutil"
-	"github.com/xuri/excelize/v2"
+	excelize "github.com/xuri/excelize/v2"
 
 	"github.com/grokify/gocharts/v2/data/table"
+	"github.com/grokify/gocharts/v2/data/table/excelizeutil"
 	"github.com/grokify/gocharts/v2/data/table/format"
-	"github.com/grokify/gocharts/v2/data/table/sheet"
 	"github.com/grokify/gocharts/v2/data/timeseries"
 )
 
@@ -111,11 +111,11 @@ func (hset *HistogramSet) HistogramNameExists(histName string) bool {
 	return false
 }
 
-// ValueSum returns the sum of all the histogram bin values.
-func (hset *HistogramSet) ValueSum() int {
+// Sum returns the sum of all the histogram bin values.
+func (hset *HistogramSet) Sum() int {
 	valueSum := 0
 	for _, hist := range hset.HistogramMap {
-		valueSum += hist.ValueSum()
+		valueSum += hist.Sum()
 	}
 	return valueSum
 }
@@ -279,7 +279,7 @@ func (hset *HistogramSet) WriteXLSX(filename, sheetName, colName1, colName2, col
 	}
 	header := []interface{}{colName1, colName2, colNameCount}
 
-	err = sheet.SetRowValues(f, sheetName, 0, header)
+	err = excelizeutil.SetRowValues(f, sheetName, 0, header)
 	if err != nil {
 		return err
 	}
@@ -299,7 +299,7 @@ func (hset *HistogramSet) WriteXLSX(filename, sheetName, colName1, colName2, col
 			} else {
 				rowVals = []interface{}{fstatsName, binName, binCount}
 			}
-			err := sheet.SetRowValues(f, sheetName, rowIdx, rowVals)
+			err := excelizeutil.SetRowValues(f, sheetName, rowIdx, rowVals)
 			if err != nil {
 				return err
 			}
