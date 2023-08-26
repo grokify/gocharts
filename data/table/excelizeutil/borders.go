@@ -1,4 +1,4 @@
-package xcelize
+package excelizeutil
 
 /*
 https://pkg.go.dev/github.com/xuri/excelize/v2#File.NewStyle
