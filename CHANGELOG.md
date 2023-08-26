@@ -1,3 +1,7 @@
+- v2.11
+  - `histogram`: Add `HistogramAny` interface
+  - `table`: Add `excelizeutil.GetTable()`, `excelizeutil.GetCellValue()`
+  - `table`: Add `Table.CellValuesCounts()`
 - v2.10
   - `histogram`: Add map keys to `Histogram{}` to support arbitrary depth tables
   - `histogram`: Add `BunSum()` func to `Histogram{}`, `HistogramSet{}`, and `HistogramSets{}`
