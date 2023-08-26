@@ -5,7 +5,7 @@ import (
 )
 
 var quotient26ToPrefixTests = []struct {
-	quotient uint32
+	quotient uint
 	prefix   string
 }{
 	{0, ""},
@@ -24,10 +24,10 @@ func TestQuotient26ToPrefix(t *testing.T) {
 }
 
 var colNumberToLettersTests = []struct {
-	colNumber     uint32
-	rowNumber     uint32
-	colIndex      uint32
-	rowIndex      uint32
+	colNumber     uint
+	rowNumber     uint
+	colIndex      uint
+	rowIndex      uint
 	prefix        string
 	suffix        string
 	letters       string
@@ -48,12 +48,12 @@ var colNumberToLettersTests = []struct {
 	{702, 4096, 701, 4095, "Z", "Z", "ZZ", "ZZ4096"}}
 
 type Instance struct {
-	ColNumber   uint32
-	ColIndex    uint32
-	RowNumber   uint32
-	RowIndex    uint32
-	Quotient26  uint32
-	Remainder26 uint32
+	ColNumber   uint
+	ColIndex    uint
+	RowNumber   uint
+	RowIndex    uint
+	Quotient26  uint
+	Remainder26 uint
 	PrefixWant  string
 	PrefixGot   string
 	SuffixWant  string
