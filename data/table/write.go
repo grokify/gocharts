@@ -228,7 +228,7 @@ func WriteXLSX(path string, tbls []*Table) error {
 
 type SheetData struct {
 	SheetName string
-	Rows      [][]interface{}
+	Rows      [][]any
 }
 
 func WriteXLSXInterface(filename string, sheetdatas ...SheetData) error {

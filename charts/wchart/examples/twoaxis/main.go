@@ -22,7 +22,7 @@ func main() {
 		},
 		XAxis: chart.XAxis{
 			TickPosition: chart.TickPositionBetweenTicks,
-			ValueFormatter: func(v interface{}) string {
+			ValueFormatter: func(v any) string {
 				typed := v.(float64)
 				return fmt.Sprintf("%v", typed)
 				//			m := timeutil.MonthBegin(time.Now(), int(typed))

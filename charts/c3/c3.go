@@ -26,9 +26,9 @@ func (data *C3Chart) MustJSON() []byte {
 }
 
 type C3ChartData struct {
-	X       string          `json:"x,omitempty"`
-	Columns [][]interface{} `json:"columns,omitempty"`
-	Type    string          `json:"type,omitempty"`
+	X       string  `json:"x,omitempty"`
+	Columns [][]any `json:"columns,omitempty"`
+	Type    string  `json:"type,omitempty"`
 }
 
 func (data *C3ChartData) MustJSON() []byte {
@@ -59,10 +59,10 @@ type C3GridLines struct {
 }
 
 type C3GridLine struct {
-	Value    interface{} `json:"value,omitempty"`
-	Text     string      `json:"text,omitempty"`
-	Class    string      `json:"class,omitempty"`
-	Position string      `json:"position,omitempty"`
+	Value    any    `json:"value,omitempty"`
+	Text     string `json:"text,omitempty"`
+	Class    string `json:"class,omitempty"`
+	Position string `json:"position,omitempty"`
 }
 
 type C3Donut struct {
@@ -73,11 +73,11 @@ type C3Donut struct {
 func C3ChartForEsAggregationSimple(agg v5.AggregationResRad) C3Chart {
 	c3Chart := C3Chart{
 		Data: C3ChartData{
-			Columns: [][]interface{}{},
+			Columns: [][]any{},
 		},
 	}
 	for _, bucket := range agg.AggregationData.Buckets {
-		c3Column := []interface{}{bucket.Key, bucket.DocCount}
+		c3Column := []any{bucket.Key, bucket.DocCount}
 		c3Chart.Data.Columns = append(c3Chart.Data.Columns, c3Column)
 	}
 	return c3Chart
@@ -113,9 +113,9 @@ type C3ColumnsInt struct {
 }
 
 func (cols *C3ColumnsInt) ToC3ChartData(chartType string) C3ChartData {
-	columns := [][]interface{}{}
+	columns := [][]any{}
 	for _, col := range cols.Columns {
-		row := []interface{}{}
+		row := []any{}
 		row = append(row, col.Name)
 		for _, val := range col.Values {
 			row = append(row, val)

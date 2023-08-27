@@ -11,7 +11,7 @@ func main() {
 	chart := c3.C3Chart{
 		Bindto: "#chart",
 		Data: c3.C3ChartData{
-			Columns: [][]interface{}{{"Yes", 60}, {"No", 40}},
+			Columns: [][]any{{"Yes", 60}, {"No", 40}},
 			Type:    "donut",
 		},
 		Donut: c3.C3Donut{Title: "Votes"},

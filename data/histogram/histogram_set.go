@@ -277,7 +277,7 @@ func (hset *HistogramSet) WriteXLSX(filename, sheetName, colName1, colName2, col
 	if len(colNameCount) == 0 {
 		colNameCount = "Count"
 	}
-	header := []interface{}{colName1, colName2, colNameCount}
+	header := []any{colName1, colName2, colNameCount}
 
 	err = excelizeutil.SetRowValues(f, sheetName, 0, header)
 	if err != nil {
@@ -293,11 +293,11 @@ func (hset *HistogramSet) WriteXLSX(filename, sheetName, colName1, colName2, col
 			}
 		}
 		for binName, binCount := range fstats.Bins {
-			var rowVals []interface{}
+			var rowVals []any
 			if hset.KeyIsTime {
-				rowVals = []interface{}{fstatsNameDt, binName, binCount}
+				rowVals = []any{fstatsNameDt, binName, binCount}
 			} else {
-				rowVals = []interface{}{fstatsName, binName, binCount}
+				rowVals = []any{fstatsName, binName, binCount}
 			}
 			err := excelizeutil.SetRowValues(f, sheetName, rowIdx, rowVals)
 			if err != nil {

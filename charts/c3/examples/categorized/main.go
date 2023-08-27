@@ -34,7 +34,7 @@ func main() {
 	chart := c3.C3Chart{
 		Bindto: "#chart",
 		Data: c3.C3ChartData{
-			Columns: [][]interface{}{{"data1", 30, 200, 100, 400, 150, 250, 50, 100, 250}},
+			Columns: [][]any{{"data1", 30, 200, 100, 400, 150, 250, 50, 100, 250}},
 		},
 		Axis: c3.C3Axis{
 			X: c3.C3AxisX{

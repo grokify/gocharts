@@ -20,7 +20,7 @@ type TimeseriesData struct {
 }
 
 type TimeseriesDataJSON struct {
-	Columns   [][]interface{}  `json:"columns"`
+	Columns   [][]any          `json:"columns"`
 	Totals    []int64          `json:"totals"`
 	TotalsMap map[string]int64 `json:"totalsMap"`
 }
@@ -43,8 +43,8 @@ type TimeseriesPageData struct {
 
 func (data *TimeseriesData) AddTimeSeriesSet(set *interval.TimeSeriesSet, interval timeutil.Interval, seriesType interval.SeriesType) error {
 	data.TimeSeriesSet = set
-	columns := [][]interface{}{}
-	xValues := []interface{}{"x"}
+	columns := [][]any{}
+	xValues := []any{"x"}
 	totals := []int64{}
 	totalsMap := map[string]int64{}
 
@@ -54,7 +54,7 @@ func (data *TimeseriesData) AddTimeSeriesSet(set *interval.TimeSeriesSet, interv
 		if err != nil {
 			return err
 		}
-		yValues := []interface{}{seriesName}
+		yValues := []any{seriesName}
 
 		items := timeSeries.ItemsSorted()
 		for j, item := range items {

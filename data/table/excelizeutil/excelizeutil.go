@@ -11,7 +11,7 @@ import (
 
 var ErrExcelizeFileCannotBeNil = errors.New("excelize.File cannot be nil")
 
-func SetRowValues(f *excelize.File, sheetName string, rowIndex uint, rowValues []interface{}) error {
+func SetRowValues(f *excelize.File, sheetName string, rowIndex uint, rowValues []any) error {
 	if f == nil {
 		return ErrExcelizeFileCannotBeNil
 	}

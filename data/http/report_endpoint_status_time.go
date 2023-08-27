@@ -93,7 +93,7 @@ type Request struct {
 	OperationID   string // OpenAPI spec OperationID
 	SessionID     string // native SessionID
 	RequestID     string // native RequestID, typically UID
-	RawData       interface{}
+	RawData       any
 	RawDataString string
 }
 

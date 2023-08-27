@@ -22,7 +22,7 @@ func TimeSeriesToBarChart(ds timeseries.TimeSeries) chart.BarChart {
 			},
 		},
 		YAxis: chart.YAxis{
-			ValueFormatter: func(v interface{}) string {
+			ValueFormatter: func(v any) string {
 				if vf, isFloat := v.(float64); isFloat {
 					return strconvutil.Commify(int64(vf))
 				}

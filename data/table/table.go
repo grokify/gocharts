@@ -14,7 +14,7 @@ type Table struct {
 	Columns        Columns
 	Rows           [][]string
 	FormatMap      map[int]string
-	FormatFunc     func(val string, colIdx uint) (interface{}, error)
+	FormatFunc     func(val string, colIdx uint) (any, error)
 	FormatAutoLink bool
 	ID             string
 	Class          string

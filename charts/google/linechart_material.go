@@ -28,7 +28,7 @@ type LineChartMaterial struct {
 	Width    int
 	Height   int
 	Columns  []Column
-	Data     [][]interface{}
+	Data     [][]any
 }
 
 type Column struct {
@@ -82,10 +82,10 @@ func LineChartMaterialFromTimeSeriesSet(tss timeseries.TimeSeriesSet, yearLabel 
 	}
 	lcm.Columns = lcmCols
 
-	rows := [][]interface{}{}
+	rows := [][]any{}
 
 	for _, dt := range tss.Times {
-		row := []interface{}{strconv.Itoa(dt.Year())}
+		row := []any{strconv.Itoa(dt.Year())}
 
 		for _, seriesName := range tss.Order {
 			item, err := tss.Item(seriesName, dt.Format(time.RFC3339))

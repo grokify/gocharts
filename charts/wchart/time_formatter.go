@@ -14,7 +14,7 @@ type TimeFormatter struct {
 	Layout string // time format string
 }
 
-func (tvf *TimeFormatter) FormatTime(v interface{}) string {
+func (tvf *TimeFormatter) FormatTime(v any) string {
 	tvf.Layout = strings.TrimSpace(tvf.Layout)
 	if len(tvf.Layout) == 0 {
 		tvf.Layout = time.RFC3339

@@ -69,13 +69,13 @@ func QoqDataToChart(domID string, axis c3.C3Axis, qoqData []timeseries.RowFloat6
 	qoqChart := c3.C3Chart{
 		Bindto: "#" + domID,
 		Data: c3.C3ChartData{
-			Columns: [][]interface{}{},
+			Columns: [][]any{},
 		},
 		Axis: axis,
 		Grid: c3.C3Grid{Y: c3.C3GridLines{Show: true}}}
 
 	for _, r := range qoqData {
-		r2 := []interface{}{}
+		r2 := []any{}
 		r2 = append(r2, r.Name)
 		for _, v := range r.Values {
 			r2 = append(r2, int(mathutil.Round(strconvutil.ChangeToXoXPct(v))))
@@ -89,13 +89,13 @@ func FunnelDataToChart(domID string, axis c3.C3Axis, funnelData []timeseries.Row
 	funnelChart := c3.C3Chart{
 		Bindto: "#" + domID,
 		Data: c3.C3ChartData{
-			Columns: [][]interface{}{},
+			Columns: [][]any{},
 		},
 		Axis: axis,
 		Grid: c3.C3Grid{Y: c3.C3GridLines{Show: true}}}
 
 	for _, r := range funnelData {
-		r2 := []interface{}{}
+		r2 := []any{}
 		r2 = append(r2, r.Name)
 		for _, v := range r.Values {
 			r2 = append(r2, int(mathutil.Round(strconvutil.ChangeToFunnelPct(v))))

@@ -9,7 +9,7 @@ type TableSet struct {
 	Name       string
 	Columns    []string
 	FormatMap  map[int]string
-	FormatFunc func(val string, colIdx uint) (interface{}, error)
+	FormatFunc func(val string, colIdx uint) (any, error)
 	TableMap   map[string]*Table
 	Order      []string
 }

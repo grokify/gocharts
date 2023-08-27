@@ -130,7 +130,7 @@ func TimeSeriesSetToLineChart(tset timeseries.TimeSeriesSet, opts *LineChartOpts
 	graph := chart.Chart{
 		Title: strings.Join(titleParts, " "),
 		YAxis: chart.YAxis{
-			ValueFormatter: func(v interface{}) string {
+			ValueFormatter: func(v any) string {
 				if vf, isFloat := v.(float64); isFloat {
 					return strconvutil.Commify(int64(vf))
 				}

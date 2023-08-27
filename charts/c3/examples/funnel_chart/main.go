@@ -77,13 +77,13 @@ func main() {
 			qoqChart := c3.C3Chart{
 				Bindto: "#" + domID,
 				Data: c3.C3ChartData{
-					Columns: [][]interface{}{},
+					Columns: [][]any{},
 				},
 				Axis: c3Bar.Axis,
 				Grid: c3.C3Grid{Y: c3.C3GridLines{Show: true}}}
 
 			for _, r := range qoqData {
-				r2 := []interface{}{}
+				r2 := []any{}
 				r2 = append(r2, r.Name)
 				for _, v := range r.Values {
 					r2 = append(r2, int(math.Round(strconvutil.ChangeToXoXPct(v))))
@@ -98,13 +98,13 @@ func main() {
 			funChart := c3.C3Chart{
 				Bindto: "#" + domID,
 				Data: c3.C3ChartData{
-					Columns: [][]interface{}{},
+					Columns: [][]any{},
 				},
 				Axis: c3Bar.Axis,
 				Grid: c3.C3Grid{Y: c3.C3GridLines{Show: true}}}
 
 			for _, r := range funData {
-				r2 := []interface{}{}
+				r2 := []any{}
 				r2 = append(r2, r.Name)
 				for _, v := range r.Values {
 					r2 = append(r2, int(math.Round(strconvutil.ChangeToFunnelPct(v))))

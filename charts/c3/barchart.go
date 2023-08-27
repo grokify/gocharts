@@ -10,12 +10,12 @@ import (
 func TimeSeriesSetSimpleToC3ChartBar(data []timeseries.RowInt64, c3BarInfo C3Bar) C3Chart {
 	c3Chart := C3Chart{
 		Data: C3ChartData{
-			Columns: [][]interface{}{},
+			Columns: [][]any{},
 			Type:    "bar"},
 		Bar: c3BarInfo}
 
 	for _, r := range data {
-		row := []interface{}{}
+		row := []any{}
 		row = append(row, r.Name)
 		for _, v := range r.Values {
 			row = append(row, v)
@@ -29,11 +29,11 @@ func TimeSeriesSetSimpleToC3ChartBar(data []timeseries.RowInt64, c3BarInfo C3Bar
 func SlotDataSeriesSetSimpleToC3ChartBar(input slot.SlotDataSeriesSetSimple, c3BarInfo C3Bar, hardMax int64) (C3Chart, error) {
 	output := C3Chart{
 		Data: C3ChartData{
-			Columns: [][]interface{}{},
+			Columns: [][]any{},
 			Type:    "bar"},
 		Bar: c3BarInfo}
 
-	columns := [][]interface{}{}
+	columns := [][]any{}
 	min, max := input.MinMaxX()
 	if hardMax > 0 {
 		max = hardMax
@@ -46,7 +46,7 @@ func SlotDataSeriesSetSimpleToC3ChartBar(input slot.SlotDataSeriesSetSimple, c3B
 			return output, fmt.Errorf("series name not found [%v]", seriesName)
 		}
 
-		column := []interface{}{seriesName}
+		column := []any{seriesName}
 		for i := min; i <= max; i++ {
 			//fmt.Printf("%v ", i)
 			x := i
