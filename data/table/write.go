@@ -61,8 +61,7 @@ func (tbl *Table) FormatterFunc() func(val string, colIdx uint) (any, error) {
 	return func(val string, colIdx uint) (any, error) {
 		fmtType, ok := tbl.FormatMap[int(colIdx)]
 		if !ok || len(strings.TrimSpace(fmtType)) == 0 {
-			fmtType, ok = tbl.FormatMap[-1]
-			if !ok {
+			if fmtType, ok = tbl.FormatMap[-1]; !ok {
 				fmtType = ""
 			}
 		}
@@ -70,12 +69,11 @@ func (tbl *Table) FormatterFunc() func(val string, colIdx uint) (any, error) {
 		case FormatFloat:
 			if strings.TrimSpace(val) == "" {
 				return float64(0), nil
-			}
-			floatVal, err := strconv.ParseFloat(val, 64)
-			if err != nil {
+			} else if floatVal, err := strconv.ParseFloat(val, 64); err != nil {
 				return val, err
+			} else {
+				return floatVal, nil
 			}
-			return floatVal, nil
 		case FormatInt:
 			if strings.TrimSpace(val) == "" {
 				return int(0), nil
@@ -90,17 +88,17 @@ func (tbl *Table) FormatterFunc() func(val string, colIdx uint) (any, error) {
 			}
 			return intVal, nil
 		case FormatDate:
-			dtVal, err := time.Parse(time.RFC3339, val)
-			if err != nil {
+			if dtVal, err := time.Parse(time.RFC3339, val); err != nil {
 				return val, err
+			} else {
+				return dtVal.Format(timeutil.DateMDY), nil
 			}
-			return dtVal.Format(timeutil.DateMDY), nil
 		case FormatTime:
-			dtVal, err := time.Parse(time.RFC3339, val)
-			if err != nil {
+			if dtVal, err := time.Parse(time.RFC3339, val); err != nil {
 				return val, err
+			} else {
+				return dtVal, nil
 			}
-			return dtVal, nil
 		}
 		return val, nil
 	}
