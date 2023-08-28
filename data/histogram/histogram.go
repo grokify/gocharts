@@ -102,12 +102,6 @@ func (hist *Histogram) ItemCount() uint {
 	return uint(len(hist.Bins))
 }
 
-/*
-func (hist *Histogram) KeyCount() int {
-	return len(hist.Bins)
-}
-*/
-
 func (hist *Histogram) Stats() point.PointSet {
 	pointSet := point.NewPointSet()
 	for binName, binCount := range hist.Bins {
