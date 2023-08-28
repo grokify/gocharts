@@ -1,10 +1,10 @@
 package histogram
 
 import (
-	"sort"
 	"strconv"
 	"strings"
 
+	"github.com/grokify/mogo/type/maputil"
 	"github.com/grokify/mogo/type/stringsutil"
 
 	"github.com/grokify/gocharts/v2/data/table"
@@ -52,12 +52,7 @@ func (hsets *HistogramSets) BinNames() []string {
 	hsets.Visit(func(hsetName, histName, binName string, binCount int) {
 		binNamesMap[binName] = 1
 	})
-	binNames := []string{}
-	for binName := range binNamesMap {
-		binNames = append(binNames, binName)
-	}
-	sort.Strings(binNames)
-	return binNames
+	return maputil.Keys(binNamesMap)
 }
 
 func (hsets *HistogramSets) Sum() int {
@@ -91,6 +86,10 @@ func (hsets *HistogramSets) Counts() *HistogramSetsCounts {
 // ItemCount returns the number of histogram sets.
 func (hsets *HistogramSets) ItemCount() uint {
 	return uint(len(hsets.HistogramSetMap))
+}
+
+func (hsets *HistogramSets) ItemNames() []string {
+	return maputil.Keys(hsets.HistogramSetMap)
 }
 
 func (hsets *HistogramSets) Visit(visit func(hsetName, histName, binName string, binCount int)) {

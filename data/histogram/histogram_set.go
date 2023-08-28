@@ -2,13 +2,13 @@ package histogram
 
 import (
 	"fmt"
-	"sort"
 	"strconv"
 	"strings"
 	"time"
 
 	"github.com/grokify/mogo/errors/errorsutil"
 	"github.com/grokify/mogo/time/timeutil"
+	"github.com/grokify/mogo/type/maputil"
 	"github.com/grokify/mogo/type/stringsutil"
 	excelize "github.com/xuri/excelize/v2"
 
@@ -61,16 +61,6 @@ func (hset *HistogramSet) Add(histName, binName string, binCount int) {
 	hset.HistogramMap[histName] = hist
 }
 
-func (hset *HistogramSet) BinSum() int {
-	binCount := 0
-	for _, hist := range hset.HistogramMap {
-		for _, c := range hist.Bins {
-			binCount += c
-		}
-	}
-	return binCount
-}
-
 // ItemCount returns the number of histograms.
 func (hset *HistogramSet) ItemCount() uint {
 	return uint(len(hset.HistogramMap))
@@ -87,19 +77,8 @@ func (hset *HistogramSet) ItemCounts() *Histogram {
 }
 
 // ItemNames returns the number of histograms.
-// Alias for `HistogramNames()`.
 func (hset *HistogramSet) ItemNames() []string {
-	return hset.HistogramNames()
-}
-
-// HistogramNames returns the number of histograms.
-func (hset *HistogramSet) HistogramNames() []string {
-	names := []string{}
-	for name := range hset.HistogramMap {
-		names = append(names, name)
-	}
-	sort.Strings(names)
-	return names
+	return maputil.Keys(hset.HistogramMap)
 }
 
 // HistogramNameExists returns a boolean indicating if
@@ -131,8 +110,7 @@ func (hset *HistogramSet) BinNameExists(binName string) bool {
 	return false
 }
 
-// BinNames returns all the bin names used across all the
-// histograms.
+// BinNames returns all the bin names used across all the histograms.
 func (hset *HistogramSet) BinNames() []string {
 	binNames := []string{}
 	for _, hist := range hset.HistogramMap {
@@ -217,7 +195,7 @@ func (hset *HistogramSet) TableMatrix(tableName, histColName string) (*table.Tab
 		tbl.FormatMap[0] = table.FormatString
 	}
 
-	hnames := hset.HistogramNames()
+	hnames := hset.ItemNames()
 	for _, hname := range hnames {
 		row := []string{hname}
 		hist, ok := hset.HistogramMap[hname]

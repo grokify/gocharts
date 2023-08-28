@@ -2,7 +2,6 @@ package histogram
 
 import (
 	"io"
-	"sort"
 	"strconv"
 	"strings"
 
@@ -75,12 +74,7 @@ func (hist *Histogram) Inflate() {
 }
 
 func (hist *Histogram) BinNames() []string {
-	binNames := []string{}
-	for binName := range hist.Bins {
-		binNames = append(binNames, binName)
-	}
-	sort.Strings(binNames)
-	return binNames
+	return hist.ItemNames()
 }
 
 func (hist *Histogram) BinNameExists(binName string) bool {
@@ -90,16 +84,20 @@ func (hist *Histogram) BinNameExists(binName string) bool {
 	return false
 }
 
+func (hist *Histogram) ItemCount() uint {
+	return uint(len(hist.Bins))
+}
+
+func (hist *Histogram) ItemNames() []string {
+	return maputil.Keys(hist.Bins)
+}
+
 func (hist *Histogram) Sum() int {
 	binSum := 0
 	for _, c := range hist.Bins {
 		binSum += c
 	}
 	return binSum
-}
-
-func (hist *Histogram) ItemCount() uint {
-	return uint(len(hist.Bins))
 }
 
 func (hist *Histogram) Stats() point.PointSet {
