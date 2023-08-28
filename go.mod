@@ -3,12 +3,12 @@ module github.com/grokify/gocharts/v2
 go 1.18
 
 require (
-	github.com/grokify/mogo v0.54.0
+	github.com/grokify/mogo v0.54.1
 	github.com/jessevdk/go-flags v1.5.0
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/valyala/quicktemplate v1.7.0
 	github.com/wcharczuk/go-chart/v2 v2.1.1
-	github.com/xuri/excelize/v2 v2.7.1
+	github.com/xuri/excelize/v2 v2.8.0
 	golang.org/x/exp v0.0.0-20230817173708-d852ddb80c63
 	gonum.org/v1/gonum v0.14.0
 )
