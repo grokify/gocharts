@@ -14,7 +14,8 @@ func (tbl *Table) RowCellCounts() map[int]int {
 	return mii
 }
 
-func (tbl *Table) RowsToMSS(keyIdx, valIdx uint) (map[string]string, error) {
+// RowsToMap converts two columns to a map, given a `keyIdx` and `valIdx` for the keys and values.
+func (tbl *Table) RowsToMap(keyIdx, valIdx uint) (map[string]string, error) {
 	m := map[string]string{}
 	kIdxInt := int(keyIdx)
 	vIdxInt := int(valIdx)
