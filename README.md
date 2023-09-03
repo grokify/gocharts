@@ -55,8 +55,8 @@ See the example here:
 
 [charts/rickshaw/examples/report.go](charts/rickshaw/examples/report.go)
 
- [build-status-svg]: https://github.com/grokify/gocharts/workflows/build/badge.svg
- [build-status-url]: https://github.com/grokify/gocharts/actions/workflows/build.yaml
+ [build-status-svg]: https://github.com/grokify/gocharts/workflows/test/badge.svg
+ [build-status-url]: https://github.com/grokify/gocharts/actions/workflows/test.yaml
  [goreport-svg]: https://goreportcard.com/badge/github.com/grokify/gocharts
  [goreport-url]: https://goreportcard.com/report/github.com/grokify/gocharts
  [docs-godoc-svg]: https://pkg.go.dev/badge/github.com/grokify/gocharts
