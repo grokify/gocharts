@@ -1,6 +1,7 @@
 package histogram
 
 import (
+	"errors"
 	"io"
 	"strconv"
 	"strings"
@@ -71,6 +72,21 @@ func (hist *Histogram) Inflate() {
 		hist.Percentages[binName] = float64(binVal) / float64(sum)
 	}
 	// hist.Sum = sum
+}
+
+func (hist *Histogram) BinCount(binName string) (int, error) {
+	if v, ok := hist.Bins[binName]; ok {
+		return v, nil
+	}
+	return -1, errors.New("bin not found")
+}
+
+func (hist *Histogram) BinCountOrDefault(binName string, def int) int {
+	c, err := hist.BinCount(binName)
+	if err != nil {
+		return def
+	}
+	return c
 }
 
 func (hist *Histogram) BinNames() []string {
