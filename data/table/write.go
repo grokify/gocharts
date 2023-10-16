@@ -9,7 +9,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/grokify/gocharts/v2/data/table/format"
 	"github.com/grokify/gocharts/v2/data/table/sheet"
 	"github.com/grokify/mogo/encoding/jsonutil"
 	"github.com/grokify/mogo/errors/errorsutil"
@@ -17,31 +16,6 @@ import (
 	"github.com/grokify/mogo/time/timeutil"
 	excelize "github.com/xuri/excelize/v2"
 )
-
-/*
-func writeCSV(path string, t *Table) error {
-	file, err := os.Create(path)
-	if err != nil {
-		return err
-	}
-	defer file.Close()
-
-	writer := csv.NewWriter(file)
-
-	if len(t.Columns) > 0 {
-		err = writer.Write(t.Columns)
-		if err != nil {
-			return err
-		}
-	}
-	err = writer.WriteAll(t.Rows)
-	if err != nil {
-		return err
-	}
-	writer.Flush()
-	return writer.Error()
-}
-*/
 
 // WriteCSVSimple writes a file with cols and rows data.
 func WriteCSVSimple(cols []string, rows [][]string, filename string) error {
@@ -51,13 +25,17 @@ func WriteCSVSimple(cols []string, rows [][]string, filename string) error {
 	return tbl.WriteCSV(filename)
 }
 
+// FormatterFunc returns a formatter function. A custom format func is returned if it is
+// supplied and `FormatMap` is empty. If FormatMap is not empty, a function for it is
+// returned.`
 func (tbl *Table) FormatterFunc() func(val string, colIdx uint) (any, error) {
 	if tbl.FormatMap == nil || len(tbl.FormatMap) == 0 {
-		if tbl.FormatFunc == nil {
-			return format.FormatStrings
+		if tbl.FormatFunc != nil {
+			return tbl.FormatFunc
 		}
-		return tbl.FormatFunc
+		// return format.FormatStrings
 	}
+
 	return func(val string, colIdx uint) (any, error) {
 		fmtType, ok := tbl.FormatMap[int(colIdx)]
 		if !ok || len(strings.TrimSpace(fmtType)) == 0 {
@@ -146,7 +124,7 @@ func WriteXLSX(path string, tbls []*Table) error {
 		}
 		sheetIndex, err := f.NewSheet(sheetName)
 		if err != nil {
-			return errorsutil.Wrap(err, "excelize.File.NewShet()")
+			return errorsutil.Wrap(err, "excelize.File.NewSheet()")
 		}
 		// Set value of a cell.
 		rowBase := 0
@@ -164,8 +142,8 @@ func WriteXLSX(path string, tbls []*Table) error {
 		for y, row := range tbl.Rows {
 			for x, cellValue := range row {
 				cellLocation := sheet.CoordinatesToSheetLocation(uint(x), uint(y+rowBase))
-				if fmttype, ok := tbl.FormatMap[x]; ok {
-					if fmttype == FormatURL {
+				if fmtType, ok := tbl.FormatMap[x]; ok {
+					if fmtType == FormatURL {
 						txt, lnk := markdown.ParseLink(cellValue)
 						txt = strings.TrimSpace(txt)
 						lnk = strings.TrimSpace(lnk)

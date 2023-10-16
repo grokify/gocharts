@@ -84,7 +84,6 @@ func (tbl *Table) WriteXLSX(path, sheetname string) error {
 }
 
 func (tbl *Table) WriteCSV(path string) error {
-	// return writeCSV(path, tbl)
 	file, err := os.Create(path)
 	if err != nil {
 		return err
