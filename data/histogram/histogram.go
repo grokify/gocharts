@@ -8,6 +8,7 @@ import (
 
 	"github.com/grokify/mogo/type/maputil"
 	"github.com/grokify/mogo/type/slicesutil"
+	"github.com/grokify/mogo/type/stringsutil"
 	"github.com/olekukonko/tablewriter"
 
 	"github.com/grokify/gocharts/v2/data/point"
@@ -87,6 +88,47 @@ func (hist *Histogram) BinCountOrDefault(binName string, def int) int {
 		return def
 	}
 	return c
+}
+
+func (hist *Histogram) FlattenMapSingleKey(mapKeyFilter string) (*Histogram, error) {
+	filtered := NewHistogram(hist.Name)
+	for mapKeyStr, count := range hist.Bins {
+		binMap, err := maputil.ParseMapStringString(mapKeyStr)
+		if err != nil {
+			return nil, err
+		}
+		if val, ok := binMap[mapKeyFilter]; ok {
+			filtered.Add(val, count)
+		} else {
+			filtered.Add("", count)
+		}
+	}
+	return filtered, nil
+}
+
+func (hist *Histogram) FilterMapKeys(mapKeysFilter []string) (*Histogram, error) {
+	mapKeysFilter = stringsutil.SliceCondenseSpace(mapKeysFilter, true, true)
+	filtered := NewHistogram(hist.Name)
+	if len(mapKeysFilter) == 0 || len(hist.Bins) == 0 {
+		return filtered, nil
+	}
+
+	for mapKeysStr, count := range hist.Bins {
+		binMap, err := maputil.ParseMapStringString(mapKeysStr)
+		if err != nil {
+			return nil, err
+		}
+		newBinMap := map[string]string{}
+		for _, filterKey := range mapKeysFilter {
+			if filterVal, ok := binMap[filterKey]; ok {
+				newBinMap[filterKey] = filterVal
+			} else {
+				newBinMap[filterKey] = ""
+			}
+		}
+		filtered.AddMap(newBinMap, count)
+	}
+	return filtered, nil
 }
 
 func (hist *Histogram) BinNames() []string {
