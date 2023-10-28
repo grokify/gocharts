@@ -17,6 +17,14 @@ import (
 	excelize "github.com/xuri/excelize/v2"
 )
 
+const excelizeLinkTypeExternal = "External"
+
+var (
+	ErrSheetNameCollision  = errors.New("sheet name collision")
+	ErrTablesCannotBeEmpty = errors.New("tables cannot be empty")
+	rxURLHTTPOrHTTPS       = regexp.MustCompile(`^(?i)https?://.`)
+)
+
 // WriteCSVSimple writes a file with cols and rows data.
 func WriteCSVSimple(cols []string, rows [][]string, filename string) error {
 	tbl := NewTable("")
@@ -81,14 +89,6 @@ func (tbl *Table) FormatterFunc() func(val string, colIdx uint) (any, error) {
 		return val, nil
 	}
 }
-
-var (
-	ErrSheetNameCollision  = errors.New("sheet name colllision")
-	ErrTablesCannotBeEmpty = errors.New("tables cannot be empty")
-	rxURLHTTPOrHTTPS       = regexp.MustCompile(`^(?i)https?://.`)
-)
-
-const excelizeLinkTypeExternal = "External"
 
 // WriteXLSX writes a table as an Excel XLSX file with row formatter option.
 func WriteXLSX(path string, tbls []*Table) error {
