@@ -10,11 +10,14 @@ import (
 	"github.com/grokify/mogo/type/slicesutil"
 )
 
-func (tbl *Table) ColumnsValuesDistinct(wantCols []string, stripSpace bool) (map[string]int, error) {
+func (tbl *Table) ColumnsValuesDistinct(wantColNames []string, stripSpace bool) (map[string]int, error) {
 	data := map[string]int{}
+	if len(wantColNames) == 0 {
+		return data, nil
+	}
 	wantIdxs := []int{}
 	maxIdx := -1
-	for _, wantCol := range wantCols {
+	for _, wantCol := range wantColNames {
 		wantIdx := tbl.Columns.Index(wantCol)
 		if wantIdx < 0 {
 			return data, fmt.Errorf("column not found [%v]", wantCol)
@@ -114,6 +117,14 @@ func (tbl *Table) ColumnValues(colIdx uint, unique, sortResults bool) ([]string,
 		sort.Strings(vals)
 	}
 	return vals, nil
+}
+
+func (tbl *Table) ColumnValuesName(colName string, unique, sortResults bool) ([]string, error) {
+	idx := tbl.Columns.Index(colName)
+	if idx < 0 {
+		return []string{}, fmt.Errorf("column name not found (%s)", colName)
+	}
+	return tbl.ColumnValues(uint(idx), unique, sortResults)
 }
 
 func (tbl *Table) ColumnValuesForColumnName(colName string, dedupeValues, sortValues bool) ([]string, error) {
