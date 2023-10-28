@@ -6,9 +6,8 @@ import (
 	"os"
 )
 
-// Table is useful for working on CSV data. It stores
-// records as `[]string` with typed formatting information
-// per-column to facilitate transformations.
+// Table is useful for working on CSV data. It stores records as `[]string` with typed
+// formatting information per-column to facilitate transformations.
 type Table struct {
 	Name           string
 	Columns        Columns
