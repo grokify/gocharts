@@ -1,8 +1,11 @@
 package table
 
 import (
-	"sort"
 	"strings"
+
+	"github.com/grokify/gocharts/v2/data/table/excelizeutil"
+	"github.com/grokify/mogo/type/maputil"
+	excelize "github.com/xuri/excelize/v2"
 )
 
 type TableSet struct {
@@ -14,8 +17,8 @@ type TableSet struct {
 	Order      []string
 }
 
-func NewTableSet(name string) TableSet {
-	return TableSet{
+func NewTableSet(name string) *TableSet {
+	return &TableSet{
 		Name:      name,
 		Columns:   []string{},
 		FormatMap: map[int]string{},
@@ -23,12 +26,7 @@ func NewTableSet(name string) TableSet {
 }
 
 func (ts *TableSet) TableNames() []string {
-	names := []string{}
-	for name := range ts.TableMap {
-		names = append(names, name)
-	}
-	sort.Strings(names)
-	return names
+	return maputil.Keys(ts.TableMap)
 }
 
 func (ts *TableSet) TablesSorted() []*Table {
@@ -65,4 +63,36 @@ func (ts *TableSet) WriteXLSX(filename string) error {
 	}
 	tbls := ts.Tables(names)
 	return WriteXLSX(filename, tbls)
+}
+
+func ReadFileXLSX(filename string, headerRowCount uint, trimSpace bool) (*TableSet, error) {
+	ts := NewTableSet("")
+	f, err := excelize.OpenFile(filename)
+	if err != nil {
+		return nil, err
+	}
+	sheetNames := f.GetSheetList()
+	for _, sheetName := range sheetNames {
+		cols, rows, err := excelizeutil.GetTableData(f, sheetName, headerRowCount, trimSpace)
+		if err != nil {
+			return nil, err
+		}
+		tbl := NewTable(sheetName)
+		tbl.Columns = cols
+		tbl.Rows = rows
+		ts.TableMap[sheetName] = &tbl
+	}
+
+	return ts, f.Close()
+}
+
+func XSLXGetSheetTable(f *excelize.File, sheetName string, headerRowCount uint, trimSpace bool) (*Table, error) {
+	cols, rows, err := excelizeutil.GetTableData(f, sheetName, headerRowCount, trimSpace)
+	if err != nil {
+		return nil, err
+	}
+	tbl := NewTable(sheetName)
+	tbl.Columns = excelizeutil.ColumnsCollapse([][]string{cols}, trimSpace)
+	tbl.Rows = rows
+	return &tbl, nil
 }

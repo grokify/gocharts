@@ -4,7 +4,6 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/grokify/gocharts/v2/data/table"
 	"github.com/grokify/gocharts/v2/data/table/sheet"
 	excelize "github.com/xuri/excelize/v2"
 )
@@ -33,17 +32,19 @@ func GetCellValue(f *excelize.File, sheetName string, colIdx, rowIdx uint, opts 
 	return f.GetCellValue(sheetName, cellLoc, opts...)
 }
 
-func GetTable(f *excelize.File, sheetName string, headerRowCount uint, trimSpace bool) (*table.Table, error) {
+func GetTableData(f *excelize.File, sheetName string, headerRowCount uint, trimSpace bool) ([]string, [][]string, error) {
+	cols := []string{}
+	rows := [][]string{}
 	if f == nil {
-		return nil, ErrExcelizeFileCannotBeNil
+		return cols, rows, ErrExcelizeFileCannotBeNil
 	}
 	exCols, err := f.GetCols(sheetName)
 	if err != nil {
-		return nil, err
+		return cols, rows, err
 	}
 	exRows, err := f.GetRows(sheetName)
 	if err != nil {
-		return nil, err
+		return cols, rows, err
 	}
 	if headerRowCount > 0 && headerRowCount <= uint(len(exRows)) {
 		exRows = exRows[headerRowCount:]
@@ -55,10 +56,8 @@ func GetTable(f *excelize.File, sheetName string, headerRowCount uint, trimSpace
 			}
 		}
 	}
-	tbl := table.NewTable(sheetName)
-	tbl.Columns = ColumnsCollapse(exCols, trimSpace)
-	tbl.Rows = exRows
-	return &tbl, nil
+	cols = ColumnsCollapse(exCols, trimSpace)
+	return cols, exRows, nil
 }
 
 // ColumnsCollapse converts a response from `excelize.File.GetCols()` to an `[]string` suitable for
