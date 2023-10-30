@@ -67,13 +67,13 @@ func (ts *TableSet) WriteXLSX(filename string) error {
 
 func ReadFileXLSX(filename string, headerRowCount uint, trimSpace bool) (*TableSet, error) {
 	ts := NewTableSet("")
-	f, err := excelize.OpenFile(filename)
+	xm, err := excelizeutil.NewExcelizeMore(filename)
 	if err != nil {
 		return nil, err
 	}
-	sheetNames := f.GetSheetList()
+	sheetNames := xm.SheetList()
 	for _, sheetName := range sheetNames {
-		cols, rows, err := excelizeutil.GetTableData(f, sheetName, headerRowCount, trimSpace)
+		cols, rows, err := xm.TableData(sheetName, headerRowCount, trimSpace)
 		if err != nil {
 			return nil, err
 		}
@@ -83,11 +83,12 @@ func ReadFileXLSX(filename string, headerRowCount uint, trimSpace bool) (*TableS
 		ts.TableMap[sheetName] = &tbl
 	}
 
-	return ts, f.Close()
+	return ts, xm.Close()
 }
 
 func XSLXGetSheetTable(f *excelize.File, sheetName string, headerRowCount uint, trimSpace bool) (*Table, error) {
-	cols, rows, err := excelizeutil.GetTableData(f, sheetName, headerRowCount, trimSpace)
+	xm := excelizeutil.ExcelizeMore{File: f}
+	cols, rows, err := xm.TableData(sheetName, headerRowCount, trimSpace)
 	if err != nil {
 		return nil, err
 	}
