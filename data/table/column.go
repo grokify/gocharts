@@ -1,10 +1,13 @@
 package table
 
 import (
+	"errors"
 	"fmt"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/grokify/mogo/errors/errorsutil"
 )
 
 // Columns represents a slice of string with tabular functions.
@@ -73,6 +76,18 @@ func (cols Columns) CellInt(colName string, row []string) (int, error) {
 		return 0, err
 	}
 	return strconv.Atoi(val)
+}
+
+// CellUint returns a single row value.
+func (cols Columns) CellUint(colName string, row []string) (uint, error) {
+	val, err := cols.CellInt(colName, row)
+	if err != nil {
+		return 0, errorsutil.Wrapf(err, "Columns.CellUint(%s)", colName)
+	}
+	if val < 0 {
+		return 0, errors.New("number is less than zero")
+	}
+	return uint(val), nil
 }
 
 // CellTime returns a single row value. If no
