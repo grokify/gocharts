@@ -87,7 +87,7 @@ func ReadFileXLSX(filename string, headerRowCount uint, trimSpace bool) (*TableS
 }
 
 func XSLXGetSheetTable(f *excelize.File, sheetName string, headerRowCount uint, trimSpace bool) (*Table, error) {
-	xm := excelizeutil.ExcelizeMore{File: f}
+	xm := excelizeutil.File{File: f}
 	cols, rows, err := xm.TableData(sheetName, headerRowCount, trimSpace)
 	if err != nil {
 		return nil, err

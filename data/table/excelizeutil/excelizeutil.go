@@ -10,12 +10,12 @@ import (
 
 var ErrExcelizeFileCannotBeNil = errors.New("excelize.File cannot be nil")
 
-type ExcelizeMore struct {
-	File *excelize.File
+type File struct {
+	*excelize.File
 }
 
-func NewExcelizeMore(filename string) (*ExcelizeMore, error) {
-	x := &ExcelizeMore{}
+func NewExcelizeMore(filename string) (*File, error) {
+	x := &File{}
 	if filename != "" {
 		xf, err := excelize.OpenFile(filename)
 		if err != nil {
@@ -28,18 +28,18 @@ func NewExcelizeMore(filename string) (*ExcelizeMore, error) {
 	return x, nil
 }
 
-func (x *ExcelizeMore) Close() error {
-	if x.File == nil {
+func (f *File) Close() error {
+	if f.File == nil {
 		return nil
 	}
-	return x.File.Close()
+	return f.File.Close()
 }
 
-func (x *ExcelizeMore) SheetList() []string {
-	if x.File == nil {
+func (f *File) SheetList() []string {
+	if f.File == nil {
 		return []string{}
 	} else {
-		return x.File.GetSheetList()
+		return f.File.GetSheetList()
 	}
 }
 
@@ -65,18 +65,18 @@ func GetCellValue(f *excelize.File, sheetName string, colIdx, rowIdx uint, opts 
 	return f.GetCellValue(sheetName, cellLoc, opts...)
 }
 
-func (x *ExcelizeMore) TableData(sheetName string, headerRowCount uint, trimSpace bool) ([]string, [][]string, error) {
+func (f *File) TableData(sheetName string, headerRowCount uint, trimSpace bool) ([]string, [][]string, error) {
 	cols := []string{}
 	rows := [][]string{}
 
-	if x.File == nil {
+	if f.File == nil {
 		return cols, rows, ErrExcelizeFileCannotBeNil
 	}
-	exCols, err := x.File.GetCols(sheetName)
+	exCols, err := f.File.GetCols(sheetName)
 	if err != nil {
 		return cols, rows, err
 	}
-	exRows, err := x.File.GetRows(sheetName)
+	exRows, err := f.File.GetRows(sheetName)
 	if err != nil {
 		return cols, rows, err
 	}
