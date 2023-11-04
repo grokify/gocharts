@@ -67,7 +67,7 @@ func (ts *TableSet) WriteXLSX(filename string) error {
 
 func ReadFileXLSX(filename string, headerRowCount uint, trimSpace bool) (*TableSet, error) {
 	ts := NewTableSet("")
-	xm, err := excelizeutil.NewExcelizeMore(filename)
+	xm, err := excelizeutil.NewFile(filename)
 	if err != nil {
 		return nil, err
 	}

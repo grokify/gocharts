@@ -14,18 +14,18 @@ type File struct {
 	*excelize.File
 }
 
-func NewExcelizeMore(filename string) (*File, error) {
-	x := &File{}
-	if filename != "" {
+func NewFile(filename string) (*File, error) {
+	f := &File{}
+	if filename == "" {
+		f.File = excelize.NewFile()
+	} else {
 		xf, err := excelize.OpenFile(filename)
 		if err != nil {
 			return nil, err
 		}
-		x.File = xf
-	} else {
-		x.File = excelize.NewFile()
+		f.File = xf
 	}
-	return x, nil
+	return f, nil
 }
 
 func (f *File) Close() error {
