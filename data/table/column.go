@@ -55,7 +55,7 @@ func (cols Columns) CellString(colName string, row []string) (string, error) {
 			}
 		}
 	}
-	return "", fmt.Errorf("columnName [%s] not found", colName)
+	return "", fmt.Errorf("columnName (%s) not found", colName)
 }
 
 // CellFloat64 returns a single row value.
@@ -83,7 +83,7 @@ func (cols Columns) CellUint(colName string, row []string) (uint, error) {
 		return 0, err
 	}
 	if val < 0 {
-		return 0, errors.New("number is less than zero")
+		return 0, errors.New("cannot convert to `uint` as `int` is less than zero")
 	}
 	return uint(val), nil
 }
