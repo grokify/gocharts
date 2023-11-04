@@ -158,6 +158,21 @@ func (hset *HistogramSet) ToTimeSeriesDistinct() (timeseries.TimeSeries, error) 
 	return ds, nil
 }
 
+func (hset *HistogramSet) Table(colNameHist, colNameBin, colNameCount string) table.Table {
+	tbl := table.NewTable(hset.Name)
+	tbl.Columns = []string{colNameHist, colNameBin, colNameCount}
+	tbl.FormatMap = map[int]string{2: table.FormatInt}
+	for hName, h := range hset.HistogramMap {
+		if h == nil {
+			continue
+		}
+		for bName, count := range h.Bins {
+			tbl.Rows = append(tbl.Rows, []string{hName, bName, strconv.Itoa(count)})
+		}
+	}
+	return tbl
+}
+
 // WriteXLSXMatrix creates an XLSX file where the first column is the
 // histogram name and the other columns are the bin names. This is
 // useful for easy visualization of a table and also creating
