@@ -65,6 +65,9 @@ func (ts *TableSet) WriteXLSX(filename string) error {
 	return WriteXLSX(filename, tbls)
 }
 
+// ReadFileXLSX reads in an entire XLSX file as a `TableSet`. Warning: this can be resource
+// intensive if there's a lot of data. If you just want one sheet of many, it is better to
+// extract an individual sheet or sheets from an `excelize.File`, such as using `XSLXGetSheetTable`.
 func ReadFileXLSX(filename string, headerRowCount uint, trimSpace bool) (*TableSet, error) {
 	ts := NewTableSet("")
 	xm, err := excelizeutil.NewFile(filename)
