@@ -31,7 +31,7 @@ func NewXoXTimeSeries(ds timeseries.TimeSeries) (XoXGrowth, error) {
 		yearAgo := month.MonthStart(dateNow, -12)
 		xoxPoint.TimeQuarterAgo = quarterAgo
 		xoxPoint.TimeYearAgo = yearAgo
-		if ds.Interval == timeutil.Month {
+		if ds.Interval == timeutil.IntervalMonth {
 			monthAgo := month.MonthStart(dateNow, -1)
 			xoxPoint.TimeMonthAgo = monthAgo
 			if itemMonthAgo, ok := ds.ItemMap[monthAgo.Format(time.RFC3339)]; ok {

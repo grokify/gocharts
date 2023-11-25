@@ -20,7 +20,7 @@ func WriteFilesHistoricalData(filePrefix string, hd *yahoohistorical.HistoricalD
 		fmtutil.MustPrintJSON(tbl.Rows)
 		fmtutil.MustPrintJSON(tbl.Columns)
 	}
-	ts, err := hd.CloseTimeSeries(timeutil.Month)
+	ts, err := hd.CloseTimeSeries(timeutil.IntervalMonth)
 	if err != nil {
 		return err
 	}
@@ -55,7 +55,7 @@ func WriteFilesTimeSeries(filePrefix string, ts timeseries.TimeSeries, verbose b
 	}
 
 	opts := sts2wchart.DefaultLineChartOpts()
-	opts.XAxisTickInterval = timeutil.Year
+	opts.XAxisTickInterval = timeutil.IntervalYear
 	err = sts2wchart.WriteLineChartTimeSeries(filePrefix+".png", ts, opts)
 	if err != nil {
 		return err

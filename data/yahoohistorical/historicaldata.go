@@ -94,14 +94,14 @@ func (hd *HistoricalData) columnData(interval timeutil.Interval, columnName stri
 		if len(row) == 0 {
 			continue
 		}
-		if interval == timeutil.Year && stringsutil.ReverseIndex(row[0], "-01-01") != 0 {
+		if interval == timeutil.IntervalYear && stringsutil.ReverseIndex(row[0], "-01-01") != 0 {
 			continue
-		} else if interval == timeutil.Quarter && stringsutil.ReverseIndex(row[0], "-01-01") != 0 &&
+		} else if interval == timeutil.IntervalQuarter && stringsutil.ReverseIndex(row[0], "-01-01") != 0 &&
 			stringsutil.ReverseIndex(row[0], "-04-01") != 0 &&
 			stringsutil.ReverseIndex(row[0], "-07-01") != 0 &&
 			stringsutil.ReverseIndex(row[0], "-10-01") != 0 {
 			continue
-		} else if interval == timeutil.Month && stringsutil.ReverseIndex(row[0], "-01") != 0 {
+		} else if interval == timeutil.IntervalMonth && stringsutil.ReverseIndex(row[0], "-01") != 0 {
 			continue
 		}
 		dt, err := time.Parse(timeutil.RFC3339FullDate, row[0])

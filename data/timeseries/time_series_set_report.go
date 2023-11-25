@@ -240,7 +240,7 @@ func (set *TimeSeriesSet) Table(opts *TimeSeriesSetTableOpts) (table.Table, erro
 }
 
 func (set *TimeSeriesSet) TableYearYOY(seriesColName, valuesSuffix, yoySuffix string) table.Table {
-	if set.Interval != timeutil.Year {
+	if set.Interval != timeutil.IntervalYear {
 		panic("interval is not year")
 	}
 	if len(strings.TrimSpace(seriesColName)) == 0 {
@@ -302,7 +302,7 @@ func (set *TimeSeriesSet) WriteXLSX(filename string, opts *TimeSeriesSetTableOpt
 	if err != nil {
 		return err
 	}
-	if set.Interval == timeutil.Month {
+	if set.Interval == timeutil.IntervalMonth {
 		tbl.FormatFunc = format.FormatMonthAndFloats
 	} else {
 		tbl.FormatFunc = format.FormatDateAndFloats

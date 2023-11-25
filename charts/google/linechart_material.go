@@ -67,7 +67,7 @@ func (lcm *LineChartMaterial) WidthOrDefault() int {
 
 func LineChartMaterialFromTimeSeriesSet(tss timeseries.TimeSeriesSet, yearLabel string) (LineChartMaterial, error) {
 	lcm := LineChartMaterial{}
-	if tss.Interval != timeutil.Year {
+	if tss.Interval != timeutil.IntervalYear {
 		return lcm, errors.New("interval not supported")
 	}
 

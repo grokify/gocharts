@@ -21,7 +21,7 @@ func (tbl *Table) FilterColumnDistinctFirstTable(colIdx int) *Table {
 	return &newTbl
 }
 
-// NewTableFilterColumnValues returns a Table filtered by column names and column values.
+// FilterColumnValuesTable returns a Table filtered by column names and column values.
 func (tbl *Table) FilterColumnValuesTable(wantColNameValues map[string]string) (Table, error) {
 	t2 := Table{Columns: tbl.Columns}
 	rows, err := tbl.FilterColumnValuesRows(wantColNameValues)

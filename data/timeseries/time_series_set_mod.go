@@ -11,7 +11,7 @@ func (set *TimeSeriesSet) ToYear(inflate, popLast bool) (TimeSeriesSet, error) {
 	newTSS := TimeSeriesSet{
 		Name:     set.Name,
 		Series:   map[string]TimeSeries{},
-		Interval: timeutil.Year,
+		Interval: timeutil.IntervalYear,
 		Order:    set.Order}
 	for name, ts := range set.Series {
 		newTSS.Series[name] = ts.ToYear()
@@ -33,7 +33,7 @@ func (set *TimeSeriesSet) ToMonth(cumulative, inflate, popLast bool, monthsFilte
 		Name:     set.Name,
 		Series:   map[string]TimeSeries{},
 		Times:    set.Times,
-		Interval: timeutil.Month,
+		Interval: timeutil.IntervalMonth,
 		Order:    set.Order}
 	for name, ts := range set.Series {
 		newTSS.Series[name] = ts.ToMonth(inflate, monthsFilter...)
@@ -51,7 +51,7 @@ func (set *TimeSeriesSet) toMonthCumulative(inflate, popLast bool) (TimeSeriesSe
 		Name:     set.Name,
 		Series:   map[string]TimeSeries{},
 		Times:    set.Times,
-		Interval: timeutil.Month,
+		Interval: timeutil.IntervalMonth,
 		Order:    set.Order}
 	for seriesName, ts := range set.Series {
 		newTS, err := ts.ToMonthCumulative(inflate, newTSS.Times...)
@@ -90,7 +90,7 @@ func (set *TimeSeriesSet) ToNewSeriesNames(seriesNames, seriesSetNames map[strin
 		Series:   map[string]TimeSeries{},
 		Times:    set.Times,
 		IsFloat:  set.IsFloat,
-		Interval: timeutil.Month,
+		Interval: timeutil.IntervalMonth,
 		Order:    []string{}}
 	for _, ts := range set.Series {
 		for _, item := range ts.ItemMap {

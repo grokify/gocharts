@@ -53,7 +53,7 @@ func (ts *TimeSeries) TimeSeriesMonthXOX(years, months, days int, suffix string)
 }
 
 func (ts *TimeSeries) TimeSeriesYearYOY(suffix string) (TimeSeries, error) {
-	if ts.Interval != timeutil.Year {
+	if ts.Interval != timeutil.IntervalYear {
 		return TimeSeries{}, errors.New("interval year is required")
 	}
 	// tsm := ts.ToMonth(true)

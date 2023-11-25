@@ -28,10 +28,10 @@ func TimeSeriesToContinuousSeries(ds timeseries.TimeSeries) chart.ContinuousSeri
 	items := ds.ItemsSorted()
 	for _, item := range items {
 		switch ds.Interval {
-		case timeutil.Month:
+		case timeutil.IntervalMonth:
 			series.XValues = append(series.XValues,
 				float64(month.TimeToMonthContinuous(item.Time)))
-		case timeutil.Quarter:
+		case timeutil.IntervalQuarter:
 			series.XValues = append(series.XValues,
 				float64(quarter.TimeToQuarterContinuous(item.Time)))
 		default:

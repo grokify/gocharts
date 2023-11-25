@@ -58,9 +58,9 @@ func (opts *LineChartOpts) WantTitleSuffix() bool {
 var defaultLineChartOpts = LineChartOpts{
 	Legend:            true,
 	RegressionDegree:  0,
-	XAxisGridInterval: timeutil.Month,
+	XAxisGridInterval: timeutil.IntervalMonth,
 	XAxisTickFunc:     func(t time.Time) string { return t.Format("Jan '06") },
-	XAxisTickInterval: timeutil.Quarter,
+	XAxisTickInterval: timeutil.IntervalQuarter,
 	YAxisLeft:         true,
 	YAxisMinEnable:    true,
 	YAxisTickFunc:     YAxisTickFormatSimple,
@@ -68,7 +68,7 @@ var defaultLineChartOpts = LineChartOpts{
 	QAgoAnnotation:    true,
 	YAgoAnnotation:    true,
 	AgoAnnotationPct:  true,
-	Interval:          timeutil.Month}
+	Interval:          timeutil.IntervalMonth}
 
 func DefaultLineChartOpts() *LineChartOpts {
 	return &defaultLineChartOpts
@@ -156,7 +156,7 @@ func TimeSeriesSetToLineChart(tset timeseries.TimeSeriesSet, opts *LineChartOpts
 	}
 
 	mainSeries := chart.ContinuousSeries{}
-	if opts.Interval == timeutil.Quarter || opts.Interval == timeutil.Month {
+	if opts.Interval == timeutil.IntervalQuarter || opts.Interval == timeutil.IntervalMonth {
 		if opts.Interval != tset.Interval {
 			return chart.Chart{}, fmt.Errorf("E_INTERVAL_MISMATCH INPUT_INTERVAL [%s]", tset.Interval)
 			//panic("opts.Interval dss.Interval mismatch")
@@ -241,7 +241,7 @@ func TimeSeriesSetToLineChart(tset timeseries.TimeSeriesSet, opts *LineChartOpts
 		graph = axesCreator.AddYAxisPercent(graph, minValue, maxValue)
 	}
 
-	if opts.Interval == timeutil.Month {
+	if opts.Interval == timeutil.IntervalMonth {
 		for _, ds := range tset.Series {
 			annoSeries, err := TimeSeriesMonthToAnnotations(ds, *opts)
 			if err == nil && len(annoSeries.Annotations) > 0 {
@@ -361,12 +361,12 @@ func DataSeriesQuarterToAnnotations(ds timeseries.TimeSeries, opts LineChartOpts
 */
 
 func FormatXTickTimeFunc(interval timeutil.Interval) func(time.Time) string {
-	if interval == timeutil.Month {
+	if interval == timeutil.IntervalMonth {
 		return func(dt time.Time) string {
 			return dt.Format("1/06")
 			//	return dt.Format("Jan '06")
 		}
-	} else if interval == timeutil.Quarter {
+	} else if interval == timeutil.IntervalQuarter {
 		return func(dt time.Time) string {
 			return timeutil.FormatQuarterYYYYQ(dt)
 		}

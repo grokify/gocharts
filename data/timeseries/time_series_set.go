@@ -175,9 +175,9 @@ func (set *TimeSeriesSet) TimeSlice(sortAsc bool) timeutil.Times {
 	for _, ts := range set.Series {
 		for _, item := range ts.ItemMap {
 			tm := timeutil.NewTimeMore(item.Time, 0)
-			if set.Interval == timeutil.Year && !tm.IsYearStart() {
+			if set.Interval == timeutil.IntervalYear && !tm.IsYearStart() {
 				panic("timeitem for TimeSeriesSet year is not a year start")
-			} else if set.Interval == timeutil.Month && !tm.IsMonthStart() {
+			} else if set.Interval == timeutil.IntervalMonth && !tm.IsMonthStart() {
 				panic("timeitem for TimeSeriesSet month is not a month start")
 			}
 			times = append(times, item.Time)
@@ -185,9 +185,9 @@ func (set *TimeSeriesSet) TimeSlice(sortAsc bool) timeutil.Times {
 	}
 	times = timeutil.Sort(timeutil.Distinct(times))
 	switch set.Interval {
-	case timeutil.Month:
+	case timeutil.IntervalMonth:
 		return month.TimesMonthStarts(times...)
-	case timeutil.Year:
+	case timeutil.IntervalYear:
 		return year.TimesYearStarts(times...)
 	}
 	return times

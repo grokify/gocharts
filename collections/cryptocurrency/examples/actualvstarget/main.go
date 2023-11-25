@@ -13,12 +13,12 @@ import (
 
 func main() {
 	hdBTC := cryptocurrency.HistoricalDataBTCUSDMonthly()
-	adjClose, err := hdBTC.AdjCloseTimeSeries(timeutil.Month)
+	adjClose, err := hdBTC.AdjCloseTimeSeries(timeutil.IntervalMonth)
 	logutil.FatalErr(err, "hdBTC.AdjCloseTimeSeries")
 
 	decsOnly := adjClose.ToMonth(false, time.December)
 	decsOnly.SetSeriesName("actual")
-	decsOnly.Interval = timeutil.Year
+	decsOnly.Interval = timeutil.IntervalYear
 	err = decsOnly.TimeUpdateIntervalStart()
 	logutil.FatalErr(err, "decsOnly.TimeUpdateIntervalStart")
 
@@ -51,7 +51,7 @@ func main() {
 	fmtutil.PrintJSON(forecastSeries)
 
 	tss := timeseries.NewTimeSeriesSet("BTC")
-	tss.Interval = timeutil.Year
+	tss.Interval = timeutil.IntervalYear
 	err = tss.AddSeries(decsOnly, trainingSeries, forecastSeries)
 	logutil.FatalErr(err, "tss.AddSeries")
 

@@ -13,13 +13,13 @@ import (
 func (ts *TimeSeries) LinearRegression() (alpha, beta float64, err error) {
 	xs, ys := []float64{}, []float64{}
 	switch ts.Interval {
-	case timeutil.Year:
+	case timeutil.IntervalYear:
 		for _, ti := range ts.ItemMap {
 			xs = append(xs, float64(ti.Time.Year()))
 			ys = append(ys, ti.Float64())
 		}
 		alpha, beta = stat.LinearRegression(xs, ys, nil, false)
-	case timeutil.Month:
+	case timeutil.IntervalMonth:
 		for _, ti := range ts.ItemMap {
 			xs = append(xs, float64(month.TimeToMonthContinuous(ti.Time)))
 			ys = append(ys, ti.Float64())
@@ -31,10 +31,9 @@ func (ts *TimeSeries) LinearRegression() (alpha, beta float64, err error) {
 	return
 }
 
-// LinearRegressionYearProjection only runs when interval=Year for now.
-// Use this to build tables.
+// LinearRegressionYearProjection only runs when interval=Year for now. Use this to build tables.
 func (ts *TimeSeries) LinearRegressionYearProjection(years uint, constantYOY bool) error {
-	if ts.Interval != timeutil.Year {
+	if ts.Interval != timeutil.IntervalYear {
 		return ErrIntervalNotSupported
 	}
 	if years == 0 {

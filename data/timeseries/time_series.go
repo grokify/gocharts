@@ -208,7 +208,7 @@ func (ts *TimeSeries) LastItem(skipIfTimePartialValueLessPrev bool) (TimeItem, e
 	if skipIfTimePartialValueLessPrev {
 		itemPrev := items[len(items)-2]
 		dtNow := time.Now().UTC()
-		if ts.Interval == timeutil.Month {
+		if ts.Interval == timeutil.IntervalMonth {
 			dtNow = month.MonthStart(dtNow, 0)
 		}
 		if itemLast.Time.Equal(dtNow) {
@@ -312,7 +312,7 @@ func (ts *TimeSeries) DeleteTime(dt time.Time) {
 // ToMonth aggregates time values into months. `addZeroValueMonths` is used to add months with `0` values.
 func (ts *TimeSeries) ToMonth(addZeroValueMonths bool, monthsFilter ...time.Month) TimeSeries {
 	newTimeSeries := NewTimeSeries(ts.SeriesName)
-	newTimeSeries.Interval = timeutil.Year
+	newTimeSeries.Interval = timeutil.IntervalYear
 	newTimeSeries.IsFloat = ts.IsFloat
 	monthsFilterMap := map[time.Month]int{}
 	for _, m := range monthsFilter {
@@ -332,7 +332,7 @@ func (ts *TimeSeries) ToMonth(addZeroValueMonths bool, monthsFilter ...time.Mont
 			ValueFloat: item.ValueFloat})
 	}
 	if addZeroValueMonths {
-		timeSeries := timeutil.TimeSeriesSlice(timeutil.Month, newTimeSeries.ItemTimes())
+		timeSeries := timeutil.TimeSeriesSlice(timeutil.IntervalMonth, newTimeSeries.ItemTimes())
 		for _, dt := range timeSeries {
 			newTimeSeries.AddItems(TimeItem{
 				SeriesName: newTimeSeries.SeriesName,
@@ -350,7 +350,7 @@ func (ts *TimeSeries) ToMonthCumulative(inflate bool, timesInput ...time.Time) (
 		SeriesName: ts.SeriesName,
 		ItemMap:    map[string]TimeItem{},
 		IsFloat:    ts.IsFloat,
-		Interval:   timeutil.Month}
+		Interval:   timeutil.IntervalMonth}
 	tsMonth := ts.ToMonth(inflate)
 	var min time.Time
 	var max time.Time
@@ -366,7 +366,7 @@ func (ts *TimeSeries) ToMonthCumulative(inflate bool, timesInput ...time.Time) (
 			return newTimeSeries, err
 		}
 	}
-	times := timeutil.TimeSeriesSlice(timeutil.Month, []time.Time{min, max})
+	times := timeutil.TimeSeriesSlice(timeutil.IntervalMonth, []time.Time{min, max})
 	cItems := []TimeItem{}
 	for _, t := range times {
 		rfc := t.Format(time.RFC3339)
@@ -415,7 +415,7 @@ func (ts *TimeSeries) ToMonthCumulative(inflate bool, timesInput ...time.Time) (
 func (ts *TimeSeries) ToQuarter() TimeSeries {
 	newTimeSeries := NewTimeSeries(ts.SeriesName)
 	newTimeSeries.IsFloat = ts.IsFloat
-	newTimeSeries.Interval = timeutil.Quarter
+	newTimeSeries.Interval = timeutil.IntervalQuarter
 	for _, item := range ts.ItemMap {
 		newTimeSeries.AddFloat64(timeutil.NewTimeMore(item.Time, 0).QuarterStart(), item.Float64())
 	}
@@ -425,7 +425,7 @@ func (ts *TimeSeries) ToQuarter() TimeSeries {
 func (ts *TimeSeries) ToYear() TimeSeries {
 	newTimeSeries := NewTimeSeries(ts.SeriesName)
 	newTimeSeries.IsFloat = ts.IsFloat
-	newTimeSeries.Interval = timeutil.Year
+	newTimeSeries.Interval = timeutil.IntervalYear
 	for _, item := range ts.ItemMap {
 		newTimeSeries.AddFloat64(timeutil.NewTimeMore(item.Time, 0).YearStart(), item.Float64())
 	}

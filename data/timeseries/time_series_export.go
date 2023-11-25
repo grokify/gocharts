@@ -32,9 +32,9 @@ func (ts *TimeSeries) Table(tableName, dateColumnName, countColumnName string, d
 	// previously only took dateColumnName as a parameter.
 	if len(strings.TrimSpace(dateColumnName)) == 0 {
 		switch ts.Interval {
-		case timeutil.Month:
+		case timeutil.IntervalMonth:
 			dateColumnName = "Month"
-		case timeutil.Quarter:
+		case timeutil.IntervalQuarter:
 			dateColumnName = "Quarter"
 		default:
 			dateColumnName = "Date"

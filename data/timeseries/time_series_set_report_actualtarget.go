@@ -17,12 +17,12 @@ func (set *TimeSeriesSet) TableActualTarget() (*table.Table, error) {
 	tbl := table.NewTable("")
 	tbl.Columns = append(tbl.Columns, "Series")
 	tbl.FormatMap = map[int]string{0: table.FormatString, -1: table.FormatFloat}
-	if set.Interval == timeutil.Year {
+	if set.Interval == timeutil.IntervalYear {
 		times = year.TimesYearStarts(set.Times...)
 		for _, dt := range times {
 			tbl.Columns = append(tbl.Columns, strconv.Itoa(dt.Year()))
 		}
-	} else if set.Interval == timeutil.Month {
+	} else if set.Interval == timeutil.IntervalMonth {
 		times = month.TimesMonthStarts(set.Times...)
 		for _, dt := range times {
 			tbl.Columns = append(tbl.Columns, dt.Format("Jan 2006"))

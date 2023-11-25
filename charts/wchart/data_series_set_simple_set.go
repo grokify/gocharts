@@ -30,7 +30,7 @@ func TSSToChart(data timeseries.TimeSeriesSet, opts ChartOptions) chart.Chart {
 			ts.YAxis = chart.YAxisSecondary
 		}
 		times := timeutil.TimeSeriesSlice(
-			timeutil.Month,
+			timeutil.IntervalMonth,
 			series.ItemTimes())
 		ts.XValues = times
 		yvalues := []float64{}

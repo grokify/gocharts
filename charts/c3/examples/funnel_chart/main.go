@@ -21,7 +21,7 @@ import (
 
 func TestData() timeseries.TimeSeriesSet {
 	tss := timeseries.NewTimeSeriesSet("Funnel Chart Data")
-	tss.Interval = timeutil.Month
+	tss.Interval = timeutil.IntervalMonth
 	for i := 0; i < 12; i++ {
 		dt := month.MonthStart(time.Now().UTC(), i)
 		//dt := timeutil.DeltaQuarters(time.Now().UTC(), i)
