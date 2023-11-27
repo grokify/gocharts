@@ -2,9 +2,12 @@ package excelizeutil
 
 import (
 	"errors"
+	"sort"
 	"strings"
 
 	"github.com/grokify/gocharts/v2/data/table/sheet"
+	"github.com/grokify/mogo/type/slicesutil"
+	"github.com/grokify/mogo/type/stringsutil"
 	excelize "github.com/xuri/excelize/v2"
 )
 
@@ -35,11 +38,17 @@ func (f *File) Close() error {
 	return f.File.Close()
 }
 
-func (f *File) SheetList() []string {
+func (f *File) SheetNames(sortAsc bool) []string {
 	if f.File == nil {
 		return []string{}
 	} else {
-		return f.File.GetSheetList()
+		if !sortAsc {
+			return f.File.GetSheetList()
+		} else {
+			colNames := f.File.GetSheetList()
+			sort.Strings(colNames)
+			return colNames
+		}
 	}
 }
 
@@ -65,37 +74,101 @@ func GetCellValue(f *excelize.File, sheetName string, colIdx, rowIdx uint, opts 
 	return f.GetCellValue(sheetName, cellLoc, opts...)
 }
 
-func (f *File) TableData(sheetName string, headerRowCount uint, trimSpace bool) ([]string, [][]string, error) {
+func (f *File) SheetColumnNames(sheetName string, trimSpace bool) ([]string, error) {
+	if exCols, err := f.File.GetCols(sheetName); err != nil {
+		return []string{}, err
+	} else {
+		return ColumnsCollapse(exCols, trimSpace), nil
+	}
+}
+
+func (f *File) TableData(sheetName string, headerRowCount uint, trimSpace, umerge bool) ([]string, [][]string, error) {
 	cols := []string{}
 	rows := [][]string{}
-
+	var err error
 	if f.File == nil {
-		return cols, rows, ErrExcelizeFileCannotBeNil
-	}
-	exCols, err := f.File.GetCols(sheetName)
-	if err != nil {
-		return cols, rows, err
-	}
-	exRows, err := f.File.GetRows(sheetName)
-	if err != nil {
-		return cols, rows, err
-	}
-	if headerRowCount > 0 && headerRowCount <= uint(len(exRows)) {
-		exRows = exRows[headerRowCount:]
-	}
-	if trimSpace {
-		for i, row := range exRows {
-			for j := range row {
-				exRows[i][j] = strings.TrimSpace(exRows[i][j])
+		return []string{}, [][]string{}, ErrExcelizeFileCannotBeNil
+	} else {
+		cols, err = f.SheetColumnNames(sheetName, trimSpace)
+		if err != nil {
+			return []string{}, [][]string{}, ErrExcelizeFileCannotBeNil
+		}
+		rows, err = f.File.GetRows(sheetName)
+		if err != nil {
+			return cols, [][]string{}, err
+		}
+		if headerRowCount > 0 && headerRowCount <= uint(len(rows)) {
+			rows = rows[headerRowCount:]
+		}
+		if trimSpace {
+			for i, row := range rows {
+				for j := range row {
+					rows[i][j] = strings.TrimSpace(rows[i][j])
+				}
+			}
+		}
+		if !umerge {
+			// no need to unmerge
+			return cols, rows, nil
+		} else if len(rows) == 0 ||
+			len(rows) == 1 && len(cols) == len(rows[0]) {
+			// no need to unmerge
+			return cols, rows, nil
+		} else {
+			mapLengthCounts := slicesutil.LengthCounts(rows)
+			if len(mapLengthCounts) == 1 {
+				for l := range mapLengthCounts {
+					if l == uint(len(cols)) {
+						return cols, rows, nil
+					}
+					break
+				}
 			}
 		}
 	}
-	cols = ColumnsCollapse(exCols, trimSpace)
-	return cols, exRows, nil
+
+	newRows := [][]string{}
+	for rowIdx, row := range rows {
+		try := stringsutil.SliceCondenseSpace(row, false, false)
+		if len(try) == 0 {
+			continue
+		}
+		l := len(row)
+		if l == len(cols) {
+			newRows = append(newRows, row)
+		} else if l > len(cols) {
+			return cols, newRows, errors.New("row longer than cols")
+		} else {
+			newRow := []string{}
+			for colIdx := 0; colIdx < len(cols); colIdx++ {
+				if cell, err := f.File.GetCellValue(sheetName,
+					sheet.CoordinatesToSheetLocation(
+						uint(colIdx),
+						uint(rowIdx)+headerRowCount,
+					)); err != nil {
+					return cols, rows, err
+				} else {
+					if trimSpace {
+						cell = strings.TrimSpace(cell)
+					}
+					newRow = append(newRow, cell)
+				}
+			}
+			if len(newRow) != len(cols) {
+				return cols, rows, errors.New("modified row length mismatch")
+			} else {
+				newRows = append(newRows, newRow)
+			}
+		}
+	}
+	mapLengthCountsNew := slicesutil.LengthCounts(newRows)
+	if len(mapLengthCountsNew) != 1 {
+		return cols, newRows, errors.New("row mismatch after unmerging")
+	}
+	return cols, newRows, nil
 }
 
-// ColumnsCollapse converts a response from `excelize.File.GetCols()` to an `[]string` suitable for
-// `Table.Columns`.
+// ColumnsCollapse converts a response from `excelize.File.GetCols()` to an `[]string` suitable for `Table.Columns`.
 func ColumnsCollapse(cols [][]string, trimSpace bool) []string {
 	collapsed := []string{}
 	for _, col := range cols {

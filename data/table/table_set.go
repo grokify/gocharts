@@ -74,9 +74,9 @@ func ReadFileXLSX(filename string, headerRowCount uint, trimSpace bool) (*TableS
 	if err != nil {
 		return nil, err
 	}
-	sheetNames := xm.SheetList()
+	sheetNames := xm.SheetNames(false)
 	for _, sheetName := range sheetNames {
-		cols, rows, err := xm.TableData(sheetName, headerRowCount, trimSpace)
+		cols, rows, err := xm.TableData(sheetName, headerRowCount, trimSpace, false)
 		if err != nil {
 			return nil, err
 		}
@@ -85,18 +85,17 @@ func ReadFileXLSX(filename string, headerRowCount uint, trimSpace bool) (*TableS
 		tbl.Rows = rows
 		ts.TableMap[sheetName] = &tbl
 	}
-
 	return ts, xm.Close()
 }
 
 func XSLXGetSheetTable(f *excelize.File, sheetName string, headerRowCount uint, trimSpace bool) (*Table, error) {
 	xm := excelizeutil.File{File: f}
-	cols, rows, err := xm.TableData(sheetName, headerRowCount, trimSpace)
-	if err != nil {
+	if cols, rows, err := xm.TableData(sheetName, headerRowCount, trimSpace, false); err != nil {
 		return nil, err
+	} else {
+		tbl := NewTable(sheetName)
+		tbl.Columns = excelizeutil.ColumnsCollapse([][]string{cols}, trimSpace)
+		tbl.Rows = rows
+		return &tbl, nil
 	}
-	tbl := NewTable(sheetName)
-	tbl.Columns = excelizeutil.ColumnsCollapse([][]string{cols}, trimSpace)
-	tbl.Rows = rows
-	return &tbl, nil
 }
