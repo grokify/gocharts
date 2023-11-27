@@ -34,6 +34,7 @@ var colNumberToLettersTests = []struct {
 	sheetLocation string
 }{
 	{1, 1, 0, 0, "", "A", "A", "A1"},
+	{36, 1, 35, 0, "A", "J", "AJ", "AJ1"},
 	{26, 26, 25, 25, "", "Z", "Z", "Z26"},
 	{1, 1024, 0, 1023, "", "A", "A", "A1024"},
 	{26, 1024, 25, 1023, "", "Z", "Z", "Z1024"},
@@ -74,7 +75,7 @@ func TestColNumberToLetters(t *testing.T) {
 			SuffixWant:  tt.suffix,
 			LettersWant: tt.letters,
 			LettersGot:  letters}
-		//fmtutil.PrintJSON(inst)
+
 		if inst.LettersGot != inst.LettersWant {
 			t.Errorf("table.ColNumberToLetters(%v) want [%v] got [%v]",
 				tt.colNumber, tt.letters, letters)
