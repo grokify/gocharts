@@ -11,8 +11,7 @@ import (
 // Columns represents a slice of string with tabular functions.
 type Columns []string
 
-// Index returns the column index of the requested column name.
-// A value of `-1` is returned if the coliumn name is not found.
+// Index returns the column index of the requested column name. A value of `-1` is returned if the coliumn name is not found.
 func (cols Columns) Index(colName string) int {
 	for idx, colNameTry := range cols {
 		if colNameTry == colName {
@@ -22,8 +21,7 @@ func (cols Columns) Index(colName string) int {
 	return -1
 }
 
-// Equal returns true if the number of elements or the
-// element values of the Columns do not match.
+// Equal returns true if the number of elements or the element values of the Columns do not match.
 func (cols Columns) Equal(c Columns) bool {
 	if len(cols) != len(c) {
 		return false
@@ -36,22 +34,27 @@ func (cols Columns) Equal(c Columns) bool {
 	return true
 }
 
-// MustCellString returns a single row value or empty string if the column
-// name doesn't exist.
+// MustCellString returns a single row value or empty string if the column name doesn't exist.
 func (cols Columns) MustCellString(colName string, row []string) string {
-	val, err := cols.CellString(colName, row)
-	if err != nil {
+	if val, err := cols.CellString(colName, row, true, ""); err != nil {
 		return ""
+	} else {
+		return val
 	}
-	return val
 }
 
 // CellString returns a single row value.
-func (cols Columns) CellString(colName string, row []string) (string, error) {
+func (cols Columns) CellString(colName string, row []string, defaultIfEmpty bool, def string) (string, error) {
 	for colIdx, colNameTry := range cols {
 		if colNameTry == colName {
 			if colIdx < len(row) {
+				v := row[colIdx]
+				if v == "" && defaultIfEmpty {
+					return def, nil
+				}
 				return row[colIdx], nil
+			} else {
+				return "", errors.New("column index not present in row")
 			}
 		}
 	}
@@ -59,46 +62,50 @@ func (cols Columns) CellString(colName string, row []string) (string, error) {
 }
 
 // CellFloat64 returns a single row value.
-func (cols Columns) CellFloat64(colName string, row []string) (float64, error) {
-	val, err := cols.CellString(colName, row)
-	if err != nil {
+func (cols Columns) CellFloat64(colName string, row []string, defaultIfEmpty bool, def float64) (float64, error) {
+	if val, err := cols.CellString(colName, row, false, ""); err != nil {
 		return 0, err
+	} else if strings.TrimSpace(val) == "" && defaultIfEmpty {
+		return def, nil
+	} else {
+		return strconv.ParseFloat(val, 64)
 	}
-	return strconv.ParseFloat(val, 64)
 }
 
 // CellInt returns a single row value.
-func (cols Columns) CellInt(colName string, row []string) (int, error) {
-	val, err := cols.CellString(colName, row)
-	if err != nil {
+func (cols Columns) CellInt(colName string, row []string, defaultIfEmpty bool, def int) (int, error) {
+	if val, err := cols.CellString(colName, row, false, ""); err != nil {
 		return 0, err
+	} else if strings.TrimSpace(val) == "" && defaultIfEmpty {
+		return def, nil
+	} else {
+		return strconv.Atoi(val)
 	}
-	return strconv.Atoi(val)
 }
 
 // CellUint returns a single row value.
-func (cols Columns) CellUint(colName string, row []string) (uint, error) {
-	val, err := cols.CellInt(colName, row)
-	if err != nil {
+func (cols Columns) CellUint(colName string, row []string, defaultIfEmpty bool, def uint) (uint, error) {
+	if val, err := cols.CellInt(colName, row, defaultIfEmpty, int(def)); err != nil {
 		return 0, err
-	}
-	if val < 0 {
+	} else if val < 0 {
 		return 0, errors.New("cannot convert to `uint` as `int` is less than zero")
+	} else {
+		return uint(val), nil
 	}
-	return uint(val), nil
 }
 
-// CellTime returns a single row value. If no
-// `timeFormat` is provided `time.RFC3339` is used.
-func (cols Columns) CellTime(colName, timeFormat string, row []string) (time.Time, error) {
-	val, err := cols.CellString(colName, row)
-	if err != nil {
+// CellTime returns a single row value. If no `timeFormat` is provided `time.RFC3339` is used.
+func (cols Columns) CellTime(colName, timeFormat string, row []string, defaultIfEmpty bool, def time.Time) (time.Time, error) {
+	if val, err := cols.CellString(colName, row, false, ""); err != nil {
 		return time.Now(), err
+	} else if strings.TrimSpace(val) == "" && defaultIfEmpty {
+		return time.Time{}, nil
+	} else {
+		if strings.TrimSpace(timeFormat) == "" {
+			timeFormat = time.RFC3339
+		}
+		return time.Parse(timeFormat, val)
 	}
-	if strings.TrimSpace(timeFormat) == "" {
-		timeFormat = time.RFC3339
-	}
-	return time.Parse(timeFormat, val)
 }
 
 // MustCellsString returns a slice of values.
@@ -111,12 +118,11 @@ func (cols Columns) MustCellsString(colNames []string, row []string) []string {
 }
 
 // CellsString returns a slice of values.
-func (cols Columns) CellsString(colNames []string, row []string) ([]string, error) {
+func (cols Columns) CellsString(colNames []string, row []string, useDefault bool, def string) ([]string, error) {
 	missingColumnNames := []string{}
 	vals := []string{}
 	for _, colName := range colNames {
-		val, err := cols.CellString(colName, row)
-		if err != nil {
+		if val, err := cols.CellString(colName, row, useDefault, def); err != nil {
 			missingColumnNames = append(missingColumnNames, colName)
 		} else {
 			vals = append(vals, val)

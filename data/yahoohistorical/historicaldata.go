@@ -109,13 +109,13 @@ func (hd *HistoricalData) columnData(interval timeutil.Interval, columnName stri
 			return ts, err
 		}
 		if columnName == ColumnVolume {
-			val, err := hd.Table.Columns.CellInt(columnName, row)
+			val, err := hd.Table.Columns.CellInt(columnName, row, false, 0)
 			if err != nil {
 				return ts, err
 			}
 			ts.AddInt64(dt, int64(val))
 		} else {
-			val, err := hd.Table.Columns.CellFloat64(columnName, row)
+			val, err := hd.Table.Columns.CellFloat64(columnName, row, false, 0)
 			if err != nil {
 				return ts, err
 			}
