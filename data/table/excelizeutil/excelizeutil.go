@@ -83,8 +83,8 @@ func (f *File) SheetColumnNames(sheetName string, trimSpace bool) ([]string, err
 }
 
 func (f *File) TableData(sheetName string, headerRowCount uint, trimSpace, umerge bool) ([]string, [][]string, error) {
-	cols := []string{}
-	rows := [][]string{}
+	var cols []string
+	var rows [][]string
 	var err error
 	if f.File == nil {
 		return []string{}, [][]string{}, ErrExcelizeFileCannotBeNil
