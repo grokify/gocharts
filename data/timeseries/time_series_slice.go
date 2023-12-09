@@ -10,7 +10,7 @@ import (
 )
 
 func TimeSeriesSliceTimes(tsSlice []TimeSeries) []string {
-	timeStrings := []string{}
+	var timeStrings []string
 	for _, ds := range tsSlice {
 		keys := ds.Keys()
 		timeStrings = append(timeStrings, keys...)
@@ -19,7 +19,7 @@ func TimeSeriesSliceTimes(tsSlice []TimeSeries) []string {
 }
 
 func TimeSeriesSliceNames(tsSlice []TimeSeries) []string {
-	names := []string{}
+	var names []string
 	for _, ds := range tsSlice {
 		names = append(names, ds.SeriesName)
 	}
