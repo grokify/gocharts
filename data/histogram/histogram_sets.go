@@ -92,6 +92,34 @@ func (hsets *HistogramSets) ItemNames() []string {
 	return maputil.Keys(hsets.HistogramSetMap)
 }
 
+func (hsets *HistogramSets) Map() map[string]map[string]map[string]int {
+	out := map[string]map[string]map[string]int{}
+	for hsetName, hset := range hsets.HistogramSetMap {
+		if _, ok := out[hsetName]; !ok {
+			out[hsetName] = map[string]map[string]int{}
+		}
+		for histName, hist := range hset.HistogramMap {
+			if _, ok := out[histName]; !ok {
+				out[histName] = map[string]map[string]int{}
+			}
+			for binName, binCount := range hist.Bins {
+				out[hsetName][histName][binName] += binCount
+			}
+		}
+	}
+	return out
+}
+
+func (hsets *HistogramSets) MapAdd(m map[string]map[string]map[string]int, trimSpace bool) {
+	for hsetName, hsetMap := range m {
+		for histName, histMap := range hsetMap {
+			for binName, binCount := range histMap {
+				hsets.Add(hsetName, histName, binName, binCount, trimSpace)
+			}
+		}
+	}
+}
+
 func (hsets *HistogramSets) Visit(visit func(hsetName, histName, binName string, binCount int)) {
 	for hsetName, hset := range hsets.HistogramSetMap {
 		for histName, hist := range hset.HistogramMap {
