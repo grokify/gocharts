@@ -1,5 +1,6 @@
 package tblconv
 
+/*
 import (
 	"fmt"
 	"strconv"
@@ -72,3 +73,4 @@ func TableToTimeSeries(tbl table.Table, opts *TableToTimeSeriesOpts) (timeseries
 	}
 	return ts, nil
 }
+*/

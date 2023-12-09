@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"os"
 	"sort"
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/grokify/mogo/sort/sortutil"
@@ -13,6 +15,7 @@ import (
 	"github.com/grokify/mogo/time/timeutil"
 
 	"github.com/grokify/gocharts/v2/data/point"
+	"github.com/grokify/gocharts/v2/data/table"
 )
 
 type TimeSeries struct {
@@ -32,20 +35,20 @@ func NewTimeSeries(name string) TimeSeries {
 
 // ReadFileTimeSeries reads a time series file in JSON.
 func ReadFileTimeSeries(filename string) (TimeSeries, error) {
-	data, err := os.ReadFile(filename)
-	if err != nil {
+	if data, err := os.ReadFile(filename); err != nil {
 		return TimeSeries{}, err
+	} else {
+		var ts TimeSeries
+		return ts, json.Unmarshal(data, &ts)
 	}
-	var ts TimeSeries
-	return ts, json.Unmarshal(data, &ts)
 }
 
 // AddInt64 adds a time value, converting it to a float on the series type.
-func (ts *TimeSeries) AddInt64(dt time.Time, value int64) {
+func (ts *TimeSeries) AddInt64(t time.Time, value int64) {
 	item := TimeItem{
 		SeriesName:    ts.SeriesName,
 		SeriesSetName: ts.SeriesSetName,
-		Time:          dt,
+		Time:          t,
 		IsFloat:       ts.IsFloat}
 	if ts.IsFloat {
 		item.ValueFloat = float64(value)
@@ -56,11 +59,11 @@ func (ts *TimeSeries) AddInt64(dt time.Time, value int64) {
 }
 
 // AddFloat64 adds a time value, converting it to a int64 on the series type.
-func (ts *TimeSeries) AddFloat64(dt time.Time, value float64) {
+func (ts *TimeSeries) AddFloat64(t time.Time, value float64) {
 	item := TimeItem{
 		SeriesName:    ts.SeriesName,
 		SeriesSetName: ts.SeriesSetName,
-		Time:          dt,
+		Time:          t,
 		IsFloat:       ts.IsFloat}
 	if ts.IsFloat {
 		item.ValueFloat = value
@@ -89,6 +92,76 @@ func (ts *TimeSeries) AddItems(items ...TimeItem) {
 			ts.ItemMap[rfc] = item
 		}
 	}
+}
+
+/*
+type AddTableOpts struct {
+	TimeColIdx   uint
+	TimeFormat   string
+	CountColIdx  uint
+	CountIsFloat bool
+}
+
+func DefaultAddTableOpts() *AddTableOpts {
+	return &AddTableOpts{
+		TimeColIdx:   0,
+		TimeFormat:   time.RFC3339,
+		CountColIdx:  1,
+		CountIsFloat: false}
+}
+*/
+
+func (ts *TimeSeries) AddTable(tbl *table.Table, timeColIdx uint, timeFormat string, countColIdx uint, countIsFloat bool) error {
+	// func (ts *TimeSeries) AddTable(tbl *table.Table, opts *AddTableOpts) error {
+	if tbl == nil {
+		return errors.New("table cannot be nil")
+	} else if timeColIdx == countColIdx {
+		return errors.New("column indexes for time and count cannot be the same")
+	}
+
+	// if opts == nil {
+	//	opts = DefaultAddTableOpts()
+	// }
+	// if opts.CountIsFloat {
+	//	ts.IsFloat = true
+	// }
+	// dtFormat := opts.TimeFormat
+
+	if len(timeFormat) == 0 {
+		timeFormat = time.RFC3339
+	}
+	for _, row := range tbl.Rows {
+		if len(row) == 0 {
+			continue
+		} else if int(timeColIdx) >= len(row) {
+			return fmt.Errorf("time column doesn't exist")
+		} else if int(countColIdx) >= len(row) {
+			return fmt.Errorf("count column doesn't exist")
+		}
+		dt, err := time.Parse(timeFormat, row[int(timeColIdx)])
+		if err != nil {
+			return err
+		}
+		countStr := strings.TrimSpace(row[int(countColIdx)])
+		if countStr == "" {
+			ts.AddInt64(dt, 0)
+		} else {
+			if countIsFloat {
+				if countFloat, err := strconv.ParseFloat(countStr, 64); err != nil {
+					return err
+				} else {
+					ts.AddFloat64(dt, countFloat)
+				}
+			} else {
+				if countInt, err := strconv.Atoi(countStr); err != nil {
+					return err
+				} else {
+					ts.AddInt64(dt, int64(countInt))
+				}
+			}
+		}
+	}
+	return nil
 }
 
 func (ts *TimeSeries) ConvertFloat64() {
@@ -153,23 +226,23 @@ func (ts *TimeSeries) ItemsSorted() []TimeItem {
 	keys := ts.Keys()
 	itemsSorted := []TimeItem{}
 	for _, key := range keys {
-		item, ok := ts.ItemMap[key]
-		if !ok {
+		if item, ok := ts.ItemMap[key]; !ok {
 			panic(fmt.Sprintf("KEY_NOT_FOUND [%s]", key))
+		} else {
+			itemsSorted = append(itemsSorted, item)
 		}
-		itemsSorted = append(itemsSorted, item)
 	}
 	return itemsSorted
 }
 
 // Get returns a `TimeItem` given a `time.Time`.
-func (ts *TimeSeries) Get(dt time.Time) (TimeItem, error) {
+func (ts *TimeSeries) Get(t time.Time) (TimeItem, error) {
 	for _, ti := range ts.ItemMap {
-		if ti.Time.Equal(dt) {
+		if ti.Time.Equal(t) {
 			return ti, nil
 		}
 	}
-	return TimeItem{}, fmt.Errorf("time not found [%s]", dt.Format(time.RFC3339))
+	return TimeItem{}, fmt.Errorf("time not found [%s]", t.Format(time.RFC3339))
 }
 
 func (ts *TimeSeries) Last() (TimeItem, error) {
@@ -453,7 +526,7 @@ func (ts *TimeSeries) TimeSeries(interval timeutil.Interval) []time.Time {
 }
 
 func (ts *TimeSeries) ItemTimes() []time.Time {
-	times := []time.Time{}
+	var times []time.Time
 	for _, item := range ts.ItemMap {
 		times = append(times, item.Time)
 	}
