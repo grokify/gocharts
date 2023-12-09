@@ -61,6 +61,28 @@ func (hset *HistogramSet) Add(histName, binName string, binCount int) {
 	hset.HistogramMap[histName] = hist
 }
 
+// BinSetCounts returns a ap where the key is the count of bins and the string is the set name.
+func (hset *HistogramSet) BinParentCounts() map[uint]map[string]uint {
+	out := map[uint]map[string]uint{}
+	wip := map[string]map[string]uint{} //
+	for hsetName, hist := range hset.HistogramMap {
+		for binName := range hist.Bins {
+			if wip[binName] == nil {
+				wip[binName] = map[string]uint{}
+			}
+			wip[binName][hsetName]++
+		} // cust | aws
+	}
+	for binName, mapHsetCount := range wip {
+		hsetCount := uint(len(mapHsetCount))
+		if out[hsetCount] == nil {
+			out[hsetCount] = map[string]uint{}
+		}
+		out[hsetCount][binName]++
+	}
+	return out
+}
+
 // ItemCount returns the number of histograms.
 func (hset *HistogramSet) ItemCount() uint {
 	return uint(len(hset.HistogramMap))
@@ -141,6 +163,27 @@ func (hset *HistogramSet) LeafStats(name string) *Histogram {
 		}
 	}
 	return setLeafStats
+}
+
+func (hset *HistogramSet) Map() map[string]map[string]int {
+	out := map[string]map[string]int{}
+	for histName, hist := range hset.HistogramMap {
+		if _, ok := out[histName]; !ok {
+			out[histName] = map[string]int{}
+		}
+		for binName, binCount := range hist.Bins {
+			out[histName][binName] += binCount
+		}
+	}
+	return out
+}
+
+func (hset *HistogramSet) MapAdd(m map[string]map[string]int) {
+	for histName, histMap := range m {
+		for binName, binCount := range histMap {
+			hset.Add(histName, binName, binCount)
+		}
+	}
 }
 
 func (hset *HistogramSet) ToTimeSeriesDistinct() (timeseries.TimeSeries, error) {
