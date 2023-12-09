@@ -1,5 +1,6 @@
 package xoxconv
 
+/*
 import (
 	"time"
 
@@ -8,24 +9,30 @@ import (
 	"github.com/grokify/gocharts/v2/data/timeseries"
 )
 
-// TimeSeriesXoX converts a `timeseries.TimeSeries`
-// XoX statistics.
-func TimeSeriesXoX(ts timeseries.TimeSeries) (XOXFloat64, error) {
+const (
+	XoXClassNow = "Now"
+	XoXClassMoM = "MoM"
+	XoXClassQoQ = "QoQ"
+	XoXClassYoY = "YoY"
+)
+
+// TimeSeriesXoX converts a `timeseries.TimeSeries` XoX statistics.
+func TimeSeriesXoX(ts timeseries.TimeSeries) (XoXInfoMulti, error) {
 	tsMonth := ts.ToMonth(true)
 
-	xox := XOXFloat64{}
+	xox := XoXInfoMulti{}
 	tiNow, err := tsMonth.Last()
 	if err != nil {
 		return xox, err
 	}
-	xox.Now = Compare{
-		XoX:   "NOW",
+	xox.Now = XoXInfo{
+		XoX:   XoXClassNow,
 		Time:  tiNow.Time,
 		Value: tiNow.Float64()}
 	mago, err := tsMonth.Get(timeutil.TimeDT6AddNMonths(tiNow.Time, -1))
 	if err == nil {
-		xox.Month = Compare{
-			XoX:   "MOM",
+		xox.Month = XoXInfo{
+			XoX:   XoXClassMoM,
 			Time:  mago.Time,
 			Value: mago.Float64()}
 		if mago.Float64() != 0 {
@@ -34,8 +41,8 @@ func TimeSeriesXoX(ts timeseries.TimeSeries) (XOXFloat64, error) {
 	}
 	qago, err := tsMonth.Get(timeutil.TimeDT6AddNMonths(tiNow.Time, -3))
 	if err == nil {
-		xox.Quarter = Compare{
-			XoX:   "QOQ",
+		xox.Quarter = XoXInfo{
+			XoX:   XoXClassQoQ,
 			Time:  qago.Time,
 			Value: qago.Float64()}
 		if qago.Float64() != 0 {
@@ -44,8 +51,8 @@ func TimeSeriesXoX(ts timeseries.TimeSeries) (XOXFloat64, error) {
 	}
 	yago, err := tsMonth.Get(timeutil.TimeDT6AddNMonths(tiNow.Time, -12))
 	if err == nil {
-		xox.Year = Compare{
-			XoX:   "YOY",
+		xox.Year = XoXInfo{
+			XoX:   XoXClassYoY,
 			Time:  yago.Time,
 			Value: yago.Float64()}
 		if yago.Float64() != 0 {
@@ -55,16 +62,17 @@ func TimeSeriesXoX(ts timeseries.TimeSeries) (XOXFloat64, error) {
 	return xox, nil
 }
 
-type XOXFloat64 struct {
-	Now     Compare
-	Month   Compare
-	Quarter Compare
-	Year    Compare
+type XoXInfoMulti struct {
+	Now     XoXInfo
+	Month   XoXInfo
+	Quarter XoXInfo
+	Year    XoXInfo
 }
 
-type Compare struct {
+type XoXInfo struct {
 	Time   time.Time
 	Value  float64
 	Change float64
 	XoX    string
 }
+*/
