@@ -150,6 +150,20 @@ func (hist *Histogram) ItemNames() []string {
 	return maputil.Keys(hist.Bins)
 }
 
+func (hist *Histogram) Map() map[string]int {
+	out := map[string]int{}
+	for binName, binCount := range hist.Bins {
+		out[binName] += binCount
+	}
+	return out
+}
+
+func (hist *Histogram) MapAdd(m map[string]int) {
+	for binName, binCount := range m {
+		hist.Add(binName, binCount)
+	}
+}
+
 func (hist *Histogram) Sum() int {
 	binSum := 0
 	for _, c := range hist.Bins {
