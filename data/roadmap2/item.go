@@ -62,7 +62,6 @@ func (ii Items) CountsByMetaAttribute(attrName string, keyForMissing *string) ma
 				counts[pointer.Dereference(keyForMissing)]++
 			}
 		}
-
 	}
 	return counts
 }
