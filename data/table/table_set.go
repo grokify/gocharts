@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/grokify/gocharts/v2/data/table/excelizeutil"
+	"github.com/grokify/mogo/errors/errorsutil"
 	"github.com/grokify/mogo/type/maputil"
 	excelize "github.com/xuri/excelize/v2"
 )
@@ -62,7 +63,11 @@ func (ts *TableSet) WriteXLSX(filename string) error {
 		names = ts.TableNames()
 	}
 	tbls := ts.Tables(names)
-	return WriteXLSX(filename, tbls)
+	if err := WriteXLSX(filename, tbls); err != nil {
+		return errorsutil.Wrapf(err, "error in TableSet.WriteXLSX(%s)", filename)
+	} else {
+		return nil
+	}
 }
 
 // ReadFileXLSX reads in an entire XLSX file as a `TableSet`. Warning: this can be resource
