@@ -7,8 +7,6 @@ import (
 	"strings"
 
 	"github.com/grokify/mogo/type/maputil"
-	"github.com/grokify/mogo/type/slicesutil"
-	"github.com/grokify/mogo/type/stringsutil"
 	"github.com/olekukonko/tablewriter"
 
 	"github.com/grokify/gocharts/v2/data/point"
@@ -47,14 +45,6 @@ func (hist *Histogram) AddBulk(m map[string]int) {
 	}
 }
 
-// AddMap provides a helper function to automatically create url encoded string keys.
-// This can be used with `TableMap` to generate tables with arbitrary columns easily.
-func (hist *Histogram) AddMap(binMap map[string]string, binCount int) {
-	m := maputil.MapStringString(binMap)
-	key := m.Encode()
-	hist.Add(key, binCount)
-}
-
 func (hist *Histogram) Inflate() {
 	hist.Counts = map[string]int{}
 	sum := 0
@@ -88,47 +78,6 @@ func (hist *Histogram) BinCountOrDefault(binName string, def int) int {
 		return def
 	}
 	return c
-}
-
-func (hist *Histogram) FlattenMapSingleKey(mapKeyFilter string) (*Histogram, error) {
-	filtered := NewHistogram(hist.Name)
-	for mapKeyStr, count := range hist.Bins {
-		binMap, err := maputil.ParseMapStringString(mapKeyStr)
-		if err != nil {
-			return nil, err
-		}
-		if val, ok := binMap[mapKeyFilter]; ok {
-			filtered.Add(val, count)
-		} else {
-			filtered.Add("", count)
-		}
-	}
-	return filtered, nil
-}
-
-func (hist *Histogram) FilterMapKeys(mapKeysFilter []string) (*Histogram, error) {
-	mapKeysFilter = stringsutil.SliceCondenseSpace(mapKeysFilter, true, true)
-	filtered := NewHistogram(hist.Name)
-	if len(mapKeysFilter) == 0 || len(hist.Bins) == 0 {
-		return filtered, nil
-	}
-
-	for mapKeysStr, count := range hist.Bins {
-		binMap, err := maputil.ParseMapStringString(mapKeysStr)
-		if err != nil {
-			return nil, err
-		}
-		newBinMap := map[string]string{}
-		for _, filterKey := range mapKeysFilter {
-			if filterVal, ok := binMap[filterKey]; ok {
-				newBinMap[filterKey] = filterVal
-			} else {
-				newBinMap[filterKey] = ""
-			}
-		}
-		filtered.AddMap(newBinMap, count)
-	}
-	return filtered, nil
 }
 
 func (hist *Histogram) BinNames() []string {
@@ -241,78 +190,6 @@ func (hist *Histogram) Table(colNameBinName, colNameBinCount string) *table.Tabl
 	}
 	tbl.FormatMap = map[int]string{1: "int"}
 	return &tbl
-}
-
-// MapKeys returns a list of keys using query string keys.
-func (hist *Histogram) MapKeys() ([]string, error) {
-	keys := map[string]int{}
-	for qry := range hist.Bins {
-		m, err := maputil.ParseMapStringString(qry)
-		if err != nil {
-			return []string{}, err
-		}
-		for k := range m {
-			keys[k]++
-		}
-	}
-	return maputil.Keys(keys), nil
-}
-
-// MayKeyValues returns a list of keys using query string keys.
-func (hist *Histogram) MayKeyValues(key string, dedupe bool) ([]string, error) {
-	vals := []string{}
-	for qry := range hist.Bins {
-		m, err := maputil.ParseMapStringString(qry)
-		if err != nil {
-			return []string{}, err
-		}
-		if v, ok := m[key]; ok {
-			vals = append(vals, v)
-		}
-	}
-	if dedupe {
-		vals = slicesutil.Dedupe(vals)
-	}
-	return vals, nil
-}
-
-// TableMap is used to generate a table using map keys.
-func (hist *Histogram) TableMap(mapCols []string, colNameBinCount string) (*table.Table, error) {
-	if strings.TrimSpace(colNameBinCount) == "" {
-		colNameBinCount = "Count"
-	}
-
-	// create histogram with minimized aggregate map keys to aggregate exclude non-desired
-	// properties from the key for aggregation.
-	histSubset := NewHistogram("")
-	for binName, binCount := range hist.Bins {
-		binMap, err := maputil.ParseMapStringString(binName)
-		if err != nil {
-			return nil, err
-		}
-		newBinMap := binMap.Subset(mapCols, false, true, true)
-		// newBinMap := mapStringStringSubset(binMap, mapCols, true, false, true)
-		// fmtutil.PrintJSON(newBinMap)
-		histSubset.AddMap(newBinMap, binCount)
-	}
-
-	tbl := table.NewTable(hist.Name)
-	tbl.Columns = append(mapCols, colNameBinCount)
-
-	for binName, binCount := range histSubset.Bins {
-		binMap, err := maputil.ParseMapStringString(binName)
-		if err != nil {
-			return nil, err
-		}
-		binVals := binMap.Gets(true, mapCols)
-
-		tbl.Rows = append(tbl.Rows,
-			append(binVals, strconv.Itoa(binCount)),
-		)
-	}
-
-	tbl.FormatMap = map[int]string{len(tbl.Columns) - 1: "int"}
-	return &tbl, nil
 }
 
 func (hist *Histogram) WriteXLSX(filename, sheetname, colNameBinName, colNameBinCount string) error {
