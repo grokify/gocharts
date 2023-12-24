@@ -2,7 +2,6 @@ package histogram
 
 import (
 	"errors"
-	"slices"
 	"strconv"
 	"strings"
 
@@ -11,6 +10,7 @@ import (
 	"github.com/grokify/mogo/type/maputil"
 	"github.com/grokify/mogo/type/slicesutil"
 	"github.com/grokify/mogo/type/stringsutil"
+	"golang.org/x/exp/slices"
 )
 
 // AddMap provides a helper function to automatically create url encoded string keys.
