@@ -4,8 +4,7 @@ import (
 	"strings"
 )
 
-// TransformBinNames modifies bin names and returns a new
-// histogram.
+// TransformBinNames modifies bin names and returns a new histogram.
 func (hist *Histogram) TransformBinNames(xfFunc func(input string) string) *Histogram {
 	if hist == nil {
 		return nil
@@ -47,8 +46,7 @@ func (hist *Histogram) transformBinNamesExactMatch(xfMap map[string]string) *His
 	)
 }
 
-// transformBinNamesPrefix modifies bin names and returns a new
-// histogram.
+// transformBinNamesPrefix modifies bin names and returns a new histogram.
 func (hist *Histogram) transformBinNamesPrefix(xfMap map[string]string) *Histogram {
 	if hist == nil {
 		return nil

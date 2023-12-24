@@ -103,8 +103,7 @@ func (hset *HistogramSet) ItemNames() []string {
 	return maputil.Keys(hset.HistogramMap)
 }
 
-// HistogramNameExists returns a boolean indicating if
-// the supplied histogram name exists.
+// HistogramNameExists returns a boolean indicating if the supplied histogram name exists.
 func (hset *HistogramSet) HistogramNameExists(histName string) bool {
 	if _, ok := hset.HistogramMap[histName]; ok {
 		return true
@@ -121,8 +120,7 @@ func (hset *HistogramSet) Sum() int {
 	return valueSum
 }
 
-// BinNameExists returns a boolean indicating if a bin name
-// exists in any histogram.
+// BinNameExists returns a boolean indicating if a bin name exists in any histogram.
 func (hset *HistogramSet) BinNameExists(binName string) bool {
 	for _, hist := range hset.HistogramMap {
 		if hist.BinNameExists(binName) {
