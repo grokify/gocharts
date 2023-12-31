@@ -69,8 +69,8 @@ func (hist *Histogram) MapKeySplit(mapKey string, mapValIncl []string) (*Histogr
 	return hs, nil
 }
 
-// ReduceMapKeys returns a new `Histogram` with only the supplied keys present.
-func (hist *Histogram) ReduceMapKeys(mapKeysFilter []string) (*Histogram, error) {
+// MapKeysReduce returns a new `Histogram` with only the supplied keys present.
+func (hist *Histogram) MapKeysReduce(mapKeysFilter []string) (*Histogram, error) {
 	mapKeysFilter = stringsutil.SliceCondenseSpace(mapKeysFilter, true, true)
 	filtered := NewHistogram(hist.Name)
 	if len(mapKeysFilter) == 0 || len(hist.Bins) == 0 {
@@ -95,7 +95,7 @@ func (hist *Histogram) ReduceMapKeys(mapKeysFilter []string) (*Histogram, error)
 	return filtered, nil
 }
 
-func (hist *Histogram) FlattenMapSingleKey(mapKeyFilter string) (*Histogram, error) {
+func (hist *Histogram) MapKeysFlattenSingle(mapKeyFilter string) (*Histogram, error) {
 	filtered := NewHistogram(hist.Name)
 	for mapKeyStr, count := range hist.Bins {
 		binMap, err := maputil.ParseMapStringString(mapKeyStr)
