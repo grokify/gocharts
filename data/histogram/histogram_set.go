@@ -214,23 +214,23 @@ func (hset *HistogramSet) Table(colNameHist, colNameBin, colNameCount string) ta
 	return tbl
 }
 
-// WriteXLSXMatrix creates an XLSX file where the first column is the
+// WriteXLSXPivot creates an XLSX file where the first column is the
 // histogram name and the other columns are the bin names. This is
 // useful for easy visualization of a table and also creating
 // charts such as grouped bar charts.
-func (hset *HistogramSet) WriteXLSXMatrix(filename, sheetName, histColName string) error {
-	tbl, err := hset.TableMatrix(sheetName, histColName)
+func (hset *HistogramSet) WriteXLSXPivot(filename, sheetName, histColName string) error {
+	tbl, err := hset.TablePivot(sheetName, histColName)
 	if err != nil {
 		return err
 	}
 	return tbl.WriteXLSX(filename, sheetName)
 }
 
-// TableMatrix returns a `*table.Table` where the first column is the
+// TablePivot returns a `*table.Table` where the first column is the
 // histogram name and the other columns are the bin names. This is
 // useful for easy visualization of a table and also creating
 // charts such as grouped bar charts.
-func (hset *HistogramSet) TableMatrix(tableName, histColName string) (*table.Table, error) {
+func (hset *HistogramSet) TablePivot(tableName, histColName string) (*table.Table, error) {
 	if len(strings.TrimSpace(tableName)) == 0 {
 		tableName = strings.TrimSpace(hset.Name)
 	}

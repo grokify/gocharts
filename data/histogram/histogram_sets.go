@@ -144,10 +144,10 @@ func (hsets *HistogramSets) Table(tableName, colNameHSet, colNameHist, colNameBi
 	return tbl
 }
 
-// TableMatrix returns a `*table.Table` where the first column is the histogram
+// TablePivot returns a `*table.Table` where the first column is the histogram
 // set name, the second column is the histogram name and the other columns are
 // the bin names.
-func (hsets *HistogramSets) TableMatrix(tableName, colNameHSet, colNameHist, colNameBinNamePrefix, colNameBinNameSuffix string) table.Table {
+func (hsets *HistogramSets) TablePivot(tableName, colNameHSet, colNameHist, colNameBinNamePrefix, colNameBinNameSuffix string) table.Table {
 	tbl := table.NewTable(tableName)
 	tbl.FormatMap = map[int]string{
 		-1: table.FormatInt,
@@ -184,7 +184,7 @@ func (hsets *HistogramSets) WriteXLSX(filename, sheetname, colNameHSet, colNameH
 	return tbl.WriteXLSX(filename, sheetname)
 }
 
-func (hsets *HistogramSets) WriteXLSXMatrix(filename, sheetname, colNameHSet, colNameHist, colNameBinNamePrefix, colNameBinNameSuffix string) error {
-	tbl := hsets.TableMatrix(sheetname, colNameHSet, colNameHist, colNameBinNamePrefix, colNameBinNameSuffix)
+func (hsets *HistogramSets) WriteXLSXPivot(filename, sheetname, colNameHSet, colNameHist, colNameBinNamePrefix, colNameBinNameSuffix string) error {
+	tbl := hsets.TablePivot(sheetname, colNameHSet, colNameHist, colNameBinNamePrefix, colNameBinNameSuffix)
 	return tbl.WriteXLSX(filename, sheetname)
 }
