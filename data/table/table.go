@@ -74,9 +74,7 @@ func (tbl *Table) IsWellFormed() (isWellFormed bool, columnCount int, mismatchRo
 		for i, row := range tbl.Rows {
 			if i == 0 && columnCount == 0 {
 				columnCount = len(row)
-				continue
-			}
-			if len(row) != columnCount {
+			} else if len(row) != columnCount {
 				isWellFormed = false
 				mismatchRows = append(mismatchRows, i)
 			}
@@ -88,9 +86,7 @@ func (tbl *Table) IsWellFormed() (isWellFormed bool, columnCount int, mismatchRo
 		for i, row := range tbl.RowsFloat64 {
 			if i == 0 && columnCount == 0 {
 				columnCount = len(row)
-				continue
-			}
-			if len(row) != columnCount {
+			} else if len(row) != columnCount {
 				isWellFormed = false
 				mismatchRows = append(mismatchRows, i)
 			}
