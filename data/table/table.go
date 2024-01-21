@@ -4,20 +4,26 @@ package table
 import (
 	"encoding/csv"
 	"os"
+	"strconv"
+
+	"github.com/grokify/mogo/errors/errorsutil"
 )
 
 // Table is useful for working on CSV data. It stores records as `[]string` with typed
 // formatting information per-column to facilitate transformations.
 type Table struct {
-	Name           string
-	Columns        Columns
-	Rows           [][]string
-	FormatMap      map[int]string
-	FormatFunc     func(val string, colIdx uint) (any, error)
-	FormatAutoLink bool
-	ID             string
-	Class          string
-	Style          string
+	Name                string
+	Columns             Columns
+	Rows                [][]string
+	RowsFloat64         [][]float64
+	IsFloat64           bool
+	FormatMap           map[int]string
+	FormatFunc          func(val string, colIdx uint) (any, error)
+	FormatAutoLink      bool
+	BackgroundColorFunc func(colIdx, rowIdx uint) string
+	ID                  string
+	Class               string
+	Style               string
 }
 
 // NewTable returns a new empty `Table` struct with slices and maps set to empty (non-nil) values.
@@ -61,20 +67,57 @@ func (tbl *Table) UpsertRowColumnValue(rowIdx, colIdx uint, value string) {
 func (tbl *Table) IsWellFormed() (isWellFormed bool, columnCount int, mismatchRows []int) {
 	isWellFormed = true
 	columnCount = len(tbl.Columns)
-	if len(tbl.Rows) == 0 {
-		return isWellFormed, columnCount, []int{}
-	}
-	for i, row := range tbl.Rows {
-		if i == 0 && columnCount == 0 {
-			columnCount = len(row)
-			continue
+	if !tbl.IsFloat64 {
+		if len(tbl.Rows) == 0 {
+			return isWellFormed, columnCount, []int{}
 		}
-		if len(row) != columnCount {
-			isWellFormed = false
-			mismatchRows = append(mismatchRows, i)
+		for i, row := range tbl.Rows {
+			if i == 0 && columnCount == 0 {
+				columnCount = len(row)
+				continue
+			}
+			if len(row) != columnCount {
+				isWellFormed = false
+				mismatchRows = append(mismatchRows, i)
+			}
+		}
+	} else {
+		if len(tbl.RowsFloat64) == 0 {
+			return isWellFormed, columnCount, []int{}
+		}
+		for i, row := range tbl.RowsFloat64 {
+			if i == 0 && columnCount == 0 {
+				columnCount = len(row)
+				continue
+			}
+			if len(row) != columnCount {
+				isWellFormed = false
+				mismatchRows = append(mismatchRows, i)
+			}
 		}
 	}
 	return
+}
+
+// BuildFloat64 populates `RowsFloat64` from `Rows`. It is an experimental feature for machine learning.
+// Most features use `Rows`.
+func (tbl *Table) BuildFloat64(skipEmpty bool) error {
+	for i, row := range tbl.Rows {
+		if skipEmpty && len(row) == 0 {
+			continue
+		}
+		var rowFloat64 []float64
+		for j, v := range row {
+			f, err := strconv.ParseFloat(v, 64)
+			if err != nil {
+				return errorsutil.Wrapf(err, "cannot parse float on row [%d] col [%d] with value [%s]", i, j, v)
+			}
+			rowFloat64 = append(rowFloat64, f)
+		}
+		tbl.RowsFloat64 = append(tbl.RowsFloat64, rowFloat64)
+	}
+	tbl.IsFloat64 = true
+	return nil
 }
 
 func (tbl *Table) WriteXLSX(path, sheetname string) error {
