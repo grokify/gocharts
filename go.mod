@@ -5,13 +5,13 @@ go 1.21
 // toolchain go1.21.1
 
 require (
-	github.com/grokify/mogo v0.62.7
+	github.com/grokify/mogo v0.62.8
 	github.com/jessevdk/go-flags v1.5.0
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/valyala/quicktemplate v1.7.0
 	github.com/wcharczuk/go-chart/v2 v2.1.1
 	github.com/xuri/excelize/v2 v2.8.0
-	golang.org/x/exp v0.0.0-20240112132812-db7319d0e0e3
+	golang.org/x/exp v0.0.0-20240119083558-1b970713d09a
 	gonum.org/v1/gonum v0.14.0
 )
 
