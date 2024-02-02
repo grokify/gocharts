@@ -2,6 +2,7 @@ package wchart
 
 import (
 	"errors"
+	"io"
 
 	"github.com/grokify/gocharts/v2/data/tablef64"
 	chart "github.com/wcharczuk/go-chart/v2"
@@ -51,11 +52,19 @@ func boxPlotWritePNG(filename, title string, values []float64) error {
 	return p.Save(3*vg.Inch, 3*vg.Inch, filename)
 */
 
+func (tbl *Table) ScatterPlotWritePNG(w io.Writer, title, xColName, yColName string, dotWidth float64) error {
+	if graph, err := tbl.ScatterPlot(title, xColName, yColName, dotWidth); err != nil {
+		return err
+	} else {
+		return WritePNG(w, graph)
+	}
+}
+
 func (tbl *Table) ScatterPlotWritePNGFile(filename, title, xColName, yColName string, dotWidth float64) error {
 	if graph, err := tbl.ScatterPlot(title, xColName, yColName, dotWidth); err != nil {
 		return err
 	} else {
-		return WritePNG(filename, graph)
+		return WritePNGFile(filename, graph)
 	}
 }
 

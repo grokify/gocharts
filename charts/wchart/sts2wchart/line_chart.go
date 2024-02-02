@@ -88,7 +88,7 @@ func WriteLineChartTimeSeries(filename string, ts timeseries.TimeSeries, opts *L
 	if err != nil {
 		return err
 	}
-	return wchart.WritePNG(filename, chart)
+	return wchart.WritePNGFile(filename, chart)
 }
 
 func WriteLineChartTimeSeriesSet(filename string, tset timeseries.TimeSeriesSet, opts *LineChartOpts) error {
@@ -96,7 +96,7 @@ func WriteLineChartTimeSeriesSet(filename string, tset timeseries.TimeSeriesSet,
 	if err != nil {
 		return err
 	}
-	return wchart.WritePNG(filename, chart)
+	return wchart.WritePNGFile(filename, chart)
 }
 
 func TimeSeriesSetToLineChart(tset timeseries.TimeSeriesSet, opts *LineChartOpts) (chart.Chart, error) {

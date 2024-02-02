@@ -12,12 +12,17 @@ type ChartType interface {
 	Render(rp chart.RendererProvider, w io.Writer) error
 }
 
-func WritePNG(filename string, thisChart ChartType) error {
+func WritePNG(w io.Writer, c ChartType) error {
+	return c.Render(chart.PNG, w)
+}
+
+func WritePNGFile(filename string, c ChartType) error {
 	f, err := os.Create(filename)
 	if err != nil {
 		return err
 	}
-	err = thisChart.Render(chart.PNG, f)
+	// err = c.Render(chart.PNG, f)
+	err = WritePNG(f, c)
 	err2 := f.Close()
 	if err != nil && err2 != nil {
 		return errorsutil.Wrap(err, err2.Error())
