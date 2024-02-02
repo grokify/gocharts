@@ -147,13 +147,18 @@ func (hsets *HistogramSets) Table(tableName, colNameHSet, colNameHist, colNameBi
 // TablePivot returns a `*table.Table` where the first column is the histogram
 // set name, the second column is the histogram name and the other columns are
 // the bin names.
-func (hsets *HistogramSets) TablePivot(tableName, colNameHSet, colNameHist, colNameBinNamePrefix, colNameBinNameSuffix string) table.Table {
+func (hsets *HistogramSets) TablePivot(tableName, colNameHSet, colNameHist, colNameBinNamePrefix, colNameBinNameSuffix string, binNamesOrder []string, binsInclUnordered bool) table.Table {
 	tbl := table.NewTable(tableName)
 	tbl.FormatMap = map[int]string{
 		-1: table.FormatInt,
 		0:  table.FormatString,
 		1:  table.FormatString}
 	binNames := table.Columns(hsets.BinNames())
+	if len(binNamesOrder) > 0 {
+		binNamesOrdered, _ := stringsutil.SliceOrderExplicit(binNames, binNamesOrder, binsInclUnordered)
+		binNames = binNamesOrdered
+	}
+
 	tbl.Columns = []string{
 		stringsutil.FirstNonEmpty(colNameHSet, "Histogram Set"),
 		stringsutil.FirstNonEmpty(colNameHist, "Histogram")}
@@ -184,7 +189,7 @@ func (hsets *HistogramSets) WriteXLSX(filename, sheetname, colNameHSet, colNameH
 	return tbl.WriteXLSX(filename, sheetname)
 }
 
-func (hsets *HistogramSets) WriteXLSXPivot(filename, sheetname, colNameHSet, colNameHist, colNameBinNamePrefix, colNameBinNameSuffix string) error {
-	tbl := hsets.TablePivot(sheetname, colNameHSet, colNameHist, colNameBinNamePrefix, colNameBinNameSuffix)
+func (hsets *HistogramSets) WriteXLSXPivot(filename, sheetname, colNameHSet, colNameHist, colNameBinNamePrefix, colNameBinNameSuffix string, binNamesOrder []string, binsInclUnordered bool) error {
+	tbl := hsets.TablePivot(sheetname, colNameHSet, colNameHist, colNameBinNamePrefix, colNameBinNameSuffix, binNamesOrder, binsInclUnordered)
 	return tbl.WriteXLSX(filename, sheetname)
 }
