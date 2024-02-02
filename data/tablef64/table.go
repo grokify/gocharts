@@ -3,7 +3,6 @@ package tablef64
 
 import (
 	"errors"
-	"strconv"
 
 	"github.com/grokify/gocharts/v2/data/point"
 	"github.com/grokify/gocharts/v2/data/table"
@@ -46,9 +45,7 @@ func FromTableString(tbl *table.Table, skipEmptyRows bool, colIndexes []uint) (*
 	}
 	n := NewTable("")
 	for _, colIdx := range colIndexes {
-		if colIdx < 0 {
-			return nil, errors.New("colIdx out of range: < 0")
-		} else if colIdx >= uint(len(tbl.Columns)) {
+		if colIdx >= uint(len(tbl.Columns)) {
 			return nil, errors.New("colIdx out of range: >= len")
 		} else {
 			n.Columns = append(n.Columns, tbl.Columns[colIdx])
@@ -63,7 +60,6 @@ func FromTableString(tbl *table.Table, skipEmptyRows bool, colIndexes []uint) (*
 		if err != nil {
 			return nil, err
 		}
-		// rf, err := r3.ParseFloat(64)
 		rf, err := strconvutil.SliceAtof(r3, 64)
 		if err != nil {
 			return nil, err
@@ -78,9 +74,7 @@ func FromTableString(tbl *table.Table, skipEmptyRows bool, colIndexes []uint) (*
 
 func fromTableStringAll(tbl *table.Table, skipEmptyRows bool) (*Table, error) {
 	n := NewTable("")
-	for _, v := range tbl.Columns {
-		n.Columns = append(n.Columns, v)
-	}
+	n.Columns = append(n.Columns, tbl.Columns...)
 	for _, r := range tbl.Rows {
 		if skipEmptyRows && len(r) == 0 {
 			continue
@@ -89,13 +83,9 @@ func fromTableStringAll(tbl *table.Table, skipEmptyRows bool) (*Table, error) {
 		if len(tryEmpty) == 0 {
 			continue
 		}
-		nr := []float64{}
-		for _, v := range r {
-			f, err := strconv.ParseFloat(v, 6)
-			if err != nil {
-				return nil, err
-			}
-			nr = append(nr, f)
+		nr, err := strconvutil.SliceAtof(r, 64)
+		if err != nil {
+			return nil, err
 		}
 		n.Rows = append(n.Rows, nr)
 	}
