@@ -1,13 +1,9 @@
 package histogram
 
 import (
-	"strconv"
 	"strings"
 
 	"github.com/grokify/mogo/type/maputil"
-	"github.com/grokify/mogo/type/stringsutil"
-
-	"github.com/grokify/gocharts/v2/data/table"
 )
 
 type HistogramSets struct {
@@ -128,68 +124,4 @@ func (hsets *HistogramSets) Visit(visit func(hsetName, histName, binName string,
 			}
 		}
 	}
-}
-
-func (hsets *HistogramSets) Table(tableName, colNameHSet, colNameHist, colNameBinName, colNameBinCount string) table.Table {
-	tbl := table.NewTable(tableName)
-	tbl.Columns = []string{
-		stringsutil.FirstNonEmpty(colNameHSet, "Histogram Set"),
-		stringsutil.FirstNonEmpty(colNameHist, "Histogram"),
-		stringsutil.FirstNonEmpty(colNameBinName, "Bin Name"),
-		stringsutil.FirstNonEmpty(colNameBinCount, "Bin Count")}
-	hsets.Visit(func(hsetName, histName, binName string, binCount int) {
-		tbl.Rows = append(tbl.Rows, []string{
-			hsetName, histName, binName, strconv.Itoa(binCount)})
-	})
-	return tbl
-}
-
-// TablePivot returns a `*table.Table` where the first column is the histogram
-// set name, the second column is the histogram name and the other columns are
-// the bin names.
-func (hsets *HistogramSets) TablePivot(tableName, colNameHSet, colNameHist, colNameBinNamePrefix, colNameBinNameSuffix string, binNamesOrder []string, binsInclUnordered bool) table.Table {
-	tbl := table.NewTable(tableName)
-	tbl.FormatMap = map[int]string{
-		-1: table.FormatInt,
-		0:  table.FormatString,
-		1:  table.FormatString}
-	binNames := table.Columns(hsets.BinNames())
-	if len(binNamesOrder) > 0 {
-		binNamesOrdered, _ := stringsutil.SliceOrderExplicit(binNames, binNamesOrder, binsInclUnordered)
-		binNames = binNamesOrdered
-	}
-
-	tbl.Columns = []string{
-		stringsutil.FirstNonEmpty(colNameHSet, "Histogram Set"),
-		stringsutil.FirstNonEmpty(colNameHist, "Histogram")}
-	for i, binName := range binNames {
-		if len(strings.TrimSpace(binName)) == 0 {
-			binName = "Unnamed Bin " + strconv.Itoa(i+1)
-		}
-		tbl.Columns = append(tbl.Columns, colNameBinNamePrefix+binName+colNameBinNameSuffix)
-	}
-	for hsetName, hset := range hsets.HistogramSetMap {
-		for histName, hist := range hset.HistogramMap {
-			row := []string{hsetName, histName}
-			for _, binName := range binNames {
-				if val, ok := hist.Bins[binName]; ok {
-					row = append(row, strconv.Itoa(val))
-				} else {
-					row = append(row, "0")
-				}
-			}
-			tbl.Rows = append(tbl.Rows, row)
-		}
-	}
-	return tbl
-}
-
-func (hsets *HistogramSets) WriteXLSX(filename, sheetname, colNameHSet, colNameHist, colNameBinName, colNameBinCount string) error {
-	tbl := hsets.Table(sheetname, colNameHSet, colNameHist, colNameBinName, colNameBinCount)
-	return tbl.WriteXLSX(filename, sheetname)
-}
-
-func (hsets *HistogramSets) WriteXLSXPivot(filename, sheetname, colNameHSet, colNameHist, colNameBinNamePrefix, colNameBinNameSuffix string, binNamesOrder []string, binsInclUnordered bool) error {
-	tbl := hsets.TablePivot(sheetname, colNameHSet, colNameHist, colNameBinNamePrefix, colNameBinNameSuffix, binNamesOrder, binsInclUnordered)
-	return tbl.WriteXLSX(filename, sheetname)
 }
