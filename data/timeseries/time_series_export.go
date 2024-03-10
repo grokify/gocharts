@@ -150,36 +150,36 @@ func (ts *TimeSeries) TableMonthXOX(timeFmtColName, seriesName, valuesName, yoyN
 		if err != nil {
 			panic("internal time not found")
 		}
-		valData = append(valData, strconvutil.FormatFloat64Simple(tiVal.Float64()))
+		valData = append(valData, strconvutil.Ftoa(tiVal.Float64()))
 		tiYOY, err := yoy.Get(dt)
 		if err != nil {
 			yoyData = append(yoyData, "0")
 		} else {
-			yoyData = append(yoyData, strconvutil.FormatFloat64Simple(tiYOY.Float64()))
+			yoyData = append(yoyData, strconvutil.Ftoa(tiYOY.Float64()))
 		}
 		tiQOQ, err := qoq.Get(dt)
 		if err != nil {
 			qoqData = append(qoqData, "0")
 		} else {
-			qoqData = append(qoqData, strconvutil.FormatFloat64Simple(tiQOQ.Float64()))
+			qoqData = append(qoqData, strconvutil.Ftoa(tiQOQ.Float64()))
 		}
 		tiMOM, err := mom.Get(dt)
 		if err != nil {
 			momData = append(momData, "0")
 		} else {
-			momData = append(momData, strconvutil.FormatFloat64Simple(tiMOM.Float64()))
+			momData = append(momData, strconvutil.Ftoa(tiMOM.Float64()))
 		}
 		if opts.AddMOMGrowth {
 			if dt.After(opts.MOMBaseMonth) && opts.momBaseTimeItemExists {
 				diffMonths := int(month.TimeToMonthContinuous(dt) - opts.momBaseMonthContinuous)
 				targetValue := opts.momBaseTimeItem.Float64() * math.Pow(1+opts.MOMGrowthPct, float64(diffMonths))
-				momGrowthTargets = append(momGrowthTargets, strconvutil.FormatFloat64Simple(targetValue))
+				momGrowthTargets = append(momGrowthTargets, strconvutil.Ftoa(targetValue))
 				actualValue := tiVal.Float64()
 				diff := 0.0
 				if targetValue != 0 {
 					diff = (actualValue - targetValue) / targetValue
 				}
-				momGrowthPerform = append(momGrowthPerform, strconvutil.FormatFloat64Simple(diff))
+				momGrowthPerform = append(momGrowthPerform, strconvutil.Ftoa(diff))
 			} else {
 				momGrowthTargets = append(momGrowthTargets, "0")
 				momGrowthPerform = append(momGrowthPerform, "0")
@@ -225,12 +225,12 @@ func (ts *TimeSeries) TableYearYOY(seriesName, valuesName, yoyName string) table
 				Time:    dt,
 				IsFloat: ts.IsFloat}
 		}
-		valData = append(valData, strconvutil.FormatFloat64Simple(tiVal.Float64()))
+		valData = append(valData, strconvutil.Ftoa(tiVal.Float64()))
 		tiYOY, err := yoy.Get(dt)
 		if err != nil {
 			yoyData = append(yoyData, "0")
 		} else {
-			yoyData = append(yoyData, strconvutil.FormatFloat64Simple(tiYOY.Float64()))
+			yoyData = append(yoyData, strconvutil.Ftoa(tiYOY.Float64()))
 		}
 	}
 	tbl.Rows = [][]string{valData, yoyData}
