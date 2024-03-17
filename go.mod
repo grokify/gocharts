@@ -11,8 +11,8 @@ require (
 	github.com/valyala/quicktemplate v1.7.0
 	github.com/wcharczuk/go-chart/v2 v2.1.1
 	github.com/xuri/excelize/v2 v2.8.1
-	golang.org/x/exp v0.0.0-20240222234643-814bf88cf225
-	gonum.org/v1/gonum v0.14.0
+	golang.org/x/exp v0.0.0-20240314144324-c7f7c6466f7f
+	gonum.org/v1/gonum v0.15.0
 	gonum.org/v1/plot v0.14.0
 )
 
@@ -39,7 +39,7 @@ require (
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/xuri/efp v0.0.0-20231025114914-d1ff6096ae53 // indirect
-	github.com/xuri/nfp v0.0.0-20230919160717-d98342af3f05 // indirect
+	github.com/xuri/nfp v0.0.0-20240316161844-5bacf1a74267 // indirect
 	golang.org/x/crypto v0.21.0 // indirect
 	golang.org/x/image v0.15.0 // indirect
 	golang.org/x/net v0.22.0 // indirect
