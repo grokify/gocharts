@@ -5,7 +5,7 @@ go 1.22
 // toolchain go1.21.1
 
 require (
-	github.com/grokify/mogo v0.63.6
+	github.com/grokify/mogo v0.63.7
 	github.com/jessevdk/go-flags v1.5.0
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/valyala/quicktemplate v1.7.0
