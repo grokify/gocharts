@@ -72,7 +72,7 @@ func (ts *TableSet) WriteXLSX(filename string) error {
 
 // ReadTableSetXLSXFile reads in an entire XLSX file as a `TableSet`. Warning: this can be resource
 // intensive if there's a lot of data. If you just want one sheet of many, it is better to
-// extract an individual sheet or sheets from an `excelize.File`, such as using `XSLXGetSheetTable`.
+// extract an individual sheet or sheets from an `excelize.File`, such as using `ParseTableXLSX()` or `ParseTableXLSXIndex()`.
 func ReadTableSetXLSXFile(filename string, headerRowCount uint, trimSpace bool) (*TableSet, error) {
 	ts := NewTableSet("")
 	xm, err := excelizeutil.NewFile(filename)
@@ -93,23 +93,23 @@ func ReadTableSetXLSXFile(filename string, headerRowCount uint, trimSpace bool) 
 	return ts, xm.Close()
 }
 
-func ReadTableXSLXFile(filename, sheetName string, headerRowCount uint, trimSpace bool) (*Table, error) {
+func ReadTableXLSXFile(filename, sheetName string, headerRowCount uint, trimSpace bool) (*Table, error) {
 	if xf, err := excelizeutil.ReadFile(filename); err != nil {
 		return nil, err
 	} else {
-		return ParseTableXSLX(xf.File, sheetName, headerRowCount, trimSpace)
+		return ParseTableXLSX(xf.File, sheetName, headerRowCount, trimSpace)
 	}
 }
 
-func ReadTableXSLXIndexFile(filename string, sheetIdx uint, headerRowCount uint, trimSpace bool) (*Table, error) {
+func ReadTableXLSXIndexFile(filename string, sheetIdx uint, headerRowCount uint, trimSpace bool) (*Table, error) {
 	if xf, err := excelizeutil.ReadFile(filename); err != nil {
 		return nil, err
 	} else {
-		return ParseTableXSLXIndex(xf.File, sheetIdx, headerRowCount, trimSpace)
+		return ParseTableXLSXIndex(xf.File, sheetIdx, headerRowCount, trimSpace)
 	}
 }
 
-func ParseTableXSLX(f *excelize.File, sheetName string, headerRowCount uint, trimSpace bool) (*Table, error) {
+func ParseTableXLSX(f *excelize.File, sheetName string, headerRowCount uint, trimSpace bool) (*Table, error) {
 	if f == nil {
 		return nil, excelizeutil.ErrExcelizeFileCannotBeNil
 	}
@@ -124,7 +124,7 @@ func ParseTableXSLX(f *excelize.File, sheetName string, headerRowCount uint, tri
 	}
 }
 
-func ParseTableXSLXIndex(f *excelize.File, sheetIdx uint, headerRowCount uint, trimSpace bool) (*Table, error) {
+func ParseTableXLSXIndex(f *excelize.File, sheetIdx uint, headerRowCount uint, trimSpace bool) (*Table, error) {
 	if f == nil {
 		return nil, excelizeutil.ErrExcelizeFileCannotBeNil
 	}

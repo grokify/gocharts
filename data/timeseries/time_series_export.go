@@ -243,7 +243,7 @@ func (ts *TimeSeries) WriteJSON(filename string, perm os.FileMode, prefix, inden
 	return osutil.WriteFileJSON(filename, ts, perm, prefix, indent)
 }
 
-// WriteXLSX writes an XSLX file given a `TimeSeries`
+// WriteXLSX writes an XLSX file given a `TimeSeries`
 func (ts *TimeSeries) WriteXLSX(filename string, sheetName, dateColumnName, countColumnName string) error {
 	tbl := ts.Table(sheetName, dateColumnName, countColumnName, nil)
 	return table.WriteXLSX(filename, []*table.Table{&tbl})
