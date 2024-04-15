@@ -21,21 +21,30 @@ func NewFile(filename string) (*File, error) {
 	f := &File{}
 	if filename == "" {
 		f.File = excelize.NewFile()
+	} else if xf, err := excelize.OpenFile(filename); err != nil {
+		return nil, err
 	} else {
-		xf, err := excelize.OpenFile(filename)
-		if err != nil {
-			return nil, err
-		}
 		f.File = xf
 	}
 	return f, nil
 }
 
+func ReadFile(filename string) (*File, error) {
+	f := &File{}
+	if xf, err := excelize.OpenFile(filename); err != nil {
+		return nil, err
+	} else {
+		f.File = xf
+		return f, nil
+	}
+}
+
 func (f *File) Close() error {
 	if f.File == nil {
 		return nil
+	} else {
+		return f.File.Close()
 	}
-	return f.File.Close()
 }
 
 func (f *File) SheetNames(sortAsc bool) []string {
@@ -78,7 +87,19 @@ func (f *File) SheetColumnNames(sheetName string, trimSpace bool) ([]string, err
 	if exCols, err := f.File.GetCols(sheetName); err != nil {
 		return []string{}, err
 	} else {
-		return ColumnsCollapse(exCols, trimSpace), nil
+		return ColumnsTop(exCols, trimSpace), nil
+	}
+}
+
+func (f *File) TableDataIndex(sheetIdx uint, headerRowCount uint, trimSpace, umerge bool) ([]string, [][]string, error) {
+	if f.File == nil {
+		return []string{}, [][]string{}, ErrExcelizeFileCannotBeNil
+	} else {
+		return f.TableData(
+			f.File.GetSheetName(int(sheetIdx)),
+			headerRowCount,
+			trimSpace,
+			umerge)
 	}
 }
 
@@ -95,7 +116,7 @@ func (f *File) TableData(sheetName string, headerRowCount uint, trimSpace, umerg
 		}
 		rows, err = f.File.GetRows(sheetName)
 		if err != nil {
-			return cols, [][]string{}, err
+			return []string{}, [][]string{}, err
 		}
 		if headerRowCount > 0 && headerRowCount <= uint(len(rows)) {
 			rows = rows[headerRowCount:]
@@ -110,8 +131,7 @@ func (f *File) TableData(sheetName string, headerRowCount uint, trimSpace, umerg
 		if !umerge {
 			// no need to unmerge
 			return cols, rows, nil
-		} else if len(rows) == 0 ||
-			len(rows) == 1 && len(cols) == len(rows[0]) {
+		} else if len(rows) == 0 || len(rows) == 1 && len(cols) == len(rows[0]) {
 			// no need to unmerge
 			return cols, rows, nil
 		} else {
@@ -127,7 +147,7 @@ func (f *File) TableData(sheetName string, headerRowCount uint, trimSpace, umerg
 		}
 	}
 
-	newRows := [][]string{}
+	var newRows [][]string
 	for rowIdx, row := range rows {
 		try := stringsutil.SliceCondenseSpace(row, false, false)
 		if len(try) == 0 {
@@ -168,9 +188,9 @@ func (f *File) TableData(sheetName string, headerRowCount uint, trimSpace, umerg
 	return cols, newRows, nil
 }
 
-// ColumnsCollapse converts a response from `excelize.File.GetCols()` to an `[]string` suitable for `Table.Columns`.
-func ColumnsCollapse(cols [][]string, trimSpace bool) []string {
-	collapsed := []string{}
+// ColumnsTop converts a response from `excelize.File.GetCols()` to an `[]string` suitable for `Table.Columns`.
+func ColumnsTop(cols [][]string, trimSpace bool) []string {
+	var collapsed []string
 	for _, col := range cols {
 		if len(col) > 0 {
 			colName := col[0]
