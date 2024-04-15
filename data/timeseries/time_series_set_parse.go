@@ -1,12 +1,66 @@
 package timeseries
 
 import (
+	"errors"
 	"fmt"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/grokify/gocharts/v2/data/table"
+	"github.com/grokify/mogo/strconv/strconvutil"
+	"github.com/grokify/mogo/time/timeutil"
 )
+
+// ParseTableTimeSeriesSetMatrixRows creates a `TimeSeriesSet` from a `table.Table` where the
+// various time series are in rows and the time intervals are columns `1:`. `funcStringToTime`
+// can be used to convert column names to times and set to `timeutil.ParseTimeCanonicalFunc("Jan 2006")`.
+// `funcStringToInt` can be set to `strconvutil.AtoiMoreFunc(",", ".")`.
+func ParseTableTimeSeriesSetMatrixRows(tbl table.Table, interval timeutil.Interval, isFloat bool,
+	funcStringToTime func(s string) (time.Time, error),
+	funcStringToInt func(s string) (int, error),
+	funcStringToFloat func(s string) (float64, error),
+) (*TimeSeriesSet, error) {
+	tss := NewTimeSeriesSet("")
+	tss.IsFloat = isFloat
+	if len(tbl.Columns) < 2 {
+		return nil, errors.New("columns length cannot be less than 2")
+	}
+	colTimes, err := strconvutil.SliceAtotFunc(funcStringToTime, tbl.Columns[1:])
+	if err != nil {
+		return nil, err
+	}
+	for _, row := range tbl.Rows {
+		if len(row) == 0 {
+			continue
+		} else if len(row) < 2 {
+			return nil, errors.New("row length cannot be less than 2")
+		} else if len(row) > len(tbl.Columns) {
+			return nil, errors.New("row is longer than columns")
+		}
+		seriesName := row[0]
+		for i := 1; i < len(row); i++ {
+			dt := colTimes[i-1]
+			countString := strings.TrimSpace(row[i])
+			if countString == "" || countString == "0" {
+				tss.AddInt64(seriesName, dt, 0)
+			} else if isFloat {
+				if floatVal, err := strconvutil.AtofFunc(funcStringToFloat, countString); err != nil {
+					return nil, err
+				} else {
+					tss.AddFloat64(seriesName, dt, floatVal)
+				}
+			} else {
+				if intVal, err := strconvutil.AtoiFunc(funcStringToInt, countString); err != nil {
+					return nil, err
+				} else {
+					tss.AddInt64(seriesName, dt, int64(intVal))
+				}
+			}
+		}
+	}
+	return &tss, nil
+}
 
 // ParseTableTimeSeriesSetMatrix create a `TimeSeriesSet` from a `table.Table` using the least
 // amount of input to populate the data structure. The time must be in column 0 and the series
@@ -94,7 +148,7 @@ func ParseTableTimeSeriesSetFlat(tbl table.Table, timeColIdx, seriesNameColIdx, 
 }
 
 func ParseTimeFuncMonthYear(s string) (time.Time, error) {
-	return time.Parse("January 2006", s)
+	return timeutil.ParseTimeCanonical("Jan 2006", s)
 }
 
 func ParseTimeFuncRFC3339(s string) (time.Time, error) {
