@@ -2,6 +2,8 @@ module github.com/grokify/gocharts/v2
 
 go 1.22
 
+toolchain go1.22.1
+
 require (
 	github.com/grokify/mogo v0.63.8
 	github.com/jessevdk/go-flags v1.5.0
