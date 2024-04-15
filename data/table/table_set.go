@@ -70,10 +70,10 @@ func (ts *TableSet) WriteXLSX(filename string) error {
 	}
 }
 
-// ReadFileXLSX reads in an entire XLSX file as a `TableSet`. Warning: this can be resource
+// ReadTableSetXLSXFile reads in an entire XLSX file as a `TableSet`. Warning: this can be resource
 // intensive if there's a lot of data. If you just want one sheet of many, it is better to
 // extract an individual sheet or sheets from an `excelize.File`, such as using `XSLXGetSheetTable`.
-func ReadFileXLSX(filename string, headerRowCount uint, trimSpace bool) (*TableSet, error) {
+func ReadTableSetXLSXFile(filename string, headerRowCount uint, trimSpace bool) (*TableSet, error) {
 	ts := NewTableSet("")
 	xm, err := excelizeutil.NewFile(filename)
 	if err != nil {
@@ -93,13 +93,47 @@ func ReadFileXLSX(filename string, headerRowCount uint, trimSpace bool) (*TableS
 	return ts, xm.Close()
 }
 
-func XSLXGetSheetTable(f *excelize.File, sheetName string, headerRowCount uint, trimSpace bool) (*Table, error) {
+func ReadTableXSLXFile(filename, sheetName string, headerRowCount uint, trimSpace bool) (*Table, error) {
+	if xf, err := excelizeutil.ReadFile(filename); err != nil {
+		return nil, err
+	} else {
+		return ParseTableXSLX(xf.File, sheetName, headerRowCount, trimSpace)
+	}
+}
+
+func ReadTableXSLXIndexFile(filename string, sheetIdx uint, headerRowCount uint, trimSpace bool) (*Table, error) {
+	if xf, err := excelizeutil.ReadFile(filename); err != nil {
+		return nil, err
+	} else {
+		return ParseTableXSLXIndex(xf.File, sheetIdx, headerRowCount, trimSpace)
+	}
+}
+
+func ParseTableXSLX(f *excelize.File, sheetName string, headerRowCount uint, trimSpace bool) (*Table, error) {
+	if f == nil {
+		return nil, excelizeutil.ErrExcelizeFileCannotBeNil
+	}
 	xm := excelizeutil.File{File: f}
 	if cols, rows, err := xm.TableData(sheetName, headerRowCount, trimSpace, false); err != nil {
 		return nil, err
 	} else {
 		tbl := NewTable(sheetName)
-		tbl.Columns = excelizeutil.ColumnsCollapse([][]string{cols}, trimSpace)
+		tbl.Columns = cols
+		tbl.Rows = rows
+		return &tbl, nil
+	}
+}
+
+func ParseTableXSLXIndex(f *excelize.File, sheetIdx uint, headerRowCount uint, trimSpace bool) (*Table, error) {
+	if f == nil {
+		return nil, excelizeutil.ErrExcelizeFileCannotBeNil
+	}
+	xm := excelizeutil.File{File: f}
+	if cols, rows, err := xm.TableDataIndex(sheetIdx, headerRowCount, trimSpace, false); err != nil {
+		return nil, err
+	} else {
+		tbl := NewTable(f.GetSheetName(int(sheetIdx)))
+		tbl.Columns = cols
 		tbl.Rows = rows
 		return &tbl, nil
 	}
