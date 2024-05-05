@@ -23,9 +23,7 @@ func (tbl *Table) RowsToMap(keyIdx, valIdx uint) (map[string]string, error) {
 		if kIdxInt >= len(r) || vIdxInt >= len(r) {
 			return m, errors.New("index not present in row")
 		}
-		k := r[keyIdx]
-		v := r[valIdx]
-		m[k] = v
+		m[r[keyIdx]] = r[valIdx]
 	}
 	return m, nil
 }
