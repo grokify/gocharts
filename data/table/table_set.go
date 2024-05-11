@@ -1,6 +1,8 @@
 package table
 
 import (
+	"errors"
+	"strconv"
 	"strings"
 
 	"github.com/grokify/gocharts/v2/data/table/excelizeutil"
@@ -24,6 +26,24 @@ func NewTableSet(name string) *TableSet {
 		Columns:   []string{},
 		FormatMap: map[int]string{},
 		TableMap:  map[string]*Table{}}
+}
+
+func (ts *TableSet) Add(tbl ...*Table) error {
+	for _, t := range tbl {
+		if t == nil {
+			continue
+		}
+		name := t.Name
+		if strings.TrimSpace(name) == "" {
+			name = "Table " + strconv.Itoa(len(ts.TableMap)+1)
+		}
+		if _, ok := ts.TableMap[name]; ok {
+			return errors.New("table name collision")
+		}
+		ts.TableMap[name] = t
+		ts.Order = append(ts.Order, name)
+	}
+	return nil
 }
 
 func (ts *TableSet) TableNames() []string {
