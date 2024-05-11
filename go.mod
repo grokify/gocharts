@@ -5,13 +5,13 @@ go 1.22
 toolchain go1.22.2
 
 require (
-	github.com/grokify/mogo v0.63.10
+	github.com/grokify/mogo v0.63.11
 	github.com/jessevdk/go-flags v1.5.0
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/valyala/quicktemplate v1.7.0
 	github.com/wcharczuk/go-chart/v2 v2.1.1
 	github.com/xuri/excelize/v2 v2.8.1
-	golang.org/x/exp v0.0.0-20240416160154-fe59bbe5cc7f
+	golang.org/x/exp v0.0.0-20240506185415-9bf2ced13842
 	gonum.org/v1/gonum v0.15.0
 	gonum.org/v1/plot v0.14.0
 )
@@ -40,9 +40,9 @@ require (
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/xuri/efp v0.0.0-20240408161823-9ad904a10d6d // indirect
 	github.com/xuri/nfp v0.0.0-20240318013403-ab9948c2c4a7 // indirect
-	golang.org/x/crypto v0.22.0 // indirect
-	golang.org/x/image v0.15.0 // indirect
-	golang.org/x/net v0.24.0 // indirect
+	golang.org/x/crypto v0.23.0 // indirect
+	golang.org/x/image v0.16.0 // indirect
+	golang.org/x/net v0.25.0 // indirect
 	golang.org/x/sys v0.20.0 // indirect
 	golang.org/x/text v0.15.0 // indirect
 )
