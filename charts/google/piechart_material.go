@@ -45,7 +45,7 @@ func (cm *PieChartMaterial) DataMatrix() [][]any {
 	if len(colNamesAny) < 2 {
 		colNamesAny = []any{"Categories", "Value"}
 	}
-	var matrix = [][]any{cm.Columns.NamesAny()}
+	var matrix = [][]any{colNamesAny}
 	cm.Data.Sort()
 	for _, d := range cm.Data.Data {
 		var row []any
@@ -112,7 +112,7 @@ type PieChartOptionsGoogle struct {
 	Legend            string  `json:"legend,omitempty"`
 	Height            string  `json:"height,omitempty"`
 	Width             string  `json:"width,omitempty"`
-	PieHole           float64 `json:"pieHole,omitEmpty"`
+	PieHole           float64 `json:"pieHole,omitempty"`
 	PieSliceText      string  `json:"pieSliceText,omitempty"`
 	PieSliceTextStyle string  `json:"pieSliceTextStyle,omitempty"`
 	PieStartAngle     float64 `json:"pieStartAngle,omitempty"`
