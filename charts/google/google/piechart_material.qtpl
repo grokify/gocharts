@@ -1,0 +1,25 @@
+{% func PieChartMaterialPage(data PieChartMaterial) %}<!DOCTYPE html>
+<html>
+<head>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+</head>
+<body>
+  <h1>{%s data.Title %}</h1>
+  <div id="{%s= data.ChartDivOrDefault() %}"></div>
+  <script>
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+      var data = google.visualization.arrayToDataTable({%z= data.DataMatrixJSON() %});
+
+      var options = {%z= data.GoogleOptions.MustJSON() %}
+
+      var chart = new google.visualization.PieChart(document.getElementById('{%s= data.ChartDivOrDefault() %}'));
+
+      chart.draw(data, options);
+    }
+    </script>
+  </body>
+</html>
+{% endfunc %}
