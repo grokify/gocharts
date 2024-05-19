@@ -31,11 +31,6 @@ type LineChartMaterial struct {
 	Data     [][]any
 }
 
-type Column struct {
-	Type string
-	Name string
-}
-
 func (lcm *LineChartMaterial) DataMatrixJSON() []byte {
 	bytes, err := json.Marshal(lcm.Data)
 	if err != nil {
