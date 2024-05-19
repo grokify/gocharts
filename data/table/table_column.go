@@ -48,7 +48,15 @@ func (tbl *Table) ColumnsValuesDistinct(wantColNames []string, stripSpace bool) 
 	return data, nil
 }
 
-func (tbl *Table) ColumnValuesCounts(colIdx uint, trimSpace, includeEmpty bool) map[string]int {
+func (tbl *Table) ColumnValuesCountsByName(colName string, trimSpace, includeEmpty, lowerCase bool) (map[string]int, error) {
+	colIdx := tbl.Columns.Index(colName)
+	if colIdx <= 0 {
+		return map[string]int{}, errors.New("column name not found")
+	}
+	return tbl.ColumnValuesCounts(uint(colIdx), trimSpace, includeEmpty, lowerCase), nil
+}
+
+func (tbl *Table) ColumnValuesCounts(colIdx uint, trimSpace, includeEmpty, lowerCase bool) map[string]int {
 	m := map[string]int{}
 	colIdxInt := int(colIdx)
 	for _, row := range tbl.Rows {
@@ -61,6 +69,9 @@ func (tbl *Table) ColumnValuesCounts(colIdx uint, trimSpace, includeEmpty bool) 
 		}
 		if !includeEmpty && v == "" {
 			continue
+		}
+		if lowerCase {
+			v = strings.ToLower(v)
 		}
 		m[v]++
 	}
