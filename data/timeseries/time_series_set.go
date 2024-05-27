@@ -121,6 +121,16 @@ func (set *TimeSeriesSet) AddSeries(timeSeries ...TimeSeries) error {
 	return nil
 }
 
+func (set *TimeSeriesSet) GetInt64WithDefault(seriesName, rfc3339fulldate string, def int64) int64 {
+	if series, ok := set.Series[seriesName]; !ok {
+		return def
+	} else if ti, ok := series.ItemMap[rfc3339fulldate]; !ok {
+		return def
+	} else {
+		return ti.Int64()
+	}
+}
+
 func (set *TimeSeriesSet) Inflate() {
 	set.Times = set.TimeSlice(true)
 	if len(set.Order) > 0 {
@@ -170,8 +180,18 @@ func (set *TimeSeriesSet) Item(seriesName, rfc3339 string) (TimeItem, error) {
 	return item, nil
 }
 
+func (set *TimeSeriesSet) SetInterval(interval timeutil.Interval, recursive bool) {
+	set.Interval = interval
+	if recursive {
+		for k, ts := range set.Series {
+			ts.Interval = interval
+			set.Series[k] = ts
+		}
+	}
+}
+
 func (set *TimeSeriesSet) TimeSlice(sortAsc bool) timeutil.Times {
-	times := []time.Time{}
+	var times []time.Time
 	for _, ts := range set.Series {
 		for _, item := range ts.ItemMap {
 			tm := timeutil.NewTimeMore(item.Time, 0)
@@ -189,8 +209,9 @@ func (set *TimeSeriesSet) TimeSlice(sortAsc bool) timeutil.Times {
 		return month.TimesMonthStarts(times...)
 	case timeutil.IntervalYear:
 		return year.TimesYearStarts(times...)
+	default:
+		return times
 	}
-	return times
 }
 
 func (set *TimeSeriesSet) TimeStrings() []string {
