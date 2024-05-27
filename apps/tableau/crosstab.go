@@ -36,8 +36,11 @@ func WriteFileLineChartCrosstabXLSX(infile, outfile string, perm os.FileMode, in
 	}
 	lcm := google.NewLineChartMaterial()
 	lcm.Title = title
-	lcm.LoadTimeSeriesSetMonth(tss, func(t time.Time) string {
+	err = lcm.LoadTimeSeriesSetMonth(tss, func(t time.Time) string {
 		return t.Format("Jan 2006")
 	})
+	if err != nil {
+		return err
+	}
 	return lcm.WriteFilePage(outfile, perm)
 }
