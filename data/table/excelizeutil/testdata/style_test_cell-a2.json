@@ -1,0 +1,40 @@
+{
+	"Border": null,
+	"Fill": {
+		"Type": "pattern",
+		"Pattern": 1,
+		"Color": [
+			"FF0000"
+		],
+		"Shading": 0
+	},
+	"Font": {
+		"Bold": false,
+		"Italic": false,
+		"Underline": "",
+		"Family": "Arial",
+		"Size": 0,
+		"Strike": false,
+		"Color": "",
+		"ColorIndexed": 0,
+		"ColorTheme": 1,
+		"ColorTint": 0,
+		"VertAlign": ""
+	},
+	"Alignment": {
+		"Horizontal": "",
+		"Indent": 0,
+		"JustifyLastLine": false,
+		"ReadingOrder": 0,
+		"RelativeIndent": 0,
+		"ShrinkToFit": false,
+		"TextRotation": 0,
+		"Vertical": "",
+		"WrapText": false
+	},
+	"Protection": null,
+	"NumFmt": 0,
+	"DecimalPlaces": null,
+	"CustomNumFmt": null,
+	"NegRed": false
+}
