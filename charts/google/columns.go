@@ -1,5 +1,10 @@
 package google
 
+const (
+	TypeNumber = "number"
+	TypeString = "string"
+)
+
 type Columns []Column
 
 func (cols Columns) Names() []string {

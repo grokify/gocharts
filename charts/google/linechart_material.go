@@ -3,6 +3,7 @@ package google
 import (
 	"encoding/json"
 	"errors"
+	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -15,8 +16,6 @@ const (
 	DefaultWidth    = 900
 	DefaultHeight   = 500
 	DefaultChartDiv = "chart_div"
-	TypeNumber      = "number"
-	TypeString      = "string"
 )
 
 // LineChartMaterial provides data for Google Material Line Charts described here:
@@ -29,6 +28,22 @@ type LineChartMaterial struct {
 	Height   int
 	Columns  []Column
 	Data     [][]any
+}
+
+func NewLineChartMaterial() LineChartMaterial {
+	return LineChartMaterial{
+		Columns: []Column{},
+		Data:    [][]any{}}
+}
+
+func (lcm *LineChartMaterial) LoadTimeSeriesSetMonth(tss *timeseries.TimeSeriesSet, fn func(t time.Time) string) error {
+	if cols, rows, err := TimeSeriesSetToLineChartMaterial(tss, fn); err != nil {
+		return err
+	} else {
+		lcm.Columns = cols
+		lcm.Data = rows
+		return nil
+	}
 }
 
 func (lcm *LineChartMaterial) DataMatrixJSON() []byte {
@@ -58,6 +73,14 @@ func (lcm *LineChartMaterial) WidthOrDefault() int {
 		return lcm.Width
 	}
 	return DefaultWidth
+}
+
+func (lcm *LineChartMaterial) PageHTML() string {
+	return LineChartMaterialPage(*lcm)
+}
+
+func (lcm *LineChartMaterial) WriteFilePage(filename string, perm os.FileMode) error {
+	return os.WriteFile(filename, []byte(lcm.PageHTML()), perm)
 }
 
 func LineChartMaterialFromTimeSeriesSet(tss timeseries.TimeSeriesSet, yearLabel string) (LineChartMaterial, error) {
