@@ -108,14 +108,14 @@ func (cm *PieChartMaterial) WriteFilePage(filename string, perm os.FileMode) err
 // PieChartOptionsGoogle represents the Google Charts JSON options map as defined here:
 // https://developers.google.com/chart/interactive/docs/gallery/piechart .
 type PieChartOptionsGoogle struct {
-	Title             string  `json:"title,omitempty"`
-	Legend            string  `json:"legend,omitempty"`
-	Height            string  `json:"height,omitempty"`
-	Width             string  `json:"width,omitempty"`
-	PieHole           float64 `json:"pieHole,omitempty"`
-	PieSliceText      string  `json:"pieSliceText,omitempty"`
-	PieSliceTextStyle string  `json:"pieSliceTextStyle,omitempty"`
-	PieStartAngle     float64 `json:"pieStartAngle,omitempty"`
+	Title             string    `json:"title,omitempty"`
+	Legend            string    `json:"legend,omitempty"`
+	Height            string    `json:"height,omitempty"`
+	Width             string    `json:"width,omitempty"`
+	PieHole           float64   `json:"pieHole,omitempty"`
+	PieSliceText      string    `json:"pieSliceText,omitempty"`
+	PieSliceTextStyle TextStyle `json:"pieSliceTextStyle,omitempty"`
+	PieStartAngle     float64   `json:"pieStartAngle,omitempty"`
 }
 
 // MustJSON represents the Google Charts JSON options map as defined here:
@@ -127,4 +127,13 @@ func (opts PieChartOptionsGoogle) MustJSON() []byte {
 	} else {
 		return b
 	}
+}
+
+type TextStyle struct {
+	// https://developers.google.com/chart/interactive/docs/gallery/piechart
+	Color    string  `json:"color,omitempty"`
+	FontName string  `json:"fontName,omitempty"`
+	FontSize float64 `json:"fontSize,omitempty"`
+	Bold     bool    `json:"bold,omitempty"`
+	Italic   bool    `json:"italic,omitempty"`
 }
