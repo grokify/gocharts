@@ -3,9 +3,12 @@ package cryptocurrency
 import (
 	"bytes"
 	"embed"
+	"time"
 
 	"github.com/grokify/gocharts/v2/data/table"
+	"github.com/grokify/gocharts/v2/data/timeseries"
 	"github.com/grokify/gocharts/v2/data/yahoohistorical"
+	"github.com/grokify/mogo/time/timeutil"
 )
 
 //go:embed BTC-USD_monthly_2022-04.csv
@@ -44,4 +47,10 @@ func TableETHUSDMonthly() table.Table {
 
 func HistoricalDataETHUSDMonthly() *yahoohistorical.HistoricalData {
 	return &yahoohistorical.HistoricalData{Table: TableETHUSDMonthly()}
+}
+
+func TableToTimeSeriesSet(t table.Table) (timeseries.TimeSeriesSet, error) {
+	return timeseries.ParseTableTimeSeriesSetMatrixColumns(t, true, func(s string) (time.Time, error) {
+		return time.Parse(timeutil.RFC3339FullDate, s)
+	})
 }
