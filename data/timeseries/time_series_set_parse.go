@@ -62,10 +62,11 @@ func ParseTableTimeSeriesSetMatrixRows(tbl table.Table, interval timeutil.Interv
 	return &tss, nil
 }
 
-// ParseTableTimeSeriesSetMatrix create a `TimeSeriesSet` from a `table.Table` using the least
+// ParseTableTimeSeriesSetMatrixColumns create a `TimeSeriesSet` from a `table.Table` using the least
 // amount of input to populate the data structure. The time must be in column 0 and the series
-// names must be in the column headers.
-func ParseTableTimeSeriesSetMatrix(tbl table.Table, isFloat bool, timeParseFunc func(s string) (time.Time, error)) (TimeSeriesSet, error) {
+// names must be in the column headers. The series are expected to be columns with the first column
+// being the time.
+func ParseTableTimeSeriesSetMatrixColumns(tbl table.Table, isFloat bool, timeParseFunc func(s string) (time.Time, error)) (TimeSeriesSet, error) {
 	if timeParseFunc == nil {
 		timeParseFunc = ParseTimeFuncRFC3339
 	}
