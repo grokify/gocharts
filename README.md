@@ -67,3 +67,7 @@ See the example here:
  [used-by-url]: https://sourcegraph.com/github.com/grokify/gocharts?badge
  [loc-svg]: https://tokei.rs/b1/github/grokify/gocharts
  [repo-url]: https://github.com/grokify/gocharts
+
+ ## Mentions
+
+ 1. [Philip Gardner's GitHub stars: `github.com/gaahrdner/starred`](https://github.com/gaahrdner/starred)
