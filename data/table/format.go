@@ -107,7 +107,6 @@ func (tbl *Table) FormatColumns(colIdxMin uint, colIdxMax int, conv func(cellVal
 		} else if !skipRowLengthMismatch && colIdxMax >= 0 && colIdxMax >= len(row) {
 			return fmt.Errorf("row [%d] is len [%d] without max col index [%d]", i, len(row), colIdxMax)
 		}
-		// fmt.Printf("MIN [%d] MAX [%d]\n", colIdxMinInt, colIdxMax)
 
 		colIdxMaxRow := colIdxMax
 		if colIdxMaxRow < 0 {

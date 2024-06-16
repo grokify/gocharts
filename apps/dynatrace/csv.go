@@ -24,7 +24,7 @@ func UpdateTimes(t *table.Table) error {
 		return table.ErrTableCannotBeNil
 	}
 	t.FormatMap[0] = table.FormatTime
-	return t.FormatColumn(0, func(s string) (string, error) {
+	return t.FormatColumns(0, 0, func(s string) (string, error) {
 		if dt, err := time.Parse(timeutil.SQLTimestampMinutes, s); err != nil {
 			return s, err
 		} else {
