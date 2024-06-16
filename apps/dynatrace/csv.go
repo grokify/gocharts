@@ -38,10 +38,12 @@ func UpdateDurations(t *table.Table, toTimeUnit time.Duration, prec int, addSuff
 	if t == nil {
 		return table.ErrTableCannotBeNil
 	}
-	if prec == 0 {
-		t.FormatMap[-1] = table.FormatInt
-	} else {
-		t.FormatMap[-1] = table.FormatFloat
+	if !addSuffix {
+		if prec == 0 {
+			t.FormatMap[-1] = table.FormatInt
+		} else {
+			t.FormatMap[-1] = table.FormatFloat
+		}
 	}
 	return t.FormatColumns(1, -1, func(s string) (string, error) {
 		s = strings.TrimSpace(s)
