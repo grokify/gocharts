@@ -10,12 +10,14 @@ GoCharts
 
 GoCharts is a library to assist with building charts, by directly working with charting libraries, generating tabular data for Excel XLSX files and CSV files, or to transfer data to/from analytics solutions like [Metabase](https://pkg.go.dev/github.com/grokify/go-metabase/metabaseutil) and [SimpleKPI](https://pkg.go.dev/github.com/grokify/go-simplekpi/simplekpiutil).
 
+## Contents
+
 It includes two sets of packages:
 
 1. data structures to generically hold and manipulate different types of data
 1. chart library helpers to make generating charts eaiser, often times using data structures mentioned above
 
-## Data Structures
+### Data Structures
 
 Commonly used data structures include:
 
@@ -25,7 +27,7 @@ Commonly used data structures include:
 
 A full list is available in the [`data`](data) folder.
 
-## Chart Helpers
+### Chart Helpers
 
 * [C3](https://pkg.go.dev/github.com/grokify/gocharts/v2/charts/c3) - [code](charts/c3), [project](https://c3js.org/)
 * [D3](https://pkg.go.dev/github.com/grokify/gocharts/v2/charts/d3) - [code](charts/d3), [project](https://d3js.org/)
@@ -39,9 +41,13 @@ An example chart is the Rickshaw chart shown below:
 
 ![](charts/rickshaw/graph_example_2.png)
 
-## Collections
+### Collections
 
 Data collections are provided in the [`collections`](collections) folder for the primary purpose of providing example data to run in the examples. Currently, cryptocurrency data from Yahoo! Finance is included.
+
+### Applications
+
+Various helpers to use applications are located in the [`apps`](apps) folder for the primary purpose of providing reusable and example code.
 
 ## Installation
 
