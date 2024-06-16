@@ -68,7 +68,7 @@ func (datum PieChartDatum) NameWithCount(defaultName string) string {
 		parts = append(parts, defaultName)
 	}
 	if datum.IsFloat {
-		parts = append(parts, fmt.Sprintf("(%s)", strconvutil.Ftoa(datum.ValFloat)))
+		parts = append(parts, fmt.Sprintf("(%s)", strconvutil.Ftoa(datum.ValFloat, -1)))
 	} else {
 		parts = append(parts, fmt.Sprintf("(%d)", datum.ValInt))
 	}

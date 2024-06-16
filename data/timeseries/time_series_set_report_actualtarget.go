@@ -47,18 +47,18 @@ func (set *TimeSeriesSet) TableActualTarget() (*table.Table, error) {
 			if errActual != nil {
 				rowActual = append(rowActual, "0")
 			} else {
-				rowActual = append(rowActual, strconvutil.Ftoa(itemActual.Float64()))
+				rowActual = append(rowActual, strconvutil.Ftoa(itemActual.Float64(), -1))
 			}
 			itemTarget, errTarget := targetTS.Get(dt)
 			if errTarget != nil {
 				rowTarget = append(rowTarget, "0")
 			} else {
-				rowTarget = append(rowTarget, strconvutil.Ftoa(itemTarget.Float64()))
+				rowTarget = append(rowTarget, strconvutil.Ftoa(itemTarget.Float64(), -1))
 			}
 			if errActual != nil || errTarget != nil {
 				rowDiff = append(rowDiff, "0")
 			} else {
-				rowDiff = append(rowDiff, strconvutil.Ftoa((itemActual.Float64()-itemTarget.Float64())/itemTarget.Float64()))
+				rowDiff = append(rowDiff, strconvutil.Ftoa((itemActual.Float64()-itemTarget.Float64())/itemTarget.Float64(), -1))
 			}
 		}
 		tbl.Rows = append(tbl.Rows, rowActual, rowTarget, rowDiff)

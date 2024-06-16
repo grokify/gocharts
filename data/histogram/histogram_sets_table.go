@@ -129,7 +129,7 @@ func (hsets *HistogramSets) TablePivot(opts TablePivotOpts) table.Table {
 					if histSum == 0 {
 						row = append(row, "0")
 					} else if binCount, ok := hist.Bins[binName]; ok && binCount != 0 {
-						row = append(row, strconvutil.Ftoa(float64(binCount)/float64(histSum)))
+						row = append(row, strconvutil.Ftoa(float64(binCount)/float64(histSum), -1))
 					} else {
 						row = append(row, "0")
 					}
