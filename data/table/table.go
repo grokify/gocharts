@@ -3,11 +3,14 @@ package table
 
 import (
 	"encoding/csv"
+	"errors"
 	"os"
 	"strconv"
 
 	"github.com/grokify/mogo/errors/errorsutil"
 )
+
+var ErrTableCannotBeNil = errors.New("table cannot be nil")
 
 // Table is useful for working on CSV data. It stores records as `[]string` with typed
 // formatting information per-column to facilitate transformations.
