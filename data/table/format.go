@@ -73,23 +73,62 @@ func (tbl *Table) Pivot(colCount uint, haveColumns bool) (Table, error) {
 	return newTbl, nil
 }
 
-/*
 // FormatColumn takes a function to format all cell values.
-func (tbl *Table) FormatColumn(colIdx uint, conv func(cellVal string) (string, error)) error {
+func (tbl *Table) FormatColumn(colIdx uint, conv func(cellVal string) (string, error), skipRowLengthMismatch bool) error {
 	colInt := int(colIdx)
 	for i, row := range tbl.Rows {
 		if colInt >= len(row) {
-			return fmt.Errorf("row [%d] is len [%d] without col index [%d]", i, len(row), colInt)
-		}
-		newVal, err := conv(row[colInt])
-		if err != nil {
+			if skipRowLengthMismatch {
+				continue
+			} else {
+				return fmt.Errorf("row [%d] is len [%d] without col index [%d]", i, len(row), colInt)
+			}
+		} else if newVal, err := conv(row[colInt]); err != nil {
 			return err
+		} else {
+			tbl.Rows[i][colInt] = newVal
 		}
-		tbl.Rows[i][colInt] = newVal
 	}
 	return nil
 }
-*/
+
+func (tbl *Table) FormatColumns(colIdxMin uint, colIdxMax int, conv func(cellVal string) (string, error), skipRowLengthMismatch bool) error {
+	colIdxMinInt := int(colIdxMin)
+	if colIdxMax >= 0 && colIdxMax < colIdxMinInt {
+		return errors.New("colIdxMax cannot be less than colIdxMin")
+	}
+	for i, row := range tbl.Rows {
+		if colIdxMinInt >= len(row) {
+			if skipRowLengthMismatch {
+				continue
+			} else {
+				return fmt.Errorf("row [%d] is len [%d] without min col index [%d]", i, len(row), colIdxMinInt)
+			}
+		} else if !skipRowLengthMismatch && colIdxMax >= 0 && colIdxMax >= len(row) {
+			return fmt.Errorf("row [%d] is len [%d] without max col index [%d]", i, len(row), colIdxMax)
+		}
+		// fmt.Printf("MIN [%d] MAX [%d]\n", colIdxMinInt, colIdxMax)
+
+		colIdxMaxRow := colIdxMax
+		if colIdxMaxRow < 0 {
+			colIdxMaxRow = len(row) - 1
+		}
+		for j := colIdxMinInt; j <= colIdxMaxRow; j++ {
+			if j >= len(row) {
+				if skipRowLengthMismatch {
+					continue
+				} else {
+					return fmt.Errorf("row [%d] is len [%d] without col index [%d] on max col index [%d]", i, len(row), j, colIdxMax)
+				}
+			} else if newVal, err := conv(row[j]); err != nil {
+				return err
+			} else {
+				tbl.Rows[i][j] = newVal
+			}
+		}
+	}
+	return nil
+}
 
 // FormatRows formats row cells using a start and ending column index and a convert function.
 // The `format.ConvertDecommify()` and `format.ConvertRemoveControls()` functions are available to use.
