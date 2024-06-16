@@ -1,6 +1,7 @@
 package table
 
 import (
+	"bufio"
 	"errors"
 	"fmt"
 	"io"
@@ -77,7 +78,7 @@ func ParseReadSeeker(opts *ParseOptions, rs io.ReadSeeker) (Table, error) {
 			if err == io.EOF {
 				break
 			} else if err != nil {
-				return tbl, err
+				return tbl, errorsutil.Wrapf(err, "error on `csvReader.Read()` row [%d]", i)
 			}
 			i++
 			if i == 0 && (opts == nil || !opts.NoHeader) {
@@ -269,4 +270,32 @@ func (tbl *Table) Unmarshal(funcRow func(row []string) error) error {
 		}
 	}
 	return nil
+}
+
+// ReadTableSimple is used for CSVs without standard escaping. For example,
+// when `"` is used within a string, but is not used for encapsulating strings.
+func ReadTableSimple(filename, sep string) (*Table, error) {
+	f, err := os.Open(filename)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+
+	t := NewTable("")
+
+	scanner := bufio.NewScanner(f)
+	i := 0
+	for scanner.Scan() {
+		parts := strings.Split(scanner.Text(), sep)
+		if i == 0 {
+			t.Columns = parts
+		} else {
+			t.Rows = append(t.Rows, parts)
+		}
+		i++
+	}
+	if err := scanner.Err(); err != nil {
+		return nil, err
+	}
+	return &t, nil
 }
