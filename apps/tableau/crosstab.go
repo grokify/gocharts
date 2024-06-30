@@ -5,6 +5,8 @@ import (
 	"time"
 
 	"github.com/grokify/gocharts/v2/charts/google"
+	"github.com/grokify/gocharts/v2/charts/wchart"
+	"github.com/grokify/gocharts/v2/charts/wchart/sts2wchart"
 	"github.com/grokify/gocharts/v2/data/table"
 	"github.com/grokify/gocharts/v2/data/timeseries"
 	"github.com/grokify/mogo/strconv/strconvutil"
@@ -30,17 +32,37 @@ func ReadFileCrosstabXLSX(filename string, interval timeutil.Interval) (*timeser
 }
 
 func WriteFileLineChartCrosstabXLSX(infile, outfile string, perm os.FileMode, interval timeutil.Interval, title string) error {
-	tss, err := ReadFileCrosstabXLSX(infile, interval)
-	if err != nil {
+	if tss, err := ReadFileCrosstabXLSX(infile, interval); err != nil {
 		return err
+	} else {
+		return WriteFileLineChartTimeSeriesSet(tss, outfile, perm, interval, title)
 	}
+}
+
+func WriteFileLineChartTimeSeriesSet(tss *timeseries.TimeSeriesSet, outfile string, perm os.FileMode, interval timeutil.Interval, title string) error {
 	lcm := google.NewLineChartMaterial()
 	lcm.Title = title
-	err = lcm.LoadTimeSeriesSetMonth(tss, func(t time.Time) string {
-		return t.Format("Jan 2006")
-	})
-	if err != nil {
+	if err := lcm.LoadTimeSeriesSetMonth(tss, func(t time.Time) string { return t.Format("Jan 2006") }); err != nil {
 		return err
+	} else {
+		return lcm.WriteFilePage(outfile, perm)
 	}
-	return lcm.WriteFilePage(outfile, perm)
+}
+
+func WriteFileLineChartWchartXLSX(infile, outfile string, interval timeutil.Interval) error {
+	if tss, err := ReadFileCrosstabXLSX(infile, interval); err != nil {
+		return err
+	} else {
+		return WriteFileLineChartWchartTimeSeriesSet(tss, outfile, interval)
+	}
+}
+
+func WriteFileLineChartWchartTimeSeriesSet(tss *timeseries.TimeSeriesSet, outfile string, interval timeutil.Interval) error {
+	opts := sts2wchart.DefaultLineChartOpts()
+	opts.Interval = interval
+	if chart, err := sts2wchart.TimeSeriesSetToLineChart(*tss, opts); err != nil {
+		return err
+	} else {
+		return wchart.WritePNGFile(outfile, chart)
+	}
 }
