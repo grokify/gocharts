@@ -5,13 +5,13 @@ go 1.22.0
 toolchain go1.22.2
 
 require (
-	github.com/grokify/mogo v0.64.5
+	github.com/grokify/mogo v0.64.6
 	github.com/jessevdk/go-flags v1.6.1
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/valyala/quicktemplate v1.8.0
 	github.com/wcharczuk/go-chart/v2 v2.1.1
 	github.com/xuri/excelize/v2 v2.8.1
-	golang.org/x/exp v0.0.0-20240613232115-7f521ea00fb8
+	golang.org/x/exp v0.0.0-20240707233637-46b078467d37
 	gonum.org/v1/gonum v0.15.0
 	gonum.org/v1/plot v0.14.0
 )
@@ -21,8 +21,8 @@ require (
 	github.com/ajstarks/svgo v0.0.0-20211024235047-1546f124cd8b // indirect
 	github.com/blend/go-sdk v1.20220411.3 // indirect
 	github.com/campoy/embedmd v1.0.0 // indirect
-	github.com/go-fonts/liberation v0.3.2 // indirect
-	github.com/go-latex/latex v0.0.0-20231108140139-5c1ce85aa4ea // indirect
+	github.com/go-fonts/liberation v0.3.3 // indirect
+	github.com/go-latex/latex v0.0.0-20240709081214-31cef3c7570e // indirect
 	github.com/go-pdf/fpdf v0.9.0 // indirect
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/grokify/base36 v1.0.5 // indirect
