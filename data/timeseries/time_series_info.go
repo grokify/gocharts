@@ -21,6 +21,22 @@ func (ts *TimeSeries) Keys() []string {
 	return keys
 }
 
+func (ts *TimeSeries) MapFloat64() map[string]float64 {
+	m := map[string]float64{}
+	for k, v := range ts.ItemMap {
+		m[k] = v.Float64()
+	}
+	return m
+}
+
+func (ts *TimeSeries) MapInt64() map[string]int64 {
+	m := map[string]int64{}
+	for k, v := range ts.ItemMap {
+		m[k] = v.Int64()
+	}
+	return m
+}
+
 // ItemsSorted returns sorted TimeItems. This currently uses
 // a simple string sort on RFC3339 times.
 func (ts *TimeSeries) ItemsSorted() []TimeItem {
