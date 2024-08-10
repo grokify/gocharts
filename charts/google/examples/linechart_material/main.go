@@ -4,14 +4,15 @@ import (
 	"fmt"
 
 	"github.com/grokify/gocharts/v2/charts/google"
+	"github.com/grokify/gocharts/v2/charts/google/linechart"
 )
 
 // exampleData provides the example data from Google's documentation here:
 // https://developers.google.com/chart/interactive/docs/gallery/linechart#examples
 // `demo_reference.html` is a copy and paste from the Google documentation while
 // `demo.html` was created by this program.
-func exampleData() google.LineChartMaterial {
-	return google.LineChartMaterial{
+func exampleData() linechart.LineChartMaterial {
+	return linechart.LineChartMaterial{
 		Title:    "Box Office Earnings in First Two Weeks of Opening",
 		Subtitle: "in millions of dollars (USD)",
 		Columns: []google.Column{
@@ -49,7 +50,7 @@ func exampleData() google.LineChartMaterial {
 
 func main() {
 	data := exampleData()
-	pageHTML := google.LineChartMaterialPage(data)
+	pageHTML := linechart.LineChartMaterialPage(data)
 
 	fmt.Println(pageHTML)
 }

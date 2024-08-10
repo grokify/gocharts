@@ -1,10 +1,11 @@
-package google
+package piechart
 
 import (
 	"encoding/json"
 	"io"
 	"os"
 
+	"github.com/grokify/gocharts/v2/charts/google"
 	"github.com/grokify/gocharts/v2/data/piechart"
 	"github.com/grokify/gocharts/v2/data/table"
 )
@@ -19,7 +20,7 @@ type PieChartMaterial struct {
 	Height              int
 	AddCountToName      bool
 	DefaultCategoryName string
-	Columns             Columns
+	Columns             google.Columns
 	Data                piechart.PieChartData
 	GoogleOptions       PieChartOptionsGoogle
 }
@@ -27,7 +28,7 @@ type PieChartMaterial struct {
 func NewPieChartMaterialInts(chartName, sliceName, sliceValueName string, vals map[string]int) PieChartMaterial {
 	c := PieChartMaterial{
 		Title: chartName,
-		Columns: Columns{
+		Columns: google.Columns{
 			{Name: sliceName, Type: table.FormatString},
 			{Name: sliceValueName, Type: table.FormatInt},
 		},
@@ -40,7 +41,7 @@ func NewPieChartMaterialInts(chartName, sliceName, sliceValueName string, vals m
 	return c
 }
 
-func (cm *PieChartMaterial) DataMatrix() [][]any {
+func (cm *PieChartMaterial) DataTable() google.DataTable {
 	colNamesAny := cm.Columns.NamesAny()
 	if len(colNamesAny) < 2 {
 		colNamesAny = []any{"Categories", "Value"}
@@ -63,34 +64,34 @@ func (cm *PieChartMaterial) DataMatrix() [][]any {
 	return matrix
 }
 
-func (cm *PieChartMaterial) DataMatrixJSON() []byte {
-	matrix := cm.DataMatrix()
-	bytes, err := json.Marshal(matrix)
-	if err != nil {
-		return []byte("[]")
-	}
-	return bytes
+func (cm *PieChartMaterial) DataTableJSON() []byte {
+	matrix := cm.DataTable()
+	return matrix.MustJSON()
+}
+
+func (cm *PieChartMaterial) OptionsJSON() []byte {
+	return cm.GoogleOptions.MustJSON()
 }
 
 func (cm *PieChartMaterial) ChartDivOrDefault() string {
 	if len(cm.ChartDiv) > 0 {
 		return cm.ChartDiv
 	}
-	return DefaultChartDiv
+	return google.DefaultChartDiv
 }
 
 func (cm *PieChartMaterial) HeightOrDefault() int {
 	if cm.Height > 0 {
 		return cm.Height
 	}
-	return DefaultHeight
+	return google.DefaultHeight
 }
 
 func (cm *PieChartMaterial) WidthOrDefault() int {
 	if cm.Width > 0 {
 		return cm.Width
 	}
-	return DefaultWidth
+	return google.DefaultWidth
 }
 
 func (cm *PieChartMaterial) PageHTML() string {

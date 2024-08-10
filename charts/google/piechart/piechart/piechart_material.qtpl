@@ -11,7 +11,7 @@
       google.charts.setOnLoadCallback(drawChart);
 
     function drawChart() {
-      var data = google.visualization.arrayToDataTable({%z= data.DataMatrixJSON() %});
+      var data = google.visualization.arrayToDataTable({%z= data.DataTableJSON() %});
 
       var options = {%z= data.GoogleOptions.MustJSON() %}
 

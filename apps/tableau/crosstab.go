@@ -4,7 +4,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/grokify/gocharts/v2/charts/google"
+	"github.com/grokify/gocharts/v2/charts/google/linechart"
 	"github.com/grokify/gocharts/v2/charts/wchart"
 	"github.com/grokify/gocharts/v2/charts/wchart/sts2wchart"
 	"github.com/grokify/gocharts/v2/data/table"
@@ -40,7 +40,7 @@ func WriteFileLineChartCrosstabXLSX(infile, outfile string, perm os.FileMode, in
 }
 
 func WriteFileLineChartTimeSeriesSet(tss *timeseries.TimeSeriesSet, outfile string, perm os.FileMode, interval timeutil.Interval, title string) error {
-	lcm := google.NewLineChartMaterial()
+	lcm := linechart.NewLineChartMaterial()
 	lcm.Title = title
 	if err := lcm.LoadTimeSeriesSetMonth(tss, func(t time.Time) string { return t.Format("Jan 2006") }); err != nil {
 		return err

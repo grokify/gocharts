@@ -2,7 +2,7 @@
 // See https://github.com/valyala/quicktemplate for details.
 
 //line linechart_material.qtpl:1
-package google
+package linechart
 
 //line linechart_material.qtpl:1
 import (

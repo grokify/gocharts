@@ -1,4 +1,4 @@
-package google
+package linechart
 
 import (
 	"encoding/json"
@@ -8,14 +8,9 @@ import (
 	"strings"
 	"time"
 
+	"github.com/grokify/gocharts/v2/charts/google"
 	"github.com/grokify/gocharts/v2/data/timeseries"
 	"github.com/grokify/mogo/time/timeutil"
-)
-
-const (
-	DefaultWidth    = 900
-	DefaultHeight   = 500
-	DefaultChartDiv = "chart_div"
 )
 
 // LineChartMaterial provides data for Google Material Line Charts described here:
@@ -26,13 +21,13 @@ type LineChartMaterial struct {
 	ChartDiv string
 	Width    int
 	Height   int
-	Columns  []Column
+	Columns  []google.Column
 	Data     [][]any
 }
 
 func NewLineChartMaterial() LineChartMaterial {
 	return LineChartMaterial{
-		Columns: []Column{},
+		Columns: []google.Column{},
 		Data:    [][]any{}}
 }
 
@@ -58,21 +53,21 @@ func (lcm *LineChartMaterial) ChartDivOrDefault() string {
 	if len(lcm.ChartDiv) > 0 {
 		return lcm.ChartDiv
 	}
-	return DefaultChartDiv
+	return google.DefaultChartDiv
 }
 
 func (lcm *LineChartMaterial) HeightOrDefault() int {
 	if lcm.Height > 0 {
 		return lcm.Height
 	}
-	return DefaultHeight
+	return google.DefaultHeight
 }
 
 func (lcm *LineChartMaterial) WidthOrDefault() int {
 	if lcm.Width > 0 {
 		return lcm.Width
 	}
-	return DefaultWidth
+	return google.DefaultWidth
 }
 
 func (lcm *LineChartMaterial) PageHTML() string {
@@ -92,11 +87,11 @@ func LineChartMaterialFromTimeSeriesSet(tss timeseries.TimeSeriesSet, yearLabel 
 	if len(strings.TrimSpace(yearLabel)) == 0 {
 		yearLabel = "Year"
 	}
-	lcmCols := []Column{
-		{Type: TypeString, Name: yearLabel},
+	lcmCols := []google.Column{
+		{Type: google.TypeString, Name: yearLabel},
 	}
 	for _, seriesName := range tss.Order {
-		lcmCols = append(lcmCols, Column{Type: TypeNumber, Name: seriesName})
+		lcmCols = append(lcmCols, google.Column{Type: google.TypeNumber, Name: seriesName})
 	}
 	lcm.Columns = lcmCols
 

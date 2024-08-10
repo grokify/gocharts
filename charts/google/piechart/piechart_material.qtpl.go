@@ -2,7 +2,7 @@
 // See https://github.com/valyala/quicktemplate for details.
 
 //line piechart_material.qtpl:1
-package google
+package piechart
 
 //line piechart_material.qtpl:1
 import (
@@ -43,7 +43,7 @@ func StreamPieChartMaterialPage(qw422016 *qt422016.Writer, data PieChartMaterial
     function drawChart() {
       var data = google.visualization.arrayToDataTable(`)
 //line piechart_material.qtpl:14
-	qw422016.N().Z(data.DataMatrixJSON())
+	qw422016.N().Z(data.DataTableJSON())
 //line piechart_material.qtpl:14
 	qw422016.N().S(`);
 
