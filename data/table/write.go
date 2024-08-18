@@ -37,11 +37,10 @@ func WriteCSVSimple(cols []string, rows [][]string, filename string) error {
 // supplied and `FormatMap` is empty. If FormatMap is not empty, a function for it is
 // returned.`
 func (tbl *Table) FormatterFunc() func(val string, colIdx uint) (any, error) {
-	if tbl.FormatMap == nil || len(tbl.FormatMap) == 0 {
+	if len(tbl.FormatMap) == 0 {
 		if tbl.FormatFunc != nil {
 			return tbl.FormatFunc
 		}
-		// return format.FormatStrings
 	}
 
 	return func(val string, colIdx uint) (any, error) {
