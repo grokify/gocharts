@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/grokify/mogo/type/maputil"
+	"github.com/grokify/mogo/type/stringsutil"
 	"github.com/olekukonko/tablewriter"
 
 	"github.com/grokify/gocharts/v2/data/point"
@@ -21,6 +22,7 @@ type Histogram struct {
 	Bins        map[string]int
 	Counts      map[string]int // how many items have counts.
 	Percentages map[string]float64
+	Order       []string // bin ordering for formatting.
 	// BinCount    uint
 	// Sum         int
 }
@@ -42,6 +44,14 @@ func (hist *Histogram) Add(binName string, binCount int) {
 func (hist *Histogram) AddBulk(m map[string]int) {
 	for k, v := range m {
 		hist.Add(k, v)
+	}
+}
+
+func (hist *Histogram) GetOrDefault(binName string, def int) int {
+	if v, ok := hist.Bins[binName]; ok {
+		return v
+	} else {
+		return def
 	}
 }
 
@@ -113,6 +123,50 @@ func (hist *Histogram) MapAdd(m map[string]int) {
 	}
 }
 
+// OrderOrDefault returns a list of histogram bin names defaulting to
+// ordered names and falling back to sorted bin names. If an order is
+// provided, the non-explicitly listed bin names can be included at
+// the end or not included.
+func (hist *Histogram) OrderOrDefault(inclUnordered bool) []string {
+	s1, _ := stringsutil.SliceOrderExplicit(
+		maputil.StringKeys(hist.Bins, nil),
+		hist.Order,
+		inclUnordered)
+	return s1
+	/*
+		return SliceDedupeOrdered(
+			maputil.StringKeys(hist.Bins, nil),
+			hist.Order,
+			true,
+			inclUnordered)
+	*/
+	/*
+		var out []string
+		if len(hist.Order) > 0 {
+			seen := map[string]int{}
+			for _, o := range hist.Order {
+				if _, ok := seen[o]; !ok {
+					out = append(out, o)
+					seen[o]++
+				}
+			}
+			if inclUnordered {
+				asc := maputil.StringKeys(hist.Bins, nil)
+				for _, o := range asc {
+					if _, ok := seen[o]; !ok {
+						out = append(out, o)
+						seen[o]++
+					}
+				}
+			}
+		} else {
+			out = maputil.StringKeys(hist.Bins, nil)
+			sort.Strings(out)
+		}
+		return out
+	*/
+}
+
 func (hist *Histogram) Sum() int {
 	binSum := 0
 	for _, c := range hist.Bins {
@@ -147,7 +201,7 @@ func (hist *Histogram) ItemCounts(sortBy string) []maputil.Record {
 
 // WriteTable writes an ASCII Table. For CLI apps, pass `os.Stdout` for `io.Writer`.
 func (hist *Histogram) WriteTableASCII(w io.Writer, header []string, sortBy string, inclTotal bool) {
-	rows := [][]string{}
+	var rows [][]string
 	sortedItems := hist.ItemCounts(sortBy)
 	for _, sortedItem := range sortedItems {
 		rows = append(rows, []string{
