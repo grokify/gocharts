@@ -14,14 +14,14 @@ func main() {
 
 	t, err := dynatrace.ReadCSVTimeDurations(f, time.Millisecond, 2, true)
 	logutil.FatalErr(err)
-	fmtutil.PrintJSON(t.Rows)
-	fmtutil.PrintJSON(t.Columns)
+	fmtutil.MustPrintJSON(t.Rows)
+	fmtutil.MustPrintJSON(t.Columns)
 
 	if 1 == 0 {
 		t, err := dynatrace.ReadCSVTimeDurations(f, time.Millisecond, 2, true)
 		logutil.FatalErr(err)
-		fmtutil.PrintJSON(t.Rows)
-		fmtutil.PrintJSON(t.Columns)
+		fmtutil.MustPrintJSON(t.Rows)
+		fmtutil.MustPrintJSON(t.Columns)
 	}
 
 	fmt.Println("DONE")
