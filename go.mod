@@ -5,14 +5,14 @@ go 1.22.0
 toolchain go1.22.2
 
 require (
-	github.com/grokify/mogo v0.64.7
+	github.com/grokify/mogo v0.64.8
 	github.com/jessevdk/go-flags v1.6.1
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/valyala/quicktemplate v1.8.0
 	github.com/wcharczuk/go-chart/v2 v2.1.1
 	github.com/xuri/excelize/v2 v2.8.1
 	golang.org/x/exp v0.0.0-20240808152545-0cdaa3abc0fa
-	gonum.org/v1/gonum v0.15.0
+	gonum.org/v1/gonum v0.15.1
 	gonum.org/v1/plot v0.14.0
 )
 
