@@ -1,4 +1,4 @@
-{% func LineChartMaterialPage(data LineChartMaterial) %}<!DOCTYPE html>
+{% func LineChartMaterialPage(data Chart) %}<!DOCTYPE html>
 <html>
 <head>
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>

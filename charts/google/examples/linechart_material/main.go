@@ -11,8 +11,8 @@ import (
 // https://developers.google.com/chart/interactive/docs/gallery/linechart#examples
 // `demo_reference.html` is a copy and paste from the Google documentation while
 // `demo.html` was created by this program.
-func exampleData() linechart.LineChartMaterial {
-	return linechart.LineChartMaterial{
+func exampleData() linechart.Chart {
+	return linechart.Chart{
 		Title:    "Box Office Earnings in First Two Weeks of Opening",
 		Subtitle: "in millions of dollars (USD)",
 		Columns: []google.Column{

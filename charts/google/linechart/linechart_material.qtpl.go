@@ -18,7 +18,7 @@ var (
 )
 
 //line linechart_material.qtpl:1
-func StreamLineChartMaterialPage(qw422016 *qt422016.Writer, data LineChartMaterial) {
+func StreamLineChartMaterialPage(qw422016 *qt422016.Writer, data Chart) {
 //line linechart_material.qtpl:1
 	qw422016.N().S(`<!DOCTYPE html>
 <html>
@@ -109,7 +109,7 @@ func StreamLineChartMaterialPage(qw422016 *qt422016.Writer, data LineChartMateri
 }
 
 //line linechart_material.qtpl:37
-func WriteLineChartMaterialPage(qq422016 qtio422016.Writer, data LineChartMaterial) {
+func WriteLineChartMaterialPage(qq422016 qtio422016.Writer, data Chart) {
 //line linechart_material.qtpl:37
 	qw422016 := qt422016.AcquireWriter(qq422016)
 //line linechart_material.qtpl:37
@@ -120,7 +120,7 @@ func WriteLineChartMaterialPage(qq422016 qtio422016.Writer, data LineChartMateri
 }
 
 //line linechart_material.qtpl:37
-func LineChartMaterialPage(data LineChartMaterial) string {
+func LineChartMaterialPage(data Chart) string {
 //line linechart_material.qtpl:37
 	qb422016 := qt422016.AcquireByteBuffer()
 //line linechart_material.qtpl:37

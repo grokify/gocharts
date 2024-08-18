@@ -18,7 +18,7 @@ var (
 )
 
 //line piechart_material.qtpl:1
-func StreamPieChartMaterialPage(qw422016 *qt422016.Writer, data PieChartMaterial) {
+func StreamPieChartMaterialPage(qw422016 *qt422016.Writer, data Chart) {
 //line piechart_material.qtpl:1
 	qw422016.N().S(`<!DOCTYPE html>
 <html>
@@ -69,7 +69,7 @@ func StreamPieChartMaterialPage(qw422016 *qt422016.Writer, data PieChartMaterial
 }
 
 //line piechart_material.qtpl:25
-func WritePieChartMaterialPage(qq422016 qtio422016.Writer, data PieChartMaterial) {
+func WritePieChartMaterialPage(qq422016 qtio422016.Writer, data Chart) {
 //line piechart_material.qtpl:25
 	qw422016 := qt422016.AcquireWriter(qq422016)
 //line piechart_material.qtpl:25
@@ -80,7 +80,7 @@ func WritePieChartMaterialPage(qq422016 qtio422016.Writer, data PieChartMaterial
 }
 
 //line piechart_material.qtpl:25
-func PieChartMaterialPage(data PieChartMaterial) string {
+func PieChartMaterialPage(data Chart) string {
 //line piechart_material.qtpl:25
 	qb422016 := qt422016.AcquireByteBuffer()
 //line piechart_material.qtpl:25

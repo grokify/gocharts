@@ -40,7 +40,7 @@ func WriteFileLineChartCrosstabXLSX(infile, outfile string, perm os.FileMode, in
 }
 
 func WriteFileLineChartTimeSeriesSet(tss *timeseries.TimeSeriesSet, outfile string, perm os.FileMode, interval timeutil.Interval, title string) error {
-	lcm := linechart.NewLineChartMaterial()
+	lcm := linechart.NewChart()
 	lcm.Title = title
 	if err := lcm.LoadTimeSeriesSetMonth(tss, func(t time.Time) string { return t.Format("Jan 2006") }); err != nil {
 		return err

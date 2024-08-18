@@ -13,25 +13,25 @@ import (
 	"github.com/grokify/mogo/time/timeutil"
 )
 
-// LineChartMaterial provides data for Google Material Line Charts described here:
+// Chart provides data for Google Material Line Charts described here:
 // https://developers.google.com/chart/interactive/docs/gallery/linechart#examples
-type LineChartMaterial struct {
+type Chart struct {
 	Title    string
 	Subtitle string
 	ChartDiv string
 	Width    int
 	Height   int
 	Columns  []google.Column
-	Data     [][]any
+	Data     google.DataTable
 }
 
-func NewLineChartMaterial() LineChartMaterial {
-	return LineChartMaterial{
+func NewChart() Chart {
+	return Chart{
 		Columns: []google.Column{},
-		Data:    [][]any{}}
+		Data:    google.DataTable{}}
 }
 
-func (lcm *LineChartMaterial) LoadTimeSeriesSetMonth(tss *timeseries.TimeSeriesSet, fn func(t time.Time) string) error {
+func (lcm *Chart) LoadTimeSeriesSetMonth(tss *timeseries.TimeSeriesSet, fn func(t time.Time) string) error {
 	if cols, rows, err := TimeSeriesSetToLineChartMaterial(tss, fn); err != nil {
 		return err
 	} else {
@@ -41,7 +41,7 @@ func (lcm *LineChartMaterial) LoadTimeSeriesSetMonth(tss *timeseries.TimeSeriesS
 	}
 }
 
-func (lcm *LineChartMaterial) DataMatrixJSON() []byte {
+func (lcm *Chart) DataMatrixJSON() []byte {
 	bytes, err := json.Marshal(lcm.Data)
 	if err != nil {
 		return []byte("[]")
@@ -49,37 +49,37 @@ func (lcm *LineChartMaterial) DataMatrixJSON() []byte {
 	return bytes
 }
 
-func (lcm *LineChartMaterial) ChartDivOrDefault() string {
+func (lcm *Chart) ChartDivOrDefault() string {
 	if len(lcm.ChartDiv) > 0 {
 		return lcm.ChartDiv
 	}
 	return google.DefaultChartDiv
 }
 
-func (lcm *LineChartMaterial) HeightOrDefault() int {
+func (lcm *Chart) HeightOrDefault() int {
 	if lcm.Height > 0 {
 		return lcm.Height
 	}
 	return google.DefaultHeight
 }
 
-func (lcm *LineChartMaterial) WidthOrDefault() int {
+func (lcm *Chart) WidthOrDefault() int {
 	if lcm.Width > 0 {
 		return lcm.Width
 	}
 	return google.DefaultWidth
 }
 
-func (lcm *LineChartMaterial) PageHTML() string {
+func (lcm *Chart) PageHTML() string {
 	return LineChartMaterialPage(*lcm)
 }
 
-func (lcm *LineChartMaterial) WriteFilePage(filename string, perm os.FileMode) error {
+func (lcm *Chart) WriteFilePage(filename string, perm os.FileMode) error {
 	return os.WriteFile(filename, []byte(lcm.PageHTML()), perm)
 }
 
-func LineChartMaterialFromTimeSeriesSet(tss timeseries.TimeSeriesSet, yearLabel string) (LineChartMaterial, error) {
-	lcm := LineChartMaterial{}
+func ChartFromTimeSeriesSet(tss timeseries.TimeSeriesSet, yearLabel string) (Chart, error) {
+	lcm := Chart{}
 	if tss.Interval != timeutil.IntervalYear {
 		return lcm, errors.New("interval not supported")
 	}

@@ -2,25 +2,27 @@ package barchart
 
 import (
 	"encoding/json"
+	"errors"
 	"os"
 	"strings"
 	"time"
 
 	"github.com/grokify/gocharts/v2/charts/google"
+	"github.com/grokify/gocharts/v2/data/histogram"
 	"github.com/grokify/gocharts/v2/data/timeseries"
 	"github.com/grokify/mogo/time/timeutil"
 )
 
-// BarChartMaterial represents the chart at:
+// Chart represents the chart at:
 // https://developers-dot-devsite-v2-prod.appspot.com/chart/interactive/docs/gallery/barchart
-type BarChartMaterial struct {
+type Chart struct {
 	Title     string
 	ChartDiv  string
 	DataTable google.DataTable
-	Options   BarChartOptions
+	Options   Options
 }
 
-func (chart BarChartMaterial) ChartDivOrDefault() string {
+func (chart Chart) ChartDivOrDefault() string {
 	div := strings.TrimSpace(chart.ChartDiv)
 	if div != "" {
 		return div
@@ -29,24 +31,51 @@ func (chart BarChartMaterial) ChartDivOrDefault() string {
 	}
 }
 
-func (chart BarChartMaterial) PageTitle() string {
+func (chart Chart) PageTitle() string {
 	return chart.Title
 }
 
-func (chart BarChartMaterial) DataTableJSON() []byte {
+func (chart Chart) DataTableJSON() []byte {
 	return chart.DataTable.MustJSON()
 }
 
-func (chart BarChartMaterial) OptionsJSON() []byte {
+func (chart Chart) OptionsJSON() []byte {
 	return chart.Options.MustJSON()
 }
 
-func (chart BarChartMaterial) WritePageHTML(filename string, perm os.FileMode) error {
+func (chart Chart) WritePageHTML(filename string, perm os.FileMode) error {
 	pg := BarChartMaterialPage(chart)
 	return os.WriteFile(filename, []byte(pg), perm)
 }
 
-func TimeSeriesSetToDataTable(name string, sets []string, set timeseries.TimeSeriesSet) (google.DataTable, error) {
+func DataTableFromHistogram(h *histogram.Histogram, inclUnordered, inclZeroCount, inclZeroCountTail bool) (google.DataTable, error) {
+	dt := google.DataTable{}
+	if h == nil {
+		return dt, errors.New("histogram must be supplied")
+	}
+	cols := []any{h.Name, "Count"}
+	dt = append(dt, cols)
+
+	bins := h.OrderOrDefault(inclUnordered)
+	idxDtLastNonZero := -1
+	for _, binName := range bins {
+		cnt := h.GetOrDefault(binName, 0)
+		if cnt != 0 {
+			dt = append(dt, []any{binName, cnt})
+			idxDtLastNonZero = len(dt) - 1
+		} else if inclZeroCount || inclZeroCountTail {
+			dt = append(dt, []any{binName, cnt})
+		}
+	}
+	if !inclZeroCountTail {
+		return dt[:idxDtLastNonZero+1], nil
+	} else {
+		return dt, nil
+	}
+}
+
+// func TimeSeriesSetToDataTable(name string, sets []string, set timeseries.TimeSeriesSet) (google.DataTable, error) {
+func DataTableFromTimeSeriesSet(name string, sets []string, set timeseries.TimeSeriesSet) (google.DataTable, error) {
 	dt := google.DataTable{}
 	if len(sets) == 0 {
 		sets = set.SeriesNames()
@@ -81,28 +110,29 @@ const (
 	IsStackedAbsolute = "absolute"
 	IsStackedPercent  = "percent"
 	IsStackedRelative = "relative"
+	IsStackedDefault  = IsStackedAbsolute
 )
 
-type BarChartOptions struct {
-	Width          uint                  `json:"width"`
-	Height         uint                  `json:"height"`
-	Legend         BarChartOptionsLegend `json:"legend,omitempty"`
-	Bar            BarChartOptionsBar    `json:"bar"`
-	IsStacked      string                `json:"isStacked"`
-	HorizontalAxis BarChartOptionsHAxis  `json:"hAxis"`
+type Options struct {
+	Width          uint          `json:"width"`
+	Height         uint          `json:"height"`
+	Legend         OptionsLegend `json:"legend,omitempty"`
+	Bar            OptionsBar    `json:"bar"`
+	IsStacked      string        `json:"isStacked"`
+	HorizontalAxis OptionsHAxis  `json:"hAxis"`
 }
 
-func BarChartOptionsDefault() BarChartOptions {
-	return BarChartOptions{
+func OptionsDefault() Options {
+	return Options{
 		Width:     600,
 		Height:    400,
-		Legend:    BarChartOptionsLegend{Position: "top", MaxLines: 3},
-		Bar:       BarChartOptionsBar{GroupWidth: "75%"},
+		Legend:    OptionsLegend{Position: "top", MaxLines: 3},
+		Bar:       OptionsBar{GroupWidth: "75%"},
 		IsStacked: IsStackedAbsolute,
 	}
 }
 
-func (opts BarChartOptions) MustJSON() []byte {
+func (opts Options) MustJSON() []byte {
 	if b, err := json.Marshal(opts); err != nil {
 		return []byte("[]")
 	} else {
@@ -110,16 +140,16 @@ func (opts BarChartOptions) MustJSON() []byte {
 	}
 }
 
-type BarChartOptionsLegend struct {
+type OptionsLegend struct {
 	Position string `json:"position,omitempty"`
 	MaxLines int    `json:"maxLines,omitempty"`
 }
 
-type BarChartOptionsBar struct {
+type OptionsBar struct {
 	GroupWidth string `json:"groupWidth,omitempty"`
 }
 
-type BarChartOptionsHAxis struct {
+type OptionsHAxis struct {
 	MinValue int   `json:"minValue"`
 	Ticks    []int `json:"ticks"`
 }

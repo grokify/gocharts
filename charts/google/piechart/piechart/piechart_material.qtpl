@@ -1,4 +1,4 @@
-{% func PieChartMaterialPage(data PieChartMaterial) %}<!DOCTYPE html>
+{% func PieChartMaterialPage(data Chart) %}<!DOCTYPE html>
 <html>
 <head>
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
