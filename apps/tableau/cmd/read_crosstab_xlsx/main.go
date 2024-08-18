@@ -15,8 +15,8 @@ func main() {
 		logutil.FatalErr(err)
 
 		fmt.Printf("Wrote (%s)\n", filename)
-
 	}
+
 	if 1 == 1 {
 		filename := "path/to/monthly-items-trend.xlsx"
 		outfileHTML := "chart_apps.html"
