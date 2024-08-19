@@ -16,7 +16,6 @@ type Datum struct {
 	Title         string
 	Description   string
 	UptimeDecimal *decimal.Decimal
-	// UptimeFloat   *float64
 }
 
 type Data []Datum
