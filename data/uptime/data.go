@@ -16,7 +16,7 @@ type Datum struct {
 	Title         string
 	Description   string
 	UptimeDecimal *decimal.Decimal
-	UptimeFloat   *float64
+	// UptimeFloat   *float64
 }
 
 type Data []Datum
@@ -31,34 +31,7 @@ func (d Data) Filter(fnIncl func(md Datum) bool) Data {
 	return out
 }
 
-func (d Data) UptimesFloat() []float64 {
-	var out []float64
-	for _, m := range d {
-		if m.UptimeFloat != nil {
-			out = append(out, pointer.Dereference(m.UptimeFloat))
-		}
-	}
-	return out
-}
-
-func (d Data) UptimesHistogramFloatMap(categories []float64) (map[float64]uint, error) {
-	return UptimeCounts(categories, d.UptimesFloat())
-}
-
-func (d Data) UptimesHistogramFloat(categories []float64) (*histogram.Histogram, error) {
-	hist := histogram.NewHistogram("")
-	m, err := d.UptimesHistogramFloatMap(categories)
-	if err != nil {
-		return nil, err
-	}
-	for k, v := range m {
-		kstr := Float64ToUptimeString(3, float32(k))
-		hist.Add(kstr, int(v))
-	}
-	return hist, nil
-}
-
-func (d Data) UptimeDecimals() Decimals {
+func (d Data) Decimals() Decimals {
 	var decs Decimals
 	for _, m := range d {
 		if m.UptimeDecimal != nil {
@@ -68,8 +41,8 @@ func (d Data) UptimeDecimals() Decimals {
 	return decs
 }
 
-func (d Data) UptimesHistogramDecimal(categories []decimal.Decimal, suffix string) (*histogram.Histogram, error) {
-	vals := d.UptimeDecimals()
+func (d Data) HistogramDecimal(categories []decimal.Decimal, suffix string) (*histogram.Histogram, error) {
+	vals := d.Decimals()
 	return vals.Histogram(categories, suffix)
 }
 
@@ -102,8 +75,7 @@ func (d Data) Descriptions(fnIncl func(s string) bool, fnFmt func(s string) stri
 	for _, m := range d {
 		if fnIncl != nil && !fnIncl(m.Description) {
 			continue
-		}
-		if fnFmt != nil {
+		} else if fnFmt != nil {
 			out = append(out, fnFmt(m.Description))
 		} else {
 			out = append(out, m.Description)
