@@ -1,21 +1,22 @@
-{% func PieChartMaterialPage(data Chart) %}<!DOCTYPE html>
+{% import "github.com/grokify/gocharts/v2/charts/google" %}
+{% func PieChartMaterialPage(chart google.Chart) %}<!DOCTYPE html>
 <html>
 <head>
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 </head>
 <body>
-  <h1>{%s data.Title %}</h1>
-  <div id="{%s= data.ChartDivOrDefault() %}"></div>
+  <h1>{%s= chart.PageTitle() %}</h1>
+  <div id="{%s= chart.ChartDivOrDefault() %}"></div>
   <script>
       google.charts.load('current', {'packages':['corechart']});
       google.charts.setOnLoadCallback(drawChart);
 
     function drawChart() {
-      var data = google.visualization.arrayToDataTable({%z= data.DataTableJSON() %});
+      var data = google.visualization.arrayToDataTable({%z= chart.DataTableJSON() %});
 
-      var options = {%z= data.GoogleOptions.MustJSON() %}
+      var options = {%z= chart.OptionsJSON() %}
 
-      var chart = new google.visualization.PieChart(document.getElementById('{%s= data.ChartDivOrDefault() %}'));
+      var chart = new google.visualization.PieChart(document.getElementById('{%s= chart.ChartDivOrDefault() %}'));
 
       chart.draw(data, options);
     }
