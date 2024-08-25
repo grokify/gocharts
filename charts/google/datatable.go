@@ -1,13 +1,11 @@
 package google
 
-import "encoding/json"
+import (
+	"github.com/grokify/mogo/encoding/jsonutil"
+)
 
 type DataTable [][]any
 
 func (dt DataTable) MustJSON() []byte {
-	if bytes, err := json.Marshal(dt); err != nil {
-		return []byte("[]")
-	} else {
-		return bytes
-	}
+	return jsonutil.MustMarshalOrDefault(dt, []byte(jsonutil.EmptyArray))
 }
