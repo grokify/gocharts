@@ -1,7 +1,6 @@
 package barchart
 
 import (
-	"encoding/json"
 	"errors"
 	"os"
 	"strings"
@@ -10,6 +9,7 @@ import (
 	"github.com/grokify/gocharts/v2/charts/google"
 	"github.com/grokify/gocharts/v2/data/histogram"
 	"github.com/grokify/gocharts/v2/data/timeseries"
+	"github.com/grokify/mogo/encoding/jsonutil"
 	"github.com/grokify/mogo/time/timeutil"
 )
 
@@ -19,31 +19,32 @@ type Chart struct {
 	Title     string
 	ChartDiv  string
 	DataTable google.DataTable
-	Options   Options
+	Options   *Options
 }
 
-func (chart Chart) ChartDivOrDefault() string {
-	div := strings.TrimSpace(chart.ChartDiv)
-	if div != "" {
+func (chart *Chart) ChartDivOrDefault() string {
+	if div := strings.TrimSpace(chart.ChartDiv); div != "" {
 		return div
 	} else {
 		return google.DefaultChartDiv
 	}
 }
 
-func (chart Chart) PageTitle() string {
-	return chart.Title
-}
-
-func (chart Chart) DataTableJSON() []byte {
+func (chart *Chart) DataTableJSON() []byte {
 	return chart.DataTable.MustJSON()
 }
 
-func (chart Chart) OptionsJSON() []byte {
-	return chart.Options.MustJSON()
+func (chart *Chart) OptionsJSON() []byte {
+	if chart.Options == nil {
+		return []byte(jsonutil.EmptyObject)
+	} else {
+		return chart.Options.MustJSON()
+	}
 }
 
-func (chart Chart) WritePageHTML(filename string, perm os.FileMode) error {
+func (chart *Chart) PageTitle() string { return chart.Title }
+
+func (chart *Chart) WriteFilePage(filename string, perm os.FileMode) error {
 	pg := BarChartMaterialPage(chart)
 	return os.WriteFile(filename, []byte(pg), perm)
 }
@@ -74,7 +75,7 @@ func DataTableFromHistogram(h *histogram.Histogram, inclUnordered, inclZeroCount
 	}
 }
 
-// func TimeSeriesSetToDataTable(name string, sets []string, set timeseries.TimeSeriesSet) (google.DataTable, error) {
+// func DataTableFromTimeSeriesSet(name string, sets []string, set timeseries.TimeSeriesSet) (google.DataTable, error) {
 func DataTableFromTimeSeriesSet(name string, sets []string, set timeseries.TimeSeriesSet) (google.DataTable, error) {
 	dt := google.DataTable{}
 	if len(sets) == 0 {
@@ -132,12 +133,8 @@ func OptionsDefault() Options {
 	}
 }
 
-func (opts Options) MustJSON() []byte {
-	if b, err := json.Marshal(opts); err != nil {
-		return []byte("[]")
-	} else {
-		return b
-	}
+func (opts *Options) MustJSON() []byte {
+	return jsonutil.MustMarshalOrDefault(opts, []byte(jsonutil.EmptyObject))
 }
 
 type OptionsLegend struct {
