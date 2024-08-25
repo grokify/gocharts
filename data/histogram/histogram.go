@@ -117,7 +117,6 @@ func (hist *Histogram) BinNamesMore(inclOrdered, inclUnordered, inclEmpty bool) 
 				}
 				names = append(names, name)
 			}
-
 		}
 	} else {
 		allNames := hist.BinNames()
