@@ -10,19 +10,21 @@ import (
 
 	"github.com/grokify/gocharts/v2/charts/google"
 	"github.com/grokify/gocharts/v2/data/timeseries"
+	"github.com/grokify/mogo/encoding/jsonutil"
 	"github.com/grokify/mogo/time/timeutil"
 )
 
 // Chart provides data for Google Material Line Charts described here:
 // https://developers.google.com/chart/interactive/docs/gallery/linechart#examples
 type Chart struct {
-	Title    string
-	Subtitle string
-	ChartDiv string
-	Width    int
-	Height   int
-	Columns  []google.Column
-	Data     google.DataTable
+	Title         string
+	Subtitle      string
+	ChartDiv      string
+	Width         int
+	Height        int
+	Columns       []google.Column
+	Data          google.DataTable
+	GoogleOptions *Options
 }
 
 func NewChart() Chart {
@@ -31,51 +33,66 @@ func NewChart() Chart {
 		Data:    google.DataTable{}}
 }
 
-func (lcm *Chart) LoadTimeSeriesSetMonth(tss *timeseries.TimeSeriesSet, fn func(t time.Time) string) error {
+func (chart *Chart) LoadTimeSeriesSetMonth(tss *timeseries.TimeSeriesSet, fn func(t time.Time) string) error {
 	if cols, rows, err := TimeSeriesSetToLineChartMaterial(tss, fn); err != nil {
 		return err
 	} else {
-		lcm.Columns = cols
-		lcm.Data = rows
+		chart.Columns = cols
+		chart.Data = rows
 		return nil
 	}
 }
 
-func (lcm *Chart) DataMatrixJSON() []byte {
-	bytes, err := json.Marshal(lcm.Data)
-	if err != nil {
-		return []byte("[]")
+func (chart *Chart) ChartDivOrDefault() string {
+	if len(chart.ChartDiv) > 0 {
+		return chart.ChartDiv
+	} else {
+		return google.DefaultChartDiv
 	}
-	return bytes
 }
 
-func (lcm *Chart) ChartDivOrDefault() string {
-	if len(lcm.ChartDiv) > 0 {
-		return lcm.ChartDiv
-	}
-	return google.DefaultChartDiv
+func (chart *Chart) DataMatrixJSON() []byte {
+	return jsonutil.MustMarshalOrDefault(chart.Data, []byte(jsonutil.EmptyArray))
 }
 
-func (lcm *Chart) HeightOrDefault() int {
-	if lcm.Height > 0 {
-		return lcm.Height
+func (chart *Chart) DataTableJSON() []byte {
+	if bytes, err := json.Marshal(chart.Data); err != nil {
+		return []byte(jsonutil.EmptyArray)
+	} else {
+		return bytes
+	}
+}
+
+func (chart *Chart) OptionsJSON() []byte {
+	if chart.GoogleOptions == nil {
+		return []byte(jsonutil.EmptyObject)
+	} else {
+		return chart.GoogleOptions.MustJSON()
+	}
+}
+
+func (chart *Chart) PageTitle() string { return chart.Title }
+
+/*
+func (chart *Chart) HeightOrDefault() int {
+	if chart.Height > 0 {
+		return chart.Height
 	}
 	return google.DefaultHeight
 }
 
-func (lcm *Chart) WidthOrDefault() int {
-	if lcm.Width > 0 {
-		return lcm.Width
+func (chart *Chart) WidthOrDefault() int {
+	if chart.Width > 0 {
+		return chart.Width
 	}
 	return google.DefaultWidth
 }
+*/
 
-func (lcm *Chart) PageHTML() string {
-	return LineChartMaterialPage(*lcm)
-}
+func (chart *Chart) PageHTML() string { return LineChartMaterialPage(*chart) }
 
-func (lcm *Chart) WriteFilePage(filename string, perm os.FileMode) error {
-	return os.WriteFile(filename, []byte(lcm.PageHTML()), perm)
+func (chart *Chart) WriteFilePage(filename string, perm os.FileMode) error {
+	return os.WriteFile(filename, []byte(chart.PageHTML()), perm)
 }
 
 func ChartFromTimeSeriesSet(tss timeseries.TimeSeriesSet, yearLabel string) (Chart, error) {
@@ -115,4 +132,28 @@ func ChartFromTimeSeriesSet(tss timeseries.TimeSeriesSet, yearLabel string) (Cha
 	lcm.Data = rows
 
 	return lcm, nil
+}
+
+type Options struct {
+	Chart  OptionsChart `json:"chart,omitempty"`
+	Height uint         `json:"height,omitempty"`
+	Width  uint         `json:"width,omitempty"`
+}
+
+func (opts *Options) Inflate() {
+	if opts.Height == 0 {
+		opts.Height = google.DefaultHeight
+	}
+	if opts.Width == 0 {
+		opts.Width = google.DefaultWidth
+	}
+}
+
+func (opts *Options) MustJSON() []byte {
+	return jsonutil.MustMarshalOrDefault(opts, []byte(jsonutil.EmptyObject))
+}
+
+type OptionsChart struct {
+	Title    string `json:"title,omitempty"`
+	Subtitle string `json:"subtitle,omitempty"`
 }
