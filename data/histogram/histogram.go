@@ -23,8 +23,6 @@ type Histogram struct {
 	Counts      map[string]int // how many items have counts.
 	Percentages map[string]float64
 	Order       []string // bin ordering for formatting.
-	// BinCount    uint
-	// Sum         int
 }
 
 func NewHistogram(name string) *Histogram {
@@ -66,13 +64,11 @@ func (hist *Histogram) Inflate() {
 		hist.Counts[countString]++
 		sum += binVal
 	}
-	// hist.BinCount = uint(len(hist.Bins))
 
 	hist.Percentages = map[string]float64{}
 	for binName, binVal := range hist.Bins {
 		hist.Percentages[binName] = float64(binVal) / float64(sum)
 	}
-	// hist.Sum = sum
 }
 
 func (hist *Histogram) BinCount(binName string) (int, error) {
@@ -92,6 +88,50 @@ func (hist *Histogram) BinCountOrDefault(binName string, def int) int {
 
 func (hist *Histogram) BinNames() []string {
 	return hist.ItemNames()
+}
+
+func (hist *Histogram) BinNamesMore(inclOrdered, inclUnordered, inclEmpty bool) []string {
+	var names []string
+	if inclOrdered {
+		seen := map[string]int{}
+		for _, ord := range hist.Order {
+			seen[ord]++
+			if !inclEmpty {
+				if v, ok := hist.Bins[ord]; !ok || v == 0 {
+					continue
+				}
+			}
+			names = append(names, ord)
+		}
+		if inclUnordered {
+			allNames := hist.BinNames()
+			for _, name := range allNames {
+				if _, ok := seen[name]; ok {
+					continue
+				}
+				seen[name]++
+				if !inclEmpty {
+					if v, ok := hist.Bins[name]; !ok || v == 0 {
+						continue
+					}
+				}
+				names = append(names, name)
+			}
+
+		}
+	} else {
+		allNames := hist.BinNames()
+		for _, name := range allNames {
+			if !inclEmpty {
+				if v, ok := hist.Bins[name]; !ok || v == 0 {
+					continue
+				}
+			}
+			names = append(names, name)
+		}
+	}
+
+	return names
 }
 
 func (hist *Histogram) BinNameExists(binName string) bool {
