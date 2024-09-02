@@ -51,6 +51,15 @@ func (hsets *HistogramSets) BinNames() []string {
 	return maputil.Keys(binNamesMap)
 }
 
+// BinValue the value of a bin.
+func (hsets *HistogramSets) BinValue(hsetName, histName, binName string) int {
+	if hset, ok := hsets.HistogramSetMap[hsetName]; !ok || hset == nil {
+		return 0
+	} else {
+		return hset.BinValue(histName, binName)
+	}
+}
+
 func (hsets *HistogramSets) Sum() int {
 	sum := 0
 	for _, hset := range hsets.HistogramSetMap {
