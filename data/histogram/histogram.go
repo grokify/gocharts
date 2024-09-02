@@ -71,15 +71,15 @@ func (hist *Histogram) Inflate() {
 	}
 }
 
-func (hist *Histogram) BinCount(binName string) (int, error) {
+func (hist *Histogram) BinValue(binName string) (int, error) {
 	if v, ok := hist.Bins[binName]; ok {
 		return v, nil
 	}
 	return -1, errors.New("bin not found")
 }
 
-func (hist *Histogram) BinCountOrDefault(binName string, def int) int {
-	c, err := hist.BinCount(binName)
+func (hist *Histogram) BinValueOrDefault(binName string, def int) int {
+	c, err := hist.BinValue(binName)
 	if err != nil {
 		return def
 	}
