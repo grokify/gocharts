@@ -78,6 +78,19 @@ func (hset *HistogramSet) BinParentCounts() map[uint]map[string]uint {
 	return out
 }
 
+// BinValue the value of a bin.
+func (hset *HistogramSet) BinValue(histName, binName string) int {
+	if h, ok := hset.HistogramMap[histName]; !ok {
+		return 0
+	} else if h == nil {
+		return 0
+	} else if v, ok := h.Bins[binName]; !ok {
+		return 0
+	} else {
+		return v
+	}
+}
+
 // ItemCount returns the number of histograms.
 func (hset *HistogramSet) ItemCount() uint {
 	return uint(len(hset.HistogramMap))
