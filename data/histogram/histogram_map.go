@@ -1,6 +1,7 @@
 package histogram
 
 import (
+	"cmp"
 	"errors"
 	"strconv"
 	"strings"
@@ -155,7 +156,7 @@ func (hist *Histogram) TableSetMap(cfgs []HistogramMapTableConfig) (*table.Table
 			if strings.TrimSpace(tblName) == "" {
 				tblName = "Sheet" + strconv.Itoa(i)
 			}
-			tbl, err := hist.TableMap(cfg.ColumnKeys, cfg.ColNameCount)
+			tbl, err := hist.TableMap(cfg.ColumnKeys, cfg.ColNameCount, nil)
 			if err != nil {
 				return nil, errorsutil.Wrapf(err, "build TableSetMap for (%s)", tblName)
 			}
@@ -186,7 +187,7 @@ func (hist *Histogram) TableSetMap(cfgs []HistogramMapTableConfig) (*table.Table
 				if !ok {
 					panic("key not found")
 				}
-				tbl, err := keyHist.TableMap(cfg.ColumnKeys, cfg.ColNameCount)
+				tbl, err := keyHist.TableMap(cfg.ColumnKeys, cfg.ColNameCount, nil)
 				if err != nil {
 					return nil, err
 				}
@@ -236,10 +237,8 @@ func (cfg *HistogramMapTableConfig) SplitValFilterInclExists(v string) bool {
 }
 
 // TableMap is used to generate a table using map keys.
-func (hist *Histogram) TableMap(mapCols []string, colNameBinCount string) (*table.Table, error) {
-	if strings.TrimSpace(colNameBinCount) == "" {
-		colNameBinCount = "Count"
-	}
+func (hist *Histogram) TableMap(mapCols []string, colNameBinCount string, fnSort func(a, b []string) int) (*table.Table, error) {
+	colNameBinCount = strings.TrimSpace(colNameBinCount) // don't add column if empty
 
 	// create histogram with minimized aggregate map keys to aggregate exclude non-desired
 	// properties from the key for aggregation.
@@ -250,13 +249,14 @@ func (hist *Histogram) TableMap(mapCols []string, colNameBinCount string) (*tabl
 			return nil, err
 		}
 		newBinMap := binMap.Subset(mapCols, false, true, true)
-		// newBinMap := mapStringStringSubset(binMap, mapCols, true, false, true)
-		// fmtutil.PrintJSON(newBinMap)
 		histSubset.AddMap(newBinMap, binCount)
 	}
 
 	tbl := table.NewTable(hist.Name)
-	tbl.Columns = append(mapCols, colNameBinCount)
+	tbl.Columns = mapCols
+	if colNameBinCount != "" {
+		tbl.Columns = append(tbl.Columns, colNameBinCount)
+	}
 
 	for binName, binCount := range histSubset.Bins {
 		binMap, err := maputil.ParseMapStringString(binName)
@@ -265,11 +265,24 @@ func (hist *Histogram) TableMap(mapCols []string, colNameBinCount string) (*tabl
 		}
 		binVals := binMap.Gets(true, mapCols)
 
-		tbl.Rows = append(tbl.Rows,
-			append(binVals, strconv.Itoa(binCount)),
-		)
+		if colNameBinCount != "" {
+			binVals = append(binVals, strconv.Itoa(binCount))
+		}
+
+		tbl.Rows = append(tbl.Rows, binVals)
 	}
 
-	tbl.FormatMap = map[int]string{len(tbl.Columns) - 1: "int"}
+	if colNameBinCount != "" {
+		tbl.FormatMap = map[int]string{len(tbl.Columns) - 1: "int"}
+	}
+
+	if fnSort != nil {
+		slices.SortFunc(tbl.Rows, fnSort)
+	}
 	return &tbl, nil
+}
+
+// SortRowsIndex0 is an example function used with `Histogram.TableMap`.
+func SortRowsIndex0(a, b []string) int {
+	return cmp.Compare(a[0], b[0])
 }
