@@ -91,7 +91,7 @@ func (chart *Chart) WidthOrDefault() int {
 
 func (chart *Chart) PageHTML() string { return LineChartMaterialPage(*chart) }
 
-func (chart *Chart) WriteFilePage(filename string, perm os.FileMode) error {
+func (chart *Chart) WriteFilePageHTML(filename string, perm os.FileMode) error {
 	return os.WriteFile(filename, []byte(chart.PageHTML()), perm)
 }
 

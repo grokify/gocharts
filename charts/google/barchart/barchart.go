@@ -44,7 +44,7 @@ func (chart *Chart) OptionsJSON() []byte {
 
 func (chart *Chart) PageTitle() string { return chart.Title }
 
-func (chart *Chart) WriteFilePage(filename string, perm os.FileMode) error {
+func (chart *Chart) WriteFilePageHTML(filename string, perm os.FileMode) error {
 	pg := BarChartMaterialPage(chart)
 	return os.WriteFile(filename, []byte(pg), perm)
 }

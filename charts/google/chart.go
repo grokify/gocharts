@@ -7,5 +7,5 @@ type Chart interface {
 	ChartDivOrDefault() string
 	DataTableJSON() []byte
 	OptionsJSON() []byte
-	WriteFilePage(filename string, perm os.FileMode) error
+	WriteFilePageHTML(filename string, perm os.FileMode) error
 }

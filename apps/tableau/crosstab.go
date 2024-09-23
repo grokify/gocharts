@@ -45,7 +45,7 @@ func WriteFileLineChartTimeSeriesSet(tss *timeseries.TimeSeriesSet, outfile stri
 	if err := lcm.LoadTimeSeriesSetMonth(tss, func(t time.Time) string { return t.Format("Jan 2006") }); err != nil {
 		return err
 	} else {
-		return lcm.WriteFilePage(outfile, perm)
+		return lcm.WriteFilePageHTML(outfile, perm)
 	}
 }
 

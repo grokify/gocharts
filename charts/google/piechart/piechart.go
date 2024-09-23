@@ -117,7 +117,7 @@ func (chart *Chart) PageHTML() string      { return PieChartMaterialPage(chart) 
 func (chart *Chart) PageTitle() string     { return chart.Title }
 func (chart *Chart) WritePage(w io.Writer) { WritePieChartMaterialPage(w, chart) }
 
-func (chart *Chart) WriteFilePage(filename string, perm os.FileMode) error {
+func (chart *Chart) WriteFilePageHTML(filename string, perm os.FileMode) error {
 	return os.WriteFile(filename, []byte(chart.PageHTML()), perm)
 }
 
