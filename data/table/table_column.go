@@ -10,6 +10,17 @@ import (
 	"github.com/grokify/mogo/type/slicesutil"
 )
 
+func (tbl *Table) RowsModify(fn func(row []string) ([]string, error)) error {
+	for i, row := range tbl.Rows {
+		if try, err := fn(row); err != nil {
+			return err
+		} else {
+			tbl.Rows[i] = try
+		}
+	}
+	return nil
+}
+
 func (tbl *Table) ColumnsValuesDistinct(wantColNames []string, stripSpace bool) (map[string]int, error) {
 	data := map[string]int{}
 	if len(wantColNames) == 0 {
