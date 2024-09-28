@@ -3,6 +3,7 @@ package histogram
 import (
 	"cmp"
 	"errors"
+	"fmt"
 	"strconv"
 	"strings"
 
@@ -68,6 +69,25 @@ func (hist *Histogram) MapKeySplit(mapKey string, mapValIncl []string) (*Histogr
 		hs.HistogramMap[histName] = subHist
 	}
 	return hs, nil
+}
+
+func (hist *Histogram) MapToHistogramSet(histName, binName string) (*HistogramSet, error) {
+	out := NewHistogramSet("")
+	for mapKeysStr, count := range hist.Bins {
+		binMap, err := maputil.ParseMapStringString(mapKeysStr)
+		if err != nil {
+			return nil, err
+		}
+		histNameVal, binNameVal := "", ""
+		if v, ok := binMap[histName]; ok {
+			histNameVal = v
+		}
+		if v, ok := binMap[binName]; ok {
+			binNameVal = v
+		}
+		out.Add(histNameVal, binNameVal, count)
+	}
+	return out, nil
 }
 
 // MapKeysReduce returns a new `Histogram` with only the supplied keys present.
@@ -238,6 +258,20 @@ func (cfg *HistogramMapTableConfig) SplitValFilterInclExists(v string) bool {
 
 // TableMap is used to generate a table using map keys.
 func (hist *Histogram) TableMap(mapCols []string, colNameBinCount string, fnSort func(a, b []string) int) (*table.Table, error) {
+	if keys, err := hist.MapKeys(); err != nil {
+		return nil, err
+	} else {
+		km := map[string]int{}
+		for _, k := range keys {
+			km[k] = 0
+		}
+		for _, mcol := range mapCols {
+			if _, ok := km[mcol]; !ok {
+				return nil, fmt.Errorf("desired map column (%s) not found", mcol)
+			}
+		}
+	}
+
 	colNameBinCount = strings.TrimSpace(colNameBinCount) // don't add column if empty
 
 	// create histogram with minimized aggregate map keys to aggregate exclude non-desired
