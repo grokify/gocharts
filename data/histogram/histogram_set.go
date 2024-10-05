@@ -1,6 +1,7 @@
 package histogram
 
 import (
+	"fmt"
 	"strings"
 	"time"
 
@@ -260,4 +261,31 @@ func (hset *HistogramSet) HistogramSetTimeKeyCountWriteXLSX(filename string, int
 	}
 	tbl.FormatFunc = format.FormatTimeAndInts
 	return table.WriteXLSX(filename, []*table.Table{&tbl})
+}
+
+func (hset *HistogramSet) String(histNotSet, binNotSet string) string {
+	var parts []string
+	for hName, h := range hset.HistogramMap {
+		if strings.TrimSpace(hName) == "" {
+			hName = histNotSet
+		}
+		bNames := h.BinNames()
+		var counts []string
+		for _, bName := range bNames {
+			count, ok := h.Bins[bName]
+			if !ok {
+				count = 0
+			}
+			if strings.TrimSpace(bName) == "" {
+				bName = binNotSet
+			}
+			counts = append(counts, fmt.Sprintf("%s: %d", bName, count))
+		}
+		if len(counts) > 0 {
+			parts = append(parts, fmt.Sprintf("%s (%s)", hName, strings.Join(counts, ", ")))
+		} else {
+			parts = append(parts, hName)
+		}
+	}
+	return strings.Join(parts, ", ")
 }
