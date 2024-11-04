@@ -2,6 +2,7 @@ package table
 
 import (
 	"fmt"
+	"slices"
 	"strings"
 )
 
@@ -12,6 +13,26 @@ type ColumnDefinitions struct {
 	Definitions   []ColumnDefinition
 }
 
+// BuildColumnDefinitions returns a `ColumnDefinitions{}` struct given a set of column
+// names and a format map, similar to stored in `Table{}`.`
+func BuildColumnDefinitions(names []string, formatMap map[int]string) ColumnDefinitions {
+	cds := ColumnDefinitions{}
+	if f, ok := formatMap[-1]; ok {
+		cds.DefaultFormat = f
+	}
+	for i, name := range names {
+		cd := ColumnDefinition{
+			Name: name,
+		}
+		if f, ok := formatMap[i]; ok {
+			cd.Format = f
+		}
+		cds.Definitions = append(cds.Definitions, cd)
+	}
+	return cds
+}
+
+// ColumnDefinition represents one column including its name and format.
 type ColumnDefinition struct {
 	Name   string
 	Format string
@@ -46,4 +67,11 @@ func (tbl *Table) LoadColumnDefinitions(colDefs *ColumnDefinitions) {
 	if defaultType != "" {
 		tbl.FormatMap[-1] = defaultType
 	}
+}
+
+// ColumnDefinitions returns a `ColumnDefinitions{}` struct for the `Table{}`.
+func (tbl *Table) ColumnDefinitions() ColumnDefinitions {
+	return BuildColumnDefinitions(
+		slices.Clone(tbl.Columns),
+		tbl.FormatMap)
 }
