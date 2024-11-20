@@ -3,14 +3,12 @@ package table
 import (
 	"errors"
 	"fmt"
-	"os"
 	"regexp"
 	"strconv"
 	"strings"
 	"time"
 
 	"github.com/grokify/gocharts/v2/data/table/sheet"
-	"github.com/grokify/mogo/encoding/jsonutil"
 	"github.com/grokify/mogo/errors/errorsutil"
 	"github.com/grokify/mogo/text/markdown"
 	"github.com/grokify/mogo/time/timeutil"
@@ -251,20 +249,6 @@ func WriteXLSXInterface(filename string, sheetdatas ...SheetData) error {
 	}
 	// Save xlsx file by the given path.
 	return f.SaveAs(filename)
-}
-
-type jsonRecords struct {
-	Records []map[string]string `json:"records,omitempty"`
-}
-
-func (tbl *Table) WriteJSON(path string, perm os.FileMode, jsonPrefix, jsonIndent string) error {
-	out := jsonRecords{Records: tbl.ToSliceMSS()}
-	fmt.Printf("TABLE.WRITEJSON [%v]\n", path)
-	bytes, err := jsonutil.MarshalSimple(out, jsonPrefix, jsonIndent)
-	if err != nil {
-		return err
-	}
-	return os.WriteFile(path, bytes, perm)
 }
 
 /*

@@ -3,10 +3,12 @@ package table
 
 import (
 	"encoding/csv"
+	"encoding/json"
 	"errors"
 	"os"
 	"strconv"
 
+	"github.com/grokify/mogo/encoding/jsonutil"
 	"github.com/grokify/mogo/errors/errorsutil"
 )
 
@@ -36,6 +38,17 @@ func NewTable(name string) Table {
 		Columns:   []string{},
 		Rows:      [][]string{},
 		FormatMap: map[int]string{}}
+}
+
+// ReadFileJSON loads a JSON marshal of `Table{}`, such as produced by `Table.WriteJSON()`.
+func ReadFileJSON(filepath string) (*Table, error) {
+	if b, err := os.ReadFile(filepath); err != nil {
+		return nil, err
+	} else {
+		t := Table{}
+		err = json.Unmarshal(b, &t)
+		return &t, err
+	}
 }
 
 // LoadMergedRows is used to load data including both column names and rows from `[][]string` sources
@@ -119,9 +132,12 @@ func (tbl *Table) BuildFloat64(skipEmpty bool) error {
 	return nil
 }
 
-func (tbl *Table) WriteXLSX(path, sheetname string) error {
-	tbl.Name = sheetname
-	return WriteXLSX(path, []*Table{tbl})
+func (tbl *Table) ToSliceMSS() []map[string]string {
+	slice := []map[string]string{}
+	for _, row := range tbl.Rows {
+		slice = append(slice, tbl.Columns.RowMap(row, false))
+	}
+	return slice
 }
 
 func (tbl *Table) WriteCSV(path string) error {
@@ -147,10 +163,28 @@ func (tbl *Table) WriteCSV(path string) error {
 	return writer.Error()
 }
 
-func (tbl *Table) ToSliceMSS() []map[string]string {
-	slice := []map[string]string{}
-	for _, row := range tbl.Rows {
-		slice = append(slice, tbl.Columns.RowMap(row, false))
+func (tbl *Table) WriteJSON(path string, perm os.FileMode, jsonPrefix, jsonIndent string) error {
+	if b, err := jsonutil.MarshalSimple(tbl, jsonPrefix, jsonIndent); err != nil {
+		return err
+	} else {
+		return os.WriteFile(path, b, perm)
 	}
-	return slice
+}
+
+type jsonRecords struct {
+	Records []map[string]string `json:"records,omitempty"`
+}
+
+func (tbl *Table) WriteJSONObjects(path string, perm os.FileMode, jsonPrefix, jsonIndent string) error {
+	out := jsonRecords{Records: tbl.ToSliceMSS()}
+	if b, err := jsonutil.MarshalSimple(out, jsonPrefix, jsonIndent); err != nil {
+		return err
+	} else {
+		return os.WriteFile(path, b, perm)
+	}
+}
+
+func (tbl *Table) WriteXLSX(path, sheetname string) error {
+	tbl.Name = sheetname
+	return WriteXLSX(path, []*Table{tbl})
 }
