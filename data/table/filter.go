@@ -1,10 +1,14 @@
 package table
 
 import (
+	"errors"
 	"fmt"
 )
 
-func (tbl *Table) FilterColumnDistinctFirstTable(colIdx int) *Table {
+func (tbl *Table) FilterColumnDistinctFirstTable(colIdx int) (*Table, error) {
+	if tbl.IsFloat64 {
+		return nil, errors.New("cannot filter float table on string values")
+	}
 	out := tbl.Clone(false)
 
 	seen := map[string]int{}
@@ -17,18 +21,21 @@ func (tbl *Table) FilterColumnDistinctFirstTable(colIdx int) *Table {
 			}
 		}
 	}
-	return out
+	return out, nil
 }
 
 // FilterColumnValuesTable returns a Table filtered by column names and column values.
 func (tbl *Table) FilterColumnValuesTable(wantColNameValues map[string]string) (*Table, error) {
-	out := tbl.Clone(false)
-	rows, err := tbl.FilterColumnValuesRows(wantColNameValues)
-	if err != nil {
-		return out, err
+	if tbl.IsFloat64 {
+		return nil, errors.New("cannot filter float table on string values")
 	}
-	out.Rows = rows
-	return out, nil
+	out := tbl.Clone(false)
+	if rows, err := tbl.FilterColumnValuesRows(wantColNameValues); err != nil {
+		return out, err
+	} else {
+		out.Rows = rows
+		return out, nil
+	}
 }
 
 // FilterRecordsColumnValues returns a set of records filtered by column names and column values.
