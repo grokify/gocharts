@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"os"
+	"slices"
 	"strconv"
 
 	"github.com/grokify/mogo/encoding/jsonutil"
@@ -49,6 +50,31 @@ func ReadFileJSON(filepath string) (*Table, error) {
 		err = json.Unmarshal(b, &t)
 		return &t, err
 	}
+}
+
+func (tbl *Table) Clone(inclRows bool) *Table {
+	out := Table{
+		Name:        tbl.Name,
+		IsFloat64:   tbl.IsFloat64,
+		ID:          tbl.ID,
+		Class:       tbl.Class,
+		Style:       tbl.Style,
+		Rows:        [][]string{},
+		RowsFloat64: [][]float64{},
+	}
+	out.Columns = append(out.Columns, tbl.Columns...)
+	for k, v := range tbl.FormatMap {
+		out.FormatMap[k] = v
+	}
+	if inclRows {
+		for _, r := range tbl.Rows {
+			out.Rows = append(out.Rows, slices.Clone(r))
+		}
+		for _, r := range tbl.RowsFloat64 {
+			out.RowsFloat64 = append(out.RowsFloat64, slices.Clone(r))
+		}
+	}
+	return &out
 }
 
 // LoadMergedRows is used to load data including both column names and rows from `[][]string` sources

@@ -5,31 +5,30 @@ import (
 )
 
 func (tbl *Table) FilterColumnDistinctFirstTable(colIdx int) *Table {
-	newTbl := NewTable("")
-	newTbl.Columns = tbl.Columns
+	out := tbl.Clone(false)
 
 	seen := map[string]int{}
 	for _, row := range tbl.Rows {
 		if colIdx >= 0 && colIdx < len(row) {
 			val := row[colIdx]
 			if _, ok := seen[val]; !ok {
-				newTbl.Rows = append(newTbl.Rows, row)
+				out.Rows = append(out.Rows, row)
 				seen[val] = 1
 			}
 		}
 	}
-	return &newTbl
+	return out
 }
 
 // FilterColumnValuesTable returns a Table filtered by column names and column values.
-func (tbl *Table) FilterColumnValuesTable(wantColNameValues map[string]string) (Table, error) {
-	t2 := Table{Columns: tbl.Columns}
+func (tbl *Table) FilterColumnValuesTable(wantColNameValues map[string]string) (*Table, error) {
+	out := tbl.Clone(false)
 	rows, err := tbl.FilterColumnValuesRows(wantColNameValues)
 	if err != nil {
-		return t2, err
+		return out, err
 	}
-	t2.Rows = rows
-	return t2, nil
+	out.Rows = rows
+	return out, nil
 }
 
 // FilterRecordsColumnValues returns a set of records filtered by column names and column values.
