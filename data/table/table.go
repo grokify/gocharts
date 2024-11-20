@@ -23,9 +23,9 @@ type Table struct {
 	RowsFloat64         [][]float64
 	IsFloat64           bool
 	FormatMap           map[int]string
-	FormatFunc          func(val string, colIdx uint) (any, error)
+	FormatFunc          func(val string, colIdx uint) (any, error) `json:"-"`
 	FormatAutoLink      bool
-	BackgroundColorFunc func(colIdx, rowIdx uint) string
+	BackgroundColorFunc func(colIdx, rowIdx uint) string `json:"-"`
 	ID                  string
 	Class               string
 	Style               string
@@ -163,6 +163,8 @@ func (tbl *Table) WriteCSV(path string) error {
 	return writer.Error()
 }
 
+// WriteJSON writes the raw structure of the Table to JSON so it can be read back with
+// metadata intact. It does not cover functions as those cannot be marshaled.
 func (tbl *Table) WriteJSON(path string, perm os.FileMode, jsonPrefix, jsonIndent string) error {
 	if b, err := jsonutil.MarshalSimple(tbl, jsonPrefix, jsonIndent); err != nil {
 		return err
