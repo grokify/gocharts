@@ -71,7 +71,5 @@ func (tbl *Table) LoadColumnDefinitions(colDefs *ColumnDefinitions) {
 
 // ColumnDefinitions returns a `ColumnDefinitions{}` struct for the `Table{}`.
 func (tbl *Table) ColumnDefinitions() ColumnDefinitions {
-	return BuildColumnDefinitions(
-		slices.Clone(tbl.Columns),
-		tbl.FormatMap)
+	return BuildColumnDefinitions(slices.Clone(tbl.Columns), tbl.FormatMap)
 }

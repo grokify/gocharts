@@ -55,6 +55,7 @@ func ReadFileJSON(filepath string) (*Table, error) {
 func (tbl *Table) Clone(inclRows bool) *Table {
 	out := Table{
 		Name:        tbl.Name,
+		Columns:     slices.Clone(tbl.Columns),
 		IsFloat64:   tbl.IsFloat64,
 		ID:          tbl.ID,
 		Class:       tbl.Class,
@@ -62,7 +63,6 @@ func (tbl *Table) Clone(inclRows bool) *Table {
 		Rows:        [][]string{},
 		RowsFloat64: [][]float64{},
 	}
-	out.Columns = append(out.Columns, tbl.Columns...)
 	for k, v := range tbl.FormatMap {
 		out.FormatMap[k] = v
 	}
@@ -157,6 +157,13 @@ func (tbl *Table) BuildFloat64(skipEmpty bool) error {
 	tbl.IsFloat64 = true
 	return nil
 }
+
+/*
+func (tbl *Table) ColumnInsert(name string, index uint, format string) error {
+
+
+}
+*/
 
 func (tbl *Table) ToSliceMSS() []map[string]string {
 	slice := []map[string]string{}
