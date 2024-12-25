@@ -232,10 +232,24 @@ const (
 	SortValueDesc = maputil.SortValueDesc
 )
 
-// ItemCounts returns sorted item names and values.
-func (hist *Histogram) ItemCounts(sortBy string) []maputil.Record {
+// ItemCounts returns sorted bin names and values.
+func (hist *Histogram) ItemCounts(sortBy string) maputil.Records {
 	msi := maputil.MapStringInt(hist.Bins)
 	return msi.Sorted(sortBy)
+}
+
+// ItemValuesOrdered returns bin names and values sorted by the `Order` field.
+// Unordered bins are not included.
+func (hist *Histogram) ItemValuesOrdered() maputil.Records {
+	var recs maputil.Records
+	for _, ord := range hist.Order {
+		if v, ok := hist.Bins[ord]; ok {
+			recs = append(recs, maputil.Record{Name: ord, Value: v})
+		} else {
+			recs = append(recs, maputil.Record{Name: ord, Value: 0})
+		}
+	}
+	return recs
 }
 
 // WriteTable writes an ASCII Table. For CLI apps, pass `os.Stdout` for `io.Writer`.
