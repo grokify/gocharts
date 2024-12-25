@@ -3,7 +3,7 @@ module github.com/grokify/gocharts/v2
 go 1.22.0
 
 require (
-	github.com/grokify/mogo v0.66.3
+	github.com/grokify/mogo v0.66.4
 	github.com/jessevdk/go-flags v1.6.1
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/shopspring/decimal v1.4.0
