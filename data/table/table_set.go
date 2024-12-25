@@ -46,6 +46,26 @@ func (ts *TableSet) Add(tbl ...*Table) error {
 	return nil
 }
 
+// LensOrdered returns a slice of table row counts.
+func (ts *TableSet) LensOrdered() []int {
+	var lens []int
+	for _, ord := range ts.Order {
+		if tbl, ok := ts.TableMap[ord]; ok {
+			if tbl != nil {
+				lens = append(lens, len(tbl.Rows))
+			} else {
+				lens = append(lens, 0)
+			}
+		} else {
+			lens = append(lens, 0)
+		}
+	}
+	if len(lens) != len(ts.Order) {
+		panic("internal mismatch in `TableSet.LensOrdered(), calculated length vs. `TableSet.Order`")
+	}
+	return lens
+}
+
 func (ts *TableSet) TableNames() []string {
 	return maputil.Keys(ts.TableMap)
 }
