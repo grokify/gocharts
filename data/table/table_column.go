@@ -22,7 +22,8 @@ func (tbl *Table) RowsModify(fn func(i int, row []string) ([]string, error)) err
 	return nil
 }
 
-func (tbl *Table) AddColumnLineNumber(colName string, startNumber int) (*Table, error) {
+/*
+func (tbl *Table) addColumnLineNumberClone(colName string, startNumber int) (*Table, error) {
 	out := tbl.Clone(true)
 	// Update Columns
 	if colName == "" {
@@ -46,6 +47,36 @@ func (tbl *Table) AddColumnLineNumber(colName string, startNumber int) (*Table, 
 		return slices.Clone(outRow), nil
 	})
 	return out, err
+}
+*/
+
+func (tbl *Table) AddColumnLineNumber(colName string, startNumber int) {
+	// Update Columns
+	if colName == "" {
+		colName = "Number"
+	}
+	newCols := []string{colName}
+	newCols = append(newCols, tbl.Columns...)
+	tbl.Columns = slices.Clone(newCols)
+	// Update Format Map
+	newFmtMap := map[int]string{0: FormatInt}
+	for k, v := range tbl.FormatMap {
+		if k >= 0 {
+			newFmtMap[k+1] = v
+		} else {
+			newFmtMap[k] = v
+		}
+	}
+	tbl.FormatMap = newFmtMap
+	// Update Rows
+	err := tbl.RowsModify(func(i int, row []string) ([]string, error) {
+		outRow := []string{strconv.Itoa(i + startNumber)}
+		outRow = append(outRow, row...)
+		return slices.Clone(outRow), nil
+	})
+	if err != nil {
+		panic(err)
+	}
 }
 
 func (tbl *Table) ColumnsValuesDistinct(wantColNames []string, stripSpace bool) (map[string]int, error) {
