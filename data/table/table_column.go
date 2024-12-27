@@ -3,6 +3,7 @@ package table
 import (
 	"errors"
 	"fmt"
+	"slices"
 	"sort"
 	"strconv"
 	"strings"
@@ -10,15 +11,41 @@ import (
 	"github.com/grokify/mogo/type/slicesutil"
 )
 
-func (tbl *Table) RowsModify(fn func(row []string) ([]string, error)) error {
+func (tbl *Table) RowsModify(fn func(i int, row []string) ([]string, error)) error {
 	for i, row := range tbl.Rows {
-		if try, err := fn(row); err != nil {
+		if try, err := fn(i, row); err != nil {
 			return err
 		} else {
 			tbl.Rows[i] = try
 		}
 	}
 	return nil
+}
+
+func (tbl *Table) AddColumnLineNumber(colName string, startNumber int) (*Table, error) {
+	out := tbl.Clone(true)
+	// Update Columns
+	if colName == "" {
+		colName = "Number"
+	}
+	out.Columns = []string{colName}
+	out.Columns = append(out.Columns, tbl.Columns...)
+	// Update Format Map
+	out.FormatMap = map[int]string{0: FormatInt}
+	for k, v := range tbl.FormatMap {
+		if k >= 0 {
+			out.FormatMap[k+1] = v
+		} else {
+			out.FormatMap[k] = v
+		}
+	}
+	// Update Rows
+	err := out.RowsModify(func(i int, row []string) ([]string, error) {
+		outRow := []string{strconv.Itoa(i + startNumber)}
+		outRow = append(outRow, row...)
+		return slices.Clone(outRow), nil
+	})
+	return out, err
 }
 
 func (tbl *Table) ColumnsValuesDistinct(wantColNames []string, stripSpace bool) (map[string]int, error) {
