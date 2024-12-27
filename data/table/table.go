@@ -57,6 +57,7 @@ func (tbl *Table) Clone(inclRows bool) *Table {
 		Name:        tbl.Name,
 		Columns:     slices.Clone(tbl.Columns),
 		IsFloat64:   tbl.IsFloat64,
+		FormatMap:   map[int]string{},
 		ID:          tbl.ID,
 		Class:       tbl.Class,
 		Style:       tbl.Style,
