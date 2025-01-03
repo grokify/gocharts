@@ -37,16 +37,20 @@ func NewHistogram(name string) *Histogram {
 	}
 }
 
+// ReadFileHistogramBins reads a JSON file consisting of a `map[string]int` and
+// populates a `Histogram`.
 func ReadFileHistogramBins(filename string) (*Histogram, error) {
 	b, err := os.ReadFile(filename)
 	if err != nil {
 		return nil, err
 	}
 	msi := map[string]int{}
-	err = json.Unmarshal(b, &msi)
-	if err != nil {
+	if err := json.Unmarshal(b, &msi); err != nil {
 		return nil, err
 	}
+	h := NewHistogram("")
+	h.Bins = msi
+	return h, nil
 }
 
 func (hist *Histogram) Add(binName string, binCount int) {
