@@ -1,8 +1,10 @@
 package histogram
 
 import (
+	"encoding/json"
 	"errors"
 	"io"
+	"os"
 	"strconv"
 	"strings"
 
@@ -32,6 +34,18 @@ func NewHistogram(name string) *Histogram {
 		Counts:      map[string]int{},
 		Percentages: map[string]float64{},
 		// BinCount:    0}
+	}
+}
+
+func ReadFileHistogramBins(filename string) (*Histogram, error) {
+	b, err := os.ReadFile(filename)
+	if err != nil {
+		return nil, err
+	}
+	msi := map[string]int{}
+	err = json.Unmarshal(b, &msi)
+	if err != nil {
+		return nil, err
 	}
 }
 
