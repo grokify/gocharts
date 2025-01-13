@@ -6,6 +6,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/grokify/mogo/type/slicesutil"
 )
 
 // Columns represents a slice of string with tabular functions.
@@ -32,6 +34,11 @@ func (cols Columns) Equal(c Columns) bool {
 		}
 	}
 	return true
+}
+
+// Unique returns true if the Column names are unqiue, false if there are duplicates.
+func (cols Columns) Unique() bool {
+	return slicesutil.Unique(cols)
 }
 
 // MustCellString returns a single row value or empty string if the column name doesn't exist.
