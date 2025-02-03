@@ -115,6 +115,30 @@ func (cols Columns) CellTime(colName, timeFormat string, row []string, defaultIf
 	}
 }
 
+func (cols Columns) MustCellTime(colName, timeFormat string, row []string) *time.Time {
+	if val, err := cols.CellString(colName, row, false, ""); err != nil {
+		return nil
+	} else if strings.TrimSpace(val) == "" {
+		return nil
+	} else if strings.TrimSpace(timeFormat) == "" {
+		return nil
+	} else if t, err := time.Parse(timeFormat, val); err != nil {
+		return nil
+	} else {
+		return &t
+	}
+}
+
+func (cols Columns) MustCellIntOrDefault(colName string, row []string, def int) int {
+	if val, err := cols.CellString(colName, row, true, ""); err != nil {
+		return def
+	} else if valI, err := strconv.Atoi(val); err != nil {
+		return def
+	} else {
+		return valI
+	}
+}
+
 // MustCellsString returns a slice of values.
 func (cols Columns) MustCellsString(colNames []string, row []string) []string {
 	vals := []string{}
