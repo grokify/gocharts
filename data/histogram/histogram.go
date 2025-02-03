@@ -16,6 +16,11 @@ import (
 	"github.com/grokify/gocharts/v2/data/table"
 )
 
+var (
+	ErrHistogramCannotBeNil    = errors.New("histogram cannot be nil")
+	ErrHistogramSetCannotBeNil = errors.New("histogram set cannot be nil")
+)
+
 // Histogram is used to count how many times an item appears and how many times number
 // of appearances appear. It can be used with simple string keys or `map[string]string`
 // keys which are converted to soerted query strings.
@@ -89,21 +94,6 @@ func (hist *Histogram) Inflate() {
 	}
 }
 
-func (hist *Histogram) BinValue(binName string) (int, error) {
-	if v, ok := hist.Bins[binName]; ok {
-		return v, nil
-	}
-	return -1, errors.New("bin not found")
-}
-
-func (hist *Histogram) BinValueOrDefault(binName string, def int) int {
-	c, err := hist.BinValue(binName)
-	if err != nil {
-		return def
-	}
-	return c
-}
-
 func (hist *Histogram) BinNames() []string {
 	return hist.ItemNames()
 }
@@ -154,8 +144,33 @@ func (hist *Histogram) BinNamesMore(inclOrdered, inclUnordered, inclEmpty bool) 
 func (hist *Histogram) BinNameExists(binName string) bool {
 	if _, ok := hist.Bins[binName]; ok {
 		return true
+	} else {
+		return false
 	}
-	return false
+}
+
+func (hist *Histogram) BinValue(binName string) (int, error) {
+	if v, ok := hist.Bins[binName]; ok {
+		return v, nil
+	} else {
+		return -1, errors.New("bin not found")
+	}
+}
+
+func (hist *Histogram) BinValueOrDefault(binName string, def int) int {
+	if c, err := hist.BinValue(binName); err != nil {
+		return def
+	} else {
+		return c
+	}
+}
+
+func (hist *Histogram) BinValuesOrDefault(binNames []string, def int) []int {
+	var out []int
+	for _, binName := range binNames {
+		out = append(out, hist.BinValueOrDefault(binName, def))
+	}
+	return out
 }
 
 func (hist *Histogram) ItemCount() uint {
