@@ -18,12 +18,14 @@ type HistogramSet struct {
 	Name         string
 	HistogramMap map[string]*Histogram
 	KeyIsTime    bool
+	Order        []string
 }
 
 func NewHistogramSet(name string) *HistogramSet {
 	return &HistogramSet{
 		Name:         name,
-		HistogramMap: map[string]*Histogram{}}
+		HistogramMap: map[string]*Histogram{},
+		Order:        []string{}}
 }
 
 func NewHistogramSetWithData(name string, data map[string]map[string]int) *HistogramSet {
