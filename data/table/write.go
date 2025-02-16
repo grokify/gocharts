@@ -91,6 +91,53 @@ func (tbl *Table) FormatterFunc() func(val string, colIdx uint) (any, error) {
 	}
 }
 
+func (tbl *Table) FormatterFuncHTML() func(val string, colIdx uint) (any, error) {
+	if len(tbl.FormatMap) == 0 {
+		if tbl.FormatFunc != nil {
+			return tbl.FormatFunc
+		}
+	}
+
+	return func(val string, colIdx uint) (any, error) {
+		fmtType, ok := tbl.FormatMap[int(colIdx)]
+		if !ok || len(strings.TrimSpace(fmtType)) == 0 {
+			if fmtType, ok = tbl.FormatMap[-1]; !ok {
+				fmtType = ""
+			}
+		}
+		switch strings.ToLower(strings.TrimSpace(fmtType)) {
+		case FormatFloat:
+			if strings.TrimSpace(val) == "" {
+				return float64(0), nil
+			} else if floatVal, err := strconv.ParseFloat(val, 64); err != nil {
+				return val, err
+			} else {
+				return floatVal, nil
+			}
+		case FormatInt:
+			if strings.TrimSpace(val) == "" {
+				return "0", nil
+			}
+			return val, nil
+		case FormatDate:
+			if strings.TrimSpace(val) == "" {
+				return "", nil // if date is not present, return an empty string.
+			} else if dtVal, err := time.Parse(time.RFC3339, val); err != nil {
+				return val, err
+			} else {
+				return dtVal.Format(timeutil.DateMDY), nil
+			}
+		case FormatURL:
+			if u := strings.TrimSpace(val); u == "" {
+				return "", nil
+			} else {
+				return fmt.Sprintf(`<a href="%s">%s</a>`, val, val), nil
+			}
+		}
+		return val, nil
+	}
+}
+
 // WriteXLSX writes a table as an Excel XLSX file with row formatter option.
 func WriteXLSX(path string, tbls []*Table) error {
 	tables := []*Table{}

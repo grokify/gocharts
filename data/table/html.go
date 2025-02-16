@@ -63,7 +63,7 @@ func (tbl *Table) ToHTML(escapeHTML bool) string {
 	}
 	if len(tbl.Rows) > 0 {
 		tHTML += "<tbody>"
-		fmtFunc := tbl.FormatterFunc()
+		fmtFunc := tbl.FormatterFuncHTML()
 		for _, row := range tbl.Rows {
 			tHTML += "<tr>"
 			for x, cell := range row {
