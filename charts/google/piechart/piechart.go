@@ -3,6 +3,7 @@ package piechart
 import (
 	"io"
 	"os"
+	"strings"
 
 	"github.com/grokify/gocharts/v2/charts/google"
 	"github.com/grokify/gocharts/v2/data/histogram"
@@ -84,23 +85,13 @@ func (chart *Chart) BuildDataTable() google.DataTable {
 	return dt
 }
 
-/*
-func (chart Chart) ChartDivOrDefault() string {
-	if div := strings.TrimSpace(chart.ChartDiv); div != "" {
-		return div
-	} else {
-		return google.DefaultChartDiv
-	}
-}
-*/
-
 func (chart *Chart) DataTableJSON() []byte {
 	dt := chart.BuildDataTable()
 	return dt.MustJSON()
 }
 
 func (chart *Chart) ChartDivOrDefault() string {
-	if len(chart.ChartDiv) > 0 {
+	if strings.TrimSpace(chart.ChartDiv) != "" {
 		return chart.ChartDiv
 	}
 	return google.DefaultChartDiv
@@ -113,9 +104,11 @@ func (chart *Chart) OptionsJSON() []byte {
 		return chart.GoogleOptions.MustJSON()
 	}
 }
-func (chart *Chart) PageHTML() string      { return PieChartMaterialPage(chart) }
+
+func (chart *Chart) HTML() string          { return PieChartMaterialHTML(chart) }
+func (chart *Chart) PageHTML() string      { return PieChartMaterialHTMLPage(chart) }
 func (chart *Chart) PageTitle() string     { return chart.Title }
-func (chart *Chart) WritePage(w io.Writer) { WritePieChartMaterialPage(w, chart) }
+func (chart *Chart) WritePage(w io.Writer) { WritePieChartMaterialHTMLPage(w, chart) }
 
 func (chart *Chart) WriteFilePageHTML(filename string, perm os.FileMode) error {
 	return os.WriteFile(filename, []byte(chart.PageHTML()), perm)

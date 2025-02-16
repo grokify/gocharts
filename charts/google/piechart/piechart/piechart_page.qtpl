@@ -1,5 +1,11 @@
 {% import "github.com/grokify/gocharts/v2/charts/google" %}
-{% func PieChartMaterialHTML(chart google.Chart) %}
+{% func PieChartMaterialHTMLPage(chart google.Chart) %}<!DOCTYPE html>
+<html>
+<head>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+</head>
+<body>
+  <h1>{%s= chart.PageTitle() %}</h1>
   <div id="{%s= chart.ChartDivOrDefault() %}"></div>
   <script>
       google.charts.load('current', {'packages':['corechart']});
@@ -15,4 +21,6 @@
       chart.draw(data, options);
     }
     </script>
+  </body>
+</html>
 {% endfunc %}

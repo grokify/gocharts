@@ -21,23 +21,13 @@ var (
 )
 
 //line piechart.qtpl:2
-func StreamPieChartMaterialPage(qw422016 *qt422016.Writer, chart google.Chart) {
+func StreamPieChartMaterialHTML(qw422016 *qt422016.Writer, chart google.Chart) {
 //line piechart.qtpl:2
-	qw422016.N().S(`<!DOCTYPE html>
-<html>
-<head>
-  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-</head>
-<body>
-  <h1>`)
-//line piechart.qtpl:8
-	qw422016.N().S(chart.PageTitle())
-//line piechart.qtpl:8
-	qw422016.N().S(`</h1>
+	qw422016.N().S(`
   <div id="`)
-//line piechart.qtpl:9
+//line piechart.qtpl:3
 	qw422016.N().S(chart.ChartDivOrDefault())
-//line piechart.qtpl:9
+//line piechart.qtpl:3
 	qw422016.N().S(`"></div>
   <script>
       google.charts.load('current', {'packages':['corechart']});
@@ -45,54 +35,52 @@ func StreamPieChartMaterialPage(qw422016 *qt422016.Writer, chart google.Chart) {
 
     function drawChart() {
       var data = google.visualization.arrayToDataTable(`)
-//line piechart.qtpl:15
+//line piechart.qtpl:9
 	qw422016.N().Z(chart.DataTableJSON())
-//line piechart.qtpl:15
+//line piechart.qtpl:9
 	qw422016.N().S(`);
 
       var options = `)
-//line piechart.qtpl:17
+//line piechart.qtpl:11
 	qw422016.N().Z(chart.OptionsJSON())
-//line piechart.qtpl:17
+//line piechart.qtpl:11
 	qw422016.N().S(`
 
       var chart = new google.visualization.PieChart(document.getElementById('`)
-//line piechart.qtpl:19
+//line piechart.qtpl:13
 	qw422016.N().S(chart.ChartDivOrDefault())
-//line piechart.qtpl:19
+//line piechart.qtpl:13
 	qw422016.N().S(`'));
 
       chart.draw(data, options);
     }
     </script>
-  </body>
-</html>
 `)
-//line piechart.qtpl:26
+//line piechart.qtpl:18
 }
 
-//line piechart.qtpl:26
-func WritePieChartMaterialPage(qq422016 qtio422016.Writer, chart google.Chart) {
-//line piechart.qtpl:26
+//line piechart.qtpl:18
+func WritePieChartMaterialHTML(qq422016 qtio422016.Writer, chart google.Chart) {
+//line piechart.qtpl:18
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line piechart.qtpl:26
-	StreamPieChartMaterialPage(qw422016, chart)
-//line piechart.qtpl:26
+//line piechart.qtpl:18
+	StreamPieChartMaterialHTML(qw422016, chart)
+//line piechart.qtpl:18
 	qt422016.ReleaseWriter(qw422016)
-//line piechart.qtpl:26
+//line piechart.qtpl:18
 }
 
-//line piechart.qtpl:26
-func PieChartMaterialPage(chart google.Chart) string {
-//line piechart.qtpl:26
+//line piechart.qtpl:18
+func PieChartMaterialHTML(chart google.Chart) string {
+//line piechart.qtpl:18
 	qb422016 := qt422016.AcquireByteBuffer()
-//line piechart.qtpl:26
-	WritePieChartMaterialPage(qb422016, chart)
-//line piechart.qtpl:26
+//line piechart.qtpl:18
+	WritePieChartMaterialHTML(qb422016, chart)
+//line piechart.qtpl:18
 	qs422016 := string(qb422016.B)
-//line piechart.qtpl:26
+//line piechart.qtpl:18
 	qt422016.ReleaseByteBuffer(qb422016)
-//line piechart.qtpl:26
+//line piechart.qtpl:18
 	return qs422016
-//line piechart.qtpl:26
+//line piechart.qtpl:18
 }
