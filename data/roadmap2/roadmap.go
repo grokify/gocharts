@@ -141,7 +141,7 @@ func (r *Roadmap) Table(includeUnknown, includeUnassigned bool) (table.Table, er
 		rows := slicesutil.MakeMatrix2D[string](maxCellLength, len(tbl.Columns))
 		for x, cell := range stream.Cells {
 			for _, item := range cell.Items {
-				y, err := stringsutil.Matrix2DColRowIndex(rows, uint(x+1), "")
+				y, err := stringsutil.Matrix2DColRowIndex(rows, x+1, "")
 				if err != nil {
 					return tbl, err
 				}

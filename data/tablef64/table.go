@@ -34,10 +34,10 @@ func ReadFile(filename string, skipEmptyRows bool) (*Table, error) {
 	if err != nil {
 		return nil, err
 	}
-	return FromTableString(&tbl, skipEmptyRows, []uint{})
+	return FromTableString(&tbl, skipEmptyRows, []int{})
 }
 
-func FromTableString(tbl *table.Table, skipEmptyRows bool, colIndexes []uint) (*Table, error) {
+func FromTableString(tbl *table.Table, skipEmptyRows bool, colIndexes []int) (*Table, error) {
 	if tbl == nil {
 		return nil, errors.New("input table cannot be nil")
 	} else if len(colIndexes) == 0 {
@@ -45,7 +45,7 @@ func FromTableString(tbl *table.Table, skipEmptyRows bool, colIndexes []uint) (*
 	}
 	n := NewTable("")
 	for _, colIdx := range colIndexes {
-		if colIdx >= uint(len(tbl.Columns)) {
+		if colIdx >= len(tbl.Columns) {
 			return nil, errors.New("colIdx out of range: >= len")
 		} else {
 			n.Columns = append(n.Columns, tbl.Columns[colIdx])

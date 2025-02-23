@@ -17,7 +17,7 @@ func (tbl *Table) Markdown(newline string, escPipe bool) string {
 	if len(tbl.Columns) > 0 {
 		md += markdown.TableRowToMarkdown(tbl.Columns, escPipe) + newline
 		if len(tbl.Rows) > 0 {
-			md += markdown.TableSeparator(uint(len(tbl.Columns))) + newline
+			md += markdown.TableSeparator(len(tbl.Columns)) + newline
 		}
 	}
 	return md + markdown.TableRowsToMarkdown(tbl.Rows, newline, escPipe, false)
