@@ -4,14 +4,14 @@ go 1.23.2
 
 require (
 	github.com/go-echarts/go-echarts/v2 v2.5.1
-	github.com/grokify/mogo v0.68.0
+	github.com/grokify/mogo v0.68.1
 	github.com/jessevdk/go-flags v1.6.1
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/shopspring/decimal v1.4.0
 	github.com/valyala/quicktemplate v1.8.0
 	github.com/wcharczuk/go-chart/v2 v2.1.2
 	github.com/xuri/excelize/v2 v2.9.0
-	golang.org/x/exp v0.0.0-20250215185904-eff6e970281f
+	golang.org/x/exp v0.0.0-20250218142911-aa4b98e5adaa
 	gonum.org/v1/gonum v0.15.1
 	gonum.org/v1/plot v0.15.0
 )
@@ -39,7 +39,7 @@ require (
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/xuri/efp v0.0.0-20241211021726-c4e992084aa6 // indirect
 	github.com/xuri/nfp v0.0.0-20250111060730-82a408b9aa71 // indirect
-	golang.org/x/crypto v0.33.0 // indirect
+	golang.org/x/crypto v0.34.0 // indirect
 	golang.org/x/image v0.24.0 // indirect
 	golang.org/x/net v0.35.0 // indirect
 	golang.org/x/sys v0.30.0 // indirect
