@@ -285,6 +285,24 @@ func (hist *Histogram) ItemValuesOrdered() maputil.Records {
 	return recs
 }
 
+// Percentile returns a percentile where all the keys are integers. If it encounters
+// a non-integer key, it will return an error.
+func (hist *Histogram) Percentile(x int) (float32, error) {
+	countTotal := 0
+	countLess := 0
+	for k, v := range hist.Bins {
+		kint, err := strconv.Atoi(k)
+		if err != nil {
+			return 0, err
+		}
+		countTotal += v
+		if kint < x {
+			countLess += v
+		}
+	}
+	return float32(countLess) / float32(countTotal), nil
+}
+
 // WriteTable writes an ASCII Table. For CLI apps, pass `os.Stdout` for `io.Writer`.
 func (hist *Histogram) WriteTableASCII(w io.Writer, header []string, sortBy string, inclTotal bool) {
 	var rows [][]string
