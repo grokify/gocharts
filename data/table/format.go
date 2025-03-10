@@ -92,7 +92,7 @@ func (tbl *Table) FormatColumn(colIdx uint32, conv func(cellVal string) (string,
 	return nil
 }
 
-func (tbl *Table) FormatColumns(colIdxMin uint, colIdxMax int, conv func(cellVal string) (string, error), skipRowLengthMismatch bool) error {
+func (tbl *Table) FormatColumns(colIdxMin uint32, colIdxMax int, conv func(cellVal string) (string, error), skipRowLengthMismatch bool) error {
 	colIdxMinInt := int(colIdxMin)
 	if colIdxMax >= 0 && colIdxMax < colIdxMinInt {
 		return errors.New("colIdxMax cannot be less than colIdxMin")
