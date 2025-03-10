@@ -30,7 +30,7 @@ func (tbl *Table) WriteMarkdown(filename string, perm os.FileMode, newline strin
 
 // Pivot takes a "straight table" where the columnn names
 // and values are in a single column and lays it out as a standard tabular data.
-func (tbl *Table) Pivot(colCount uint, haveColumns bool) (Table, error) {
+func (tbl *Table) Pivot(colCount uint32, haveColumns bool) (Table, error) {
 	newTbl := NewTable(tbl.Name)
 	if len(tbl.Columns) != 0 {
 		return newTbl, fmt.Errorf("has defined columns count [%d]", len(tbl.Columns))
