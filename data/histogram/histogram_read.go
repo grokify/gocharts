@@ -13,7 +13,7 @@ import (
 // `,` separator, header row and BOM to be stripped. If you
 // have other configurations, use `table.ReadFile()` directly
 // and call `HistogramFromTable()`.
-func ParseFileCSV(file string, name string, binNameColIdx, binFrequencyColIdx uint) (*Histogram, error) {
+func ParseFileCSV(file string, name string, binNameColIdx, binFrequencyColIdx uint32) (*Histogram, error) {
 	tbl, err := table.ReadFile(nil, file)
 	if err != nil {
 		return nil, err
@@ -25,7 +25,7 @@ func ParseFileCSV(file string, name string, binNameColIdx, binFrequencyColIdx ui
 // ParseTable parses a `table.Table` to a `Histogram` given a table,
 // binName column index and binFrequency column index. Empty rows are
 // skipped.
-func ParseTable(tbl table.Table, binNameColIdx, binFrequencyColIdx uint) (*Histogram, error) {
+func ParseTable(tbl table.Table, binNameColIdx, binFrequencyColIdx uint32) (*Histogram, error) {
 	hist := NewHistogram(tbl.Name)
 	for _, row := range tbl.Rows {
 		if stringsutil.SliceIsEmpty(row, true) {

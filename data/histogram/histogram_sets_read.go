@@ -11,7 +11,7 @@ import (
 )
 
 // NewHistogramSetsCSVs expects multiple files to have same columns.
-func NewHistogramSetsCSVs(filenames []string, key1ColIdx, key2ColIdx, uidColIdx uint) (*HistogramSets, table.Table, error) {
+func NewHistogramSetsCSVs(filenames []string, key1ColIdx, key2ColIdx, uidColIdx uint32) (*HistogramSets, table.Table, error) {
 	hsets := NewHistogramSets("")
 	tbl, err := table.ReadFile(nil, filenames...)
 	if err != nil {
@@ -21,9 +21,9 @@ func NewHistogramSetsCSVs(filenames []string, key1ColIdx, key2ColIdx, uidColIdx 
 	return hsets, tbl, err
 }
 
-func NewHistogramSetsTable(tbl table.Table, key1ColIdx, key2ColIdx, uidColIdx uint) (*HistogramSets, error) {
+func NewHistogramSetsTable(tbl table.Table, key1ColIdx, key2ColIdx, uidColIdx uint32) (*HistogramSets, error) {
 	hsets := NewHistogramSets(tbl.Name)
-	_, maxIdx := mathutil.MinMaxUint(key1ColIdx, key2ColIdx, uidColIdx)
+	_, maxIdx := mathutil.MinMaxUint(uint(key1ColIdx), uint(key2ColIdx), uint(uidColIdx))
 	for _, row := range tbl.Rows {
 		if len(stringsutil.SliceCondenseSpace(row, true, false)) == 0 {
 			continue
