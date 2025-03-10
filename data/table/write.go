@@ -34,14 +34,14 @@ func WriteCSVSimple(cols []string, rows [][]string, filename string) error {
 // FormatterFunc returns a formatter function. A custom format func is returned if it is
 // supplied and `FormatMap` is empty. If FormatMap is not empty, a function for it is
 // returned.`
-func (tbl *Table) FormatterFunc() func(val string, colIdx uint) (any, error) {
+func (tbl *Table) FormatterFunc() func(val string, colIdx uint32) (any, error) {
 	if len(tbl.FormatMap) == 0 {
 		if tbl.FormatFunc != nil {
 			return tbl.FormatFunc
 		}
 	}
 
-	return func(val string, colIdx uint) (any, error) {
+	return func(val string, colIdx uint32) (any, error) {
 		fmtType, ok := tbl.FormatMap[int(colIdx)]
 		if !ok || len(strings.TrimSpace(fmtType)) == 0 {
 			if fmtType, ok = tbl.FormatMap[-1]; !ok {
@@ -91,14 +91,14 @@ func (tbl *Table) FormatterFunc() func(val string, colIdx uint) (any, error) {
 	}
 }
 
-func (tbl *Table) FormatterFuncHTML() func(val string, colIdx uint) (any, error) {
+func (tbl *Table) FormatterFuncHTML() func(val string, colIdx uint32) (any, error) {
 	if len(tbl.FormatMap) == 0 {
 		if tbl.FormatFunc != nil {
 			return tbl.FormatFunc
 		}
 	}
 
-	return func(val string, colIdx uint) (any, error) {
+	return func(val string, colIdx uint32) (any, error) {
 		fmtType, ok := tbl.FormatMap[int(colIdx)]
 		if !ok || len(strings.TrimSpace(fmtType)) == 0 {
 			if fmtType, ok = tbl.FormatMap[-1]; !ok {
@@ -217,7 +217,7 @@ func WriteXLSX(path string, tbls []*Table) error {
 						}
 					}
 				}
-				formattedVal, err := fmtFunc(cellValue, uint(x))
+				formattedVal, err := fmtFunc(cellValue, uint32(x))
 				if err != nil {
 					return errorsutil.Wrap(err, "gocharts/data/tables/write.go/WriteXLSXFormatted.Error.FormatCellValue")
 				}

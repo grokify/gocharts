@@ -7,11 +7,11 @@ import (
 	"github.com/grokify/mogo/time/timeutil"
 )
 
-func FormatStrings(val string, col uint) (any, error) {
+func FormatStrings(val string, col uint32) (any, error) {
 	return val, nil
 }
 
-func FormatStringAndInts(val string, colIdx uint) (any, error) {
+func FormatStringAndInts(val string, colIdx uint32) (any, error) {
 	if colIdx == 0 {
 		return val, nil
 	}
@@ -22,7 +22,7 @@ func FormatStringAndInts(val string, colIdx uint) (any, error) {
 	return num, nil
 }
 
-func FormatStringAndFloats(val string, colIdx uint) (any, error) {
+func FormatStringAndFloats(val string, colIdx uint32) (any, error) {
 	if colIdx == 0 {
 		return val, nil
 	}
@@ -33,7 +33,7 @@ func FormatStringAndFloats(val string, colIdx uint) (any, error) {
 	return num, nil
 }
 
-func FormatTimeAndInts(val string, colIdx uint) (any, error) {
+func FormatTimeAndInts(val string, colIdx uint32) (any, error) {
 	if colIdx == 0 {
 		dt, err := time.Parse(time.RFC3339, val)
 		if err != nil {
@@ -49,7 +49,7 @@ func FormatTimeAndInts(val string, colIdx uint) (any, error) {
 	return num, nil
 }
 
-func FormatMonthAndFloats(val string, colIdx uint) (any, error) {
+func FormatMonthAndFloats(val string, colIdx uint32) (any, error) {
 	if colIdx == 0 {
 		dt, err := time.Parse(time.RFC3339, val)
 		if err != nil {
@@ -65,7 +65,7 @@ func FormatMonthAndFloats(val string, colIdx uint) (any, error) {
 	return num, nil
 }
 
-func FormatDateAndFloats(val string, colIdx uint) (any, error) {
+func FormatDateAndFloats(val string, colIdx uint32) (any, error) {
 	if colIdx == 0 {
 		dt, err := time.Parse(time.RFC3339, val)
 		if err != nil {
@@ -81,7 +81,7 @@ func FormatDateAndFloats(val string, colIdx uint) (any, error) {
 	return num, nil
 }
 
-func FormatTimeAndFloats(val string, colIdx uint) (any, error) {
+func FormatTimeAndFloats(val string, colIdx uint32) (any, error) {
 	if colIdx == 0 {
 		dt, err := time.Parse(time.RFC3339, val)
 		if err != nil {

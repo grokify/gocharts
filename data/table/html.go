@@ -19,7 +19,7 @@ func (tbl *Table) ToDocuments() []map[string]any {
 					colName = colNameTry
 				}
 			}
-			valFmt, err := fmtFunc(valStr, uint(x))
+			valFmt, err := fmtFunc(valStr, uint32(x))
 			if err != nil {
 				doc[colName] = valStr
 			} else {
@@ -67,7 +67,7 @@ func (tbl *Table) ToHTML(escapeHTML bool) string {
 		for _, row := range tbl.Rows {
 			tHTML += "<tr>"
 			for x, cell := range row {
-				cfmt, err := fmtFunc(cell, uint(x))
+				cfmt, err := fmtFunc(cell, uint32(x))
 				if err != nil {
 					if escapeHTML {
 						tHTML += "<td>" + html.EscapeString(cell) + "</td>"
