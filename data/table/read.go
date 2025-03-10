@@ -119,7 +119,9 @@ func ParseReadSeeker(opts *ParseOptions, rs io.ReadSeeker) (Table, error) {
 					cols := lines[0]
 					wantColNames := []string{}
 					for _, idx := range opts.FilterColIndices {
-						if int(idx) < len(cols) {
+						if lenCols := len(cols); lenCols < 0 {
+							panic("len cannot be negative")
+						} else if idx < uint(lenCols) {
 							wantColNames = append(wantColNames, cols[int(idx)])
 						} else {
 							return tbl, fmt.Errorf("want column index not found [%d]", idx)
