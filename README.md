@@ -3,7 +3,6 @@ GoCharts
 
 [![Build Status][build-status-svg]][build-status-url]
 [![Go Report Card][goreport-svg]][goreport-url]
-[![Used By][used-by-svg]][used-by-url]
 [![Docs][docs-godoc-svg]][docs-godoc-url]
 [![SLOC][loc-svg]][repo-url]
 [![License][license-svg]][license-url]
