@@ -11,8 +11,8 @@ import (
 )
 
 type TableConfig struct {
-	CountColIdx         uint
-	TimeColIdx          uint
+	CountColIdx         uint32
+	TimeColIdx          uint32
 	TimeFormat          string
 	SeriesSetNameColIdx int // optional. Set < 0 to discard.
 	SeriesNameColIdx    int
@@ -34,20 +34,20 @@ func ParseRecordsTimeItems(records [][]string, cfg TableConfig) ([]TimeItem, err
 			continue
 		}
 		item := TimeItem{}
-		if cfg.TimeColIdx >= uint(len(rec)) {
+		if int(cfg.TimeColIdx) >= len(rec) {
 			return items, fmt.Errorf("row [%d] missing time index col [%d]", i, cfg.TimeColIdx)
 		}
-		dtRaw := rec[int(cfg.TimeColIdx)]
+		dtRaw := rec[cfg.TimeColIdx]
 		dt, err := time.Parse(cfg.GetTimeFormat(), dtRaw)
 		if err != nil {
 			return items, fmt.Errorf("row [%d] col [%d] time error raw [%s] error [%s]", i, cfg.TimeColIdx, dtRaw, err.Error())
 		}
 		item.Time = dt
 
-		if cfg.CountColIdx >= uint(len(rec)) {
+		if int(cfg.CountColIdx) >= len(rec) {
 			return items, fmt.Errorf("row [%d] missing count index [%d]", i, cfg.TimeColIdx)
 		}
-		countRaw := rec[int(cfg.CountColIdx)]
+		countRaw := rec[cfg.CountColIdx]
 		count, err := strconv.Atoi(countRaw)
 		if err != nil {
 			return items, fmt.Errorf("row [%d] col [%d] count error raw [%s] error [%s]", i, cfg.TimeColIdx, countRaw, err.Error())
