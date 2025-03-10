@@ -14,7 +14,7 @@ const (
 )
 
 // ColumnExpandPivot adds columns to the table representing each value in the provided column.
-func (tbl *Table) ColumnExpandPivot(colIdx uint, split bool, sep, colNamePrefix, colNameNone, existString, notExistString string, addCounts bool, colNameCounts string) (map[int]string, error) {
+func (tbl *Table) ColumnExpandPivot(colIdx uint32, split bool, sep, colNamePrefix, colNameNone, existString, notExistString string, addCounts bool, colNameCounts string) (map[int]string, error) {
 	colFormats := map[int]string{}
 	if int(colIdx) >= len(tbl.Columns) {
 		return colFormats, errors.New("colIdx is too large")
@@ -23,7 +23,7 @@ func (tbl *Table) ColumnExpandPivot(colIdx uint, split bool, sep, colNamePrefix,
 	if !isWellFormed {
 		return colFormats, errors.New("table is not well formed. Cannot expand")
 	}
-	newColVals, _, err := tbl.ColumnValuesSplit(colIdx, split, sep, true, true)
+	newColVals, _, err := tbl.ColumnValuesSplit(uint(colIdx), split, sep, true, true)
 	if err != nil {
 		return colFormats, err
 	}
