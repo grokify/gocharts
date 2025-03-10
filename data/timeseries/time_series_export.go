@@ -171,7 +171,7 @@ func (ts *TimeSeries) TableMonthXOX(timeFmtColName, seriesName, valuesName, yoyN
 		}
 		if opts.AddMOMGrowth {
 			if dt.After(opts.MOMBaseMonth) && opts.momBaseTimeItemExists {
-				diffMonths := int(month.TimeToMonthContinuous(dt) - opts.momBaseMonthContinuous)
+				diffMonths := month.TimeToMonthContinuous(dt) - opts.momBaseMonthContinuous
 				targetValue := opts.momBaseTimeItem.Float64() * math.Pow(1+opts.MOMGrowthPct, float64(diffMonths))
 				momGrowthTargets = append(momGrowthTargets, strconvutil.Ftoa(targetValue, -1))
 				actualValue := tiVal.Float64()
