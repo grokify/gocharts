@@ -92,12 +92,16 @@ func (cols Columns) CellInt(colName string, row []string, defaultIfEmpty bool, d
 
 // CellUint returns a single row value.
 func (cols Columns) CellUint(colName string, row []string, defaultIfEmpty bool, def uint) (uint, error) {
-	if val, err := cols.CellInt(colName, row, defaultIfEmpty, int(def)); err != nil {
+	if val, err := cols.CellString(colName, row, false, ""); err != nil {
 		return 0, err
-	} else if val < 0 {
-		return 0, errors.New("cannot convert to `uint` as `int` is less than zero")
+	} else if strings.TrimSpace(val) == "" && defaultIfEmpty {
+		return def, nil
+	} else if ival, err := strconv.Atoi(val); err != nil {
+		return 0, err
+	} else if ival < 0 {
+		return 0, errors.New("cannot convert to `uint` as `int` value is less than zero")
 	} else {
-		return uint(val), nil
+		return uint(ival), nil
 	}
 }
 
