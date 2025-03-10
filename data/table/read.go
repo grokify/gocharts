@@ -122,7 +122,7 @@ func ParseReadSeeker(opts *ParseOptions, rs io.ReadSeeker) (Table, error) {
 						if lenCols := len(cols); lenCols < 0 {
 							panic("len cannot be negative")
 						} else if idx < uint(lenCols) {
-							wantColNames = append(wantColNames, cols[int(idx)])
+							wantColNames = append(wantColNames, cols[idx])
 						} else {
 							return tbl, fmt.Errorf("want column index not found [%d]", idx)
 						}
