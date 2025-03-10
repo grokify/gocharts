@@ -18,7 +18,7 @@ func NewBulletCharts() BulletCharts {
 	return BulletCharts{Charts: map[string]BulletChart{}}
 }
 
-func (charts *BulletCharts) AddTimeDT8(dt8 int32) error {
+func (charts *BulletCharts) AddTimeDT8(dt8 uint32) error {
 	dt8x := timeutil.DateTime8(dt8)
 	dtCur, err := dt8x.Time(time.UTC)
 	if err != nil {
