@@ -108,7 +108,7 @@ func ParseTableTimeSeriesSetMatrixColumns(tbl table.Table, isFloat bool, timePar
 // ParseTableTimeSeriesSetFlat create a `TimeSeriesSet` from a `table.Table` using the least
 // amount of input to populate the data structure. It does not set the following
 // parameters which must be set manually: `Name`, `Interval`.
-func ParseTableTimeSeriesSetFlat(tbl table.Table, timeColIdx, seriesNameColIdx, countColIdx uint, isFloat bool, timeParseFunc func(s string) (time.Time, error)) (TimeSeriesSet, error) {
+func ParseTableTimeSeriesSetFlat(tbl table.Table, timeColIdx, seriesNameColIdx, countColIdx uint32, isFloat bool, timeParseFunc func(s string) (time.Time, error)) (TimeSeriesSet, error) {
 	if timeParseFunc == nil {
 		timeParseFunc = ParseTimeFuncRFC3339
 	}
@@ -116,13 +116,11 @@ func ParseTableTimeSeriesSetFlat(tbl table.Table, timeColIdx, seriesNameColIdx, 
 	tss.IsFloat = isFloat
 	for i, row := range tbl.Rows {
 		if int(seriesNameColIdx) >= len(row) {
-			return tss, fmt.Errorf("colIdx [%d] not present in row [%d]", seriesNameColIdx, i)
-		}
-		if int(timeColIdx) >= len(row) {
-			return tss, fmt.Errorf("colIdx [%d] not present in row [%d]", timeColIdx, i)
-		}
-		if int(countColIdx) >= len(row) {
-			return tss, fmt.Errorf("colIdx [%d] not present in row [%d]", countColIdx, i)
+			return tss, fmt.Errorf("colIdx [%d] not present in row index [%d]", seriesNameColIdx, i)
+		} else if int(timeColIdx) >= len(row) {
+			return tss, fmt.Errorf("colIdx [%d] not present in row index [%d]", timeColIdx, i)
+		} else if int(countColIdx) >= len(row) {
+			return tss, fmt.Errorf("colIdx [%d] not present in row index [%d]", countColIdx, i)
 		}
 		seriesName := row[seriesNameColIdx]
 

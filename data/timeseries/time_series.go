@@ -110,7 +110,7 @@ func DefaultAddTableOpts() *AddTableOpts {
 }
 */
 
-func (ts *TimeSeries) AddTable(tbl *table.Table, timeColIdx uint, timeFormat string, countColIdx uint, countIsFloat bool) error {
+func (ts *TimeSeries) AddTable(tbl *table.Table, timeColIdx uint32, timeFormat string, countColIdx uint32, countIsFloat bool) error {
 	// func (ts *TimeSeries) AddTable(tbl *table.Table, opts *AddTableOpts) error {
 	if tbl == nil {
 		return errors.New("table cannot be nil")
@@ -137,11 +137,11 @@ func (ts *TimeSeries) AddTable(tbl *table.Table, timeColIdx uint, timeFormat str
 		} else if int(countColIdx) >= len(row) {
 			return fmt.Errorf("count column doesn't exist")
 		}
-		dt, err := time.Parse(timeFormat, row[int(timeColIdx)])
+		dt, err := time.Parse(timeFormat, row[timeColIdx])
 		if err != nil {
 			return err
 		}
-		countStr := strings.TrimSpace(row[int(countColIdx)])
+		countStr := strings.TrimSpace(row[countColIdx])
 		if countStr == "" {
 			ts.AddInt64(dt, 0)
 		} else {
