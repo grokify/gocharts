@@ -147,7 +147,7 @@ func (tbl *Table) ColumnValuesCounts(colIdx uint, trimSpace, includeEmpty, lower
 	return m
 }
 
-func (tbl *Table) ColumnValuesSplit(colIdx uint, split bool, sep string, unique, sortResults bool) ([]string, map[string]int, error) {
+func (tbl *Table) ColumnValuesSplit(colIdx uint32, split bool, sep string, unique, sortResults bool) ([]string, map[string]int, error) {
 	msi := map[string]int{}
 	vals := []string{}
 	for _, row := range tbl.Rows {
@@ -176,7 +176,7 @@ func (tbl *Table) ColumnValuesSplit(colIdx uint, split bool, sep string, unique,
 	return vals, msi, nil
 }
 
-func (tbl *Table) ColumnValues(colIdx uint, unique, sortResults bool) ([]string, error) {
+func (tbl *Table) ColumnValues(colIdx uint32, unique, sortResults bool) ([]string, error) {
 	//idx := int(colIdx)
 	seen := map[string]int{}
 	vals := []string{}
@@ -204,7 +204,7 @@ func (tbl *Table) ColumnValuesName(colName string, unique, sortResults bool) ([]
 	if idx < 0 {
 		return []string{}, fmt.Errorf("column name not found (%s)", colName)
 	}
-	return tbl.ColumnValues(uint(idx), unique, sortResults)
+	return tbl.ColumnValues(uint32(idx), unique, sortResults)
 }
 
 func (tbl *Table) ColumnValuesForColumnName(colName string, dedupeValues, sortValues bool) ([]string, error) {
@@ -212,10 +212,10 @@ func (tbl *Table) ColumnValuesForColumnName(colName string, dedupeValues, sortVa
 	if colIdx <= 0 {
 		return []string{}, fmt.Errorf("column [%s] not found", colName)
 	}
-	return tbl.ColumnValues(uint(colIdx), dedupeValues, sortValues)
+	return tbl.ColumnValues(uint32(colIdx), dedupeValues, sortValues)
 }
 
-func (tbl *Table) columnValuesDistinct(colIdx uint) map[string]int {
+func (tbl *Table) columnValuesDistinct(colIdx uint32) map[string]int {
 	data := map[string]int{}
 	idx := int(colIdx)
 
@@ -232,7 +232,7 @@ func (tbl *Table) columnValuesDistinct(colIdx uint) map[string]int {
 	return data
 }
 
-func (tbl *Table) ColumnValuesMinMax(colIdx uint) (string, string, error) {
+func (tbl *Table) ColumnValuesMinMax(colIdx uint32) (string, string, error) {
 	vals := tbl.columnValuesDistinct(colIdx)
 	if len(vals) == 0 {
 		return "", "", errors.New("no values found")
@@ -247,7 +247,7 @@ func (tbl *Table) ColumnValuesMinMax(colIdx uint) (string, string, error) {
 	return arr[0], arr[len(arr)-1], nil
 }
 
-func (tbl *Table) ColumnSumFloat64(colIdx uint) (float64, error) {
+func (tbl *Table) ColumnSumFloat64(colIdx uint32) (float64, error) {
 	sum := 0.0
 	idx := int(colIdx)
 	for _, row := range tbl.Rows {

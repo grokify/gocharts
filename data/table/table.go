@@ -90,7 +90,7 @@ func (tbl *Table) LoadMergedRows(data [][]string) {
 	}
 }
 
-func (tbl *Table) UpsertRowColumnValue(rowIdx, colIdx uint, value string) {
+func (tbl *Table) UpsertRowColumnValue(rowIdx, colIdx uint32, value string) {
 	rowIdxInt := int(rowIdx)
 	colIdxInt := int(colIdx)
 	for rowIdxInt < len(tbl.Rows)-1 {

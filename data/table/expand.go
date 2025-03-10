@@ -23,7 +23,7 @@ func (tbl *Table) ColumnExpandPivot(colIdx uint32, split bool, sep, colNamePrefi
 	if !isWellFormed {
 		return colFormats, errors.New("table is not well formed. Cannot expand")
 	}
-	newColVals, _, err := tbl.ColumnValuesSplit(uint(colIdx), split, sep, true, true)
+	newColVals, _, err := tbl.ColumnValuesSplit(colIdx, split, sep, true, true)
 	if err != nil {
 		return colFormats, err
 	}
