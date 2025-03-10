@@ -221,7 +221,7 @@ func (opts *ParseOptions) Filter(cols []string, rows [][]string, errorOutOfBound
 			if lenRow := len(row); lenRow < 0 {
 				panic("len cannot be negative")
 			} else if idx <= uint(lenRow) {
-				newRow = append(newRow, row[int(idx)])
+				newRow = append(newRow, row[idx])
 			} else if errorOutOfBounds {
 				return newRows, fmt.Errorf("desired index out of bounds: index[%d] row len [%d]", idx, len(row))
 			} else {
