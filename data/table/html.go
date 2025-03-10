@@ -11,9 +11,11 @@ func (tbl *Table) ToDocuments() []map[string]any {
 	fmtFunc := tbl.FormatterFunc()
 	for _, row := range tbl.Rows {
 		doc := map[string]any{}
-		for x, valStr := range row {
+		for x := uint32(0); int(x) < len(row); x++ {
+			valStr := row[x]
+			//for x, valStr := range row {
 			colName := fmt.Sprintf("col%d", x)
-			if x < len(tbl.Columns) {
+			if int(x) < len(tbl.Columns) {
 				colNameTry := strings.TrimSpace(tbl.Columns[x])
 				if len(colNameTry) > 0 {
 					colName = colNameTry
@@ -66,8 +68,10 @@ func (tbl *Table) ToHTML(escapeHTML bool) string {
 		fmtFunc := tbl.FormatterFuncHTML()
 		for _, row := range tbl.Rows {
 			tHTML += "<tr>"
-			for x, cell := range row {
-				cfmt, err := fmtFunc(cell, uint32(x))
+			for x := uint32(0); int(x) < len(row); x++ {
+				cell := row[x]
+				// for x, cell := range row {
+				cfmt, err := fmtFunc(cell, x)
 				if err != nil {
 					if escapeHTML {
 						tHTML += "<td>" + html.EscapeString(cell) + "</td>"
