@@ -74,7 +74,7 @@ func (tbl *Table) Pivot(colCount uint, haveColumns bool) (Table, error) {
 }
 
 // FormatColumn takes a function to format all cell values.
-func (tbl *Table) FormatColumn(colIdx uint, conv func(cellVal string) (string, error), skipRowLengthMismatch bool) error {
+func (tbl *Table) FormatColumn(colIdx uint32, conv func(cellVal string) (string, error), skipRowLengthMismatch bool) error {
 	colInt := int(colIdx)
 	for i, row := range tbl.Rows {
 		if colInt >= len(row) {
