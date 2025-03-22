@@ -4,7 +4,7 @@ go 1.23.2
 
 require (
 	github.com/go-echarts/go-echarts/v2 v2.5.2
-	github.com/grokify/mogo v0.68.1
+	github.com/grokify/mogo v0.68.2
 	github.com/jessevdk/go-flags v1.6.1
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/shopspring/decimal v1.4.0
@@ -12,13 +12,13 @@ require (
 	github.com/wcharczuk/go-chart/v2 v2.1.2
 	github.com/xuri/excelize/v2 v2.9.0
 	golang.org/x/exp v0.0.0-20250305212735-054e65f0b394
-	gonum.org/v1/gonum v0.15.1
+	gonum.org/v1/gonum v0.16.0
 	gonum.org/v1/plot v0.15.2
 )
 
 require (
-	codeberg.org/go-fonts/liberation v0.4.1 // indirect
-	codeberg.org/go-latex/latex v0.0.1 // indirect
+	codeberg.org/go-fonts/liberation v0.5.0 // indirect
+	codeberg.org/go-latex/latex v0.1.0 // indirect
 	codeberg.org/go-pdf/fpdf v0.10.0 // indirect
 	git.sr.ht/~sbinet/gg v0.6.0 // indirect
 	github.com/ajstarks/svgo v0.0.0-20211024235047-1546f124cd8b // indirect
