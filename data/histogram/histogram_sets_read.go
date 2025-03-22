@@ -27,7 +27,7 @@ func NewHistogramSetsTable(tbl table.Table, key1ColIdx, key2ColIdx, uidColIdx ui
 	for _, row := range tbl.Rows {
 		if len(stringsutil.SliceCondenseSpace(row, true, false)) == 0 {
 			continue
-		} else if len(row) <= int(maxIdx) {
+		} else if uint(len(row)) <= maxIdx {
 			return hsets, fmt.Errorf(
 				"NewHistogramSetsTable.E_ROW_LEN_ERROR NEED_ROW_LEN [%v] HAVE_ROW_LEN [%v] ROW_DATA [%s]",
 				maxIdx+1, len(row),

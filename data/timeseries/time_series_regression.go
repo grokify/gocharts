@@ -32,7 +32,7 @@ func (ts *TimeSeries) LinearRegression() (alpha, beta float64, err error) {
 }
 
 // LinearRegressionYearProjection only runs when interval=Year for now. Use this to build tables.
-func (ts *TimeSeries) LinearRegressionYearProjection(years uint, constantYOY bool) error {
+func (ts *TimeSeries) LinearRegressionYearProjection(years uint32, constantYOY bool) error {
 	if ts.Interval != timeutil.IntervalYear {
 		return ErrIntervalNotSupported
 	}

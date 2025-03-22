@@ -3,6 +3,7 @@ package tablef64
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/grokify/gocharts/v2/data/point"
 	"github.com/grokify/gocharts/v2/data/table"
@@ -129,12 +130,15 @@ func (tbl *Table) PointXYsColumnNames(xColName, yColName string) (point.PointXYs
 	return tbl.PointXYsColumnIndexes(xColIdx, yColIdx)
 }
 
-func (tbl *Table) ValuesColumnIndex(colIndex uint) ([]float64, error) {
+func (tbl *Table) ValuesColumnIndex(colIndex int) ([]float64, error) {
+	if colIndex < 0 {
+		return []float64{}, errors.New("index out of bounds: index cannot be negative")
+	}
 	var vals []float64
 	colIndexInt := int(colIndex)
-	for _, r := range tbl.Rows {
+	for i, r := range tbl.Rows {
 		if colIndexInt >= len(r) {
-			return vals, errors.New("index out of bounds")
+			return vals, fmt.Errorf("index out of bounds: index greater than row length on row (%d)", i)
 		}
 		vals = append(vals, r[colIndex])
 	}
@@ -145,6 +149,6 @@ func (tbl *Table) ValuesColumnName(colName string) ([]float64, error) {
 	if colIdx := tbl.Columns.Index(colName); colIdx < 0 {
 		return []float64{}, errors.New("column name not found")
 	} else {
-		return tbl.ValuesColumnIndex(uint(colIdx))
+		return tbl.ValuesColumnIndex(colIdx)
 	}
 }

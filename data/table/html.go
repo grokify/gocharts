@@ -21,7 +21,7 @@ func (tbl *Table) ToDocuments() []map[string]any {
 					colName = colNameTry
 				}
 			}
-			valFmt, err := fmtFunc(valStr, uint32(x))
+			valFmt, err := fmtFunc(valStr, x)
 			if err != nil {
 				doc[colName] = valStr
 			} else {

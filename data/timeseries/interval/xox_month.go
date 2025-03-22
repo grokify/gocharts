@@ -67,10 +67,10 @@ func NewXoXTimeSeries(ds timeseries.TimeSeries) (XoXGrowth, error) {
 	return xox, nil
 }
 
-func AggregatePriorMonths(ds timeseries.TimeSeries, start time.Time, months uint) int64 {
+func AggregatePriorMonths(ds timeseries.TimeSeries, start time.Time, months uint32) int64 {
 	aggregateValue := int64(0)
 	monthStart := month.MonthStart(start, 0)
-	for i := uint(1); i <= months; i++ {
+	for i := uint32(1); i <= months; i++ {
 		subtractMonths := i - 1
 		thisMonth := monthStart
 		if subtractMonths > 0 {
