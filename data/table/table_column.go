@@ -122,17 +122,19 @@ func (tbl *Table) ColumnValuesCountsByName(colName string, trimSpace, includeEmp
 	if colIdx <= 0 {
 		return map[string]int{}, errors.New("column name not found")
 	}
-	return tbl.ColumnValuesCounts(uint(colIdx), trimSpace, includeEmpty, lowerCase), nil
+	return tbl.ColumnValuesCounts(colIdx, trimSpace, includeEmpty, lowerCase), nil
 }
 
-func (tbl *Table) ColumnValuesCounts(colIdx uint, trimSpace, includeEmpty, lowerCase bool) map[string]int {
+func (tbl *Table) ColumnValuesCounts(colIdx int, trimSpace, includeEmpty, lowerCase bool) map[string]int {
 	m := map[string]int{}
-	colIdxInt := int(colIdx)
+	if colIdx < 0 {
+		return m
+	}
 	for _, row := range tbl.Rows {
-		if colIdxInt >= len(row) {
+		if colIdx >= len(row) {
 			continue
 		}
-		v := row[colIdxInt]
+		v := row[colIdx]
 		if trimSpace {
 			v = strings.TrimSpace(v)
 		}
@@ -176,12 +178,14 @@ func (tbl *Table) ColumnValuesSplit(colIdx uint32, split bool, sep string, uniqu
 	return vals, msi, nil
 }
 
-func (tbl *Table) ColumnValues(colIdx uint32, unique, sortResults bool) ([]string, error) {
-	//idx := int(colIdx)
-	seen := map[string]int{}
+func (tbl *Table) ColumnValues(colIdx int, unique, sortResults bool) ([]string, error) {
 	vals := []string{}
+	if colIdx < 0 {
+		return vals, fmt.Errorf("colIdx cannot be negative (%d)", colIdx)
+	}
+	seen := map[string]int{}
 	for _, row := range tbl.Rows {
-		if int(colIdx) < len(row) {
+		if colIdx < len(row) {
 			if unique {
 				if _, ok := seen[row[colIdx]]; ok {
 					continue
@@ -204,7 +208,7 @@ func (tbl *Table) ColumnValuesName(colName string, unique, sortResults bool) ([]
 	if idx < 0 {
 		return []string{}, fmt.Errorf("column name not found (%s)", colName)
 	}
-	return tbl.ColumnValues(uint32(idx), unique, sortResults)
+	return tbl.ColumnValues(idx, unique, sortResults)
 }
 
 func (tbl *Table) ColumnValuesForColumnName(colName string, dedupeValues, sortValues bool) ([]string, error) {
@@ -212,7 +216,7 @@ func (tbl *Table) ColumnValuesForColumnName(colName string, dedupeValues, sortVa
 	if colIdx <= 0 {
 		return []string{}, fmt.Errorf("column [%s] not found", colName)
 	}
-	return tbl.ColumnValues(uint32(colIdx), dedupeValues, sortValues)
+	return tbl.ColumnValues(colIdx, dedupeValues, sortValues)
 }
 
 func (tbl *Table) columnValuesDistinct(colIdx uint32) map[string]int {

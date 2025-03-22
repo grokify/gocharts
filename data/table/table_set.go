@@ -141,7 +141,7 @@ func ReadTableXLSXFile(filename, sheetName string, headerRowCount uint, trimSpac
 	}
 }
 
-func ReadTableXLSXIndexFile(filename string, sheetIdx uint, headerRowCount uint, trimSpace bool) (*Table, error) {
+func ReadTableXLSXIndexFile(filename string, sheetIdx, headerRowCount uint32, trimSpace bool) (*Table, error) {
 	if xf, err := excelizeutil.ReadFile(filename); err != nil {
 		return nil, err
 	} else {
@@ -164,12 +164,12 @@ func ParseTableXLSX(f *excelize.File, sheetName string, headerRowCount uint, tri
 	}
 }
 
-func ParseTableXLSXIndex(f *excelize.File, sheetIdx uint, headerRowCount uint, trimSpace bool) (*Table, error) {
+func ParseTableXLSXIndex(f *excelize.File, sheetIdx, headerRowCount uint32, trimSpace bool) (*Table, error) {
 	if f == nil {
 		return nil, excelizeutil.ErrExcelizeFileCannotBeNil
 	}
 	xm := excelizeutil.File{File: f}
-	if cols, rows, err := xm.TableDataIndex(sheetIdx, headerRowCount, trimSpace, false); err != nil {
+	if cols, rows, err := xm.TableDataIndex(uint(sheetIdx), uint(headerRowCount), trimSpace, false); err != nil {
 		return nil, err
 	} else {
 		tbl := NewTable(f.GetSheetName(int(sheetIdx)))

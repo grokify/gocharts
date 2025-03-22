@@ -15,7 +15,7 @@ func (tbl *Table) RowCellCounts() map[uint]uint {
 }
 
 // RowsToMap converts two columns to a map, given a `keyIdx` and `valIdx` for the keys and values.
-func (tbl *Table) RowsToMap(keyIdx, valIdx uint) (map[string]string, error) {
+func (tbl *Table) RowsToMap(keyIdx, valIdx uint32) (map[string]string, error) {
 	m := map[string]string{}
 	kIdxInt := int(keyIdx)
 	vIdxInt := int(valIdx)
