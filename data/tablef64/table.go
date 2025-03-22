@@ -135,9 +135,8 @@ func (tbl *Table) ValuesColumnIndex(colIndex int) ([]float64, error) {
 		return []float64{}, errors.New("index out of bounds: index cannot be negative")
 	}
 	var vals []float64
-	colIndexInt := int(colIndex)
 	for i, r := range tbl.Rows {
-		if colIndexInt >= len(r) {
+		if colIndex >= len(r) {
 			return vals, fmt.Errorf("index out of bounds: index greater than row length on row (%d)", i)
 		}
 		vals = append(vals, r[colIndex])
