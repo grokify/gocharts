@@ -13,7 +13,7 @@ require (
 	github.com/xuri/excelize/v2 v2.9.0
 	golang.org/x/exp v0.0.0-20250305212735-054e65f0b394
 	gonum.org/v1/gonum v0.16.0
-	gonum.org/v1/plot v0.15.2
+	gonum.org/v1/plot v0.16.0
 )
 
 require (
