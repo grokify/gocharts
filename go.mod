@@ -2,9 +2,11 @@ module github.com/grokify/gocharts/v2
 
 go 1.23.2
 
+toolchain go1.24.1
+
 require (
 	github.com/go-echarts/go-echarts/v2 v2.5.2
-	github.com/grokify/mogo v0.68.3
+	github.com/grokify/mogo v0.68.4
 	github.com/jessevdk/go-flags v1.6.1
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/shopspring/decimal v1.4.0
@@ -41,7 +43,7 @@ require (
 	github.com/xuri/nfp v0.0.0-20250226145837-86d5fc24b2ba // indirect
 	golang.org/x/crypto v0.36.0 // indirect
 	golang.org/x/image v0.25.0 // indirect
-	golang.org/x/net v0.37.0 // indirect
+	golang.org/x/net v0.38.0 // indirect
 	golang.org/x/sys v0.31.0 // indirect
 	golang.org/x/text v0.23.0 // indirect
 )
