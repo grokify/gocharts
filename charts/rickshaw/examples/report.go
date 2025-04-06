@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
+	"os"
 
 	"github.com/grokify/mogo/encoding/csvutil"
 
@@ -44,7 +44,6 @@ func main() {
 			panic(fmt.Sprintf("ERR_BAD_RICKSHAW_ITEM: %v\n", err))
 		}
 		rickshawData.AddItem(item)
-
 	}
 	fi.Close()
 	rickshawDataFormatted, err := rickshawData.Formatted()
@@ -58,7 +57,7 @@ func main() {
 		RickshawDataFormatted: rickshawDataFormatted,
 		IncludeDataTable:      true}
 
-	ioutil.WriteFile(outputfile, []byte(rickshaw.RickshawExtensionsReport(tmplData)), 0644)
+	os.WriteFile(outputfile, []byte(rickshaw.RickshawExtensionsReport(tmplData)), 0600)
 
 	fmt.Println("DONE")
 }
