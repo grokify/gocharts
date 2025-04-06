@@ -23,6 +23,10 @@ linters:
       - third_party$
       - builtin$
       - examples$
+  settings:
+    staticcheck:
+      checks:
+        - "-QF1008" # Disable the "could remove embedded field" check
 formatters:
   enable:
     - gofmt
