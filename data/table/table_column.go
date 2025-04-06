@@ -11,6 +11,85 @@ import (
 	"github.com/grokify/mogo/type/slicesutil"
 )
 
+type ColumnInsertOpts struct {
+	ColumnName  string
+	ColumnType  string
+	ColumnIndex int
+	ValueFunc   func(row []string) string
+}
+
+func (tbl *Table) ColumnInsert(opts ColumnInsertOpts) error {
+	if opts.ColumnIndex > len(tbl.Columns)+1 {
+		return fmt.Errorf(
+			"column index out of range: want (%d), curren len (%d)",
+			opts.ColumnIndex,
+			len(tbl.Columns))
+	}
+	newCols := []string{}
+	if opts.ColumnIndex == 0 {
+		newCols = append(newCols, opts.ColumnName)
+		newCols = append(newCols, tbl.Columns...)
+		tbl.Columns = slices.Clone(newCols)
+		newFmtMap := map[int]string{}
+		if opts.ColumnType != "" {
+			newFmtMap[0] = opts.ColumnType
+		}
+		for k, v := range tbl.FormatMap {
+			if k < 0 {
+				newFmtMap[k] = v
+			} else {
+				newFmtMap[k+1] = v
+			}
+		}
+		tbl.FormatMap = newFmtMap
+	} else if opts.ColumnIndex < 0 {
+		newCols = append(newCols, tbl.Columns...)
+		newCols = append(newCols, opts.ColumnName)
+		tbl.Columns = slices.Clone(newCols)
+		if opts.ColumnType != "" {
+			tbl.FormatMap[len(tbl.Columns)-1] = opts.ColumnType
+		}
+	} else {
+		newCols = append(newCols, tbl.Columns[:opts.ColumnIndex]...)
+		newCols = append(newCols, opts.ColumnName)
+		newCols = append(newCols, tbl.Columns[opts.ColumnIndex:]...)
+		tbl.Columns = slices.Clone(newCols)
+		newFmtMap := map[int]string{}
+		if opts.ColumnType != "" {
+			newFmtMap[opts.ColumnIndex] = opts.ColumnType
+		}
+		for k, v := range tbl.FormatMap {
+			if k < opts.ColumnIndex { // incl. k < 0
+				newFmtMap[k] = v
+			} else if k >= opts.ColumnIndex {
+				newFmtMap[k+1] = v
+			}
+		}
+		tbl.FormatMap = newFmtMap
+	}
+	if opts.ValueFunc == nil {
+		opts.ValueFunc = func(row []string) string { return "" }
+	}
+	return tbl.RowsModify(
+		func(_ int, row []string) ([]string, error) {
+			newVal := opts.ValueFunc(row)
+			newRow := []string{}
+			if opts.ColumnIndex == 0 {
+				newRow = append(newRow, newVal)
+				newRow = append(newRow, row...)
+			} else if opts.ColumnIndex < 0 {
+				newRow = append(newRow, row...)
+				newRow = append(newRow, newVal)
+			} else {
+				newRow = append(newRow, row[:opts.ColumnIndex]...)
+				newRow = append(newRow, newVal)
+				newRow = append(newRow, row[opts.ColumnIndex:]...)
+			}
+			return slices.Clone(newRow), nil
+		},
+	)
+}
+
 func (tbl *Table) RowsModify(fn func(i int, row []string) ([]string, error)) error {
 	for i, row := range tbl.Rows {
 		if try, err := fn(i, row); err != nil {
