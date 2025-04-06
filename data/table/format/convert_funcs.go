@@ -6,7 +6,7 @@ import (
 )
 
 func ConvertDecommify(s string) (string, error) {
-	return strings.Replace(s, ",", "", -1), nil
+	return strings.ReplaceAll(s, ",", ""), nil
 }
 
 func ConvertRemoveControls(s string) (string, error) {
