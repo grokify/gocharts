@@ -19,6 +19,7 @@ type HistogramSet struct {
 	HistogramMap map[string]*Histogram
 	KeyIsTime    bool
 	Order        []string
+	BinsOrder    []string
 }
 
 func NewHistogramSet(name string) *HistogramSet {
@@ -57,6 +58,30 @@ func (hset *HistogramSet) Add(histName, binName string, binCount int) {
 	}
 	hist.Add(binName, binCount)
 	hset.HistogramMap[histName] = hist
+}
+
+// BinNameExists returns a boolean indicating if a bin name exists in any histogram.
+func (hset *HistogramSet) BinNameExists(binName string) bool {
+	for _, hist := range hset.HistogramMap {
+		if hist.BinNameExists(binName) {
+			return true
+		}
+	}
+	return false
+}
+
+// BinNames returns all the bin names used across all the histograms.
+func (hset *HistogramSet) BinNames() []string {
+	binNames := []string{}
+	for _, hist := range hset.HistogramMap {
+		binNames = append(binNames, hist.BinNames()...)
+	}
+	binNames = stringsutil.SliceCondenseSpace(binNames, true, true)
+	if len(hset.BinsOrder) == 0 {
+		return binNames
+	}
+	binNames, _ = stringsutil.SliceOrderExplicit(binNames, hset.BinsOrder, true)
+	return binNames
 }
 
 // BinSetCounts returns a ap where the key is the count of bins and the string is the set name.
@@ -129,25 +154,6 @@ func (hset *HistogramSet) Sum() int {
 		valueSum += hist.Sum()
 	}
 	return valueSum
-}
-
-// BinNameExists returns a boolean indicating if a bin name exists in any histogram.
-func (hset *HistogramSet) BinNameExists(binName string) bool {
-	for _, hist := range hset.HistogramMap {
-		if hist.BinNameExists(binName) {
-			return true
-		}
-	}
-	return false
-}
-
-// BinNames returns all the bin names used across all the histograms.
-func (hset *HistogramSet) BinNames() []string {
-	binNames := []string{}
-	for _, hist := range hset.HistogramMap {
-		binNames = append(binNames, hist.BinNames()...)
-	}
-	return stringsutil.SliceCondenseSpace(binNames, true, true)
 }
 
 // HistogramBinNames returns the bin names for a single
@@ -254,6 +260,14 @@ func (hset *HistogramSet) DatetimeKeyCountTable(interval timeutil.Interval, coun
 		countColName = "Count"
 	}
 	return ts.Table(hset.Name, "", countColName, timeseries.TimeFormatRFC3339), nil
+}
+
+// HistogramOrder sets the histogram order for each histogram to the supplied order.
+func (hset *HistogramSet) HistogramOrder(order []string) {
+	for hName, h := range hset.HistogramMap {
+		h.Order = order
+		hset.HistogramMap[hName] = h
+	}
 }
 
 func (hset *HistogramSet) HistogramSetTimeKeyCountWriteXLSX(filename string, interval timeutil.Interval, countColName string) error {
