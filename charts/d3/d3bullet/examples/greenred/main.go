@@ -2,7 +2,8 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
+	"log"
+	"os"
 	"time"
 
 	"github.com/grokify/mogo/time/timeutil"
@@ -45,7 +46,9 @@ func main() {
 		},
 	}
 
-	ioutil.WriteFile("chart.html", []byte(templates.Charts(chartsData)), 0644)
-
+	err := os.WriteFile("chart.html", []byte(templates.Charts(chartsData)), 0600)
+	if err != nil {
+		log.Fatal(err)
+	}
 	fmt.Println("DONE")
 }
