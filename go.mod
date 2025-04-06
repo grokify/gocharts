@@ -21,7 +21,7 @@ require (
 require (
 	codeberg.org/go-fonts/liberation v0.5.0 // indirect
 	codeberg.org/go-latex/latex v0.1.0 // indirect
-	codeberg.org/go-pdf/fpdf v0.10.0 // indirect
+	codeberg.org/go-pdf/fpdf v0.11.0 // indirect
 	git.sr.ht/~sbinet/gg v0.6.0 // indirect
 	github.com/ajstarks/svgo v0.0.0-20211024235047-1546f124cd8b // indirect
 	github.com/campoy/embedmd v1.0.0 // indirect
@@ -44,6 +44,6 @@ require (
 	golang.org/x/crypto v0.36.0 // indirect
 	golang.org/x/image v0.25.0 // indirect
 	golang.org/x/net v0.38.0 // indirect
-	golang.org/x/sys v0.31.0 // indirect
-	golang.org/x/text v0.23.0 // indirect
+	golang.org/x/sys v0.32.0 // indirect
+	golang.org/x/text v0.24.0 // indirect
 )
