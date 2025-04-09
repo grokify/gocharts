@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/grokify/mogo/type/stringsutil"
+	"github.com/grokify/mogo/type/strslices"
 )
 
 const (
@@ -64,7 +65,7 @@ func (tbl *Table) ColumnExpandPivot(colIdx uint32, split bool, sep, colNamePrefi
 				}
 			} else {
 				rowVals := stringsutil.SliceCondenseSpace(strings.Split(row[colIdx], sep), true, true)
-				if stringsutil.SliceIndex(rowVals, newColVal, false, nil) > -1 {
+				if strslices.Index(rowVals, newColVal, false, nil) > -1 {
 					exist = true
 				}
 				rowColVals = len(rowVals)
