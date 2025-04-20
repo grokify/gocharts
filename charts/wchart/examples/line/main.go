@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"log/slog"
 	"net/http"
 	"os"
 	"time"
@@ -31,7 +32,7 @@ func drawChartTSSSimple(res http.ResponseWriter, req *http.Request) {
 			Value:      int64(j)}
 		tss.AddItems(item)
 	}
-	fmtutil.PrintJSON(tss)
+	fmtutil.MustPrintJSON(tss)
 	graph, err := sts2wchart.TimeSeriesSetToLineChart(
 		tss,
 		&sts2wchart.LineChartOpts{
@@ -40,11 +41,13 @@ func drawChartTSSSimple(res http.ResponseWriter, req *http.Request) {
 			}},
 	)
 	if err != nil {
-		panic(err)
+		slog.Error(err.Error())
 	}
 
-	res.Header().Set("Content-Type", "image/png")
-	graph.Render(chart.PNG, res)
+	res.Header().Set(httputilmore.HeaderContentType, httputilmore.ContentTypeImagePNG)
+	if err := graph.Render(chart.PNG, res); err != nil {
+		slog.Error(err.Error())
+	}
 }
 
 func drawChart(res http.ResponseWriter, req *http.Request) {
@@ -76,8 +79,10 @@ func drawChart(res http.ResponseWriter, req *http.Request) {
 		},
 	}
 
-	res.Header().Set("Content-Type", "image/png")
-	graph.Render(chart.PNG, res)
+	res.Header().Set(httputilmore.HeaderContentType, httputilmore.ContentTypeImagePNG)
+	if err := graph.Render(chart.PNG, res); err != nil {
+		slog.Error(err.Error())
+	}
 }
 
 func GetChartExampleDays() chart.Chart {
@@ -174,16 +179,22 @@ func drawCustomChart(res http.ResponseWriter, req *http.Request) {
 	}
 
 	res.Header().Set(httputilmore.HeaderContentType, httputilmore.ContentTypeImagePNG)
-	graph.Render(chart.PNG, res)
+	if err := graph.Render(chart.PNG, res); err != nil {
+		slog.Error(err.Error())
+	}
 }
 
 func main() {
-	http.HandleFunc("/", drawChart)
-	http.HandleFunc("/favicon.ico", func(res http.ResponseWriter, req *http.Request) {
-		res.Write([]byte{})
+	mux := http.NewServeMux()
+
+	mux.HandleFunc("/", drawChart)
+	mux.HandleFunc("/favicon.ico", func(res http.ResponseWriter, req *http.Request) {
+		if _, err := res.Write([]byte{}); err != nil {
+			slog.Error(err.Error())
+		}
 	})
-	http.HandleFunc("/custom1", drawCustomChart)
-	http.HandleFunc("/custom2", drawChartTSSSimple)
+	mux.HandleFunc("/custom1", drawCustomChart)
+	mux.HandleFunc("/custom2", drawChartTSSSimple)
 
 	chart1 := GetChartExampleMonths()
 	err := wchart.WritePNGFile("img_line_wrap.png", chart1)
@@ -191,14 +202,24 @@ func main() {
 		log.Fatal(err)
 	}
 
-	if 1 == 1 {
-		f, err := os.Create("img_line_direct.png")
-		if err != nil {
-			log.Fatal(err)
-		}
-		chart1.Render(chart.PNG, f)
-		f.Close()
+	if err := writeFile("img_line_direct.png", chart1); err != nil {
+		slog.Error(err.Error())
 	}
 
-	http.ListenAndServe(":8080", nil)
+	log.Fatal(httputilmore.ListenAndServeTimeouts(":8080", mux, time.Second))
+}
+
+func writeFile(filename string, ch chart.Chart) error {
+	f, err := os.Create(filename)
+	if err != nil {
+		return err
+	}
+	if err := ch.Render(chart.PNG, f); err != nil {
+		return err
+	}
+	if err := f.Close(); err != nil {
+		return err
+	} else {
+		return nil
+	}
 }

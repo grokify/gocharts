@@ -29,10 +29,10 @@ func main() {
 		log.Fatal(err)
 	}
 	fmt.Printf("Record Count [%d]\n", len(tbl.Rows))
-	fmtutil.PrintJSON(tbl.Rows)
+	fmtutil.MustPrintJSON(tbl.Rows)
 
 	for _, row := range tbl.Rows {
-		fmtutil.PrintJSON(row)
+		fmtutil.MustPrintJSON(row)
 	}
 
 	cfg := timeseries.TableConfig{
@@ -46,7 +46,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmtutil.PrintJSON(counts)
+	fmtutil.MustPrintJSON(counts)
 
 	if cfg.SeriesSetNameColIdx >= 0 {
 		sets := timeseries.NewTimeSeriesSets("Time Series Sets Counts")

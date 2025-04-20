@@ -54,7 +54,7 @@ func getTimeSeriesSetSimple(numQuarters uint) timeseries.TimeSeriesSet {
 
 func buildBarChart(ds3 timeseries.TimeSeriesSet, numCols int, lowFirst bool) (c3.C3Chart, []timeseries.RowInt64) {
 	rep := timeseries.Report(ds3, numCols, lowFirst)
-	fmtutil.PrintJSON(rep)
+	fmtutil.MustPrintJSON(rep)
 	axis := timeseries.ReportAxisX(ds3, numCols,
 		func(t time.Time) string { return timeutil.FormatQuarterYYYYQ(t) })
 
@@ -119,7 +119,7 @@ func main() {
 
 	filename := "output.html"
 
-	err := os.WriteFile(filename, []byte(c3.C3DonutChartPage(tmplData)), 600)
+	err := os.WriteFile(filename, []byte(c3.C3DonutChartPage(tmplData)), 0600)
 	if err != nil {
 		log.Fatal(err)
 	}

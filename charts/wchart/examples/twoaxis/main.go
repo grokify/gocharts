@@ -4,6 +4,7 @@ package main
 
 import (
 	"fmt"
+	"log/slog"
 	"os"
 
 	chart "github.com/wcharczuk/go-chart/v2"
@@ -52,7 +53,15 @@ func main() {
 		chart.LegendLeft(&graph),
 	}
 
-	f, _ := os.Create("output.png")
+	f, err := os.Create("output.png")
+	if err != nil {
+		slog.Error(err.Error())
+		os.Exit(1)
+	}
 	defer f.Close()
-	graph.Render(chart.PNG, f)
+	if err := graph.Render(chart.PNG, f); err != nil {
+		slog.Error(err.Error())
+		os.Exit(2)
+	}
+	os.Exit(0)
 }

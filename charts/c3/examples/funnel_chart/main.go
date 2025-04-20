@@ -52,7 +52,7 @@ func main() {
 	lowFirst := true
 	rep := timeseries.Report(dss, numCols, lowFirst)
 
-	fmtutil.PrintJSON(rep)
+	fmtutil.MustPrintJSON(rep)
 	axis := timeseries.ReportAxisX(dss, numCols,
 		func(t time.Time) string { return timeutil.FormatQuarterYYYYQ(t) })
 

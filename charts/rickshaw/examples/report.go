@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"io"
-	"log"
+	"log/slog"
 	"os"
 
 	"github.com/grokify/mogo/encoding/csvutil"
@@ -17,7 +17,8 @@ func main() {
 
 	csv, fi, err := csvutil.NewReaderFile(inputfile, rune(','))
 	if err != nil {
-		panic(fmt.Sprintf("ERROR %v\n", err))
+		slog.Error(err.Error())
+		os.Exit(1)
 	}
 
 	rickshawData := rickshaw.NewRickshawData()
@@ -37,18 +38,23 @@ func main() {
 			MonthS:     record[1],
 			YearS:      record[2],
 			ValueS:     record[3]}
-		monthData.Inflate()
-
-		item, err := monthData.RickshawItem()
-		if err != nil {
-			panic(fmt.Sprintf("ERR_BAD_RICKSHAW_ITEM: %v\n", err))
+		if err := monthData.Inflate(); err != nil {
+			slog.Error(err.Error())
+			os.Exit(2)
 		}
-		rickshawData.AddItem(item)
+
+		if item, err := monthData.RickshawItem(); err != nil {
+			slog.Error(err.Error(), "msg", "ERR_BAD_RICKSHAW_ITEM")
+			os.Exit(3)
+		} else {
+			rickshawData.AddItem(item)
+		}
 	}
 	fi.Close()
 	rickshawDataFormatted, err := rickshawData.Formatted()
 	if err != nil {
-		log.Fatal(err)
+		slog.Error(err.Error())
+		os.Exit(4)
 	}
 
 	tmplData := rickshaw.TemplateData{
@@ -57,7 +63,12 @@ func main() {
 		RickshawDataFormatted: rickshawDataFormatted,
 		IncludeDataTable:      true}
 
-	os.WriteFile(outputfile, []byte(rickshaw.RickshawExtensionsReport(tmplData)), 0600)
+	if err := os.WriteFile(outputfile,
+		[]byte(rickshaw.RickshawExtensionsReport(tmplData)), 0600); err != nil {
+		slog.Error(err.Error())
+		os.Exit(5)
+	}
 
 	fmt.Println("DONE")
+	os.Exit(0)
 }
