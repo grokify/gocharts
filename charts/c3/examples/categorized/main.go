@@ -3,8 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
-
-	"io/ioutil"
+	"os"
 
 	"github.com/grokify/gocharts/v2/charts/c3"
 )
@@ -54,7 +53,7 @@ func main() {
 
 	filename := "output.html"
 
-	err := ioutil.WriteFile(filename, []byte(c3.C3DonutChartPage(tmplData)), 0644)
+	err := os.WriteFile(filename, []byte(c3.C3DonutChartPage(tmplData)), 0600)
 	if err != nil {
 		log.Fatal(err)
 	}

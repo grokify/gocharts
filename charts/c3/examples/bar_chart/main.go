@@ -3,8 +3,8 @@ package main
 import (
 	// Core Demo
 	"fmt"
-	"io/ioutil"
 	"log"
+	"os"
 	"time"
 
 	"github.com/grokify/mogo/fmt/fmtutil"
@@ -119,7 +119,7 @@ func main() {
 
 	filename := "output.html"
 
-	err := ioutil.WriteFile(filename, []byte(c3.C3DonutChartPage(tmplData)), 0644)
+	err := os.WriteFile(filename, []byte(c3.C3DonutChartPage(tmplData)), 600)
 	if err != nil {
 		log.Fatal(err)
 	}

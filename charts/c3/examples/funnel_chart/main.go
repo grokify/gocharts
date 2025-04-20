@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"log"
 	"math"
 	"math/rand"
+	"os"
 	"time"
 
 	"github.com/grokify/mogo/fmt/fmtutil"
@@ -61,7 +61,7 @@ func main() {
 
 	if 1 == 0 {
 		out := c3.C3BarChartJS(c3Bar)
-		err := ioutil.WriteFile("bar_old.html", []byte(out), 0600)
+		err := os.WriteFile("bar_old.html", []byte(out), 0600)
 		if err != nil {
 			log.Fatal(err)
 			fmt.Printf("DONE")
@@ -129,7 +129,7 @@ func main() {
 		FooterHTML: footerHTML}
 
 	out := c3.C3DonutChartPage(templateData)
-	err := ioutil.WriteFile("bar.html", []byte(out), 0600)
+	err := os.WriteFile("bar.html", []byte(out), 0600)
 	if err != nil {
 		log.Fatal(err)
 		fmt.Printf("DONE")
