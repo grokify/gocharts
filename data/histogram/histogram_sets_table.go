@@ -24,7 +24,7 @@ func (hsets *HistogramSets) Table(tableName, colNameHSet, colNameHist, colNameBi
 	return tbl
 }
 
-type TablePivotOpts struct {
+type SetsTablePivotOpts struct {
 	TableName           string
 	ColNameHistogramSet string
 	ColNameHistogram    string
@@ -38,19 +38,19 @@ type TablePivotOpts struct {
 	InclBinPercentages  bool
 }
 
-func (opts TablePivotOpts) ColNameHistogramSetOrDefault() string {
+func (opts SetsTablePivotOpts) ColNameHistogramSetOrDefault() string {
 	return stringsutil.FirstNonEmpty(opts.ColNameHistogramSet, "Histogram Set")
 }
 
-func (opts TablePivotOpts) ColNameHistogramOrDefault() string {
+func (opts SetsTablePivotOpts) ColNameHistogramOrDefault() string {
 	return stringsutil.FirstNonEmpty(opts.ColNameHistogramSet, "Histogram")
 }
 
-func (opts TablePivotOpts) ColNameBinCountsSumOrDefault() string {
+func (opts SetsTablePivotOpts) ColNameBinCountsSumOrDefault() string {
 	return stringsutil.FirstNonEmpty(opts.ColNameHistogramSet, "Total")
 }
 
-func (opts TablePivotOpts) InflateBinName(binName string, binNumber int, isPct bool) string {
+func (opts SetsTablePivotOpts) InflateBinName(binName string, binNumber int, isPct bool) string {
 	if strings.TrimSpace(binName) == "" {
 		binName = "Unnamed Bin"
 		if binNumber >= 0 {
@@ -60,7 +60,7 @@ func (opts TablePivotOpts) InflateBinName(binName string, binNumber int, isPct b
 	return opts.ColNameBinPrefix + binName + opts.ColNameBinSuffix
 }
 
-func (opts TablePivotOpts) TableColumns(binNames []string) ([]string, map[int]string) {
+func (opts SetsTablePivotOpts) TableColumns(binNames []string) ([]string, map[int]string) {
 	cols := []string{
 		opts.ColNameHistogramSetOrDefault(),
 		opts.ColNameHistogramOrDefault()}
@@ -86,7 +86,7 @@ func (opts TablePivotOpts) TableColumns(binNames []string) ([]string, map[int]st
 // TablePivot returns a `*table.Table` where the first column is the histogram
 // set name, the second column is the histogram name and the other columns are
 // the bin names.
-func (hsets *HistogramSets) TablePivot(opts TablePivotOpts) table.Table {
+func (hsets *HistogramSets) TablePivot(opts SetsTablePivotOpts) table.Table {
 	// func (hsets *HistogramSets) TablePivot(tableName, colNameHSet, colNameHist, colNameBinNamePrefix, colNameBinNameSuffix string, binNamesOrder []string, binsInclUnordered bool, inclPercentages bool) table.Table {
 	tbl := table.NewTable(opts.TableName)
 	tbl.FormatMap = map[int]string{
@@ -153,7 +153,7 @@ func (hsets *HistogramSets) WriteXLSXPivot(filename, sheetname, colNameHSet, col
 }
 */
 
-func (hsets *HistogramSets) WriteXLSXPivot(filename string, opts TablePivotOpts) error {
+func (hsets *HistogramSets) WriteXLSXPivot(filename string, opts SetsTablePivotOpts) error {
 	// func (hsets *HistogramSets) WriteXLSXPivot(filename, sheetname, colNameHSet, colNameHist, colNameBinNamePrefix, colNameBinNameSuffix string, binNamesOrder []string, binsInclUnordered bool) error {
 	//tbl := hsets.TablePivot(sheetname, colNameHSet, colNameHist, colNameBinNamePrefix, colNameBinNameSuffix, binNamesOrder, binsInclUnordered)
 	tbl := hsets.TablePivot(opts)
