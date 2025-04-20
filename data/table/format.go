@@ -5,11 +5,14 @@ import (
 	"encoding/csv"
 	"errors"
 	"fmt"
+	"io"
 	"os"
+	"slices"
 	"strings"
 
 	"github.com/grokify/mogo/math/mathutil"
 	"github.com/grokify/mogo/text/markdown"
+	"github.com/olekukonko/tablewriter"
 )
 
 func (tbl *Table) Markdown(newline string, escPipe bool) string {
@@ -194,6 +197,20 @@ func (tbl *Table) String(comma rune, useCRLF bool) (string, error) {
 
 	w.Flush()
 	return b.String(), w.Error()
+}
+
+// Text renders the table in text suitable for console reporting.
+func (tbl *Table) Text(w io.Writer) error {
+	if w == nil {
+		return errors.New("writer must be supplied")
+	}
+	tw := tablewriter.NewWriter(w)
+	tw.SetHeader(slices.Clone(tbl.Columns))
+	for _, r := range tbl.Rows {
+		tw.Append(slices.Clone(r))
+	}
+	tw.Render()
+	return nil
 }
 
 // Transpose creates a new table by transposing the matrix data.
