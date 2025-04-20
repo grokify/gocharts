@@ -2,6 +2,7 @@ package histogram
 
 import (
 	"fmt"
+	"slices"
 	"strconv"
 	"strings"
 	"time"
@@ -10,6 +11,7 @@ import (
 	"github.com/grokify/gocharts/v2/data/table/excelizeutil"
 	"github.com/grokify/mogo/errors/errorsutil"
 	"github.com/grokify/mogo/strconv/strconvutil"
+	"github.com/grokify/mogo/type/number"
 	"github.com/grokify/mogo/type/slicesutil"
 	excelize "github.com/xuri/excelize/v2"
 )
@@ -33,19 +35,83 @@ func (hset *HistogramSet) Table(colNameHist, colNameBin, colNameCount string) ta
 // histogram name and the other columns are the bin names. This is
 // useful for easy visualization of a table and also creating
 // charts such as grouped bar charts.
-func (hset *HistogramSet) WriteXLSXPivot(filename, sheetName, histColName string, addColumnTotalLeft, addColumnTotalRight, addRowTotalTop, addRowTotalBottom bool) error {
-	if tbl, err := hset.TablePivot(sheetName, histColName, addColumnTotalLeft, addColumnTotalRight, addRowTotalTop, addRowTotalBottom); err != nil {
+func (hset *HistogramSet) WriteXLSXPivot(filename, sheetName, histColName string, opts *SetTablePivotOpts) error {
+	if tbl, err := hset.TablePivot(sheetName, histColName, opts); err != nil {
 		return err
 	} else {
 		return tbl.WriteXLSX(filename, sheetName)
 	}
 }
 
+type SetTablePivotOpts struct {
+	ColTotalLeft   bool
+	ColTotalRight  bool
+	ColTotalTop    bool
+	ColTotalBottom bool
+	ColPctRight    bool
+	ColPctBottom   bool
+	PctPrecision   int
+}
+
+func (opts SetTablePivotOpts) sumRowsNoPct(r [][]int) int {
+	if len(r) <= 0 {
+		return -1
+	}
+	msum := 0
+	for _, ri := range r {
+		rsum := opts.sumRowNoPct(ri)
+		if rsum < 0 {
+			return rsum
+		} else {
+			msum += rsum
+		}
+	}
+	return msum
+}
+
+func (opts SetTablePivotOpts) sumRowNoPct(r []int) int {
+	if len(r) <= 0 {
+		return -1
+	}
+	r2 := slices.Clone(r)
+	if opts.ColTotalLeft && len(r2) > 0 {
+		r2 = r2[1:]
+	}
+	if opts.ColTotalRight && len(r2) > 0 {
+		r2 = r2[:len(r2)-1]
+	}
+	s := number.Integers[int](r2)
+	return s.Sum()
+}
+
+func (opts SetTablePivotOpts) pctRowNoPct(r []int, msum int) float64 {
+	rsum := opts.sumRowNoPct(r)
+	return float64(rsum) / float64(msum) * 100
+}
+
+func (opts SetTablePivotOpts) pctRowNoPctString(r []int, msum int) string {
+	pct := opts.pctRowNoPct(r, msum)
+	return strconvutil.Ftoa(pct, opts.PctPrecision)
+}
+func (opts SetTablePivotOpts) formatPctString(num, den int, zeroVal string) string {
+	if den == 0 {
+		return zeroVal
+	}
+	return opts.formatFloatString(float64(num) / float64(den) * 100.0)
+}
+
+func (opts SetTablePivotOpts) formatFloatString(f float64) string {
+	return strconvutil.Ftoa(f, opts.PctPrecision)
+}
+
 // TablePivot returns a `*table.Table` where the first column is the
 // histogram name and the other columns are the bin names. This is
 // useful for easy visualization of a table and also creating
 // charts such as grouped bar charts.
-func (hset *HistogramSet) TablePivot(tableName, histColName string, addColumnTotalLeft, addColumnTotalRight, addRowTotalTop, addRowTotalBottom bool) (*table.Table, error) {
+func (hset *HistogramSet) TablePivot(tableName, histColName string, opts *SetTablePivotOpts) (*table.Table, error) {
+	if opts == nil {
+		opts = &SetTablePivotOpts{}
+	}
 	if len(strings.TrimSpace(tableName)) == 0 {
 		tableName = strings.TrimSpace(hset.Name)
 	}
@@ -57,11 +123,11 @@ func (hset *HistogramSet) TablePivot(tableName, histColName string, addColumnTot
 
 	binNames := hset.BinNames()
 	tbl.Columns = append(tbl.Columns, histColName)
-	if addColumnTotalLeft {
+	if opts.ColTotalLeft {
 		tbl.Columns = append(tbl.Columns, "Total")
 	}
 	tbl.Columns = append(tbl.Columns, binNames...)
-	if addColumnTotalRight {
+	if opts.ColTotalRight {
 		tbl.Columns = append(tbl.Columns, "Total")
 	}
 	tbl.FormatMap = map[int]string{
@@ -74,6 +140,7 @@ func (hset *HistogramSet) TablePivot(tableName, histColName string, addColumnTot
 
 	hnames := hset.ItemNames()
 	colSumRows := [][]int{}
+	rowsTotal := 0
 	for _, hname := range hnames {
 		row := []string{hname}
 		hist, ok := hset.HistogramMap[hname]
@@ -82,41 +149,66 @@ func (hset *HistogramSet) TablePivot(tableName, histColName string, addColumnTot
 		}
 		rowTotal := 0
 		rowBinCounts := []int{}
-		if addColumnTotalLeft {
+		if opts.ColTotalLeft {
 			rowBinCounts = append(rowBinCounts, 0)
 		}
-		// rowBinCountVals := []string{}
 		for _, binName := range binNames {
 			if binVal, ok := hist.Bins[binName]; ok {
 				rowTotal += binVal
 				rowBinCounts = append(rowBinCounts, binVal)
-				// rowBinCountVals = append(rowBinCountVals, strconv.Itoa(binVal))
 			} else {
 				rowBinCounts = append(rowBinCounts, 0)
-				// rowBinCountVals = append(rowBinCountVals, "0")
 			}
 		}
 		rowBinCountTotal := slicesutil.SliceIntSum(rowBinCounts)
-		if addColumnTotalLeft {
-			//row = append(row, strconv.Itoa(rowTotal))
+		if opts.ColTotalLeft {
 			rowBinCounts[0] = rowBinCountTotal
 		}
 		rowBinCountStrs := strconvutil.SliceItoa(rowBinCounts)
 		row = append(row, rowBinCountStrs...)
-		if addColumnTotalRight {
+		if opts.ColTotalRight {
 			row = append(row, strconv.Itoa(rowTotal))
 			rowBinCounts = append(rowBinCounts, rowBinCountTotal)
 		}
 		tbl.Rows = append(tbl.Rows, row)
 		colSumRows = append(colSumRows, rowBinCounts)
+		rowsTotal += rowTotal
 	}
-	if addRowTotalBottom {
-		row := []string{"Total"}
+
+	if opts.ColPctRight {
+		tbl.Columns = append(tbl.Columns, "Percent")
+		if opts.PctPrecision != 0 {
+			tbl.FormatMap[len(tbl.Columns)-1] = table.FormatFloat
+		}
+		if len(tbl.Rows) != len(colSumRows) {
+			panic("internal mismatch")
+		}
+		for i, r := range tbl.Rows {
+			pct := opts.pctRowNoPctString(colSumRows[i], rowsTotal)
+			r = append(r, pct)
+			tbl.Rows[i] = r
+		}
+	}
+	if opts.ColTotalBottom || opts.ColPctBottom {
+		rowTotal := []string{"Total"}
+		rowTotalPct := []string{"Percent"}
 		sums := slicesutil.MatrixIntColSums(colSumRows)
 		for _, sum := range sums {
-			row = append(row, strconv.Itoa(sum))
+			rowTotal = append(rowTotal, strconv.Itoa(sum))
+			rowTotalPct = append(rowTotalPct, opts.formatPctString(sum, rowsTotal, "0"))
 		}
-		tbl.Rows = append(tbl.Rows, row)
+		if opts.ColTotalRight && opts.ColPctRight {
+			rowTotalPct = append(rowTotalPct, opts.formatFloatString(100))
+		}
+		if opts.ColPctRight {
+			rowTotal = append(rowTotal, opts.formatFloatString(100))
+		}
+		if opts.ColTotalBottom {
+			tbl.Rows = append(tbl.Rows, rowTotal)
+		}
+		if opts.ColPctBottom {
+			tbl.Rows = append(tbl.Rows, rowTotalPct)
+		}
 	}
 
 	return &tbl, nil
@@ -126,8 +218,7 @@ func (hset *HistogramSet) TablePivot(tableName, histColName string, addColumnTot
 // histogram name, the second column is the bin name and the
 // third column is the bin count.
 func (hset *HistogramSet) WriteXLSX(filename, sheetName, colName1, colName2, colNameCount string) error {
-	// WriteXLSX writes a table as an Excel XLSX file with
-	// row formatter option.
+	// WriteXLSX writes a table as an Excel XLSX file with row formatter option.
 	f := excelize.NewFile()
 	// Create a new sheet.
 
