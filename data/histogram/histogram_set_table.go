@@ -46,10 +46,10 @@ func (hset *HistogramSet) WriteXLSXPivot(filename, sheetName, histColName string
 type SetTablePivotOpts struct {
 	ColTotalLeft   bool
 	ColTotalRight  bool
-	ColTotalTop    bool
-	ColTotalBottom bool
+	RowTotalTop    bool
+	RowTotalBottom bool
 	ColPctRight    bool
-	ColPctBottom   bool
+	RowPctBottom   bool
 	PctPrecision   int
 }
 
@@ -189,7 +189,7 @@ func (hset *HistogramSet) TablePivot(tableName, histColName string, opts *SetTab
 			tbl.Rows[i] = r
 		}
 	}
-	if opts.ColTotalBottom || opts.ColPctBottom {
+	if opts.RowTotalBottom || opts.RowPctBottom {
 		rowTotal := []string{"Total"}
 		rowTotalPct := []string{"Percent"}
 		sums := slicesutil.MatrixIntColSums(colSumRows)
@@ -203,10 +203,10 @@ func (hset *HistogramSet) TablePivot(tableName, histColName string, opts *SetTab
 		if opts.ColPctRight {
 			rowTotal = append(rowTotal, opts.formatFloatString(100))
 		}
-		if opts.ColTotalBottom {
+		if opts.RowTotalBottom {
 			tbl.Rows = append(tbl.Rows, rowTotal)
 		}
-		if opts.ColPctBottom {
+		if opts.RowPctBottom {
 			tbl.Rows = append(tbl.Rows, rowTotalPct)
 		}
 	}
