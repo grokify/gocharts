@@ -53,6 +53,7 @@ type SetTablePivotOpts struct {
 	PctPrecision   int
 }
 
+/*
 func (opts SetTablePivotOpts) sumRowsNoPct(r [][]int) int {
 	if len(r) <= 0 {
 		return -1
@@ -68,6 +69,7 @@ func (opts SetTablePivotOpts) sumRowsNoPct(r [][]int) int {
 	}
 	return msum
 }
+*/
 
 func (opts SetTablePivotOpts) sumRowNoPct(r []int) int {
 	if len(r) <= 0 {

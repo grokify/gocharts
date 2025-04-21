@@ -52,13 +52,13 @@ func main() {
 		sets := timeseries.NewTimeSeriesSets("Time Series Sets Counts")
 		sets.Interval = timeutil.IntervalMonth
 		sets.AddItems(counts...)
-		fmtutil.PrintJSON(sets)
+		fmtutil.MustPrintJSON(sets)
 	} else {
 		set := timeseries.NewTimeSeriesSet("Time Series Set Counts")
 		set.Interval = timeutil.IntervalMonth
 		set.AddItems(counts...)
 		set.Inflate()
-		fmtutil.PrintJSON(set)
+		fmtutil.MustPrintJSON(set)
 	}
 
 	fmt.Println("DONE")

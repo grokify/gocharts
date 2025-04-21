@@ -19,7 +19,7 @@ import (
 
 const repoLink = "https://github.com/grokify/gocharts/tree/master/charts/c3/examples/bar_chart"
 
-func getData(numQuarters uint) []timeseries.TimeItem {
+func getData(numQuarters uint32) []timeseries.TimeItem {
 	timeItems := []timeseries.TimeItem{}
 
 	quarterStart := timeutil.QuarterAdd(time.Now(), -1*int(numQuarters))
@@ -36,7 +36,7 @@ func getData(numQuarters uint) []timeseries.TimeItem {
 	return timeItems
 }
 
-func getTimeSeriesSetSimple(numQuarters uint) timeseries.TimeSeriesSet {
+func getTimeSeriesSetSimple(numQuarters uint32) timeseries.TimeSeriesSet {
 	timeItems := getData(numQuarters)
 
 	tss := timeseries.NewTimeSeriesSet("Bar Chart Data")
@@ -100,11 +100,11 @@ func buildMoreInfoHTML(ds3 timeseries.TimeSeriesSet, c3Bar c3.C3Chart, rep []tim
 }
 
 func main() {
-	numQuarters := 5
+	numQuarters := uint32(5)
 
-	ds3 := getTimeSeriesSetSimple(uint(numQuarters))
+	ds3 := getTimeSeriesSetSimple(numQuarters)
 
-	chart, rep := buildBarChart(ds3, numQuarters, true)
+	chart, rep := buildBarChart(ds3, int(numQuarters), true)
 
 	moreInfoHTML := buildMoreInfoHTML(ds3, chart, rep)
 

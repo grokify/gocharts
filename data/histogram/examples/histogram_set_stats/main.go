@@ -51,5 +51,5 @@ func main() {
 	fs := histogram.NewHistogramSetWithData("FooBar", msmsi)
 	stats := fs.LeafStats("CategoryNumber")
 	stats.Inflate()
-	fmtutil.PrintJSON(stats)
+	fmtutil.MustPrintJSON(stats)
 }

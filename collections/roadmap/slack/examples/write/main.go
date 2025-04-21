@@ -15,17 +15,17 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmtutil.PrintJSON(streams)
+	fmtutil.MustPrintJSON(streams)
 
 	tbl, err := rmap.Table(true, true)
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmtutil.PrintJSON(tbl)
+	fmtutil.MustPrintJSON(tbl)
 
 	fmt.Printf("TBLNAME [%s]\n", tbl.Name)
-	fmtutil.PrintJSON(tbl.Columns)
-	fmtutil.PrintJSON(tbl.Rows)
+	fmtutil.MustPrintJSON(tbl.Columns)
+	fmtutil.MustPrintJSON(tbl.Rows)
 
 	err = tbl.WriteXLSX("roadmap.xlsx", tbl.Name)
 	if err != nil {
