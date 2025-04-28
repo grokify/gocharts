@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"log"
 	"math"
-	"math/rand"
 	"os"
 	"time"
 
+	"github.com/grokify/mogo/crypto/randutil"
 	"github.com/grokify/mogo/fmt/fmtutil"
 	"github.com/grokify/mogo/strconv/strconvutil"
 	"github.com/grokify/mogo/time/month"
@@ -25,9 +25,9 @@ func TestData() timeseries.TimeSeriesSet {
 	for i := 0; i < 12; i++ {
 		dt := month.MonthStart(time.Now().UTC(), i)
 		//dt := timeutil.DeltaQuarters(time.Now().UTC(), i)
-		val1 := int64(float64(i*20)*rand.Float64() + 10)
-		val2 := int64(float64(val1)*1 - (float64(5) * rand.Float64()))
-		val3 := int64(float64(val1)*1 - (float64(2) * rand.Float64()))
+		val1 := int64(float64(i*20)*randutil.MustFloat64() + 10)
+		val2 := int64(float64(val1)*1 - (float64(5) * randutil.MustFloat64()))
+		val3 := int64(float64(val1)*1 - (float64(2) * randutil.MustFloat64()))
 
 		tss.AddItems(timeseries.TimeItem{
 			SeriesName: "Funnel Stage 1",

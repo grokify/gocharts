@@ -50,6 +50,26 @@ func drawChartTSSSimple(res http.ResponseWriter, req *http.Request) {
 	}
 }
 
+func exampleTimeseries(chartName string) chart.TimeSeries {
+	return chart.TimeSeries{
+		Name: chartName,
+		XValues: []time.Time{
+			time.Now().AddDate(0, 0, -10),
+			time.Now().AddDate(0, 0, -9),
+			time.Now().AddDate(0, 0, -8),
+			time.Now().AddDate(0, 0, -7),
+			time.Now().AddDate(0, 0, -6),
+			time.Now().AddDate(0, 0, -5),
+			time.Now().AddDate(0, 0, -4),
+			time.Now().AddDate(0, 0, -3),
+			time.Now().AddDate(0, 0, -2),
+			time.Now().AddDate(0, 0, -1),
+			time.Now(),
+		},
+		YValues: []float64{1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0},
+	}
+}
+
 func drawChart(res http.ResponseWriter, req *http.Request) {
 	// This is an example of using the `TimeSeries` to automatically coerce time.Time values into a continuous xrange.
 	// Note: chart.TimeSeries implements `ValueFormatterProvider` and as a result gives the XAxis the appropriate formatter to use for the ticks.
@@ -59,23 +79,7 @@ func drawChart(res http.ResponseWriter, req *http.Request) {
 			ValueFormatter: formatter.FormatTime,
 		},
 		Series: []chart.Series{
-			chart.TimeSeries{
-				Name: "ABC",
-				XValues: []time.Time{
-					time.Now().AddDate(0, 0, -10),
-					time.Now().AddDate(0, 0, -9),
-					time.Now().AddDate(0, 0, -8),
-					time.Now().AddDate(0, 0, -7),
-					time.Now().AddDate(0, 0, -6),
-					time.Now().AddDate(0, 0, -5),
-					time.Now().AddDate(0, 0, -4),
-					time.Now().AddDate(0, 0, -3),
-					time.Now().AddDate(0, 0, -2),
-					time.Now().AddDate(0, 0, -1),
-					time.Now(),
-				},
-				YValues: []float64{1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0},
-			},
+			exampleTimeseries("ABC"),
 		},
 	}
 
@@ -97,23 +101,7 @@ func GetChartExampleDays() chart.Chart {
 			},
 		},
 		Series: []chart.Series{
-			chart.TimeSeries{
-				Name: "By Day",
-				XValues: []time.Time{
-					time.Now().AddDate(0, 0, -10),
-					time.Now().AddDate(0, 0, -9),
-					time.Now().AddDate(0, 0, -8),
-					time.Now().AddDate(0, 0, -7),
-					time.Now().AddDate(0, 0, -6),
-					time.Now().AddDate(0, 0, -5),
-					time.Now().AddDate(0, 0, -4),
-					time.Now().AddDate(0, 0, -3),
-					time.Now().AddDate(0, 0, -2),
-					time.Now().AddDate(0, 0, -1),
-					time.Now(),
-				},
-				YValues: []float64{1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0},
-			},
+			exampleTimeseries("By Day"),
 		},
 	}
 }

@@ -12,6 +12,7 @@ import (
 	"github.com/grokify/mogo/errors/errorsutil"
 	"github.com/grokify/mogo/text/markdown"
 	"github.com/grokify/mogo/time/timeutil"
+	"github.com/grokify/mogo/type/number"
 	excelize "github.com/xuri/excelize/v2"
 )
 
@@ -217,14 +218,13 @@ func WriteXLSX(path string, tbls []*Table) error {
 						}
 					}
 				}
-				formattedVal, err := fmtFunc(cellValue, uint32(x))
-				if err != nil {
-					return errorsutil.Wrap(err, "gocharts/data/tables/write.go/WriteXLSXFormatted.Error.FormatCellValue")
-				}
-				if err = f.SetCellValue(sheetName, cellLocation, formattedVal); err != nil {
+				if xUint32, err := number.Itou32(x); err != nil {
 					return err
-				}
-				if tbl.FormatAutoLink {
+				} else if formattedVal, err := fmtFunc(cellValue, xUint32); err != nil {
+					return errorsutil.Wrap(err, "gocharts/data/tables/write.go/WriteXLSXFormatted.Error.FormatCellValue")
+				} else if err = f.SetCellValue(sheetName, cellLocation, formattedVal); err != nil {
+					return err
+				} else if tbl.FormatAutoLink {
 					if rxURLHTTPOrHTTPS.MatchString(cellValue) {
 						err := f.SetCellHyperLink(sheetName, cellLocation, cellValue, excelizeLinkTypeExternal)
 						if err != nil {
