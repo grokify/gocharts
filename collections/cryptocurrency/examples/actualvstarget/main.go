@@ -30,7 +30,7 @@ func main() {
 	_, err = trainingSeries.Pop()
 	logutil.FatalErr(err, "trainingSeries.Pop")
 
-	fmtutil.PrintJSON(trainingSeries)
+	fmtutil.MustPrintJSON(trainingSeries)
 
 	alpha, beta, err := trainingSeries.LinearRegression()
 	logutil.FatalErr(err, "trainingSeries.LinearRegression")
@@ -48,7 +48,7 @@ func main() {
 		forecastSeries.AddFloat64(x, alpha+beta*float64(x.Year()))
 	}
 
-	fmtutil.PrintJSON(forecastSeries)
+	fmtutil.MustPrintJSON(forecastSeries)
 
 	tss := timeseries.NewTimeSeriesSet("BTC")
 	tss.Interval = timeutil.IntervalYear
