@@ -30,8 +30,8 @@ github.com/google/go-cmp v0.6.0/go.mod h1:17dUlkBOakJ0+DkrSSNjCkIjxS6bF9zb3elmeN
 github.com/google/gofuzz v1.0.0/go.mod h1:dBl0BpW6vV/+mYPU4Po3pmUjxk6FQPldtuIdl/M65Eg=
 github.com/grokify/base36 v1.0.5 h1:iUgnt40hrPtn3M2gjU4Darow5ikf8xWXrTuMWTLziCk=
 github.com/grokify/base36 v1.0.5/go.mod h1:L+1aaUBGfp5Ctar7KCS5G9uPABo1Ccu1Ct2iQAuhOJ4=
-github.com/grokify/mogo v0.68.11 h1:NQCklgkAetwCcyLZci0/W2lLYwQPNlNh4ojMpcRquYA=
-github.com/grokify/mogo v0.68.11/go.mod h1:ElGmqZaEVAE/cOuCqZbpOj79oQDdLC02m5v7+P00IW0=
+github.com/grokify/mogo v0.68.13 h1:FS4SeUA63jfj9zOvx6NZTgvg+pUgSN+2bAjm+SgcN+4=
+github.com/grokify/mogo v0.68.13/go.mod h1:pKOkGR2vheo+200muo2gSnXQ4SJ5TwW0Y7WY7uHahu8=
 github.com/huandu/xstrings v1.5.0 h1:2ag3IFq9ZDANvthTwTiqSSZLjDc+BedvHPAp5tJy2TI=
 github.com/huandu/xstrings v1.5.0/go.mod h1:y5/lhBue+AyNmUVz9RLU9xbLR0o4KIIExikq4ovT0aE=
 github.com/iancoleman/strcase v0.3.0 h1:nTXanmYxhfFAMjZL34Ov6gkzEsSJZ5DbhxWjvSASxEI=

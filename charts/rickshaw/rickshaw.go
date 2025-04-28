@@ -62,7 +62,7 @@ func (am *MonthData) Inflate() error {
 	if err != nil {
 		return err
 	} else {
-		dt6, err := number.Int32(i)
+		dt6, err := number.Itoi32(i)
 		if err != nil {
 			return err
 		}
@@ -202,7 +202,7 @@ func (rd *RickshawData) Formatted() (RickshawDataFormatted, error) {
 			if err != nil {
 				return formatted, err
 			}
-			i32, err := number.Int32(i)
+			i32, err := number.Itoi32(i)
 			if err != nil {
 				return formatted, err
 			}
