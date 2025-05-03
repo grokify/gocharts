@@ -98,6 +98,19 @@ func ColIndexToLetters(colIndex uint32) string {
 	return strings.TrimSpace(prefix) + strings.TrimSpace(suffix)
 }
 
+func ColLettersToIndex(letters string) (uint32, error) {
+	letters = strings.ToUpper(strings.TrimSpace(letters))
+	var result uint32 = 0
+	for i := range len(letters) {
+		c := letters[i]
+		if c < 'A' || c > 'Z' {
+			return 0, fmt.Errorf("invalid column letter (%q)", c)
+		}
+		result = result*26 + uint32(c-'A'+1)
+	}
+	return result, nil
+}
+
 // CoordinatesToSheetLocation converts x, y integer coordinates
 // to a spreadsheet location such as "AA1" for col 27, row 1.
 func CoordinatesToSheetLocation(colIdx, rowIdx uint32) string {

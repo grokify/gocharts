@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/grokify/gocharts/v2/data/table/sheet"
 	"github.com/grokify/mogo/type/slicesutil"
 )
 
@@ -184,4 +185,14 @@ func (cols Columns) RowMap(row []string, omitEmpty bool) map[string]string {
 		}
 	}
 	return mss
+}
+
+func (cols Columns) ModifyNamesColLettersMap(m map[string]string, unique bool) (Columns, error) {
+	if out, err := sheet.SliceReplaceValueAtLettersMap(cols, m); err != nil {
+		return Columns{}, err
+	} else if outcols := Columns(out); unique && !outcols.Unique() {
+		return Columns{}, errors.New("non unique column names")
+	} else {
+		return outcols, nil
+	}
 }

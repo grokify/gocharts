@@ -94,3 +94,27 @@ func TestColNumberToLetters(t *testing.T) {
 		}
 	}
 }
+
+func TestColLettersToIndex(t *testing.T) {
+	tests := map[string]uint32{
+		"A":       1,
+		"Z":       26,
+		"AA":      27,
+		"AZ":      52,
+		"BA":      53,
+		"ZZ":      702,
+		"AAA":     703,
+		"ZZZ":     18278,
+		"FXSHRXW": 2147483647, // Max int32, useful upper bound test
+	}
+
+	for col, expected := range tests {
+		got, err := ColLettersToIndex(col)
+		if err != nil {
+			t.Errorf("ColumnLetterToIndexUint32(%q); error (%s)", col, err.Error())
+		}
+		if got != expected {
+			t.Errorf("ColumnLetterToIndexUint32(%q) = (%d); want (%d)", col, got, expected)
+		}
+	}
+}
