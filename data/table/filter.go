@@ -3,6 +3,7 @@ package table
 import (
 	"errors"
 	"fmt"
+	"slices"
 )
 
 func (tbl *Table) FilterColumnDistinctFirstTable(colIdx int) (*Table, error) {
@@ -25,7 +26,7 @@ func (tbl *Table) FilterColumnDistinctFirstTable(colIdx int) (*Table, error) {
 }
 
 // FilterColumnValuesTable returns a Table filtered by column names and column values.
-func (tbl *Table) FilterColumnValuesTable(wantColNameValues map[string]string) (*Table, error) {
+func (tbl *Table) FilterColumnValuesTable(wantColNameValues map[string][]string) (*Table, error) {
 	if tbl.IsFloat64 {
 		return nil, errors.New("cannot filter float table on string values")
 	}
@@ -39,7 +40,9 @@ func (tbl *Table) FilterColumnValuesTable(wantColNameValues map[string]string) (
 }
 
 // FilterRecordsColumnValues returns a set of records filtered by column names and column values.
-func (tbl *Table) FilterColumnValuesRows(wantColNameValues map[string]string) ([][]string, error) {
+// The supplied `wantColNameValues` provides a list of column names and a set of values,
+// any of which can match the desired rows.
+func (tbl *Table) FilterColumnValuesRows(wantColNameValues map[string][]string) ([][]string, error) {
 	data := [][]string{}
 	wantColIndexes := map[string]int{}
 	maxIdx := -1
@@ -58,11 +61,11 @@ ROWS:
 		if len(row) > maxIdx {
 			for wantColName, wantColIdx := range wantColIndexes {
 				colValue := row[wantColIdx]
-				wantColValue, ok := wantColNameValues[wantColName]
+				wantColValues, ok := wantColNameValues[wantColName]
 				if !ok {
 					return data, fmt.Errorf("column name (%s) has no desired value", wantColName)
 				}
-				if colValue != wantColValue {
+				if !slices.Contains(wantColValues, colValue) {
 					continue ROWS
 				}
 			}
