@@ -63,7 +63,8 @@ func buildBarChart(ds3 timeseries.TimeSeriesSet, numCols int, lowFirst bool) (c3
 	return chart, rep
 }
 
-func buildMoreInfoHTML(ds3 timeseries.TimeSeriesSet, c3Bar c3.C3Chart, rep []timeseries.RowInt64) string {
+func buildMoreInfoHTML(c3Bar c3.C3Chart, rep []timeseries.RowInt64) string {
+	// func buildMoreInfoHTML(ds3 timeseries.TimeSeriesSet, c3Bar c3.C3Chart, rep []timeseries.RowInt64) string {
 	moreInfoHTML := ""
 
 	axis := c3Bar.Axis.X.Categories
@@ -106,7 +107,7 @@ func main() {
 
 	chart, rep := buildBarChart(ds3, int(numQuarters), true)
 
-	moreInfoHTML := buildMoreInfoHTML(ds3, chart, rep)
+	moreInfoHTML := buildMoreInfoHTML(chart, rep)
 
 	tmplData := c3.TemplateData{
 		HeaderHTML:             "Bar Chart",

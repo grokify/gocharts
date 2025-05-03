@@ -12,7 +12,6 @@ import (
 	"github.com/grokify/mogo/errors/errorsutil"
 	"github.com/grokify/mogo/text/markdown"
 	"github.com/grokify/mogo/time/timeutil"
-	"github.com/grokify/mogo/type/number"
 	excelize "github.com/xuri/excelize/v2"
 )
 
@@ -157,7 +156,9 @@ func WriteXLSX(path string, tbls []*Table) error {
 
 	// Create a new sheet.
 	sheetNum := 0
-	for i, tbl := range tables {
+	for i := uint32(0); int(i) < len(tables); i++ {
+		// for i, tbl := range tables {
+		tbl := tables[i]
 		if tbl == nil {
 			continue
 		}
@@ -176,11 +177,13 @@ func WriteXLSX(path string, tbls []*Table) error {
 			return errorsutil.Wrap(err, "excelize.File.NewSheet()")
 		}
 		// Set value of a cell.
-		rowBase := 0
+		rowBase := uint32(0)
 		if len(tbl.Columns) > 0 {
 			rowBase++
-			for i, cellValue := range tbl.Columns {
-				cellLocation := sheet.CoordinatesToSheetLocation(uint(i), 0)
+			for j := uint32(0); int(j) < len(tbl.Columns); j++ {
+				// for i, cellValue := range tbl.Columns {
+				cellValue := tbl.Columns[j]
+				cellLocation := sheet.CoordinatesToSheetLocation(j, 0)
 				err := f.SetCellValue(sheetName, cellLocation, cellValue)
 				if err != nil {
 					return err
@@ -188,10 +191,14 @@ func WriteXLSX(path string, tbls []*Table) error {
 			}
 		}
 		fmtFunc := tbl.FormatterFunc()
-		for y, row := range tbl.Rows {
-			for x, cellValue := range row {
-				cellLocation := sheet.CoordinatesToSheetLocation(uint(x), uint(y+rowBase))
-				if fmtType, ok := tbl.FormatMap[x]; ok {
+		for y := uint32(0); int(y) < len(tbl.Rows); y++ {
+			// for y, row := range tbl.Rows {
+			row := tbl.Rows[y]
+			for x := uint32(0); int(x) < len(row); x++ {
+				// for x, cellValue := range row {
+				cellValue := row[x]
+				cellLocation := sheet.CoordinatesToSheetLocation(x, y+rowBase)
+				if fmtType, ok := tbl.FormatMap[int(x)]; ok {
 					if fmtType == FormatURL {
 						txt, lnk := markdown.ParseLink(cellValue)
 						txt = strings.TrimSpace(txt)
@@ -218,9 +225,9 @@ func WriteXLSX(path string, tbls []*Table) error {
 						}
 					}
 				}
-				if xUint32, err := number.Itou32(x); err != nil {
-					return err
-				} else if formattedVal, err := fmtFunc(cellValue, xUint32); err != nil {
+				// if xUint32, err := number.Itou32(x); err != nil {
+				//	return err
+				if formattedVal, err := fmtFunc(cellValue, x); err != nil {
 					return errorsutil.Wrap(err, "gocharts/data/tables/write.go/WriteXLSXFormatted.Error.FormatCellValue")
 				} else if err = f.SetCellValue(sheetName, cellLocation, formattedVal); err != nil {
 					return err
@@ -280,9 +287,13 @@ func WriteXLSXInterface(filename string, sheetdatas ...SheetData) error {
 		if err != nil {
 			return errorsutil.Wrap(err, "excelize.File.NewSheet()")
 		}
-		for y, row := range sheetdata.Rows {
-			for x, cellValue := range row {
-				cellLocation := sheet.CoordinatesToSheetLocation(uint(x), uint(y))
+		for y := uint32(0); int(y) < len(sheetdata.Rows); y++ {
+			// for y, row := range sheetdata.Rows {
+			row := sheetdata.Rows[y]
+			for x := uint32(0); int(x) < len(row); x++ {
+				// for x, cellValue := range row {
+				cellValue := row[x]
+				cellLocation := sheet.CoordinatesToSheetLocation(x, y)
 				err := f.SetCellValue(sheetname, cellLocation, cellValue)
 				if err != nil {
 					return err

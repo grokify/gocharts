@@ -61,12 +61,13 @@ func (f *File) SheetNames(sortAsc bool) []string {
 	}
 }
 
-func SetRowValues(f *excelize.File, sheetName string, rowIndex uint, rowValues []any) error {
+func SetRowValues(f *excelize.File, sheetName string, rowIndex uint32, rowValues []any) error {
 	if f == nil {
 		return ErrExcelizeFileCannotBeNil
 	}
-	for colIdx, cellValue := range rowValues {
-		cellLocation := sheet.CoordinatesToSheetLocation(uint(colIdx), rowIndex)
+	for colIdx := uint32(0); int(colIdx) < len(rowValues); colIdx++ {
+		cellValue := rowValues[colIdx]
+		cellLocation := sheet.CoordinatesToSheetLocation(colIdx, rowIndex)
 		err := f.SetCellValue(sheetName, cellLocation, cellValue)
 		if err != nil {
 			return err
@@ -75,7 +76,7 @@ func SetRowValues(f *excelize.File, sheetName string, rowIndex uint, rowValues [
 	return nil
 }
 
-func GetCellValue(f *excelize.File, sheetName string, colIdx, rowIdx uint, opts ...excelize.Options) (string, error) {
+func GetCellValue(f *excelize.File, sheetName string, colIdx, rowIdx uint32, opts ...excelize.Options) (string, error) {
 	if f == nil {
 		return "", ErrExcelizeFileCannotBeNil
 	}
@@ -91,7 +92,7 @@ func (f *File) SheetColumnNames(sheetName string, trimSpace bool) ([]string, err
 	}
 }
 
-func (f *File) TableDataIndex(sheetIdx uint, headerRowCount uint, trimSpace, umerge bool) ([]string, [][]string, error) {
+func (f *File) TableDataIndex(sheetIdx, headerRowCount uint32, trimSpace, umerge bool) ([]string, [][]string, error) {
 	if f.File == nil {
 		return []string{}, [][]string{}, ErrExcelizeFileCannotBeNil
 	} else {
@@ -103,7 +104,7 @@ func (f *File) TableDataIndex(sheetIdx uint, headerRowCount uint, trimSpace, ume
 	}
 }
 
-func (f *File) TableData(sheetName string, headerRowCount uint, trimSpace, umerge bool) ([]string, [][]string, error) {
+func (f *File) TableData(sheetName string, headerRowCount uint32, trimSpace, umerge bool) ([]string, [][]string, error) {
 	var cols []string
 	var rows [][]string
 	var err error
@@ -118,7 +119,7 @@ func (f *File) TableData(sheetName string, headerRowCount uint, trimSpace, umerg
 		if err != nil {
 			return []string{}, [][]string{}, err
 		}
-		if headerRowCount > 0 && headerRowCount <= uint(len(rows)) {
+		if headerRowCount > 0 && int(headerRowCount) <= len(rows) {
 			rows = rows[headerRowCount:]
 		}
 		if trimSpace {
@@ -148,7 +149,9 @@ func (f *File) TableData(sheetName string, headerRowCount uint, trimSpace, umerg
 	}
 
 	var newRows [][]string
-	for rowIdx, row := range rows {
+	for rowIdx := uint32(0); int(rowIdx) < len(rows); rowIdx++ {
+		// for rowIdx, row := range rows {
+		row := rows[rowIdx]
 		try := stringsutil.SliceCondenseSpace(row, false, false)
 		if len(try) == 0 {
 			continue
@@ -160,11 +163,11 @@ func (f *File) TableData(sheetName string, headerRowCount uint, trimSpace, umerg
 			return cols, newRows, errors.New("row longer than cols")
 		} else {
 			newRow := []string{}
-			for colIdx := 0; colIdx < len(cols); colIdx++ {
+			for colIdx := uint32(0); int(colIdx) < len(cols); colIdx++ {
 				if cell, err := f.File.GetCellValue(sheetName,
 					sheet.CoordinatesToSheetLocation(
-						uint(colIdx),
-						uint(rowIdx)+headerRowCount,
+						colIdx,
+						rowIdx+headerRowCount,
 					)); err != nil {
 					return cols, rows, err
 				} else {

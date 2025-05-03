@@ -262,7 +262,7 @@ func (hset *HistogramSet) WriteXLSX(filename, sheetName, colName1, colName2, col
 	if err != nil {
 		return err
 	}
-	rowIdx := uint(1)
+	rowIdx := uint32(1)
 	for fstatsName, fstats := range hset.HistogramMap {
 		fstatsNameDt := time.Now()
 		if hset.KeyIsTime {
