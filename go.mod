@@ -4,7 +4,7 @@ go 1.23.2
 
 require (
 	github.com/go-echarts/go-echarts/v2 v2.5.3
-	github.com/grokify/mogo v0.68.13
+	github.com/grokify/mogo v0.68.14
 	github.com/jessevdk/go-flags v1.6.1
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/shopspring/decimal v1.4.0
@@ -19,7 +19,7 @@ require (
 require (
 	codeberg.org/go-fonts/liberation v0.5.0 // indirect
 	codeberg.org/go-latex/latex v0.1.0 // indirect
-	codeberg.org/go-pdf/fpdf v0.11.0 // indirect
+	codeberg.org/go-pdf/fpdf v0.11.1 // indirect
 	git.sr.ht/~sbinet/gg v0.6.0 // indirect
 	github.com/ajstarks/svgo v0.0.0-20211024235047-1546f124cd8b // indirect
 	github.com/campoy/embedmd v1.0.0 // indirect
