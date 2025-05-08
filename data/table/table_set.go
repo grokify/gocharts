@@ -2,6 +2,7 @@ package table
 
 import (
 	"errors"
+	"fmt"
 	"strconv"
 	"strings"
 
@@ -64,6 +65,14 @@ func (ts *TableSet) LensOrdered() []int {
 		panic("internal mismatch in `TableSet.LensOrdered(), calculated length vs. `TableSet.Order`")
 	}
 	return lens
+}
+
+func (ts *TableSet) Table(name string) (*Table, error) {
+	if t, ok := ts.TableMap[name]; ok {
+		return t, nil
+	} else {
+		return nil, fmt.Errorf("table name not found (%s)", name)
+	}
 }
 
 func (ts *TableSet) TableNames() []string {
