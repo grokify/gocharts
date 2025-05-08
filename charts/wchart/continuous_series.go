@@ -9,17 +9,21 @@ import (
 	"github.com/grokify/gocharts/v2/data/timeseries"
 )
 
-func TimeSeriesMapToContinuousSeriesMonths(dsm map[string]timeseries.TimeSeries, order []string) []chart.ContinuousSeries {
+func TimeSeriesMapToContinuousSeriesMonths(dsm map[string]timeseries.TimeSeries, order []string) ([]chart.ContinuousSeries, error) {
 	csSet := []chart.ContinuousSeries{}
 	for _, seriesName := range order {
 		if ds, ok := dsm[seriesName]; ok {
-			csSet = append(csSet, TimeSeriesToContinuousSeries(ds))
+			if cs, err := TimeSeriesToContinuousSeries(ds); err != nil {
+				return csSet, err
+			} else {
+				csSet = append(csSet, cs)
+			}
 		}
 	}
-	return csSet
+	return csSet, nil
 }
 
-func TimeSeriesToContinuousSeries(ds timeseries.TimeSeries) chart.ContinuousSeries {
+func TimeSeriesToContinuousSeries(ds timeseries.TimeSeries) (chart.ContinuousSeries, error) {
 	series := chart.ContinuousSeries{
 		Name:    ds.SeriesName,
 		XValues: []float64{},
@@ -29,11 +33,17 @@ func TimeSeriesToContinuousSeries(ds timeseries.TimeSeries) chart.ContinuousSeri
 	for _, item := range items {
 		switch ds.Interval {
 		case timeutil.IntervalMonth:
-			series.XValues = append(series.XValues,
-				float64(month.TimeToMonthContinuous(item.Time)))
+			if dtC, err := month.TimeToMonthContinuous(item.Time); err != nil {
+				return series, err
+			} else {
+				series.XValues = append(series.XValues, float64(dtC))
+			}
 		case timeutil.IntervalQuarter:
-			series.XValues = append(series.XValues,
-				float64(quarter.TimeToQuarterContinuous(item.Time)))
+			if dtC, err := quarter.TimeToQuarterContinuous(item.Time); err != nil {
+				return series, err
+			} else {
+				series.XValues = append(series.XValues, float64(dtC))
+			}
 		default:
 			series.XValues = append(series.XValues, float64(item.Time.Unix()))
 		}
@@ -43,20 +53,24 @@ func TimeSeriesToContinuousSeries(ds timeseries.TimeSeries) chart.ContinuousSeri
 			series.YValues = append(series.YValues, float64(item.Value))
 		}
 	}
-	return series
+	return series, nil
 }
 
-func TimeSeriesMapToContinuousSeriesQuarters(dsm map[string]timeseries.TimeSeries, order []string) []chart.ContinuousSeries {
+func TimeSeriesMapToContinuousSeriesQuarters(dsm map[string]timeseries.TimeSeries, order []string) ([]chart.ContinuousSeries, error) {
 	csSet := []chart.ContinuousSeries{}
 	for _, seriesName := range order {
 		if ds, ok := dsm[seriesName]; ok {
-			csSet = append(csSet, TimeSeriesToContinuousSeriesQuarter(ds))
+			if cs, err := TimeSeriesToContinuousSeriesQuarter(ds); err != nil {
+				return csSet, err
+			} else {
+				csSet = append(csSet, cs)
+			}
 		}
 	}
-	return csSet
+	return csSet, nil
 }
 
-func TimeSeriesToContinuousSeriesQuarter(ds timeseries.TimeSeries) chart.ContinuousSeries {
+func TimeSeriesToContinuousSeriesQuarter(ds timeseries.TimeSeries) (chart.ContinuousSeries, error) {
 	series := chart.ContinuousSeries{
 		Name:    ds.SeriesName,
 		XValues: []float64{},
@@ -64,12 +78,16 @@ func TimeSeriesToContinuousSeriesQuarter(ds timeseries.TimeSeries) chart.Continu
 
 	items := ds.ItemsSorted()
 	for _, item := range items {
+		dtQuarterContinuous, err := quarter.TimeToQuarterContinuous(item.Time)
+		if err != nil {
+			return series, err
+		}
 		series.XValues = append(
 			series.XValues,
-			float64(quarter.TimeToQuarterContinuous(item.Time)))
+			float64(dtQuarterContinuous))
 		series.YValues = append(
 			series.YValues,
 			float64(item.Value))
 	}
-	return series
+	return series, nil
 }

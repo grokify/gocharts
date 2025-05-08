@@ -82,7 +82,7 @@ type TableMonthXOXOpts struct {
 	momBaseTimeItemExists  bool
 }
 
-func (ts *TimeSeries) TableMonthXOX(timeFmtColName, seriesName, valuesName, yoyName, qoqName, momName string, opts *TableMonthXOXOpts) table.Table {
+func (ts *TimeSeries) TableMonthXOX(timeFmtColName, seriesName, valuesName, yoyName, qoqName, momName string, opts *TableMonthXOXOpts) (*table.Table, error) {
 	if len(strings.TrimSpace(seriesName)) == 0 {
 		seriesName = "Series"
 	}
@@ -107,7 +107,11 @@ func (ts *TimeSeries) TableMonthXOX(timeFmtColName, seriesName, valuesName, yoyN
 			opts.MOMBaseMonth = minDt
 		}
 		opts.MOMBaseMonth = timeutil.NewTimeMore(opts.MOMBaseMonth.UTC(), 0).MonthStart()
-		opts.momBaseMonthContinuous = month.TimeToMonthContinuous(opts.MOMBaseMonth)
+		if try, err := month.TimeToMonthContinuous(opts.MOMBaseMonth); err != nil {
+			return nil, err
+		} else {
+			opts.momBaseMonthContinuous = uint64(try)
+		}
 		momBaseTimeItem, err := ts.Get(opts.MOMBaseMonth)
 		if err != nil {
 			opts.momBaseTimeItemExists = false
@@ -171,7 +175,11 @@ func (ts *TimeSeries) TableMonthXOX(timeFmtColName, seriesName, valuesName, yoyN
 		}
 		if opts.AddMOMGrowth {
 			if dt.After(opts.MOMBaseMonth) && opts.momBaseTimeItemExists {
-				diffMonths := month.TimeToMonthContinuous(dt) - opts.momBaseMonthContinuous
+				dtMonthContinuous, err := month.TimeToMonthContinuous(dt)
+				if err != nil {
+					return nil, err
+				}
+				diffMonths := uint64(dtMonthContinuous) - opts.momBaseMonthContinuous
 				targetValue := opts.momBaseTimeItem.Float64() * math.Pow(1+opts.MOMGrowthPct, float64(diffMonths))
 				momGrowthTargets = append(momGrowthTargets, strconvutil.Ftoa(targetValue, -1))
 				actualValue := tiVal.Float64()
@@ -190,7 +198,7 @@ func (ts *TimeSeries) TableMonthXOX(timeFmtColName, seriesName, valuesName, yoyN
 	if opts.AddMOMGrowth {
 		tbl.Rows = append(tbl.Rows, momGrowthTargets, momGrowthPerform)
 	}
-	return tbl
+	return &tbl, nil
 }
 
 func (ts *TimeSeries) TableYearYOY(seriesName, valuesName, yoyName string) table.Table {

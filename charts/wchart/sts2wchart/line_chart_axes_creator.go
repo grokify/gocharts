@@ -31,14 +31,17 @@ func (ac *AxesCreator) AddBackground(graph chart.Chart) chart.Chart {
 	return graph
 }
 
-func (ac *AxesCreator) AddXAxis(graph chart.Chart, interval timeutil.Interval, minTime, maxTime time.Time) chart.Chart {
-	xTicks, xGridlines := wchart.TicksAndGridlinesTime(
+func (ac *AxesCreator) AddXAxis(graph chart.Chart, interval timeutil.Interval, minTime, maxTime time.Time) (chart.Chart, error) {
+	xTicks, xGridlines, err := wchart.TicksAndGridlinesTime(
 		interval, minTime, maxTime,
 		ac.GridMajorStyle, ac.GridMinorStyle, ac.XAxisTickFormatFunc, ac.XAxisTickInterval, ac.XAxisGridInterval)
+	if err != nil {
+		return graph, err
+	}
 	graph.XAxis.Ticks = xTicks
 	graph.XAxis.GridLines = xGridlines
 	graph.XAxis.GridMajorStyle = ac.GridMajorStyle
-	return graph
+	return graph, nil
 }
 
 func (ac *AxesCreator) AddYAxis(graph chart.Chart, minValue, maxValue int64) chart.Chart {
@@ -58,7 +61,7 @@ func (ac *AxesCreator) AddYAxisPercent(graph chart.Chart, minValue, maxValue flo
 	return graph
 }
 
-func (ac *AxesCreator) ChartAddAxesDataSeries(graph chart.Chart, interval timeutil.Interval, minTime, maxTime time.Time, minValue, maxValue int64) chart.Chart {
+func (ac *AxesCreator) ChartAddAxesDataSeries(graph chart.Chart, interval timeutil.Interval, minTime, maxTime time.Time, minValue, maxValue int64) (chart.Chart, error) {
 	graph.Background = chart.Style{Padding: chart.Box{}}
 	if ac.PaddingTop > 0 {
 		graph.Background.Padding.Top = ac.PaddingTop
@@ -69,12 +72,15 @@ func (ac *AxesCreator) ChartAddAxesDataSeries(graph chart.Chart, interval timeut
 	graph.YAxis.GridLines = wchart.GridLines(tickValues, ac.GridMinorStyle)
 	graph.YAxis.GridMajorStyle = ac.GridMinorStyle
 
-	xTicks, xGridlines := wchart.TicksAndGridlinesTime(
+	xTicks, xGridlines, err := wchart.TicksAndGridlinesTime(
 		interval, minTime, maxTime,
 		ac.GridMajorStyle, ac.GridMinorStyle, ac.XAxisTickFormatFunc, ac.XAxisTickInterval, ac.XAxisGridInterval)
+	if err != nil {
+		return graph, err
+	}
 	graph.XAxis.Ticks = xTicks
 	graph.XAxis.GridLines = xGridlines
 	graph.XAxis.GridMajorStyle = ac.GridMajorStyle
 
-	return graph
+	return graph, nil
 }

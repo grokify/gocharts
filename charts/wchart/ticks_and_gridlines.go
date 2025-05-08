@@ -50,21 +50,37 @@ func GridLines(values []float64, style chart.Style) []chart.GridLine {
 
 // TicksAndGridlinesTime takes a start and end time and converts it to
 // `[]chart.Tick` and `[]chart.GridLine.`.
-func TicksAndGridlinesTime(interval timeutil.Interval, timeStart, timeEnd time.Time, styleMajor, styleMinor chart.Style, timeFormat func(time.Time) string, tickInterval, gridInterval timeutil.Interval) ([]chart.Tick, []chart.GridLine) {
+func TicksAndGridlinesTime(interval timeutil.Interval, timeStart, timeEnd time.Time, styleMajor, styleMinor chart.Style, timeFormat func(time.Time) string, tickInterval, gridInterval timeutil.Interval) ([]chart.Tick, []chart.GridLine, error) {
 	//fmt.Printf("TICK [%v] GRID [%v]\n", tickInterval, gridInterval)
-
-	timecStart := uint64(0)
-	timecEnd := uint64(0)
-	if interval == timeutil.IntervalMonth {
-		timecStart = month.TimeToMonthContinuous(timeStart)
-		timecEnd = month.TimeToMonthContinuous(timeEnd)
-	} else if interval == timeutil.IntervalQuarter {
-		timecStart = quarter.TimeToQuarterContinuous(timeStart)
-		timecEnd = quarter.TimeToQuarterContinuous(timeEnd)
-	}
-
 	ticks := []chart.Tick{}
 	gridlines := []chart.GridLine{}
+
+	timecStart := uint32(0)
+	timecEnd := uint32(0)
+	if interval == timeutil.IntervalMonth {
+		if timecStartTry, err := month.TimeToMonthContinuous(timeStart); err != nil {
+			return ticks, gridlines, err
+		} else {
+			timecStart = timecStartTry
+		}
+		if timecEndTry, err := month.TimeToMonthContinuous(timeStart); err != nil {
+			return ticks, gridlines, err
+		} else {
+			timecEnd = timecEndTry
+		}
+	} else if interval == timeutil.IntervalQuarter {
+		if timecStartTry, err := quarter.TimeToQuarterContinuous(timeStart); err != nil {
+			return ticks, gridlines, err
+		} else {
+			timecStart = timecStartTry
+		}
+		if timecEndTry, err := quarter.TimeToQuarterContinuous(timeEnd); err != nil {
+			return ticks, gridlines, err
+		} else {
+			timecEnd = timecEndTry
+		}
+	}
+
 	if timecStart > timecEnd {
 		tmp := timecStart
 		timecStart = timecEnd
@@ -155,5 +171,5 @@ func TicksAndGridlinesTime(interval timeutil.Interval, timeStart, timeEnd time.T
 		}
 	}
 
-	return ticks, gridlines
+	return ticks, gridlines, nil
 }

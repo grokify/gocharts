@@ -35,17 +35,20 @@ func WriteFilesTimeSeries(filePrefix string, ts timeseries.TimeSeries, verbose b
 		filePrefix = "_data"
 	}
 
-	tblXox := ts.TableMonthXOX("Jan 2006", "", "", "", "", "",
+	tblXox, err := ts.TableMonthXOX("Jan 2006", "", "", "", "", "",
 		&timeseries.TableMonthXOXOpts{
 			AddMOMGrowth: true,
 			MOMGrowthPct: accounting.AnnualToMonthly(.3),
 			MOMBaseMonth: timeutil.MustParse(timeutil.RFC3339FullDate, "2021-12-01"),
 		})
+	if err != nil {
+		return err
+	}
 	if verbose {
 		fmtutil.MustPrintJSON(tblXox.Rows)
 		fmtutil.MustPrintJSON(tblXox.Columns)
 	}
-	err := tblXox.WriteXLSX(filePrefix+".xlsx", "data")
+	err = tblXox.WriteXLSX(filePrefix+".xlsx", "data")
 	if err != nil {
 		return err
 	}

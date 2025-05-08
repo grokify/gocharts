@@ -21,7 +21,12 @@ func (ts *TimeSeries) LinearRegression() (alpha, beta float64, err error) {
 		alpha, beta = stat.LinearRegression(xs, ys, nil, false)
 	case timeutil.IntervalMonth:
 		for _, ti := range ts.ItemMap {
-			xs = append(xs, float64(month.TimeToMonthContinuous(ti.Time)))
+			tiTimeMonthContinuous, errTry := month.TimeToMonthContinuous(ti.Time)
+			if errTry != nil {
+				err = errTry
+				return
+			}
+			xs = append(xs, float64(tiTimeMonthContinuous))
 			ys = append(ys, ti.Float64())
 		}
 		alpha, beta = stat.LinearRegression(xs, ys, nil, false)

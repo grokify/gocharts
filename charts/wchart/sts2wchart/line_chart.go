@@ -166,9 +166,13 @@ func TimeSeriesSetToLineChart(tset timeseries.TimeSeriesSet, opts *LineChartOpts
 	if len(tset.Order) == 0 {
 		tset.Inflate()
 	}
+	var err error
 	for _, seriesName := range tset.Order {
 		if ts, ok := tset.Series[seriesName]; ok {
-			mainSeries = wchart.TimeSeriesToContinuousSeries(ts)
+			mainSeries, err = wchart.TimeSeriesToContinuousSeries(ts)
+			if err != nil {
+				return graph, err
+			}
 
 			mainSeries.Style = chart.Style{StrokeWidth: float64(3)}
 
@@ -229,11 +233,17 @@ func TimeSeriesSetToLineChart(tset timeseries.TimeSeriesSet, opts *LineChartOpts
 		if opts.YAxisMinEnable {
 			minValue = int64(opts.YAxisMin)
 		}
-		graph = axesCreator.ChartAddAxesDataSeries(
+		graph, err = axesCreator.ChartAddAxesDataSeries(
 			graph, tset.Interval, minTime, maxTime, minValue, maxValue)
+		if err != nil {
+			return graph, err
+		}
 	} else {
 		graph = axesCreator.AddBackground(graph)
-		graph = axesCreator.AddXAxis(graph, tset.Interval, minTime, maxTime)
+		graph, err = axesCreator.AddXAxis(graph, tset.Interval, minTime, maxTime)
+		if err != nil {
+			return graph, err
+		}
 		minValue, maxValue := tset.MinMaxValuesFloat64()
 		if opts.YAxisMinEnable {
 			minValue = opts.YAxisMin
@@ -271,36 +281,52 @@ func TimeSeriesMonthToAnnotations(ts timeseries.TimeSeries, opts LineChartOpts) 
 	xoxLast := xox.Last()
 
 	if opts.NowAnnotation {
-		annoSeries.Annotations = append(annoSeries.Annotations, chart.Value2{
-			XValue: float64(month.TimeToMonthContinuous(xoxLast.Time)),
-			YValue: float64(xoxLast.Value),
-			Label:  strconvutil.Int64Abbreviation(xoxLast.Value)})
+		if dtMC, err := month.TimeToMonthContinuous(xoxLast.Time); err != nil {
+			return annoSeries, err
+		} else {
+			annoSeries.Annotations = append(annoSeries.Annotations, chart.Value2{
+				XValue: float64(dtMC),
+				YValue: float64(xoxLast.Value),
+				Label:  strconvutil.Int64Abbreviation(xoxLast.Value)})
+		}
 	}
 	if opts.MAgoAnnotation {
-		annoSeries.Annotations = append(annoSeries.Annotations, chart.Value2{
-			XValue: float64(month.TimeToMonthContinuous(xoxLast.TimeMonthAgo)),
-			YValue: float64(xoxLast.MMAgoValue),
-			Label:  "M: " + strconvutil.Int64Abbreviation(xoxLast.MMAgoValue)})
+		if dtMC, err := month.TimeToMonthContinuous(xoxLast.TimeMonthAgo); err != nil {
+			return annoSeries, err
+		} else {
+			annoSeries.Annotations = append(annoSeries.Annotations, chart.Value2{
+				XValue: float64(dtMC),
+				YValue: float64(xoxLast.MMAgoValue),
+				Label:  "M: " + strconvutil.Int64Abbreviation(xoxLast.MMAgoValue)})
+		}
 	}
 	if opts.QAgoAnnotation {
 		suffix := ""
 		if opts.AgoAnnotationPct {
 			suffix = fmt.Sprintf(", %d%%", int(xoxLast.QoQ))
 		}
-		annoSeries.Annotations = append(annoSeries.Annotations, chart.Value2{
-			XValue: float64(month.TimeToMonthContinuous(xoxLast.TimeQuarterAgo)),
-			YValue: float64(xoxLast.MQAgoValue),
-			Label:  "Q: " + strconvutil.Int64Abbreviation(xoxLast.MQAgoValue) + suffix})
+		if dtMC, err := month.TimeToMonthContinuous(xoxLast.TimeQuarterAgo); err != nil {
+			return annoSeries, err
+		} else {
+			annoSeries.Annotations = append(annoSeries.Annotations, chart.Value2{
+				XValue: float64(dtMC),
+				YValue: float64(xoxLast.MQAgoValue),
+				Label:  "Q: " + strconvutil.Int64Abbreviation(xoxLast.MQAgoValue) + suffix})
+		}
 	}
 	if opts.YAgoAnnotation {
 		suffix := ""
 		if opts.AgoAnnotationPct {
 			suffix = fmt.Sprintf(", %d%%", int(xoxLast.YoY))
 		}
-		annoSeries.Annotations = append(annoSeries.Annotations, chart.Value2{
-			XValue: float64(month.TimeToMonthContinuous(xoxLast.TimeYearAgo)),
-			YValue: float64(xoxLast.MYAgoValue),
-			Label:  "Y: " + strconvutil.Int64Abbreviation(xoxLast.MYAgoValue) + suffix})
+		if dtMC, err := month.TimeToMonthContinuous(xoxLast.TimeYearAgo); err != nil {
+			return annoSeries, err
+		} else {
+			annoSeries.Annotations = append(annoSeries.Annotations, chart.Value2{
+				XValue: float64(dtMC),
+				YValue: float64(xoxLast.MYAgoValue),
+				Label:  "Y: " + strconvutil.Int64Abbreviation(xoxLast.MYAgoValue) + suffix})
+		}
 	}
 	return annoSeries, nil
 }
