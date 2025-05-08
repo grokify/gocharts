@@ -9,6 +9,7 @@ import (
 	"slices"
 	"strconv"
 
+	"github.com/grokify/mogo/encoding/csvutil"
 	"github.com/grokify/mogo/encoding/jsonutil"
 	"github.com/grokify/mogo/errors/errorsutil"
 )
@@ -39,6 +40,34 @@ func NewTable(name string) Table {
 		Columns:   []string{},
 		Rows:      [][]string{},
 		FormatMap: map[int]string{}}
+}
+
+func ReadFileCSV(filepath string, sep rune) (*Table, error) {
+	cr, f, err := csvutil.NewReaderFile(filepath, sep)
+	if err != nil {
+		return nil, err
+	} else {
+		defer f.Close()
+	}
+	t := NewTable("")
+	i := 0
+	for {
+		row, err := cr.Read()
+		if err != nil {
+			if err.Error() == "EOF" {
+				break
+			} else {
+				return nil, err
+			}
+		}
+		if i == 0 {
+			t.Columns = row
+		} else {
+			t.Rows = append(t.Rows, row)
+		}
+		i++
+	}
+	return &t, nil
 }
 
 // ReadFileJSON loads a JSON marshal of `Table{}`, such as produced by `Table.WriteJSON()`.
