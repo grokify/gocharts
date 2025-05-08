@@ -69,6 +69,19 @@ func (cols Columns) CellString(colName string, row []string, defaultIfEmpty bool
 	return "", fmt.Errorf("columnName (%s) not found", colName)
 }
 
+// CellStringByLetters returns a single row value by column letters.
+func (cols Columns) CellStringByLetters(colLetters string, row []string, defaultIfEmpty bool, def string) (string, error) {
+	if colIdx, err := sheet.ColLettersToIndex(colLetters); err != nil {
+		return "", err
+	} else if int(colIdx) < len(row) {
+		return row[colIdx], nil
+	} else if defaultIfEmpty {
+		return def, nil
+	} else {
+		return "", fmt.Errorf("index out of range (%d)", colIdx)
+	}
+}
+
 // CellFloat64 returns a single row value.
 func (cols Columns) CellFloat64(colName string, row []string, defaultIfEmpty bool, def float64) (float64, error) {
 	if val, err := cols.CellString(colName, row, false, ""); err != nil {
