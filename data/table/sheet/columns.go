@@ -18,15 +18,15 @@ func SliceReplaceValueAtLettersMap(s []string, m map[string]string) ([]string, e
 }
 
 func SliceReplaceValueAtLetters(s []string, letters, v string) ([]string, error) {
-	idx, err := ColLettersToIndex(letters)
+	num, err := ColLettersToNumber(letters)
 	if err != nil {
 		return []string{}, err
 	}
-	if int(idx) >= len(s) {
+	if int(num) > len(s) {
 		return []string{}, fmt.Errorf("index out of bounds index letter (%s) index int (%d) len input (%d)",
-			letters, idx, len(s))
+			letters, num-1, len(s))
 	}
 	out := slices.Clone(s)
-	out[idx] = v
+	out[num-1] = v
 	return out, nil
 }

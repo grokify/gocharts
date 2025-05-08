@@ -71,14 +71,14 @@ func (cols Columns) CellString(colName string, row []string, defaultIfEmpty bool
 
 // CellStringByLetters returns a single row value by column letters.
 func (cols Columns) CellStringByLetters(colLetters string, row []string, defaultIfEmpty bool, def string) (string, error) {
-	if colIdx, err := sheet.ColLettersToIndex(colLetters); err != nil {
+	if colNum, err := sheet.ColLettersToNumber(colLetters); err != nil {
 		return "", err
-	} else if int(colIdx) < len(row) {
-		return row[colIdx], nil
+	} else if int(colNum) <= len(row) {
+		return row[colNum-1], nil
 	} else if defaultIfEmpty {
 		return def, nil
 	} else {
-		return "", fmt.Errorf("index out of range (%d)", colIdx)
+		return "", fmt.Errorf("index out of range (%d)", colNum-1)
 	}
 }
 

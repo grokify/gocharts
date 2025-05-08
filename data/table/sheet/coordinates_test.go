@@ -95,7 +95,7 @@ func TestColNumberToLetters(t *testing.T) {
 	}
 }
 
-func TestColLettersToIndex(t *testing.T) {
+func TestColLettersToNumber(t *testing.T) {
 	tests := map[string]uint32{
 		"A":       1,
 		"Z":       26,
@@ -109,7 +109,7 @@ func TestColLettersToIndex(t *testing.T) {
 	}
 
 	for col, expected := range tests {
-		got, err := ColLettersToIndex(col)
+		got, err := ColLettersToNumber(col)
 		if err != nil {
 			t.Errorf("ColumnLetterToIndexUint32(%q); error (%s)", col, err.Error())
 		}

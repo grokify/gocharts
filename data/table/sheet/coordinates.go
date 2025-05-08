@@ -1,6 +1,7 @@
 package sheet
 
 import (
+	"errors"
 	"fmt"
 	"strconv"
 	"strings"
@@ -98,9 +99,12 @@ func ColIndexToLetters(colIndex uint32) string {
 	return strings.TrimSpace(prefix) + strings.TrimSpace(suffix)
 }
 
-func ColLettersToIndex(letters string) (uint32, error) {
+func ColLettersToNumber(letters string) (uint32, error) {
 	letters = strings.ToUpper(strings.TrimSpace(letters))
-	var result uint32 = 0
+	result := uint32(0)
+	if letters == "" {
+		return result, errors.New("letters string cannot be empty")
+	}
 	for i := range len(letters) {
 		c := letters[i]
 		if c < 'A' || c > 'Z' {
