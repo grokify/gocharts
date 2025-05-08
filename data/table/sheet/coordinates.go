@@ -99,6 +99,14 @@ func ColIndexToLetters(colIndex uint32) string {
 	return strings.TrimSpace(prefix) + strings.TrimSpace(suffix)
 }
 
+func ColLettersToIndex(letters string) (uint32, error) {
+	if colNum, err := ColLettersToNumber(letters); err != nil {
+		return 0, err
+	} else {
+		return colNum - 1, nil
+	}
+}
+
 func ColLettersToNumber(letters string) (uint32, error) {
 	letters = strings.ToUpper(strings.TrimSpace(letters))
 	result := uint32(0)
