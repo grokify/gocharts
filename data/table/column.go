@@ -3,6 +3,7 @@ package table
 import (
 	"errors"
 	"fmt"
+	"slices"
 	"strconv"
 	"strings"
 	"time"
@@ -131,6 +132,10 @@ func (cols Columns) CellTime(colName, timeFormat string, row []string, defaultIf
 		}
 		return time.Parse(timeFormat, val)
 	}
+}
+
+func (cols Columns) Clone() Columns {
+	return slices.Clone(cols)
 }
 
 func (cols Columns) MustCellTime(colName, timeFormat string, row []string) *time.Time {
