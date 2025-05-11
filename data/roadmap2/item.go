@@ -27,9 +27,9 @@ func NewItem() Item {
 	return Item{Meta: map[string]string{}}
 }
 
-func (i Item) ReleaseTimeQuarter() int32 {
+func (i Item) ReleaseTimeYearQuarter() int {
 	tm := timeutil.NewTimeMore(i.ReleaseTime, 0)
-	q := tm.Quarter()
+	q := tm.YearQuarter()
 	if q == 11 {
 		q = -1
 	}
@@ -89,7 +89,7 @@ func (ii Items) NamesByIntervals(intervals []string, sortAsc, inclNonExplicit bo
 		}
 		if !added && inclNonExplicit {
 			tm := timeutil.NewTimeMore(item.ReleaseTime, 0)
-			qtrString := tm.YearQuarter()
+			qtrString := tm.YearQuarterString()
 			if _, ok := out[qtrString]; !ok {
 				out[qtrString] = []string{}
 			}
@@ -104,10 +104,10 @@ func (ii Items) NamesByIntervals(intervals []string, sortAsc, inclNonExplicit bo
 	return out, nil
 }
 
-func (ii Items) NamesByQuarter(sortAsc bool) map[int32][]string {
-	out := map[int32][]string{}
+func (ii Items) NamesByQuarter(sortAsc bool) map[int][]string {
+	out := map[int][]string{}
 	for _, item := range ii {
-		q := item.ReleaseTimeQuarter()
+		q := item.ReleaseTimeYearQuarter()
 		if out[q] == nil {
 			out[q] = []string{}
 		}
@@ -121,10 +121,10 @@ func (ii Items) NamesByQuarter(sortAsc bool) map[int32][]string {
 	return out
 }
 
-func MapInt32SliceStringToLines(m map[int32][]string, keyPrefix, valPrefix string) []string {
+func MapInt32SliceStringToLines(m map[int][]string, keyPrefix, valPrefix string) []string {
 	var lines []string
 	for k, vals := range m {
-		kStr := strconv.Itoa(int(k))
+		kStr := strconv.Itoa(k)
 		kStr = keyPrefix + kStr
 		lines = append(lines, kStr)
 		for _, v := range vals {

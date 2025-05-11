@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	tu "github.com/grokify/mogo/time/timeutil"
+	"github.com/grokify/mogo/time/timeutil"
 )
 
 type Item struct {
@@ -22,7 +22,7 @@ type Item struct {
 	BackgroundColorHex string
 }
 
-func (i *Item) SetMinMaxQuarter(qtrMin, qtrMax int32) error {
+func (i *Item) SetMinMaxQuarter(qtrMin, qtrMax int) error {
 	if qtrMax < qtrMin {
 		return fmt.Errorf("max is < min: min [%v] max [%v]", qtrMin, qtrMax)
 	}
@@ -33,8 +33,8 @@ func (i *Item) SetMinMaxQuarter(qtrMin, qtrMax int32) error {
 	return i.SetMaxQuarter(qtrMax)
 }
 
-func (i *Item) SetMinQuarter(qtr int32) error {
-	qt, err := tu.QuarterInt32StartTime(qtr)
+func (i *Item) SetMinQuarter(yyyyq int) error {
+	qt, err := timeutil.YearQuarterStartTime(yyyyq)
 	if err != nil {
 		return err
 	}
@@ -42,8 +42,8 @@ func (i *Item) SetMinQuarter(qtr int32) error {
 	return nil
 }
 
-func (i *Item) SetMaxQuarter(qtr int32) error {
-	qt, err := tu.QuarterInt32EndTime(qtr)
+func (i *Item) SetMaxQuarter(yyyyq int) error {
+	qt, err := timeutil.YearQuarterEndTime(yyyyq)
 	if err != nil {
 		return err
 	}

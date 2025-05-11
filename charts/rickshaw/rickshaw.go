@@ -2,6 +2,7 @@ package rickshaw
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"sort"
 	"strconv"
@@ -34,7 +35,7 @@ type MonthData struct {
 	SeriesName string
 	MonthS     string
 	YearS      string
-	Dt6        int32
+	Dt6        int
 	Value      int64
 	ValueS     string
 }
@@ -58,14 +59,9 @@ func (am *MonthData) Inflate() error {
 	}
 	dt6s := fmt.Sprintf("%v%02d", am.YearS, monthn)
 
-	i, err := strconv.Atoi(dt6s)
-	if err != nil {
+	if dt6, err := strconv.Atoi(dt6s); err != nil {
 		return err
 	} else {
-		dt6, err := number.Itoi32(i)
-		if err != nil {
-			return err
-		}
 		am.Dt6 = dt6
 	}
 
@@ -223,15 +219,18 @@ func (rd *RickshawData) Formatted() (RickshawDataFormatted, error) {
 		}
 	}
 
-	// timeutil.ParseDt6(minDt6)
-
-	dt6Axis := timeutil.DT6MinMaxSlice(minDt6, maxDt6)
+	var dt6Axis []uint32
+	if minDt6 < 0 || maxDt6 < 0 {
+		return formatted, errors.New("years cannot be negative")
+	} else {
+		dt6Axis = timeutil.DT6MinMaxSlice(uint32(minDt6), uint32(maxDt6))
+	}
 
 	seriesSetInflatedSorted := [][]Item{}
 	for _, thinSeries := range seriesSet {
 		fullSeries := []Item{}
 		for _, dt6 := range dt6Axis {
-			dt, err := timeutil.TimeForDT6(dt6)
+			dt, err := timeutil.TimeForDT6(int(dt6))
 			if err != nil {
 				return formatted, err
 			}

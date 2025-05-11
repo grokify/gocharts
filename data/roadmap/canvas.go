@@ -25,19 +25,19 @@ type Canvas struct {
 	Rows    [][]Item
 }
 
-func (can *Canvas) SetMinMaxQuarter(qtrMin, qtrMax int32) error {
-	if qtrMax < qtrMin {
-		return fmt.Errorf("max is < min: min [%v] max [%v]", qtrMin, qtrMax)
+func (can *Canvas) SetMinMaxQuarter(yyyyqMin, yyyyqMax int) error {
+	if yyyyqMax < yyyyqMin {
+		return fmt.Errorf("max is < min: min [%v] max [%v]", yyyyqMin, yyyyqMax)
 	}
-	err := can.SetMinQuarter(qtrMin)
+	err := can.SetMinQuarter(yyyyqMin)
 	if err != nil {
 		return err
 	}
-	return can.SetMaxQuarter(qtrMax)
+	return can.SetMaxQuarter(yyyyqMax)
 }
 
-func (can *Canvas) SetMinQuarter(qtr int32) error {
-	qt, err := timeutil.QuarterInt32StartTime(qtr)
+func (can *Canvas) SetMinQuarter(yyyyq int) error {
+	qt, err := timeutil.YearQuarterStartTime(yyyyq)
 	if err != nil {
 		return err
 	}
@@ -46,8 +46,8 @@ func (can *Canvas) SetMinQuarter(qtr int32) error {
 	return nil
 }
 
-func (can *Canvas) SetMaxQuarter(qtr int32) error {
-	qt, err := timeutil.QuarterInt32EndTime(qtr)
+func (can *Canvas) SetMaxQuarter(yyyyq int) error {
+	qt, err := timeutil.YearQuarterEndTime(yyyyq)
 	if err != nil {
 		return err
 	}
@@ -207,12 +207,12 @@ ITEMS:
 	}
 */
 
-func GetCanvasQuarter(start, end int32) (Canvas, error) {
-	qs, err := timeutil.QuarterInt32StartTime(start)
+func GetCanvasQuarter(yyyyqStart, yyyyqEnd int) (Canvas, error) {
+	qs, err := timeutil.YearQuarterStartTime(yyyyqStart)
 	if err != nil {
 		return Canvas{}, err
 	}
-	qe, err := timeutil.QuarterInt32EndTime(end)
+	qe, err := timeutil.YearQuarterEndTime(yyyyqEnd)
 	if err != nil {
 		return Canvas{}, err
 	}

@@ -3,7 +3,7 @@ package timeseries
 import (
 	"strconv"
 
-	tu "github.com/grokify/mogo/time/timeutil"
+	"github.com/grokify/mogo/time/timeutil"
 )
 
 // TimeStats is used to generate unique counts stats
@@ -16,7 +16,7 @@ func (ts *TimeStats) UniqueCountsByQuarter() map[string]int {
 	// quarter-value-count
 	wip := map[string]map[string]int{}
 	for _, item := range ts.Items {
-		q := strconv.Itoa(int(tu.QuarterInt32ForTime(item.Time)))
+		q := strconv.Itoa(timeutil.YearQuarterForTime(item.Time))
 		v := item.SeriesName
 		if _, ok := wip[q]; !ok {
 			wip[q] = map[string]int{}
@@ -33,7 +33,7 @@ func (ts *TimeStats) UniqueCountsByMonth() map[string]int {
 	// month-value-count
 	wip := map[string]map[string]int{}
 	for _, item := range ts.Items {
-		m := item.Time.Format(tu.DT6)
+		m := item.Time.Format(timeutil.DT6)
 		v := item.SeriesName
 		if _, ok := wip[m]; !ok {
 			wip[m] = map[string]int{}
