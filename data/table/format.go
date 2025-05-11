@@ -205,12 +205,13 @@ func (tbl *Table) Text(w io.Writer) error {
 		return errors.New("writer must be supplied")
 	}
 	tw := tablewriter.NewWriter(w)
-	tw.SetHeader(slices.Clone(tbl.Columns))
+	tw.Header(slices.Clone(tbl.Columns))
 	for _, r := range tbl.Rows {
-		tw.Append(slices.Clone(r))
+		if err := tw.Append(slices.Clone(r)); err != nil {
+			return err
+		}
 	}
-	tw.Render()
-	return nil
+	return tw.Render()
 }
 
 // Transpose creates a new table by transposing the matrix data.

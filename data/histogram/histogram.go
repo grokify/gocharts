@@ -304,7 +304,7 @@ func (hist *Histogram) Percentile(x int) (float32, error) {
 }
 
 // WriteTable writes an ASCII Table. For CLI apps, pass `os.Stdout` for `io.Writer`.
-func (hist *Histogram) WriteTableASCII(w io.Writer, header []string, sortBy string, inclTotal bool) {
+func (hist *Histogram) WriteTableASCII(w io.Writer, header []string, sortBy string, inclTotal bool) error {
 	var rows [][]string
 	sortedItems := hist.ItemCounts(sortBy)
 	for _, sortedItem := range sortedItems {
@@ -326,17 +326,20 @@ func (hist *Histogram) WriteTableASCII(w io.Writer, header []string, sortBy stri
 		header[1] = "Value"
 	}
 
-	table := tablewriter.NewWriter(w)
-	table.SetHeader(header)
+	tw := tablewriter.NewWriter(w)
+	tw.Header(header)
 	if inclTotal {
-		table.SetFooter([]string{
+		tw.Footer([]string{
 			"Total",
 			strconv.Itoa(hist.Sum()),
 		}) // Add Footer
 	}
-	table.SetBorder(false) // Set Border to false
-	table.AppendBulk(rows) // Add Bulk Data
-	table.Render()
+	// tw.SetBorder(false) // Set Border to false
+	if err := tw.Bulk(rows); err != nil {
+		return err
+	} else {
+		return tw.Render()
+	}
 }
 
 func (hist *Histogram) Table(colNameBinName, colNameBinCount string) *table.Table {
