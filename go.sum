@@ -25,8 +25,8 @@ github.com/google/go-cmp v0.6.0/go.mod h1:17dUlkBOakJ0+DkrSSNjCkIjxS6bF9zb3elmeN
 github.com/google/gofuzz v1.0.0/go.mod h1:dBl0BpW6vV/+mYPU4Po3pmUjxk6FQPldtuIdl/M65Eg=
 github.com/grokify/base36 v1.0.5 h1:iUgnt40hrPtn3M2gjU4Darow5ikf8xWXrTuMWTLziCk=
 github.com/grokify/base36 v1.0.5/go.mod h1:L+1aaUBGfp5Ctar7KCS5G9uPABo1Ccu1Ct2iQAuhOJ4=
-github.com/grokify/mogo v0.69.1 h1:By/OzcobshAA1kv6uhYf5WPp6e/rdsevjt/3GxP+xAY=
-github.com/grokify/mogo v0.69.1/go.mod h1:hw/lNS/kYID4EiP5w9kHDChxh1ryN0NGi3W3TqCzoXA=
+github.com/grokify/mogo v0.69.3 h1:Yh01QY+I/qGxaa55sX0WkD/KUiK2HtArRltkt4DJY+4=
+github.com/grokify/mogo v0.69.3/go.mod h1:hw/lNS/kYID4EiP5w9kHDChxh1ryN0NGi3W3TqCzoXA=
 github.com/huandu/xstrings v1.5.0 h1:2ag3IFq9ZDANvthTwTiqSSZLjDc+BedvHPAp5tJy2TI=
 github.com/huandu/xstrings v1.5.0/go.mod h1:y5/lhBue+AyNmUVz9RLU9xbLR0o4KIIExikq4ovT0aE=
 github.com/iancoleman/strcase v0.3.0 h1:nTXanmYxhfFAMjZL34Ov6gkzEsSJZ5DbhxWjvSASxEI=
@@ -52,8 +52,10 @@ github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826 h1:RWengNIwukTxcDr9
 github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826/go.mod h1:TaXosZuwdSHYgviHp1DAtfrULt5eUgsSMsZf+YrPgl8=
 github.com/olekukonko/errors v1.1.0 h1:RNuGIh15QdDenh+hNvKrJkmxxjV4hcS50Db478Ou5sM=
 github.com/olekukonko/errors v1.1.0/go.mod h1:ppzxA5jBKcO1vIpCXQ9ZqgDh8iwODz6OXIGKU8r5m4Y=
-github.com/olekukonko/tablewriter v1.0.0 h1:WHgrshVkRhxxTAVetUh3m4WjBwyOitmUXztaXp3P08g=
-github.com/olekukonko/tablewriter v1.0.0/go.mod h1:xmnTFhuRZ6FbtSSkjRw3qDa/TB237m7SlzsC8WaBLUo=
+github.com/olekukonko/ll v0.0.6-0.20250511102614-9564773e9d27 h1:LgDwLQDELPB6wMOx1x4DSXnH2pjQNDKFgqv2inJuiAU=
+github.com/olekukonko/ll v0.0.6-0.20250511102614-9564773e9d27/go.mod h1:En+sEW0JNETl26+K8eZ6/W4UQ7CYSrrgg/EdIYT2H8g=
+github.com/olekukonko/tablewriter v1.0.2 h1:nxz/j28kPYQUuc4veIv3Ymmef7gHKn8rhr42aauENnk=
+github.com/olekukonko/tablewriter v1.0.2/go.mod h1:eUa4ArVhHJYomS27xrJB/GyLtnzKKVkZeLM6/MNO+pA=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/richardlehane/mscfb v1.0.4 h1:WULscsljNPConisD5hR0+OyZjwK46Pfyr6mPu5ZawpM=
