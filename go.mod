@@ -6,7 +6,7 @@ require (
 	github.com/go-echarts/go-echarts/v2 v2.5.4
 	github.com/grokify/mogo v0.69.3
 	github.com/jessevdk/go-flags v1.6.1
-	github.com/olekukonko/tablewriter v1.0.5
+	github.com/olekukonko/tablewriter v1.0.6
 	github.com/shopspring/decimal v1.4.0
 	github.com/valyala/quicktemplate v1.8.0
 	github.com/wcharczuk/go-chart/v2 v2.1.2
@@ -35,7 +35,7 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/olekukonko/errors v1.1.0 // indirect
-	github.com/olekukonko/ll v0.0.7 // indirect
+	github.com/olekukonko/ll v0.0.8 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/richardlehane/mscfb v1.0.4 // indirect
 	github.com/richardlehane/msoleps v1.0.4 // indirect
