@@ -4,7 +4,7 @@ go 1.23.2
 
 require (
 	github.com/go-echarts/go-echarts/v2 v2.5.4
-	github.com/grokify/mogo v0.70.1
+	github.com/grokify/mogo v0.70.2
 	github.com/jessevdk/go-flags v1.6.1
 	github.com/olekukonko/tablewriter v1.0.7
 	github.com/shopspring/decimal v1.4.0
