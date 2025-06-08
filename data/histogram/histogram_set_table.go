@@ -12,7 +12,6 @@ import (
 	"github.com/grokify/mogo/errors/errorsutil"
 	"github.com/grokify/mogo/strconv/strconvutil"
 	"github.com/grokify/mogo/type/number"
-	"github.com/grokify/mogo/type/slicesutil"
 	excelize "github.com/xuri/excelize/v2"
 )
 
@@ -141,7 +140,7 @@ func (hset *HistogramSet) TablePivot(tableName, histColName string, opts *SetTab
 	}
 
 	hnames := hset.ItemNames()
-	colSumRows := [][]int{}
+	colSumRows := number.IntegersMatrix[int]{}
 	rowsTotal := 0
 	for _, hname := range hnames {
 		row := []string{hname}
@@ -150,7 +149,7 @@ func (hset *HistogramSet) TablePivot(tableName, histColName string, opts *SetTab
 			return nil, fmt.Errorf("histogram name present without histogram [%s]", hname)
 		}
 		rowTotal := 0
-		rowBinCounts := []int{}
+		rowBinCounts := number.Integers[int]{}
 		if opts.ColTotalLeft {
 			rowBinCounts = append(rowBinCounts, 0)
 		}
@@ -162,7 +161,7 @@ func (hset *HistogramSet) TablePivot(tableName, histColName string, opts *SetTab
 				rowBinCounts = append(rowBinCounts, 0)
 			}
 		}
-		rowBinCountTotal := slicesutil.SliceIntSum(rowBinCounts)
+		rowBinCountTotal := rowBinCounts.Sum()
 		if opts.ColTotalLeft {
 			rowBinCounts[0] = rowBinCountTotal
 		}
@@ -194,7 +193,7 @@ func (hset *HistogramSet) TablePivot(tableName, histColName string, opts *SetTab
 	if opts.RowTotalBottom || opts.RowPctBottom {
 		rowTotal := []string{"Total"}
 		rowTotalPct := []string{"Percent"}
-		sums := slicesutil.MatrixIntColSums(colSumRows)
+		sums := colSumRows.ColumnSumsSimple()
 		for _, sum := range sums {
 			rowTotal = append(rowTotal, strconv.Itoa(sum))
 			rowTotalPct = append(rowTotalPct, opts.formatPctString(sum, rowsTotal, "0"))
