@@ -3,8 +3,8 @@ module github.com/grokify/gocharts/v2
 go 1.23.2
 
 require (
-	github.com/go-echarts/go-echarts/v2 v2.5.5
-	github.com/grokify/mogo v0.70.6
+	github.com/go-echarts/go-echarts/v2 v2.6.0
+	github.com/grokify/mogo v0.70.7
 	github.com/jessevdk/go-flags v1.6.1
 	github.com/olekukonko/tablewriter v1.0.7
 	github.com/shopspring/decimal v1.4.0
@@ -40,7 +40,7 @@ require (
 	github.com/richardlehane/mscfb v1.0.4 // indirect
 	github.com/richardlehane/msoleps v1.0.4 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
-	github.com/tiendc/go-deepcopy v1.6.0 // indirect
+	github.com/tiendc/go-deepcopy v1.6.1 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/xuri/efp v0.0.1 // indirect
 	github.com/xuri/nfp v0.0.1 // indirect
