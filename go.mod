@@ -4,14 +4,15 @@ go 1.23.2
 
 require (
 	github.com/go-echarts/go-echarts/v2 v2.6.0
-	github.com/grokify/mogo v0.70.8
+	github.com/grokify/mogo v0.70.9
 	github.com/jessevdk/go-flags v1.6.1
+	github.com/nao1215/markdown v0.8.0
 	github.com/olekukonko/tablewriter v1.0.7
 	github.com/shopspring/decimal v1.4.0
 	github.com/valyala/quicktemplate v1.8.0
 	github.com/wcharczuk/go-chart/v2 v2.1.2
 	github.com/xuri/excelize/v2 v2.9.1
-	golang.org/x/exp v0.0.0-20250606033433-dcc06ee1d476
+	golang.org/x/exp v0.0.0-20250620022241-b7579e27df2b
 	gonum.org/v1/gonum v0.16.0
 	gonum.org/v1/plot v0.16.0
 )
@@ -29,6 +30,7 @@ require (
 	github.com/huandu/xstrings v1.5.0 // indirect
 	github.com/iancoleman/strcase v0.3.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
+	github.com/karrick/godirwalk v1.17.0 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mattn/go-runewidth v0.0.16 // indirect
