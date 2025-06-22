@@ -47,6 +47,18 @@ func (ts *TableSet) Add(tbl ...*Table) error {
 	return nil
 }
 
+func (ts *TableSet) ColumnSetByTableName() (map[string]Columns, error) {
+	out := map[string]Columns{}
+	for _, t := range ts.TableMap {
+		if _, ok := out[t.Name]; ok {
+			return out, fmt.Errorf("column name duplicate (%s)", t.Name)
+		} else {
+			out[t.Name] = t.Columns
+		}
+	}
+	return out, nil
+}
+
 // LensOrdered returns a slice of table row counts.
 func (ts *TableSet) LensOrdered() []int {
 	var lens []int
