@@ -79,7 +79,7 @@ func (cols Columns) CellStringByLetters(colLetters string, row []string, default
 	} else if defaultIfEmpty {
 		return def, nil
 	} else {
-		return "", fmt.Errorf("index out of range (%d)", colNum-1)
+		return "", fmt.Errorf("index requested (%d) out of range with row len (%d)", colNum-1, len(row))
 	}
 }
 
