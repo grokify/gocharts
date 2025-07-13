@@ -1,8 +1,10 @@
 package erd
 
 const (
-	TypeBool   = "bool"
-	TypeDate   = "date"
-	TypeInt    = "int"
-	TypeString = "string"
+	TypeBool      = "bool"
+	TypeDate      = "date"
+	TypeDecimal   = "decimal"
+	TypeInt       = "int"
+	TypeString    = "string"
+	TypeTimestamp = "timestamp"
 )
