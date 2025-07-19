@@ -3,7 +3,7 @@ module github.com/grokify/gocharts/v2
 go 1.23.2
 
 require (
-	github.com/go-echarts/go-echarts/v2 v2.6.0
+	github.com/go-echarts/go-echarts/v2 v2.6.1
 	github.com/grokify/mogo v0.70.12
 	github.com/jessevdk/go-flags v1.6.1
 	github.com/nao1215/markdown v0.8.0
@@ -12,7 +12,7 @@ require (
 	github.com/valyala/quicktemplate v1.8.0
 	github.com/wcharczuk/go-chart/v2 v2.1.2
 	github.com/xuri/excelize/v2 v2.9.1
-	golang.org/x/exp v0.0.0-20250711185948-6ae5c78190dc
+	golang.org/x/exp v0.0.0-20250718183923-645b1fa84792
 	gonum.org/v1/gonum v0.16.0
 	gonum.org/v1/plot v0.16.0
 )
