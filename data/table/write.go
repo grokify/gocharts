@@ -73,7 +73,7 @@ func (tbl *Table) FormatterFunc() func(val string, colIdx uint32) (any, error) {
 		case FormatDate:
 			if strings.TrimSpace(val) == "" {
 				return "", nil // if date is not present, return an empty string.
-			} else if dtVal, err := time.Parse(time.RFC3339, val); err != nil {
+			} else if dtVal, err := time.Parse(time.DateOnly, val); err != nil {
 				return val, err
 			} else {
 				return dtVal.Format(timeutil.DateMDY), nil
