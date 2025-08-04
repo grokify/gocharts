@@ -282,6 +282,20 @@ func (tbl *Table) ColumnValues(colIdx int, unique, sortResults bool) ([]string, 
 	return vals, nil
 }
 
+func (tbl *Table) ColumnsValues(byColName bool, unique, sortResults bool) (map[string][]string, error) {
+	out := map[string][]string{}
+	for colIdx, colName := range tbl.Columns {
+		if vals, err := tbl.ColumnValues(colIdx, unique, sortResults); err != nil {
+			return out, err
+		} else if byColName {
+			out[colName] = vals
+		} else {
+			out[strconv.Itoa(colIdx)] = vals
+		}
+	}
+	return out, nil
+}
+
 func (tbl *Table) ColumnValuesName(colName string, unique, sortResults bool) ([]string, error) {
 	idx := tbl.Columns.Index(colName)
 	if idx < 0 {
