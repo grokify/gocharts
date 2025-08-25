@@ -31,6 +31,25 @@ func WriteCSVSimple(cols []string, rows [][]string, filename string) error {
 	return tbl.WriteCSV(filename)
 }
 
+func (tbl *Table) RowMapAny(row []string, fmtFunc func(val string, colIdx uint32) (any, error)) (map[string]any, error) {
+	if fmtFunc == nil {
+		fmtFunc = tbl.FormatterFunc()
+	}
+	out := map[string]any{}
+	for i := uint32(0); int(i) < len(row); i++ {
+		if int(i) >= len(row) {
+			panic("index out of range")
+		} else if va, err := fmtFunc(row[i], i); err != nil {
+			return out, err
+		} else if int(i) >= len(tbl.Columns) {
+			return out, fmt.Errorf("row index (%d) out of column index range with len (%d)", i, len(tbl.Columns))
+		} else {
+			out[tbl.Columns[i]] = va
+		}
+	}
+	return out, nil
+}
+
 // FormatterFunc returns a formatter function. A custom format func is returned if it is
 // supplied and `FormatMap` is empty. If FormatMap is not empty, a function for it is
 // returned.`

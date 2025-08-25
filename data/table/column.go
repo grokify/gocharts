@@ -205,25 +205,6 @@ func (cols Columns) RowMap(row []string, omitEmpty bool) map[string]string {
 	return mss
 }
 
-/*
-// RowMap converts a CSV row to a `map[string]string`.
-func (cols Columns) RowMapAny(row []string, omitEmpty bool, fmtMap map[int]string) map[string]any {
-	mss := map[string]string{}
-	fm := FormatMap(fmtMap)
-	for i, key := range cols {
-		if i < len(row) {
-			val := strings.TrimSpace(row[i])
-			if !omitEmpty || len(val) > 0 {
-				mss[key] = row[i]
-			}
-		} else if !omitEmpty {
-			mss[key] = ""
-		}
-	}
-	return mss
-}
-*/
-
 func (cols Columns) ModifyNamesColLettersMap(m map[string]string, unique bool) (Columns, error) {
 	if out, err := sheet.SliceReplaceValueAtLettersMap(cols, m); err != nil {
 		return Columns{}, err
