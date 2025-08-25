@@ -24,7 +24,7 @@ type Table struct {
 	Rows                [][]string
 	RowsFloat64         [][]float64
 	IsFloat64           bool
-	FormatMap           map[int]string
+	FormatMap           FormatMap
 	FormatFunc          func(val string, colIdx uint32) (any, error) `json:"-"`
 	FormatAutoLink      bool
 	BackgroundColorFunc func(colIdx, rowIdx uint) string `json:"-"`
