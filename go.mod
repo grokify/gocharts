@@ -6,7 +6,7 @@ toolchain go1.24.5
 
 require (
 	github.com/go-echarts/go-echarts/v2 v2.6.1
-	github.com/grokify/mogo v0.70.18
+	github.com/grokify/mogo v0.70.19
 	github.com/jessevdk/go-flags v1.6.1
 	github.com/nao1215/markdown v0.8.0
 	github.com/olekukonko/tablewriter v1.0.9
