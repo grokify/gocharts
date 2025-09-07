@@ -61,8 +61,8 @@ github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd h1:TRLaZ9cD/w
 github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd/go.mod h1:6dJC0mAP4ikYIbvyc7fijjWJddQyLn8Ig3JB5CqoB9Q=
 github.com/modern-go/reflect2 v1.0.2 h1:xBagoLtFs94CBntxluKeaWgTMpvLxC4ur3nMaC9Gz0M=
 github.com/modern-go/reflect2 v1.0.2/go.mod h1:yWuevngMOJpCy52FWWMvUC8ws7m/LJsjYzDa0/r8luk=
-github.com/nao1215/markdown v0.8.0 h1:LYIszlH8/0dXtMMqA8/hk2fjJ/3sK/q+VOB+JBWXjts=
-github.com/nao1215/markdown v0.8.0/go.mod h1:8nDAiZBGlyBqqxHuAt+v9x69I4pa3uMdmfPi0oCXSLc=
+github.com/nao1215/markdown v0.8.1 h1:UbIFV21Gq1e7XMA17KojC9M/CgP9iY6Em+QqSuxAM/g=
+github.com/nao1215/markdown v0.8.1/go.mod h1:n/C6UO2niUmOSt6CGcc+BQvdJrxTsAZg/AW86df9iSo=
 github.com/olekukonko/cat v0.0.0-20250817074551-3280053e4e00 h1:ZCnkxe9GgWqqBxAk3cIKlQJuaqgOUF/nUtQs8flVTHM=
 github.com/olekukonko/cat v0.0.0-20250817074551-3280053e4e00/go.mod h1:rEKTHC9roVVicUIfZK7DYrdIoM0EOr8mK1Hj5s3JjH0=
 github.com/olekukonko/errors v1.1.0 h1:RNuGIh15QdDenh+hNvKrJkmxxjV4hcS50Db478Ou5sM=
