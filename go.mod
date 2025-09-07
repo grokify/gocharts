@@ -6,7 +6,7 @@ toolchain go1.24.5
 
 require (
 	github.com/go-echarts/go-echarts/v2 v2.6.2
-	github.com/grokify/mogo v0.70.19
+	github.com/grokify/mogo v0.70.21
 	github.com/jessevdk/go-flags v1.6.1
 	github.com/nao1215/markdown v0.8.1
 	github.com/olekukonko/tablewriter v1.0.9
@@ -21,9 +21,9 @@ require (
 
 require (
 	codeberg.org/go-fonts/liberation v0.5.0 // indirect
-	codeberg.org/go-latex/latex v0.1.0 // indirect
+	codeberg.org/go-latex/latex v0.2.0 // indirect
 	codeberg.org/go-pdf/fpdf v0.11.1 // indirect
-	git.sr.ht/~sbinet/gg v0.6.0 // indirect
+	git.sr.ht/~sbinet/gg v0.7.0 // indirect
 	github.com/ajstarks/svgo v0.0.0-20211024235047-1546f124cd8b // indirect
 	github.com/campoy/embedmd v1.0.0 // indirect
 	github.com/fatih/color v1.18.0 // indirect
@@ -52,6 +52,6 @@ require (
 	golang.org/x/crypto v0.41.0 // indirect
 	golang.org/x/image v0.30.0 // indirect
 	golang.org/x/net v0.43.0 // indirect
-	golang.org/x/sys v0.35.0 // indirect
+	golang.org/x/sys v0.36.0 // indirect
 	golang.org/x/text v0.28.0 // indirect
 )
