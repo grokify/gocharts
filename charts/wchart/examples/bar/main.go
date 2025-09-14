@@ -6,23 +6,22 @@ import (
 	"log/slog"
 	"os"
 
-	chart "github.com/go-analyze/charts/chartdraw"
-
+	"github.com/go-analyze/charts/chartdraw"
 	"github.com/grokify/gocharts/v2/charts/wchart"
 )
 
 func main() {
-	graph := chart.BarChart{
+	graph := chartdraw.BarChart{
 		Title: "Test Bar Chart",
-		Background: chart.Style{
-			Padding: chart.Box{
+		Background: chartdraw.Style{
+			Padding: chartdraw.Box{
 				Top: 40,
 			},
 		},
 		ColorPalette: wchart.ColorsDefault(),
 		Height:       512,
 		//BarWidth: 60,
-		Bars: []chart.Value{
+		Bars: []chartdraw.Value{
 			{Value: 5.25, Label: "Jan 20"},
 			{Value: 4.88, Label: "Feb 20"},
 			{Value: 4.74, Label: "Gray"},
@@ -39,7 +38,7 @@ func main() {
 		os.Exit(1)
 	}
 	defer f.Close()
-	if err := graph.Render(chart.PNG, f); err != nil {
+	if err := graph.Render(chartdraw.PNG, f); err != nil {
 		slog.Error(err.Error())
 		os.Exit(2)
 	}

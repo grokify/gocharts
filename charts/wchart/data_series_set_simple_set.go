@@ -3,8 +3,8 @@ package wchart
 import (
 	"time"
 
+	"github.com/go-analyze/charts/chartdraw"
 	"github.com/grokify/mogo/time/timeutil"
-	chart "github.com/go-analyze/charts/chartdraw"
 
 	"github.com/grokify/gocharts/v2/data/timeseries"
 )
@@ -16,18 +16,18 @@ type ChartOptions struct {
 }
 
 // TSSToChart converts a `TimeSeriesSet` to a `wcharczuk.Chart`.
-func TSSToChart(data timeseries.TimeSeriesSet, opts ChartOptions) chart.Chart {
+func TSSToChart(data timeseries.TimeSeriesSet, opts ChartOptions) chartdraw.Chart {
 	formatter := TimeFormatter{Layout: opts.XAxisTimeLayout}
-	graph := chart.Chart{
-		XAxis: chart.XAxis{
+	graph := chartdraw.Chart{
+		XAxis: chartdraw.XAxis{
 			ValueFormatter: formatter.FormatTime},
-		Series: []chart.Series{},
+		Series: []chartdraw.Series{},
 	}
 	for _, series := range data.Series {
-		ts := chart.TimeSeries{
+		ts := chartdraw.TimeSeries{
 			Name: series.SeriesName}
 		if 1 == 0 && opts.YAxisLeft {
-			ts.YAxis = chart.YAxisSecondary
+			ts.YAxis = chartdraw.YAxisSecondary
 		}
 		times := timeutil.TimeSeriesSlice(
 			timeutil.IntervalMonth,
@@ -46,8 +46,8 @@ func TSSToChart(data timeseries.TimeSeriesSet, opts ChartOptions) chart.Chart {
 		graph.Series = append(graph.Series, ts)
 	}
 	if opts.LegendEnable {
-		graph.Elements = []chart.Renderable{
-			chart.Legend(&graph),
+		graph.Elements = []chartdraw.Renderable{
+			chartdraw.Legend(&graph),
 		}
 	}
 	return graph

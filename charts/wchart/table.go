@@ -4,11 +4,12 @@ import (
 	"errors"
 	"io"
 
-	"github.com/grokify/gocharts/v2/data/tablef64"
-	chart "github.com/go-analyze/charts/chartdraw"
+	"github.com/go-analyze/charts/chartdraw"
 	"gonum.org/v1/plot"
 	"gonum.org/v1/plot/plotter"
 	"gonum.org/v1/plot/vg"
+
+	"github.com/grokify/gocharts/v2/data/tablef64"
 )
 
 type Table struct {
@@ -68,30 +69,30 @@ func (tbl *Table) ScatterPlotWritePNGFile(filename, title, xColName, yColName st
 	}
 }
 
-func (tbl *Table) ScatterPlot(title, xColName, yColName string, dotWidth float64) (chart.Chart, error) {
+func (tbl *Table) ScatterPlot(title, xColName, yColName string, dotWidth float64) (chartdraw.Chart, error) {
 	if dotWidth < 0 {
 		dotWidth = 3
 	}
 	if tbl.Table == nil {
-		return chart.Chart{}, errors.New("table cannot be nil")
+		return chartdraw.Chart{}, errors.New("table cannot be nil")
 	}
 	pts, err := tbl.Table.PointXYsColumnNames(xColName, yColName)
 	if err != nil {
-		return chart.Chart{}, err
+		return chartdraw.Chart{}, err
 	}
 	xs, ys := pts.XAndYSeries()
-	graph := chart.Chart{
+	graph := chartdraw.Chart{
 		Title: title,
-		XAxis: chart.XAxis{
+		XAxis: chartdraw.XAxis{
 			Name: xColName,
 		},
-		YAxis: chart.YAxis{
+		YAxis: chartdraw.YAxis{
 			Name: yColName,
 		},
-		Series: []chart.Series{
-			chart.ContinuousSeries{
-				Style: chart.Style{
-					StrokeWidth: chart.Disabled,
+		Series: []chartdraw.Series{
+			chartdraw.ContinuousSeries{
+				Style: chartdraw.Style{
+					StrokeWidth: chartdraw.Disabled,
 					DotWidth:    dotWidth,
 				},
 				XValues: xs,

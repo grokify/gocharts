@@ -1,16 +1,16 @@
 package wchart
 
 import (
+	"github.com/go-analyze/charts/chartdraw"
 	"github.com/grokify/mogo/time/month"
 	"github.com/grokify/mogo/time/quarter"
 	"github.com/grokify/mogo/time/timeutil"
-	chart "github.com/go-analyze/charts/chartdraw"
 
 	"github.com/grokify/gocharts/v2/data/timeseries"
 )
 
-func TimeSeriesMapToContinuousSeriesMonths(dsm map[string]timeseries.TimeSeries, order []string) ([]chart.ContinuousSeries, error) {
-	csSet := []chart.ContinuousSeries{}
+func TimeSeriesMapToContinuousSeriesMonths(dsm map[string]timeseries.TimeSeries, order []string) ([]chartdraw.ContinuousSeries, error) {
+	csSet := []chartdraw.ContinuousSeries{}
 	for _, seriesName := range order {
 		if ds, ok := dsm[seriesName]; ok {
 			if cs, err := TimeSeriesToContinuousSeries(ds); err != nil {
@@ -23,8 +23,8 @@ func TimeSeriesMapToContinuousSeriesMonths(dsm map[string]timeseries.TimeSeries,
 	return csSet, nil
 }
 
-func TimeSeriesToContinuousSeries(ds timeseries.TimeSeries) (chart.ContinuousSeries, error) {
-	series := chart.ContinuousSeries{
+func TimeSeriesToContinuousSeries(ds timeseries.TimeSeries) (chartdraw.ContinuousSeries, error) {
+	series := chartdraw.ContinuousSeries{
 		Name:    ds.SeriesName,
 		XValues: []float64{},
 		YValues: []float64{}}
@@ -56,8 +56,8 @@ func TimeSeriesToContinuousSeries(ds timeseries.TimeSeries) (chart.ContinuousSer
 	return series, nil
 }
 
-func TimeSeriesMapToContinuousSeriesQuarters(dsm map[string]timeseries.TimeSeries, order []string) ([]chart.ContinuousSeries, error) {
-	csSet := []chart.ContinuousSeries{}
+func TimeSeriesMapToContinuousSeriesQuarters(dsm map[string]timeseries.TimeSeries, order []string) ([]chartdraw.ContinuousSeries, error) {
+	csSet := []chartdraw.ContinuousSeries{}
 	for _, seriesName := range order {
 		if ds, ok := dsm[seriesName]; ok {
 			if cs, err := TimeSeriesToContinuousSeriesQuarter(ds); err != nil {
@@ -70,8 +70,8 @@ func TimeSeriesMapToContinuousSeriesQuarters(dsm map[string]timeseries.TimeSerie
 	return csSet, nil
 }
 
-func TimeSeriesToContinuousSeriesQuarter(ds timeseries.TimeSeries) (chart.ContinuousSeries, error) {
-	series := chart.ContinuousSeries{
+func TimeSeriesToContinuousSeriesQuarter(ds timeseries.TimeSeries) (chartdraw.ContinuousSeries, error) {
+	series := chartdraw.ContinuousSeries{
 		Name:    ds.SeriesName,
 		XValues: []float64{},
 		YValues: []float64{}}

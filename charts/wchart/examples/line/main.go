@@ -8,11 +8,11 @@ import (
 	"os"
 	"time"
 
+	"github.com/go-analyze/charts/chartdraw"
 	"github.com/grokify/mogo/fmt/fmtutil"
 	"github.com/grokify/mogo/net/http/httputilmore"
 	"github.com/grokify/mogo/time/month"
 	"github.com/grokify/mogo/time/timeutil"
-	chart "github.com/go-analyze/charts/chartdraw"
 
 	"github.com/grokify/gocharts/v2/charts/wchart"
 	"github.com/grokify/gocharts/v2/charts/wchart/sts2wchart"
@@ -45,13 +45,13 @@ func drawChartTSSSimple(res http.ResponseWriter, req *http.Request) {
 	}
 
 	res.Header().Set(httputilmore.HeaderContentType, httputilmore.ContentTypeImagePNG)
-	if err := graph.Render(chart.PNG, res); err != nil {
+	if err := graph.Render(chartdraw.PNG, res); err != nil {
 		slog.Error(err.Error())
 	}
 }
 
-func exampleTimeseries(chartName string) chart.TimeSeries {
-	return chart.TimeSeries{
+func exampleTimeseries(chartName string) chartdraw.TimeSeries {
+	return chartdraw.TimeSeries{
 		Name: chartName,
 		XValues: []time.Time{
 			time.Now().AddDate(0, 0, -10),
@@ -72,54 +72,54 @@ func exampleTimeseries(chartName string) chart.TimeSeries {
 
 func drawChart(res http.ResponseWriter, req *http.Request) {
 	// This is an example of using the `TimeSeries` to automatically coerce time.Time values into a continuous xrange.
-	// Note: chart.TimeSeries implements `ValueFormatterProvider` and as a result gives the XAxis the appropriate formatter to use for the ticks.
+	// Note: chartdraw.TimeSeries implements `ValueFormatterProvider` and as a result gives the XAxis the appropriate formatter to use for the ticks.
 	formatter := wchart.TimeFormatter{Layout: "Jan '06"}
-	graph := chart.Chart{
-		XAxis: chart.XAxis{
+	graph := chartdraw.Chart{
+		XAxis: chartdraw.XAxis{
 			ValueFormatter: formatter.FormatTime,
 		},
-		Series: []chart.Series{
+		Series: []chartdraw.Series{
 			exampleTimeseries("ABC"),
 		},
 	}
 
 	res.Header().Set(httputilmore.HeaderContentType, httputilmore.ContentTypeImagePNG)
-	if err := graph.Render(chart.PNG, res); err != nil {
+	if err := graph.Render(chartdraw.PNG, res); err != nil {
 		slog.Error(err.Error())
 	}
 }
 
-func GetChartExampleDays() chart.Chart {
+func GetChartExampleDays() chartdraw.Chart {
 	formatter := wchart.TimeFormatter{Layout: "Jan '06"}
-	return chart.Chart{
-		XAxis: chart.XAxis{
+	return chartdraw.Chart{
+		XAxis: chartdraw.XAxis{
 			ValueFormatter: formatter.FormatTime,
-			GridLines: []chart.GridLine{
+			GridLines: []chartdraw.GridLine{
 				{
 					Value: float64(time.Now().AddDate(0, 0, -6).Nanosecond()),
 				},
 			},
 		},
-		Series: []chart.Series{
+		Series: []chartdraw.Series{
 			exampleTimeseries("By Day"),
 		},
 	}
 }
 
-func GetChartExampleMonths() chart.Chart {
+func GetChartExampleMonths() chartdraw.Chart {
 	//formatter := wchart.TimeFormatter{Layout: "Jan '06"}
 	formatter := wchart.TimeFormatter{Layout: timeutil.RFC3339FullDate}
-	return chart.Chart{
-		XAxis: chart.XAxis{
+	return chartdraw.Chart{
+		XAxis: chartdraw.XAxis{
 			ValueFormatter: formatter.FormatTime,
-			GridLines: []chart.GridLine{
+			GridLines: []chartdraw.GridLine{
 				{
 					Value: float64(time.Now().AddDate(0, 0, -6).Nanosecond()),
 				},
 			},
 		},
-		Series: []chart.Series{
-			chart.TimeSeries{
+		Series: []chartdraw.Series{
+			chartdraw.TimeSeries{
 				Name: "By Month",
 				XValues: []time.Time{
 					month.MonthStart(time.Now(), -10),
@@ -142,12 +142,12 @@ func GetChartExampleMonths() chart.Chart {
 
 func drawCustomChart(res http.ResponseWriter, req *http.Request) {
 	// This is basically the other timeseries example, except we switch to hour intervals and specify a different formatter from default for the xaxis tick labels.
-	graph := chart.Chart{
-		XAxis: chart.XAxis{
-			ValueFormatter: chart.TimeHourValueFormatter,
+	graph := chartdraw.Chart{
+		XAxis: chartdraw.XAxis{
+			ValueFormatter: chartdraw.TimeHourValueFormatter,
 		},
-		Series: []chart.Series{
-			chart.TimeSeries{
+		Series: []chartdraw.Series{
+			chartdraw.TimeSeries{
 				XValues: []time.Time{
 					time.Now().Add(-10 * time.Hour),
 					time.Now().Add(-9 * time.Hour),
@@ -167,7 +167,7 @@ func drawCustomChart(res http.ResponseWriter, req *http.Request) {
 	}
 
 	res.Header().Set(httputilmore.HeaderContentType, httputilmore.ContentTypeImagePNG)
-	if err := graph.Render(chart.PNG, res); err != nil {
+	if err := graph.Render(chartdraw.PNG, res); err != nil {
 		slog.Error(err.Error())
 	}
 }
@@ -197,12 +197,12 @@ func main() {
 	log.Fatal(httputilmore.ListenAndServeTimeouts(":8080", mux, time.Second))
 }
 
-func writeFile(filename string, ch chart.Chart) error {
+func writeFile(filename string, ch chartdraw.Chart) error {
 	f, err := os.Create(filename)
 	if err != nil {
 		return err
 	}
-	if err := ch.Render(chart.PNG, f); err != nil {
+	if err := ch.Render(chartdraw.PNG, f); err != nil {
 		return err
 	}
 	if err := f.Close(); err != nil {

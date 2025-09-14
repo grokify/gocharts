@@ -6,12 +6,12 @@ import (
 	"strings"
 	"time"
 
+	"github.com/go-analyze/charts/chartdraw"
+	"github.com/go-analyze/charts/chartdraw/drawing"
 	"github.com/grokify/mogo/math/ratio"
 	"github.com/grokify/mogo/strconv/strconvutil"
 	"github.com/grokify/mogo/time/month"
 	"github.com/grokify/mogo/time/timeutil"
-	chart "github.com/go-analyze/charts/chartdraw"
-	"github.com/go-analyze/charts/chartdraw/drawing"
 
 	"github.com/grokify/gocharts/v2/charts/wchart"
 	"github.com/grokify/gocharts/v2/data/timeseries"
@@ -74,7 +74,7 @@ func DefaultLineChartOpts() *LineChartOpts {
 	return &defaultLineChartOpts
 }
 
-func TimeSeriesToLineChart(ds timeseries.TimeSeries, opts *LineChartOpts) (chart.Chart, error) {
+func TimeSeriesToLineChart(ds timeseries.TimeSeries, opts *LineChartOpts) (chartdraw.Chart, error) {
 	dss := timeseries.NewTimeSeriesSet(ds.SeriesName)
 	dss.Interval = ds.Interval
 	dss.IsFloat = ds.IsFloat
@@ -99,7 +99,7 @@ func WriteLineChartTimeSeriesSet(filename string, tset timeseries.TimeSeriesSet,
 	return wchart.WritePNGFile(filename, chart)
 }
 
-func TimeSeriesSetToLineChart(tset timeseries.TimeSeriesSet, opts *LineChartOpts) (chart.Chart, error) {
+func TimeSeriesSetToLineChart(tset timeseries.TimeSeriesSet, opts *LineChartOpts) (chartdraw.Chart, error) {
 	if opts == nil {
 		opts = DefaultLineChartOpts()
 	}
@@ -107,7 +107,7 @@ func TimeSeriesSetToLineChart(tset timeseries.TimeSeriesSet, opts *LineChartOpts
 	if opts.WantTitleSuffix() && len(tset.Series) == 1 {
 		ds, err := tset.GetSeriesByIndex(0)
 		if err != nil {
-			return chart.Chart{}, err
+			return chartdraw.Chart{}, err
 		}
 		last, err := ds.Last()
 		if err == nil {
@@ -127,9 +127,9 @@ func TimeSeriesSetToLineChart(tset timeseries.TimeSeriesSet, opts *LineChartOpts
 		}
 	}
 
-	graph := chart.Chart{
+	graph := chartdraw.Chart{
 		Title: strings.Join(titleParts, " "),
-		YAxis: chart.YAxis{
+		YAxis: chartdraw.YAxis{
 			ValueFormatter: func(v any) string {
 				if vf, isFloat := v.(float64); isFloat {
 					return strconvutil.Commify(int64(vf))
@@ -137,11 +137,11 @@ func TimeSeriesSetToLineChart(tset timeseries.TimeSeriesSet, opts *LineChartOpts
 				return ""
 			},
 		},
-		Series: []chart.Series{},
+		Series: []chartdraw.Series{},
 	}
 
 	if opts.YAxisLeft {
-		graph.YAxis.AxisType = chart.YAxisSecondary // move Y axis to left.
+		graph.YAxis.AxisType = chartdraw.YAxisSecondary // move Y axis to left.
 	}
 
 	if opts.Width > 0 && opts.Height > 0 {
@@ -155,10 +155,10 @@ func TimeSeriesSetToLineChart(tset timeseries.TimeSeriesSet, opts *LineChartOpts
 		graph.Width = int(ratio.HeightToWidth(float64(opts.Height), opts.AspectRatio))
 	}
 
-	mainSeries := chart.ContinuousSeries{}
+	mainSeries := chartdraw.ContinuousSeries{}
 	if opts.Interval == timeutil.IntervalQuarter || opts.Interval == timeutil.IntervalMonth {
 		if opts.Interval != tset.Interval {
-			return chart.Chart{}, fmt.Errorf("E_INTERVAL_MISMATCH INPUT_INTERVAL [%s]", tset.Interval)
+			return chartdraw.Chart{}, fmt.Errorf("E_INTERVAL_MISMATCH INPUT_INTERVAL [%s]", tset.Interval)
 			//panic("opts.Interval dss.Interval mismatch")
 		}
 	}
@@ -174,36 +174,36 @@ func TimeSeriesSetToLineChart(tset timeseries.TimeSeriesSet, opts *LineChartOpts
 				return graph, err
 			}
 
-			mainSeries.Style = chart.Style{StrokeWidth: float64(3)}
+			mainSeries.Style = chartdraw.Style{StrokeWidth: float64(3)}
 
 			graph.Series = append(graph.Series, mainSeries)
 			//fmtutil.PrintJSON(mainSeries)
 			//panic("Q")
 			if opts.RegressionDegree == 1 {
-				linRegSeries := &chart.LinearRegressionSeries{
+				linRegSeries := &chartdraw.LinearRegressionSeries{
 					InnerSeries: mainSeries,
-					Style: chart.Style{
+					Style: chartdraw.Style{
 						StrokeWidth: float64(2),
 						StrokeColor: wchart.ColorOrange}}
 				graph.Series = append(graph.Series, linRegSeries)
 			} else if opts.RegressionDegree > 1 {
-				polyRegSeries := &chart.PolynomialRegressionSeries{
+				polyRegSeries := &chartdraw.PolynomialRegressionSeries{
 					Degree:      opts.RegressionDegree,
 					InnerSeries: mainSeries,
-					Style: chart.Style{
+					Style: chartdraw.Style{
 						StrokeWidth: float64(2),
 						StrokeColor: wchart.ColorOrange}}
 				graph.Series = append(graph.Series, polyRegSeries)
 			}
 		} else {
-			return chart.Chart{}, fmt.Errorf("E_SERIES_NAME_NOT_FOUND [%s]", seriesName)
+			return chartdraw.Chart{}, fmt.Errorf("E_SERIES_NAME_NOT_FOUND [%s]", seriesName)
 		}
 	}
 
 	if opts.Legend {
 		//note we have to do this as a separate step because we need a reference to graph
-		graph.Elements = []chart.Renderable{
-			chart.Legend(&graph),
+		graph.Elements = []chartdraw.Renderable{
+			chartdraw.Legend(&graph),
 		}
 	}
 
@@ -214,10 +214,10 @@ func TimeSeriesSetToLineChart(tset timeseries.TimeSeriesSet, opts *LineChartOpts
 
 	axesCreator := AxesCreator{
 		PaddingTop: 50,
-		GridMajorStyle: chart.Style{
+		GridMajorStyle: chartdraw.Style{
 			StrokeWidth: float64(1),
 			StrokeColor: drawing.ColorFromHex("000000")},
-		GridMinorStyle: chart.Style{
+		GridMinorStyle: chartdraw.Style{
 			StrokeWidth: float64(1),
 			StrokeColor: drawing.ColorFromHex("aaaaaa")},
 		XAxisTickInterval:          opts.XAxisTickInterval,
@@ -262,10 +262,10 @@ func TimeSeriesSetToLineChart(tset timeseries.TimeSeriesSet, opts *LineChartOpts
 	return graph, nil
 }
 
-func TimeSeriesMonthToAnnotations(ts timeseries.TimeSeries, opts LineChartOpts) (chart.AnnotationSeries, error) {
-	annoSeries := chart.AnnotationSeries{
-		Annotations: []chart.Value2{},
-		Style: chart.Style{
+func TimeSeriesMonthToAnnotations(ts timeseries.TimeSeries, opts LineChartOpts) (chartdraw.AnnotationSeries, error) {
+	annoSeries := chartdraw.AnnotationSeries{
+		Annotations: []chartdraw.Value2{},
+		Style: chartdraw.Style{
 			StrokeWidth: float64(2),
 			StrokeColor: wchart.MustParseColor("limegreen")},
 	}
@@ -284,7 +284,7 @@ func TimeSeriesMonthToAnnotations(ts timeseries.TimeSeries, opts LineChartOpts) 
 		if dtMC, err := month.TimeToMonthContinuous(xoxLast.Time); err != nil {
 			return annoSeries, err
 		} else {
-			annoSeries.Annotations = append(annoSeries.Annotations, chart.Value2{
+			annoSeries.Annotations = append(annoSeries.Annotations, chartdraw.Value2{
 				XValue: float64(dtMC),
 				YValue: float64(xoxLast.Value),
 				Label:  strconvutil.Int64Abbreviation(xoxLast.Value)})
@@ -294,7 +294,7 @@ func TimeSeriesMonthToAnnotations(ts timeseries.TimeSeries, opts LineChartOpts) 
 		if dtMC, err := month.TimeToMonthContinuous(xoxLast.TimeMonthAgo); err != nil {
 			return annoSeries, err
 		} else {
-			annoSeries.Annotations = append(annoSeries.Annotations, chart.Value2{
+			annoSeries.Annotations = append(annoSeries.Annotations, chartdraw.Value2{
 				XValue: float64(dtMC),
 				YValue: float64(xoxLast.MMAgoValue),
 				Label:  "M: " + strconvutil.Int64Abbreviation(xoxLast.MMAgoValue)})
@@ -308,7 +308,7 @@ func TimeSeriesMonthToAnnotations(ts timeseries.TimeSeries, opts LineChartOpts) 
 		if dtMC, err := month.TimeToMonthContinuous(xoxLast.TimeQuarterAgo); err != nil {
 			return annoSeries, err
 		} else {
-			annoSeries.Annotations = append(annoSeries.Annotations, chart.Value2{
+			annoSeries.Annotations = append(annoSeries.Annotations, chartdraw.Value2{
 				XValue: float64(dtMC),
 				YValue: float64(xoxLast.MQAgoValue),
 				Label:  "Q: " + strconvutil.Int64Abbreviation(xoxLast.MQAgoValue) + suffix})
@@ -322,7 +322,7 @@ func TimeSeriesMonthToAnnotations(ts timeseries.TimeSeries, opts LineChartOpts) 
 		if dtMC, err := month.TimeToMonthContinuous(xoxLast.TimeYearAgo); err != nil {
 			return annoSeries, err
 		} else {
-			annoSeries.Annotations = append(annoSeries.Annotations, chart.Value2{
+			annoSeries.Annotations = append(annoSeries.Annotations, chartdraw.Value2{
 				XValue: float64(dtMC),
 				YValue: float64(xoxLast.MYAgoValue),
 				Label:  "Y: " + strconvutil.Int64Abbreviation(xoxLast.MYAgoValue) + suffix})
@@ -332,10 +332,10 @@ func TimeSeriesMonthToAnnotations(ts timeseries.TimeSeries, opts LineChartOpts) 
 }
 
 /*
-func DataSeriesQuarterToAnnotations(ds timeseries.TimeSeries, opts LineChartOpts) (chart.AnnotationSeries, error) {
-	annoSeries := chart.AnnotationSeries{
-		Annotations: []chart.Value2{},
-		Style: chart.Style{
+func DataSeriesQuarterToAnnotations(ds timeseries.TimeSeries, opts LineChartOpts) (chartdraw.AnnotationSeries, error) {
+	annoSeries := chartdraw.AnnotationSeries{
+		Annotations: []chartdraw.Value2{},
+		Style: chartdraw.Style{
 			StrokeWidth: float64(2),
 			StrokeColor: wchart.MustParseColor("limegreen")},
 	}
@@ -351,13 +351,13 @@ func DataSeriesQuarterToAnnotations(ds timeseries.TimeSeries, opts LineChartOpts
 	xoxLast := xox.Last()
 
 	if opts.NowAnnotation {
-		annoSeries.Annotations = append(annoSeries.Annotations, chart.Value2{
+		annoSeries.Annotations = append(annoSeries.Annotations, chartdraw.Value2{
 			XValue: float64(month.TimeToMonthContinuous(xoxLast.Time)),
 			YValue: float64(xoxLast.Value),
 			Label:  strconvutil.Int64Abbreviation(xoxLast.Value)})
 	}
 	if opts.MAgoAnnotation {
-		annoSeries.Annotations = append(annoSeries.Annotations, chart.Value2{
+		annoSeries.Annotations = append(annoSeries.Annotations, chartdraw.Value2{
 			XValue: float64(month.TimeToMonthContinuous(xoxLast.TimeMonthAgo)),
 			YValue: float64(xoxLast.MMAgoValue),
 			Label:  "M: " + strconvutil.Int64Abbreviation(xoxLast.MMAgoValue)})
@@ -367,7 +367,7 @@ func DataSeriesQuarterToAnnotations(ds timeseries.TimeSeries, opts LineChartOpts
 		if opts.AgoAnnotationPct {
 			suffix = fmt.Sprintf(", %d%%", int(xoxLast.QoQ))
 		}
-		annoSeries.Annotations = append(annoSeries.Annotations, chart.Value2{
+		annoSeries.Annotations = append(annoSeries.Annotations, chartdraw.Value2{
 			XValue: float64(month.TimeToMonthContinuous(xoxLast.TimeQuarterAgo)),
 			YValue: float64(xoxLast.MQAgoValue),
 			Label:  "Q: " + strconvutil.Int64Abbreviation(xoxLast.MQAgoValue) + suffix})
@@ -377,7 +377,7 @@ func DataSeriesQuarterToAnnotations(ds timeseries.TimeSeries, opts LineChartOpts
 		if opts.AgoAnnotationPct {
 			suffix = fmt.Sprintf(", %d%%", int(xoxLast.YoY))
 		}
-		annoSeries.Annotations = append(annoSeries.Annotations, chart.Value2{
+		annoSeries.Annotations = append(annoSeries.Annotations, chartdraw.Value2{
 			XValue: float64(month.TimeToMonthContinuous(xoxLast.TimeYearAgo)),
 			YValue: float64(xoxLast.MYAgoValue),
 			Label:  "Y: " + strconvutil.Int64Abbreviation(xoxLast.MYAgoValue) + suffix})

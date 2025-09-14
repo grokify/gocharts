@@ -4,36 +4,36 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/go-analyze/charts/chartdraw"
 	"github.com/grokify/mogo/math/mathutil"
 	"github.com/grokify/mogo/strconv/strconvutil"
 	"github.com/grokify/mogo/type/maputil"
-	chart "github.com/go-analyze/charts/chartdraw"
 
 	"github.com/grokify/gocharts/v2/charts/wchart"
 	"github.com/grokify/gocharts/v2/data/timeseries"
 )
 
-func TimeSeriesToBarChart(ds timeseries.TimeSeries) chart.BarChart {
-	graph := chart.BarChart{
+func TimeSeriesToBarChart(ds timeseries.TimeSeries) chartdraw.BarChart {
+	graph := chartdraw.BarChart{
 		Title: ds.SeriesName,
-		Background: chart.Style{
-			Padding: chart.Box{
+		Background: chartdraw.Style{
+			Padding: chartdraw.Box{
 				Top: 40,
 			},
 		},
-		YAxis: chart.YAxis{
+		YAxis: chartdraw.YAxis{
 			ValueFormatter: func(v any) string {
 				if vf, isFloat := v.(float64); isFloat {
 					return strconvutil.Commify(int64(vf))
 				}
 				return ""
 			},
-			Ticks: []chart.Tick{},
+			Ticks: []chartdraw.Tick{},
 		},
 		ColorPalette: wchart.ColorsDefault(),
 		Height:       512,
 		BarWidth:     20,
-		Bars:         []chart.Value{},
+		Bars:         []chartdraw.Value{},
 	}
 	highValue := int64(0)
 	lowValue := int64(0)
@@ -43,7 +43,7 @@ func TimeSeriesToBarChart(ds timeseries.TimeSeries) chart.BarChart {
 	for _, item := range items {
 		graph.Bars = append(
 			graph.Bars,
-			chart.Value{
+			chartdraw.Value{
 				Value: float64(item.Value),
 				Label: fmt.Sprintf("%s %s",
 					item.Time.Format("Jan '06"),
@@ -68,8 +68,8 @@ func TimeSeriesToBarChart(ds timeseries.TimeSeries) chart.BarChart {
 	return graph
 }
 
-func MsiToValues(msi maputil.MapStringInt, inclValueInKey bool) []chart.Value {
-	values := []chart.Value{}
+func MsiToValues(msi maputil.MapStringInt, inclValueInKey bool) []chartdraw.Value {
+	values := []chartdraw.Value{}
 	keys := msi.Keys(true)
 	for _, key := range keys {
 		val := msi.MustGet(key, 0)
@@ -77,7 +77,7 @@ func MsiToValues(msi maputil.MapStringInt, inclValueInKey bool) []chart.Value {
 			key += " (" + strconv.Itoa(val) + ")"
 		}
 		values = append(values,
-			chart.Value{
+			chartdraw.Value{
 				Label: key,
 				Value: float64(val)})
 	}
