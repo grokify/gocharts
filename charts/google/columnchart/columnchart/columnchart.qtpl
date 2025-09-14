@@ -1,0 +1,28 @@
+{% import "github.com/grokify/gocharts/v2/charts/google" %}
+{% func ColumnChartMaterialPage(chart google.Chart) %}<!DOCTYPE html>
+<html>
+<head>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+</head>
+<body>
+  <h1>{%s= chart.PageTitle() %}</h1>
+  <div id="{%s= chart.ChartDivOrDefault() %}"></div>
+  <script>
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+      var data = google.visualization.arrayToDataTable({%z= chart.DataTableJSON() %});
+
+      var view = new google.visualization.DataView(data);
+
+      var options = {%z= chart.OptionsJSON() %}
+
+      var chart = new google.visualization.ColumnChart(document.getElementById('{%s= chart.ChartDivOrDefault() %}'));
+
+      chart.draw(view, options);
+    }
+    </script>
+  </body>
+</html>
+{% endfunc %}
