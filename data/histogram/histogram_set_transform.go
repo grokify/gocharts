@@ -2,6 +2,8 @@ package histogram
 
 import (
 	"strings"
+
+	"github.com/grokify/mogo/type/maputil"
 )
 
 // FilterHistogramNames returns a new `HistogramSet` with only the matching histogram names included.
@@ -61,10 +63,13 @@ func (hset *HistogramSet) TransformHistogramNames(xfFunc func(input string) stri
 */
 
 // TransformBinNamesMap modifies bin names and returns a new `HistogramSet`.
-func (hset *HistogramSet) TransformBinNamesMap(xfMap map[string]string) *HistogramSet {
+func (hset *HistogramSet) TransformBinNamesMap(xfMap map[string]string, trimSpace bool) *HistogramSet {
 	return hset.TransformNames(
 		nil,
 		func(input string) string {
+			if trimSpace {
+				input = strings.TrimSpace(input)
+			}
 			if newBinName, ok := xfMap[input]; ok {
 				return newBinName
 			}
@@ -73,9 +78,13 @@ func (hset *HistogramSet) TransformBinNamesMap(xfMap map[string]string) *Histogr
 	)
 }
 
-// TransformHistogramNamesMap modifies bin names and returns a new
-// `HistogramSet`. `matchType` can be set to `prefix` to match name
-// prefixes instead of exact match.
+func (hset *HistogramSet) TransformBinNamesMapSlice(xfMap map[string][]string, dedupe, sortAsc bool, sep string, trimSpace bool) *HistogramSet {
+	xfMSS := maputil.MapStringSlice(xfMap)
+	return hset.TransformBinNamesMap(xfMSS.FlattenJoin(dedupe, sortAsc, sep), trimSpace)
+}
+
+// TransformHistogramNamesMap modifies bin names and returns a new `HistogramSet`. `matchType`
+// can be set to `prefix` to match name prefixes instead of exact match.
 func (hset *HistogramSet) TransformHistogramNamesMap(xfMap map[string]string, matchType string) *HistogramSet {
 	matchType = strings.ToLower(strings.TrimSpace(matchType))
 	if matchType == "prefix" {
