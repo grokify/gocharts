@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/grokify/mogo/time/timeutil"
-	chart "github.com/wcharczuk/go-chart/v2"
+	chart "github.com/go-analyze/charts/chartdraw"
 
 	"github.com/grokify/gocharts/v2/data/timeseries"
 )

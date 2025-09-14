@@ -5,8 +5,8 @@ import (
 
 	"github.com/grokify/mogo/image/colors"
 
-	chart "github.com/wcharczuk/go-chart/v2"
-	"github.com/wcharczuk/go-chart/v2/drawing"
+	chart "github.com/go-analyze/charts/chartdraw"
+	"github.com/go-analyze/charts/chartdraw/drawing"
 )
 
 // MustParseColor returns a `drawing.Color` for the
@@ -57,13 +57,13 @@ type Colors struct {
 
 func ColorsDefault() Colors {
 	return Colors{
-		BackgroundColorVal:       chart.DefaultBackgroundColor,
-		BackgroundStrokeColorVal: chart.DefaultBackgroundStrokeColor,
-		CanvasColorVal:           chart.DefaultCanvasColor,
-		CanvasStrokeColorVal:     chart.DefaultCanvasStrokeColor,
-		AxisStrokeColorVal:       chart.DefaultAxisColor,
-		TextColorVal:             chart.DefaultTextColor,
-		SeriesColorVal:           chart.DefaultFillColor}
+		BackgroundColorVal:       chart.ColorWhite,
+		BackgroundStrokeColorVal: chart.ColorWhite,
+		CanvasColorVal:           chart.ColorWhite,
+		CanvasStrokeColorVal:     chart.ColorWhite,
+		AxisStrokeColorVal:       chart.ColorBlack,
+		TextColorVal:             chart.ColorBlack,
+		SeriesColorVal:           chart.ColorBlue}
 }
 
 func (c Colors) BackgroundColor() drawing.Color         { return c.BackgroundColorVal }
