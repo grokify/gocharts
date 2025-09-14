@@ -2,6 +2,15 @@ package histogram
 
 import (
 	"strings"
+
+	"github.com/grokify/mogo/type/maputil"
+)
+
+type MatchType string
+
+const (
+	MatchTypePrefix MatchType = "prefix"
+	MatchTypeFull   MatchType = "full"
 )
 
 // TransformBinNames modifies bin names and returns a new histogram.
@@ -20,16 +29,19 @@ func (hist *Histogram) TransformBinNames(xfFunc func(input string) string) *Hist
 // TransformBinNamesMap modifies bin names and returns a new
 // histogram. `matchType` can be set to `prefix` to match name
 // prefixes instead of exact match.
-func (hist *Histogram) TransformBinNamesMap(xfMap map[string]string, matchType string) *Histogram {
-	matchType = strings.ToLower(strings.TrimSpace(matchType))
-	if matchType == "prefix" {
+func (hist *Histogram) TransformBinNamesMap(xfMap map[string]string, matchType MatchType) *Histogram {
+	if matchType == MatchTypePrefix {
 		return hist.transformBinNamesPrefix(xfMap)
 	}
 	return hist.transformBinNamesExactMatch(xfMap)
 }
 
-// transformBinNamesExactMatch modifies bin names and returns a new
-// histogram.
+func (hist *Histogram) TransformBinNamesMapSlice(xfMap map[string][]string, matchType MatchType, dedupe, sortAsc bool, sep string, def []string) *Histogram {
+	xfMSS := maputil.MapStringSlice(xfMap)
+	return hist.TransformBinNamesMap(xfMSS.FlattenJoin(dedupe, sortAsc, sep), matchType)
+}
+
+// transformBinNamesExactMatch modifies bin names and returns a new histogram.
 func (hist *Histogram) transformBinNamesExactMatch(xfMap map[string]string) *Histogram {
 	if hist == nil {
 		return nil
