@@ -7,14 +7,14 @@ toolchain go1.24.5
 require (
 	github.com/go-analyze/charts v0.5.21
 	github.com/go-echarts/go-echarts/v2 v2.6.2
-	github.com/grokify/mogo v0.70.21
+	github.com/grokify/mogo v0.70.23
 	github.com/jessevdk/go-flags v1.6.1
 	github.com/nao1215/markdown v0.8.1
 	github.com/olekukonko/tablewriter v1.0.9
 	github.com/shopspring/decimal v1.4.0
 	github.com/valyala/quicktemplate v1.8.0
 	github.com/xuri/excelize/v2 v2.9.1
-	golang.org/x/exp v0.0.0-20250819193227-8b4c13bb791b
+	golang.org/x/exp v0.0.0-20250911091902-df9299821621
 	gonum.org/v1/gonum v0.16.0
 	gonum.org/v1/plot v0.16.0
 )
@@ -38,9 +38,9 @@ require (
 	github.com/mattn/go-runewidth v0.0.16 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
-	github.com/olekukonko/cat v0.0.0-20250817074551-3280053e4e00 // indirect
+	github.com/olekukonko/cat v0.0.0-20250911104152-50322a0618f6 // indirect
 	github.com/olekukonko/errors v1.1.0 // indirect
-	github.com/olekukonko/ll v0.1.0 // indirect
+	github.com/olekukonko/ll v0.1.1 // indirect
 	github.com/richardlehane/mscfb v1.0.4 // indirect
 	github.com/richardlehane/msoleps v1.0.4 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
@@ -48,9 +48,9 @@ require (
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/xuri/efp v0.0.1 // indirect
 	github.com/xuri/nfp v0.0.1 // indirect
-	golang.org/x/crypto v0.41.0 // indirect
-	golang.org/x/image v0.30.0 // indirect
-	golang.org/x/net v0.43.0 // indirect
+	golang.org/x/crypto v0.42.0 // indirect
+	golang.org/x/image v0.31.0 // indirect
+	golang.org/x/net v0.44.0 // indirect
 	golang.org/x/sys v0.36.0 // indirect
-	golang.org/x/text v0.28.0 // indirect
+	golang.org/x/text v0.29.0 // indirect
 )
