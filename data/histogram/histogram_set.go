@@ -41,14 +41,6 @@ func NewHistogramSetWithData(name string, data map[string]map[string]int) *Histo
 	return hset
 }
 
-func (hset *HistogramSet) AddDateUIDCount(dt time.Time, uid string, count int) {
-	fName := dt.Format(time.RFC3339)
-	hset.Add(fName, uid, count)
-	if !hset.KeyIsTime {
-		hset.KeyIsTime = true
-	}
-}
-
 // Add provides an easy method to add a histogram bin name
 // and count for an existing or new histogram in the set.
 func (hset *HistogramSet) Add(histName, binName string, binCount int) {
@@ -57,6 +49,23 @@ func (hset *HistogramSet) Add(histName, binName string, binCount int) {
 		hist = NewHistogram(histName)
 	}
 	hist.Add(binName, binCount)
+	hset.HistogramMap[histName] = hist
+}
+
+func (hset *HistogramSet) AddDateUIDCount(dt time.Time, uid string, count int) {
+	fName := dt.Format(time.RFC3339)
+	hset.Add(fName, uid, count)
+	if !hset.KeyIsTime {
+		hset.KeyIsTime = true
+	}
+}
+
+func (hset *HistogramSet) AddHistogramBulk(histName string, binData map[string]int) {
+	hist, ok := hset.HistogramMap[histName]
+	if !ok {
+		hist = NewHistogram(histName)
+	}
+	hist.AddBulk(binData)
 	hset.HistogramMap[histName] = hist
 }
 
