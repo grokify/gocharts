@@ -5,7 +5,7 @@ import (
 	"io"
 
 	"github.com/grokify/gocharts/v2/data/tablef64"
-	chart "github.com/wcharczuk/go-chart/v2"
+	chart "github.com/go-analyze/charts/chartdraw"
 	"gonum.org/v1/plot"
 	"gonum.org/v1/plot/plotter"
 	"gonum.org/v1/plot/vg"

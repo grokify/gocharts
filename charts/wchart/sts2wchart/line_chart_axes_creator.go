@@ -6,7 +6,7 @@ import (
 	"github.com/grokify/mogo/math/mathutil"
 	"github.com/grokify/mogo/time/timeutil"
 	"github.com/grokify/mogo/type/number"
-	chart "github.com/wcharczuk/go-chart/v2"
+	chart "github.com/go-analyze/charts/chartdraw"
 
 	"github.com/grokify/gocharts/v2/charts/wchart"
 )

@@ -6,7 +6,7 @@ import (
 	"log/slog"
 	"os"
 
-	chart "github.com/wcharczuk/go-chart/v2"
+	chart "github.com/go-analyze/charts/chartdraw"
 
 	"github.com/grokify/gocharts/v2/charts/wchart"
 )
