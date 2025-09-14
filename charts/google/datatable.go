@@ -2,6 +2,7 @@ package google
 
 import (
 	"errors"
+	"strings"
 	"time"
 
 	"github.com/grokify/gocharts/v2/data/histogram"
@@ -70,6 +71,47 @@ func DataTableFromTimeSeriesSet(name string, sets []string, set timeseries.TimeS
 			row = append(row, "")
 			dt = append(dt, row)
 		}
+	}
+	return dt, nil
+}
+
+// DataTableFromHistogramSet is tested with columnchart.
+func DataTableFromHistogramSet(hset *histogram.HistogramSet, histogramType string) (DataTable, error) {
+	/*
+		Example: https://developers.google.com/chart/interactive/docs/gallery/columnchart
+				      var data = google.visualization.arrayToDataTable([
+			        ['Genre', 'Fantasy & Sci Fi', 'Romance', 'Mystery/Crime', 'General',
+			         'Western', 'Literature', { role: 'annotation' } ],
+			        ['2010', 10, 24, 20, 32, 18, 5, ''],
+			        ['2020', 16, 22, 23, 30, 16, 9, ''],
+			        ['2030', 28, 19, 29, 30, 12, 13, '']
+			      ]);
+	*/
+	if hset == nil {
+		return DataTable{}, errors.New("histogram set cannot be empty")
+	}
+	dt := DataTable{}
+	histogramType = strings.TrimSpace(histogramType)
+	if histogramType == "" {
+		histogramType = strings.TrimSpace(hset.Name)
+	}
+	// Header col1 = `histogramType`
+	header := []any{histogramType}
+	binNames := hset.BinNames()
+	// Header: add binNames to header
+	for _, binName := range binNames {
+		header = append(header, binName)
+	}
+	dt = append(dt, header)
+	histNames := hset.ItemNames() // alphabetized names
+	for _, histName := range histNames {
+		row := []any{histName}
+		for _, binName := range binNames {
+			count := hset.BinValue(histName, binName)
+			row = append(row, count)
+		}
+		// row = append(row, "")
+		dt = append(dt, row)
 	}
 	return dt, nil
 }
