@@ -10,7 +10,7 @@ type MatchType string
 
 const (
 	MatchTypePrefix MatchType = "prefix"
-	MatchTypeFull   MatchType = "full"
+	MatchTypeExact  MatchType = "exact"
 )
 
 // TransformBinNames modifies bin names and returns a new histogram.

@@ -85,9 +85,8 @@ func (hset *HistogramSet) TransformBinNamesMapSlice(xfMap map[string][]string, d
 
 // TransformHistogramNamesMap modifies bin names and returns a new `HistogramSet`. `matchType`
 // can be set to `prefix` to match name prefixes instead of exact match.
-func (hset *HistogramSet) TransformHistogramNamesMap(xfMap map[string]string, matchType string) *HistogramSet {
-	matchType = strings.ToLower(strings.TrimSpace(matchType))
-	if matchType == "prefix" {
+func (hset *HistogramSet) TransformHistogramNamesMap(xfMap map[string]string, matchType MatchType) *HistogramSet {
+	if matchType == MatchTypePrefix {
 		return hset.transformHistogramNamesPrefix(xfMap)
 	}
 	return hset.transformHistogramNamesExactMatch(xfMap)
