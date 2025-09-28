@@ -6,10 +6,10 @@ toolchain go1.24.5
 
 require (
 	github.com/go-analyze/charts v0.5.21
-	github.com/go-echarts/go-echarts/v2 v2.6.2
-	github.com/grokify/mogo v0.70.23
+	github.com/go-echarts/go-echarts/v2 v2.6.3
+	github.com/grokify/mogo v0.71.0
 	github.com/jessevdk/go-flags v1.6.1
-	github.com/nao1215/markdown v0.8.1
+	github.com/nao1215/markdown v0.8.2
 	github.com/olekukonko/tablewriter v1.1.0
 	github.com/shopspring/decimal v1.4.0
 	github.com/valyala/quicktemplate v1.8.0
@@ -35,7 +35,7 @@ require (
 	github.com/karrick/godirwalk v1.17.0 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
-	github.com/mattn/go-runewidth v0.0.16 // indirect
+	github.com/mattn/go-runewidth v0.0.17 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/olekukonko/cat v0.0.0-20250911104152-50322a0618f6 // indirect
@@ -44,7 +44,7 @@ require (
 	github.com/richardlehane/mscfb v1.0.4 // indirect
 	github.com/richardlehane/msoleps v1.0.4 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
-	github.com/tiendc/go-deepcopy v1.6.1 // indirect
+	github.com/tiendc/go-deepcopy v1.7.1 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/xuri/efp v0.0.1 // indirect
 	github.com/xuri/nfp v0.0.1 // indirect
