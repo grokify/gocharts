@@ -10,7 +10,7 @@ require (
 	github.com/grokify/mogo v0.70.23
 	github.com/jessevdk/go-flags v1.6.1
 	github.com/nao1215/markdown v0.8.1
-	github.com/olekukonko/tablewriter v1.0.9
+	github.com/olekukonko/tablewriter v1.1.0
 	github.com/shopspring/decimal v1.4.0
 	github.com/valyala/quicktemplate v1.8.0
 	github.com/xuri/excelize/v2 v2.9.1
