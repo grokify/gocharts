@@ -6,15 +6,15 @@ toolchain go1.24.5
 
 require (
 	github.com/go-analyze/charts v0.5.21
-	github.com/go-echarts/go-echarts/v2 v2.6.3
-	github.com/grokify/mogo v0.71.1
+	github.com/go-echarts/go-echarts/v2 v2.6.4
+	github.com/grokify/mogo v0.71.2
 	github.com/jessevdk/go-flags v1.6.1
 	github.com/nao1215/markdown v0.8.3
 	github.com/olekukonko/tablewriter v1.1.0
 	github.com/shopspring/decimal v1.4.0
 	github.com/valyala/quicktemplate v1.8.0
 	github.com/xuri/excelize/v2 v2.9.1
-	golang.org/x/exp v0.0.0-20250911091902-df9299821621
+	golang.org/x/exp v0.0.0-20251009144603-d2f985daa21b
 	gonum.org/v1/gonum v0.16.0
 	gonum.org/v1/plot v0.16.0
 )
@@ -49,9 +49,9 @@ require (
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/xuri/efp v0.0.1 // indirect
 	github.com/xuri/nfp v0.0.1 // indirect
-	golang.org/x/crypto v0.42.0 // indirect
-	golang.org/x/image v0.31.0 // indirect
-	golang.org/x/net v0.44.0 // indirect
-	golang.org/x/sys v0.36.0 // indirect
-	golang.org/x/text v0.29.0 // indirect
+	golang.org/x/crypto v0.43.0 // indirect
+	golang.org/x/image v0.32.0 // indirect
+	golang.org/x/net v0.46.0 // indirect
+	golang.org/x/sys v0.37.0 // indirect
+	golang.org/x/text v0.30.0 // indirect
 )
