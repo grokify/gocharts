@@ -16,14 +16,20 @@ import (
 )
 
 func (tbl *Table) Markdown(newline string, escPipe bool) string {
-	var md string
+	var allRows [][]string
+	var withHeader bool
 	if len(tbl.Columns) > 0 {
-		md += markdown.TableRowToMarkdown(tbl.Columns, escPipe) + newline
-		if len(tbl.Rows) > 0 {
-			md += markdown.TableSeparator(len(tbl.Columns)) + newline
-		}
+		allRows = append(allRows, tbl.Columns)
+		withHeader = true
 	}
-	return md + markdown.TableRowsToMarkdown(tbl.Rows, newline, escPipe, false)
+	if len(tbl.Rows) > 0 {
+		allRows = append(allRows, tbl.Rows...)
+	}
+	if len(allRows) > 0 {
+		return markdown.TableRowsToMarkdown(allRows, newline, escPipe, withHeader)
+	} else {
+		return ""
+	}
 }
 
 func (tbl *Table) WriteMarkdown(filename string, perm os.FileMode, newline string, escPipe bool) error {
