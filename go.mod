@@ -13,7 +13,7 @@ require (
 	github.com/olekukonko/tablewriter v1.1.0
 	github.com/shopspring/decimal v1.4.0
 	github.com/valyala/quicktemplate v1.8.0
-	github.com/xuri/excelize/v2 v2.9.1
+	github.com/xuri/excelize/v2 v2.10.0
 	golang.org/x/exp v0.0.0-20251009144603-d2f985daa21b
 	gonum.org/v1/gonum v0.16.0
 	gonum.org/v1/plot v0.16.0
@@ -48,7 +48,7 @@ require (
 	github.com/tiendc/go-deepcopy v1.7.1 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/xuri/efp v0.0.1 // indirect
-	github.com/xuri/nfp v0.0.1 // indirect
+	github.com/xuri/nfp v0.0.2-0.20250530014748-2ddeb826f9a9 // indirect
 	golang.org/x/crypto v0.43.0 // indirect
 	golang.org/x/image v0.32.0 // indirect
 	golang.org/x/net v0.46.0 // indirect
