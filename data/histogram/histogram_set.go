@@ -15,24 +15,24 @@ import (
 )
 
 type HistogramSet struct {
-	Name         string
-	HistogramMap map[string]*Histogram
-	KeyIsTime    bool
-	Order        []string
-	BinsOrder    []string
+	Name      string
+	Items     map[string]*Histogram
+	KeyIsTime bool
+	Order     []string
+	BinsOrder []string
 }
 
 func NewHistogramSet(name string) *HistogramSet {
 	return &HistogramSet{
-		Name:         name,
-		HistogramMap: map[string]*Histogram{},
-		Order:        []string{}}
+		Name:  name,
+		Items: map[string]*Histogram{},
+		Order: []string{}}
 }
 
 func NewHistogramSetWithData(name string, data map[string]map[string]int) *HistogramSet {
 	hset := &HistogramSet{
-		Name:         name,
-		HistogramMap: map[string]*Histogram{}}
+		Name:  name,
+		Items: map[string]*Histogram{}}
 	for statsName, statsData := range data {
 		for statsItemName, statsItemValue := range statsData {
 			hset.Add(statsName, statsItemName, statsItemValue)
@@ -44,12 +44,12 @@ func NewHistogramSetWithData(name string, data map[string]map[string]int) *Histo
 // Add provides an easy method to add a histogram bin name
 // and count for an existing or new histogram in the set.
 func (hset *HistogramSet) Add(histName, binName string, binCount int) {
-	hist, ok := hset.HistogramMap[histName]
+	hist, ok := hset.Items[histName]
 	if !ok {
 		hist = NewHistogram(histName)
 	}
 	hist.Add(binName, binCount)
-	hset.HistogramMap[histName] = hist
+	hset.Items[histName] = hist
 }
 
 func (hset *HistogramSet) AddDateUIDCount(dt time.Time, uid string, count int) {
@@ -61,17 +61,17 @@ func (hset *HistogramSet) AddDateUIDCount(dt time.Time, uid string, count int) {
 }
 
 func (hset *HistogramSet) AddHistogramBulk(histName string, binData map[string]int) {
-	hist, ok := hset.HistogramMap[histName]
+	hist, ok := hset.Items[histName]
 	if !ok {
 		hist = NewHistogram(histName)
 	}
 	hist.AddBulk(binData)
-	hset.HistogramMap[histName] = hist
+	hset.Items[histName] = hist
 }
 
 // BinNameExists returns a boolean indicating if a bin name exists in any histogram.
 func (hset *HistogramSet) BinNameExists(binName string) bool {
-	for _, hist := range hset.HistogramMap {
+	for _, hist := range hset.Items {
 		if hist.BinNameExists(binName) {
 			return true
 		}
@@ -82,7 +82,7 @@ func (hset *HistogramSet) BinNameExists(binName string) bool {
 // BinNames returns all the bin names used across all the histograms.
 func (hset *HistogramSet) BinNames() []string {
 	binNames := []string{}
-	for _, hist := range hset.HistogramMap {
+	for _, hist := range hset.Items {
 		binNames = append(binNames, hist.BinNames()...)
 	}
 	binNames = stringsutil.SliceCondenseSpace(binNames, true, true)
@@ -97,8 +97,8 @@ func (hset *HistogramSet) BinNames() []string {
 func (hset *HistogramSet) BinParentCounts() map[uint]map[string]uint {
 	out := map[uint]map[string]uint{}
 	wip := map[string]map[string]uint{} //
-	for hsetName, hist := range hset.HistogramMap {
-		for binName := range hist.Bins {
+	for hsetName, hist := range hset.Items {
+		for binName := range hist.Items {
 			if wip[binName] == nil {
 				wip[binName] = map[string]uint{}
 			}
@@ -117,11 +117,11 @@ func (hset *HistogramSet) BinParentCounts() map[uint]map[string]uint {
 
 // BinValue the value of a bin.
 func (hset *HistogramSet) BinValue(histName, binName string) int {
-	if h, ok := hset.HistogramMap[histName]; !ok {
+	if h, ok := hset.Items[histName]; !ok {
 		return 0
 	} else if h == nil {
 		return 0
-	} else if v, ok := h.Bins[binName]; !ok {
+	} else if v, ok := h.Items[binName]; !ok {
 		return 0
 	} else {
 		return v
@@ -130,14 +130,14 @@ func (hset *HistogramSet) BinValue(histName, binName string) int {
 
 // ItemCount returns the number of histograms.
 func (hset *HistogramSet) ItemCount() uint {
-	return uint(len(hset.HistogramMap))
+	return uint(len(hset.Items))
 }
 
 // ItemCounts returns the number of histograms.
 func (hset *HistogramSet) ItemCounts() *Histogram {
 	histCount := NewHistogram("histogram counts counts")
-	for histName, hist := range hset.HistogramMap {
-		histCount.Bins[histName] = len(hist.Bins)
+	for histName, hist := range hset.Items {
+		histCount.Items[histName] = len(hist.Items)
 	}
 	histCount.Inflate()
 	return histCount
@@ -145,12 +145,12 @@ func (hset *HistogramSet) ItemCounts() *Histogram {
 
 // ItemNames returns the number of histograms.
 func (hset *HistogramSet) ItemNames() []string {
-	return maputil.Keys(hset.HistogramMap)
+	return maputil.Keys(hset.Items)
 }
 
 // HistogramNameExists returns a boolean indicating if the supplied histogram name exists.
 func (hset *HistogramSet) HistogramNameExists(histName string) bool {
-	if _, ok := hset.HistogramMap[histName]; ok {
+	if _, ok := hset.Items[histName]; ok {
 		return true
 	}
 	return false
@@ -159,7 +159,7 @@ func (hset *HistogramSet) HistogramNameExists(histName string) bool {
 // Sum returns the sum of all the histogram bin values.
 func (hset *HistogramSet) Sum() int {
 	valueSum := 0
-	for _, hist := range hset.HistogramMap {
+	for _, hist := range hset.Items {
 		valueSum += hist.Sum()
 	}
 	return valueSum
@@ -168,7 +168,7 @@ func (hset *HistogramSet) Sum() int {
 // HistogramBinNames returns the bin names for a single
 // histogram whose name is provided as a function parameter.
 func (hset *HistogramSet) HistogramBinNames(setName string) []string {
-	if hist, ok := hset.HistogramMap[setName]; ok {
+	if hist, ok := hset.Items[setName]; ok {
 		return hist.BinNames()
 	}
 	return []string{}
@@ -181,8 +181,8 @@ func (hset *HistogramSet) LeafStats(name string) *Histogram {
 		name = "leaf stats"
 	}
 	setLeafStats := NewHistogram(name)
-	for _, hist := range hset.HistogramMap {
-		for binName, binCount := range hist.Bins {
+	for _, hist := range hset.Items {
+		for binName, binCount := range hist.Items {
 			setLeafStats.Add(binName, binCount)
 		}
 	}
@@ -191,11 +191,11 @@ func (hset *HistogramSet) LeafStats(name string) *Histogram {
 
 func (hset *HistogramSet) Map() map[string]map[string]int {
 	out := map[string]map[string]int{}
-	for histName, hist := range hset.HistogramMap {
+	for histName, hist := range hset.Items {
 		if _, ok := out[histName]; !ok {
 			out[histName] = map[string]int{}
 		}
-		for binName, binCount := range hist.Bins {
+		for binName, binCount := range hist.Items {
 			out[histName][binName] += binCount
 		}
 	}
@@ -212,7 +212,7 @@ func (hset *HistogramSet) MapAdd(m map[string]map[string]int) {
 
 func (hset *HistogramSet) ToTimeSeriesDistinct() (timeseries.TimeSeries, error) {
 	ds := timeseries.NewTimeSeries(hset.Name)
-	for rfc3339, hist := range hset.HistogramMap {
+	for rfc3339, hist := range hset.Items {
 		dt, err := time.Parse(time.RFC3339, rfc3339)
 		if err != nil {
 			return ds, err
@@ -220,7 +220,7 @@ func (hset *HistogramSet) ToTimeSeriesDistinct() (timeseries.TimeSeries, error) 
 		ds.AddItems(timeseries.TimeItem{
 			SeriesName: hset.Name,
 			Time:       dt,
-			Value:      int64(len(hist.Bins))})
+			Value:      int64(len(hist.Items))})
 	}
 	return ds, nil
 }
@@ -228,14 +228,14 @@ func (hset *HistogramSet) ToTimeSeriesDistinct() (timeseries.TimeSeries, error) 
 // DatetimeKeyToQuarter converts a HistogramSet by date to one by quarters.
 func (hset *HistogramSet) DatetimeKeyToQuarter(name string) (*HistogramSet, error) {
 	fsetQtr := NewHistogramSet(name)
-	for rfc3339, hist := range hset.HistogramMap {
+	for rfc3339, hist := range hset.Items {
 		dt, err := time.Parse(time.RFC3339, rfc3339)
 		if err != nil {
 			return fsetQtr, err
 		}
 		dt = timeutil.NewTimeMore(dt, 0).QuarterStart()
 		rfc3339Qtr := dt.Format(time.RFC3339)
-		for binName, binCount := range hist.Bins {
+		for binName, binCount := range hist.Items {
 			fsetQtr.Add(rfc3339Qtr, binName, binCount)
 		}
 	}
@@ -246,7 +246,7 @@ func (hset *HistogramSet) DatetimeKeyToQuarter(name string) (*HistogramSet, erro
 // and a sum of items is desired per time.
 func (hset *HistogramSet) DatetimeKeyCount() (timeseries.TimeSeries, error) {
 	ts := timeseries.NewTimeSeries(hset.Name)
-	for rfc3339, hist := range hset.HistogramMap {
+	for rfc3339, hist := range hset.Items {
 		dt, err := time.Parse(time.RFC3339, rfc3339)
 		if err != nil {
 			return ts, err
@@ -254,7 +254,7 @@ func (hset *HistogramSet) DatetimeKeyCount() (timeseries.TimeSeries, error) {
 		ts.AddItems(timeseries.TimeItem{
 			SeriesName: hset.Name,
 			Time:       dt,
-			Value:      int64(len(hist.Bins))})
+			Value:      int64(len(hist.Items))})
 	}
 	return ts, nil
 }
@@ -273,9 +273,9 @@ func (hset *HistogramSet) DatetimeKeyCountTable(interval timeutil.Interval, coun
 
 // HistogramOrder sets the histogram order for each histogram to the supplied order.
 func (hset *HistogramSet) HistogramOrder(order []string) {
-	for hName, h := range hset.HistogramMap {
+	for hName, h := range hset.Items {
 		h.Order = order
-		hset.HistogramMap[hName] = h
+		hset.Items[hName] = h
 	}
 }
 
@@ -290,14 +290,14 @@ func (hset *HistogramSet) HistogramSetTimeKeyCountWriteXLSX(filename string, int
 
 func (hset *HistogramSet) String(histNotSet, binNotSet string) string {
 	var parts []string
-	for hName, h := range hset.HistogramMap {
+	for hName, h := range hset.Items {
 		if strings.TrimSpace(hName) == "" {
 			hName = histNotSet
 		}
 		bNames := h.BinNames()
 		var counts []string
 		for _, bName := range bNames {
-			count, ok := h.Bins[bName]
+			count, ok := h.Items[bName]
 			if !ok {
 				count = 0
 			}

@@ -4,14 +4,14 @@ var funcStringTransformNoop = func(s string) string { return s }
 
 func (hsets *HistogramSets) FilterHsetNames(inFunc, exFunc func(name string) bool) *HistogramSets {
 	out := NewHistogramSets(hsets.Name)
-	for hsetName, hset := range hsets.HistogramSetMap {
+	for hsetName, hset := range hsets.Items {
 		if (exFunc != nil && exFunc(hsetName)) ||
 			inFunc == nil ||
 			!inFunc(hsetName) {
 			continue
 		}
-		for histName, hist := range hset.HistogramMap {
-			for binName, binSum := range hist.Bins {
+		for histName, hist := range hset.Items {
+			for binName, binSum := range hist.Items {
 				out.Add(
 					hsetName,
 					histName,
@@ -50,9 +50,9 @@ func (hsets *HistogramSets) TransformNames(xfHsetName, xfFuncHistName, xfFuncBin
 	if xfFuncBinName == nil {
 		xfFuncBinName = funcStringTransformNoop
 	}
-	for hsetName, hset := range hsets.HistogramSetMap {
-		for histName, hist := range hset.HistogramMap {
-			for binName, binSum := range hist.Bins {
+	for hsetName, hset := range hsets.Items {
+		for histName, hist := range hset.Items {
+			for binName, binSum := range hist.Items {
 				out.Add(
 					xfHsetName(hsetName),
 					xfFuncHistName(histName),

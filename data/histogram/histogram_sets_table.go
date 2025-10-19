@@ -105,12 +105,12 @@ func (hsets *HistogramSets) TablePivot(opts SetsTablePivotOpts) table.Table {
 		tbl.FormatMap[k] = v
 	}
 
-	for hsetName, hset := range hsets.HistogramSetMap {
-		for histName, hist := range hset.HistogramMap {
+	for hsetName, hset := range hsets.Items {
+		for histName, hist := range hset.Items {
 			row := []string{hsetName, histName}
 			histSum := 0
 			for _, binName := range binNames {
-				if binCount, ok := hist.Bins[binName]; ok {
+				if binCount, ok := hist.Items[binName]; ok {
 					if opts.InclBinCounts {
 						row = append(row, strconv.Itoa(binCount))
 						histSum += binCount
@@ -128,7 +128,7 @@ func (hsets *HistogramSets) TablePivot(opts SetsTablePivotOpts) table.Table {
 				for _, binName := range binNames {
 					if histSum == 0 {
 						row = append(row, "0")
-					} else if binCount, ok := hist.Bins[binName]; ok && binCount != 0 {
+					} else if binCount, ok := hist.Items[binName]; ok && binCount != 0 {
 						row = append(row, strconvutil.Ftoa(float64(binCount)/float64(histSum), -1))
 					} else {
 						row = append(row, "0")

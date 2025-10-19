@@ -19,11 +19,11 @@ func (hset *HistogramSet) Table(colNameHist, colNameBin, colNameCount string) ta
 	tbl := table.NewTable(hset.Name)
 	tbl.Columns = []string{colNameHist, colNameBin, colNameCount}
 	tbl.FormatMap = map[int]string{2: table.FormatInt}
-	for hName, h := range hset.HistogramMap {
+	for hName, h := range hset.Items {
 		if h == nil {
 			continue
 		}
-		for bName, count := range h.Bins {
+		for bName, count := range h.Items {
 			tbl.Rows = append(tbl.Rows, []string{hName, bName, strconv.Itoa(count)})
 		}
 	}
@@ -144,7 +144,7 @@ func (hset *HistogramSet) TablePivot(tableName, histColName string, opts *SetTab
 	rowsTotal := 0
 	for _, hname := range hnames {
 		row := []string{hname}
-		hist, ok := hset.HistogramMap[hname]
+		hist, ok := hset.Items[hname]
 		if !ok {
 			return nil, fmt.Errorf("histogram name present without histogram [%s]", hname)
 		}
@@ -154,7 +154,7 @@ func (hset *HistogramSet) TablePivot(tableName, histColName string, opts *SetTab
 			rowBinCounts = append(rowBinCounts, 0)
 		}
 		for _, binName := range binNames {
-			if binVal, ok := hist.Bins[binName]; ok {
+			if binVal, ok := hist.Items[binName]; ok {
 				rowTotal += binVal
 				rowBinCounts = append(rowBinCounts, binVal)
 			} else {
@@ -243,7 +243,7 @@ func (hset *HistogramSet) WriteXLSX(filename, sheetName, colName1, colName2, col
 	}
 	colName2 = strings.TrimSpace(colName2)
 	if len(colName1) == 0 {
-		for _, fstats := range hset.HistogramMap {
+		for _, fstats := range hset.Items {
 			fstats.Name = strings.TrimSpace(fstats.Name)
 			if len(fstats.Name) > 0 {
 				colName2 = fstats.Name
@@ -262,7 +262,7 @@ func (hset *HistogramSet) WriteXLSX(filename, sheetName, colName1, colName2, col
 		return err
 	}
 	rowIdx := uint32(1)
-	for fstatsName, fstats := range hset.HistogramMap {
+	for fstatsName, fstats := range hset.Items {
 		fstatsNameDt := time.Now()
 		if hset.KeyIsTime {
 			fstatsNameDt, err = time.Parse(time.RFC3339, fstatsName)
@@ -270,7 +270,7 @@ func (hset *HistogramSet) WriteXLSX(filename, sheetName, colName1, colName2, col
 				return err
 			}
 		}
-		for binName, binCount := range fstats.Bins {
+		for binName, binCount := range fstats.Items {
 			var rowVals []any
 			if hset.KeyIsTime {
 				rowVals = []any{fstatsNameDt, binName, binCount}

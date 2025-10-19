@@ -19,11 +19,11 @@ func buildHistogramSetMetadata(hs *HistogramSet) *HistogramSetMetadata {
 	meta := &HistogramSetMetadata{Names: []string{}}
 	names := []string{}
 	uniqueBins := map[string]int{}
-	for name, h := range hs.HistogramMap {
+	for name, h := range hs.Items {
 		h.Inflate()
-		hs.HistogramMap[name] = h
+		hs.Items[name] = h
 		names = append(names, name)
-		for binName, binCount := range h.Bins {
+		for binName, binCount := range h.Items {
 			if _, ok := uniqueBins[binName]; !ok {
 				uniqueBins[binName] = 0
 			}

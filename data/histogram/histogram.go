@@ -26,7 +26,7 @@ var (
 // keys which are converted to soerted query strings.
 type Histogram struct {
 	Name        string
-	Bins        map[string]int
+	Items       map[string]int
 	Counts      map[string]int // how many items have counts.
 	Percentages map[string]float64
 	Order       []string // bin ordering for formatting.
@@ -35,7 +35,7 @@ type Histogram struct {
 func NewHistogram(name string) *Histogram {
 	return &Histogram{
 		Name:        name,
-		Bins:        map[string]int{},
+		Items:       map[string]int{},
 		Counts:      map[string]int{},
 		Percentages: map[string]float64{},
 		// BinCount:    0}
@@ -54,12 +54,12 @@ func ReadFileHistogramBins(filename string) (*Histogram, error) {
 		return nil, err
 	}
 	h := NewHistogram("")
-	h.Bins = msi
+	h.Items = msi
 	return h, nil
 }
 
 func (hist *Histogram) Add(binName string, binCount int) {
-	hist.Bins[binName] += binCount
+	hist.Items[binName] += binCount
 }
 
 func (hist *Histogram) AddBulk(m map[string]int) {
@@ -69,7 +69,7 @@ func (hist *Histogram) AddBulk(m map[string]int) {
 }
 
 func (hist *Histogram) GetOrDefault(binName string, def int) int {
-	if v, ok := hist.Bins[binName]; ok {
+	if v, ok := hist.Items[binName]; ok {
 		return v
 	} else {
 		return def
@@ -79,7 +79,7 @@ func (hist *Histogram) GetOrDefault(binName string, def int) int {
 func (hist *Histogram) Inflate() {
 	hist.Counts = map[string]int{}
 	sum := 0
-	for _, binVal := range hist.Bins {
+	for _, binVal := range hist.Items {
 		countString := strconv.Itoa(binVal)
 		if _, ok := hist.Counts[countString]; !ok {
 			hist.Counts[countString] = 0
@@ -89,7 +89,7 @@ func (hist *Histogram) Inflate() {
 	}
 
 	hist.Percentages = map[string]float64{}
-	for binName, binVal := range hist.Bins {
+	for binName, binVal := range hist.Items {
 		hist.Percentages[binName] = float64(binVal) / float64(sum)
 	}
 }
@@ -105,7 +105,7 @@ func (hist *Histogram) BinNamesMore(inclOrdered, inclUnordered, inclEmpty bool) 
 		for _, ord := range hist.Order {
 			seen[ord]++
 			if !inclEmpty {
-				if v, ok := hist.Bins[ord]; !ok || v == 0 {
+				if v, ok := hist.Items[ord]; !ok || v == 0 {
 					continue
 				}
 			}
@@ -119,7 +119,7 @@ func (hist *Histogram) BinNamesMore(inclOrdered, inclUnordered, inclEmpty bool) 
 				}
 				seen[name]++
 				if !inclEmpty {
-					if v, ok := hist.Bins[name]; !ok || v == 0 {
+					if v, ok := hist.Items[name]; !ok || v == 0 {
 						continue
 					}
 				}
@@ -130,7 +130,7 @@ func (hist *Histogram) BinNamesMore(inclOrdered, inclUnordered, inclEmpty bool) 
 		allNames := hist.BinNames()
 		for _, name := range allNames {
 			if !inclEmpty {
-				if v, ok := hist.Bins[name]; !ok || v == 0 {
+				if v, ok := hist.Items[name]; !ok || v == 0 {
 					continue
 				}
 			}
@@ -142,7 +142,7 @@ func (hist *Histogram) BinNamesMore(inclOrdered, inclUnordered, inclEmpty bool) 
 }
 
 func (hist *Histogram) BinNameExists(binName string) bool {
-	if _, ok := hist.Bins[binName]; ok {
+	if _, ok := hist.Items[binName]; ok {
 		return true
 	} else {
 		return false
@@ -150,7 +150,7 @@ func (hist *Histogram) BinNameExists(binName string) bool {
 }
 
 func (hist *Histogram) BinValue(binName string) (int, error) {
-	if v, ok := hist.Bins[binName]; ok {
+	if v, ok := hist.Items[binName]; ok {
 		return v, nil
 	} else {
 		return -1, errors.New("bin not found")
@@ -174,16 +174,16 @@ func (hist *Histogram) BinValuesOrDefault(binNames []string, def int) []int {
 }
 
 func (hist *Histogram) ItemCount() uint {
-	return uint(len(hist.Bins))
+	return uint(len(hist.Items))
 }
 
 func (hist *Histogram) ItemNames() []string {
-	return maputil.Keys(hist.Bins)
+	return maputil.Keys(hist.Items)
 }
 
 func (hist *Histogram) Map() map[string]int {
 	out := map[string]int{}
-	for binName, binCount := range hist.Bins {
+	for binName, binCount := range hist.Items {
 		out[binName] += binCount
 	}
 	return out
@@ -201,7 +201,7 @@ func (hist *Histogram) MapAdd(m map[string]int) {
 // the end or not included.
 func (hist *Histogram) OrderOrDefault(inclUnordered bool) []string {
 	s1, _ := stringsutil.SliceOrderExplicit(
-		maputil.StringKeys(hist.Bins, nil),
+		maputil.StringKeys(hist.Items, nil),
 		hist.Order,
 		inclUnordered)
 	return s1
@@ -241,7 +241,7 @@ func (hist *Histogram) OrderOrDefault(inclUnordered bool) []string {
 
 func (hist *Histogram) Sum() int {
 	binSum := 0
-	for _, c := range hist.Bins {
+	for _, c := range hist.Items {
 		binSum += c
 	}
 	return binSum
@@ -249,7 +249,7 @@ func (hist *Histogram) Sum() int {
 
 func (hist *Histogram) Stats() point.PointSet {
 	pointSet := point.NewPointSet()
-	for binName, binCount := range hist.Bins {
+	for binName, binCount := range hist.Items {
 		pointSet.PointsMap[binName] = point.Point{
 			Name:        binName,
 			AbsoluteInt: int64(binCount)}
@@ -267,7 +267,7 @@ const (
 
 // ItemCounts returns sorted bin names and values.
 func (hist *Histogram) ItemCounts(sortBy string) maputil.Records {
-	msi := maputil.MapStringInt(hist.Bins)
+	msi := maputil.MapStringInt(hist.Items)
 	return msi.Sorted(sortBy)
 }
 
@@ -276,7 +276,7 @@ func (hist *Histogram) ItemCounts(sortBy string) maputil.Records {
 func (hist *Histogram) ItemValuesOrdered() maputil.Records {
 	var recs maputil.Records
 	for _, ord := range hist.Order {
-		if v, ok := hist.Bins[ord]; ok {
+		if v, ok := hist.Items[ord]; ok {
 			recs = append(recs, maputil.Record{Name: ord, Value: v})
 		} else {
 			recs = append(recs, maputil.Record{Name: ord, Value: 0})
@@ -290,7 +290,7 @@ func (hist *Histogram) ItemValuesOrdered() maputil.Records {
 func (hist *Histogram) Percentile(x int) (float32, error) {
 	countTotal := 0
 	countLess := 0
-	for k, v := range hist.Bins {
+	for k, v := range hist.Items {
 		kint, err := strconv.Atoi(k)
 		if err != nil {
 			return 0, err
@@ -345,7 +345,7 @@ func (hist *Histogram) WriteTableASCII(w io.Writer, header []string, sortBy stri
 func (hist *Histogram) Table(colNameBinName, colNameBinCount string) *table.Table {
 	tbl := table.NewTable(hist.Name)
 	tbl.Columns = []string{colNameBinName, colNameBinCount}
-	for binName, binCount := range hist.Bins {
+	for binName, binCount := range hist.Items {
 		tbl.Rows = append(tbl.Rows,
 			[]string{binName, strconv.Itoa(binCount)})
 	}

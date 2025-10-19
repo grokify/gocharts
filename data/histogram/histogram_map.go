@@ -42,7 +42,7 @@ func (hist *Histogram) MapKeySplit(mapKey string, mapValIncl []string) (*Histogr
 			panic("Z")
 		}
 	*/
-	for mapKeysStr, count := range hist.Bins {
+	for mapKeysStr, count := range hist.Items {
 		binMap, err := maputil.ParseMapStringString(mapKeysStr)
 		if err != nil {
 			return nil, err
@@ -61,19 +61,19 @@ func (hist *Histogram) MapKeySplit(mapKey string, mapValIncl []string) (*Histogr
 				continue
 			}
 		}
-		subHist, ok := hs.HistogramMap[histName]
+		subHist, ok := hs.Items[histName]
 		if !ok {
 			subHist = NewHistogram(histName)
 		}
 		subHist.AddMap(newBinMap, count)
-		hs.HistogramMap[histName] = subHist
+		hs.Items[histName] = subHist
 	}
 	return hs, nil
 }
 
 func (hist *Histogram) MapToHistogramSet(histName, binName string) (*HistogramSet, error) {
 	out := NewHistogramSet("")
-	for mapKeysStr, count := range hist.Bins {
+	for mapKeysStr, count := range hist.Items {
 		binMap, err := maputil.ParseMapStringString(mapKeysStr)
 		if err != nil {
 			return nil, err
@@ -94,11 +94,11 @@ func (hist *Histogram) MapToHistogramSet(histName, binName string) (*HistogramSe
 func (hist *Histogram) MapKeysReduce(mapKeysFilter []string) (*Histogram, error) {
 	mapKeysFilter = stringsutil.SliceCondenseSpace(mapKeysFilter, true, true)
 	filtered := NewHistogram(hist.Name)
-	if len(mapKeysFilter) == 0 || len(hist.Bins) == 0 {
+	if len(mapKeysFilter) == 0 || len(hist.Items) == 0 {
 		return filtered, nil
 	}
 
-	for mapKeysStr, count := range hist.Bins {
+	for mapKeysStr, count := range hist.Items {
 		binMap, err := maputil.ParseMapStringString(mapKeysStr)
 		if err != nil {
 			return nil, err
@@ -118,7 +118,7 @@ func (hist *Histogram) MapKeysReduce(mapKeysFilter []string) (*Histogram, error)
 
 func (hist *Histogram) MapKeysFlattenSingle(mapKeyFilter string) (*Histogram, error) {
 	filtered := NewHistogram(hist.Name)
-	for mapKeyStr, count := range hist.Bins {
+	for mapKeyStr, count := range hist.Items {
 		binMap, err := maputil.ParseMapStringString(mapKeyStr)
 		if err != nil {
 			return nil, err
@@ -135,7 +135,7 @@ func (hist *Histogram) MapKeysFlattenSingle(mapKeyFilter string) (*Histogram, er
 // MapKeys returns a list of keys using query string keys.
 func (hist *Histogram) MapKeys() ([]string, error) {
 	keys := map[string]int{}
-	for qry := range hist.Bins {
+	for qry := range hist.Items {
 		m, err := maputil.ParseMapStringString(qry)
 		if err != nil {
 			return []string{}, err
@@ -150,7 +150,7 @@ func (hist *Histogram) MapKeys() ([]string, error) {
 // MapKeyValues returns a list of keys using query string keys.
 func (hist *Histogram) MapKeyValues(key string, dedupe bool) ([]string, error) {
 	vals := []string{}
-	for qry := range hist.Bins {
+	for qry := range hist.Items {
 		m, err := maputil.ParseMapStringString(qry)
 		if err != nil {
 			return []string{}, err
@@ -203,7 +203,7 @@ func (hist *Histogram) TableSetMap(cfgs []HistogramMapTableConfig) (*table.Table
 				panic("HERE")
 			*/
 			for _, hsetKey := range hsetKeys {
-				keyHist, ok := hset.HistogramMap[hsetKey]
+				keyHist, ok := hset.Items[hsetKey]
 				if !ok {
 					panic("key not found")
 				}
@@ -277,7 +277,7 @@ func (hist *Histogram) TableMap(mapCols []string, colNameBinCount string, fnSort
 	// create histogram with minimized aggregate map keys to aggregate exclude non-desired
 	// properties from the key for aggregation.
 	histSubset := NewHistogram("")
-	for binName, binCount := range hist.Bins {
+	for binName, binCount := range hist.Items {
 		binMap, err := maputil.ParseMapStringString(binName)
 		if err != nil {
 			return nil, err
@@ -292,7 +292,7 @@ func (hist *Histogram) TableMap(mapCols []string, colNameBinCount string, fnSort
 		tbl.Columns = append(tbl.Columns, colNameBinCount)
 	}
 
-	for binName, binCount := range histSubset.Bins {
+	for binName, binCount := range histSubset.Items {
 		binMap, err := maputil.ParseMapStringString(binName)
 		if err != nil {
 			return nil, err

@@ -50,17 +50,17 @@ func NewHistogramSetsCounts(hsets HistogramSets) *HistogramSetsCounts {
 		UIDCounts:     map[string]map[string]uint{},
 		UIDCountsKey1: map[string]uint{},
 		UIDCountsKey2: map[string]uint{}}
-	if len(hsets.HistogramSetMap) == 0 {
+	if len(hsets.Items) == 0 {
 		return hcounts
 	}
 
-	for hsetName, hset := range hsets.HistogramSetMap {
+	for hsetName, hset := range hsets.Items {
 		hcountsGroup, ok := hcounts.UIDCounts[hsetName]
 		if !ok {
 			hcountsGroup = map[string]uint{}
 		}
-		for histName, hist := range hset.HistogramMap {
-			hcountsGroup[histName] = uint(len(hist.Bins))
+		for histName, hist := range hset.Items {
+			hcountsGroup[histName] = uint(len(hist.Items))
 		}
 		hcounts.UIDCounts[hsetName] = hcountsGroup
 	}

@@ -8,29 +8,29 @@ var histogramAnyTests = []struct {
 	v   HistogramAny
 	sum int
 }{
-	{&Histogram{Bins: map[string]int{"foo": 10}}, 10},
+	{&Histogram{Items: map[string]int{"foo": 10}}, 10},
 	{&HistogramSet{
-		HistogramMap: map[string]*Histogram{
-			"bar": {Bins: map[string]int{"foo": 10}}}}, 10},
+		Items: map[string]*Histogram{
+			"bar": {Items: map[string]int{"foo": 10}}}}, 10},
 	{
 		&HistogramSets{
-			HistogramSetMap: map[string]*HistogramSet{
+			Items: map[string]*HistogramSet{
 				"baz": {
-					HistogramMap: map[string]*Histogram{
-						"bar": {Bins: map[string]int{"foo": 10}}}},
+					Items: map[string]*Histogram{
+						"bar": {Items: map[string]int{"foo": 10}}}},
 			},
 		},
 		10,
 	},
 	{&Histogram{
-		Bins: map[string]int{"foo": 10, "bar": 2}}, 12},
+		Items: map[string]int{"foo": 10, "bar": 2}}, 12},
 	{&HistogramSet{
-		HistogramMap: map[string]*Histogram{
-			"bar": {Bins: map[string]int{
+		Items: map[string]*Histogram{
+			"bar": {Items: map[string]int{
 				"foo": 10,
 				"bar": 20,
 			}},
-			"baz": {Bins: map[string]int{
+			"baz": {Items: map[string]int{
 				"foo": 12,
 				"bar": 11,
 			}}},

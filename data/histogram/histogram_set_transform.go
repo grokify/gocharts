@@ -9,13 +9,13 @@ import (
 // FilterHistogramNames returns a new `HistogramSet` with only the matching histogram names included.
 func (hset *HistogramSet) FilterHistogramNames(inFunc, exFunc func(histname string) bool) *HistogramSet {
 	newHset := NewHistogramSet(hset.Name)
-	for histName, hist := range hset.HistogramMap {
+	for histName, hist := range hset.Items {
 		if (exFunc != nil && exFunc(histName)) ||
 			inFunc == nil ||
 			!inFunc(histName) {
 			continue
 		}
-		for binName, binCount := range hist.Bins {
+		for binName, binCount := range hist.Items {
 			newHset.Add(histName, binName, binCount)
 		}
 	}
@@ -30,8 +30,8 @@ func (hset *HistogramSet) TransformNames(xfFuncHist, xfFuncBin func(input string
 		xfFuncBin = funcStringTransformNoop
 	}
 	newHset := NewHistogramSet(hset.Name)
-	for histName, hist := range hset.HistogramMap {
-		for binName, binCount := range hist.Bins {
+	for histName, hist := range hset.Items {
+		for binName, binCount := range hist.Items {
 			newHset.Add(xfFuncHist(histName), xfFuncBin(binName), binCount)
 		}
 	}
