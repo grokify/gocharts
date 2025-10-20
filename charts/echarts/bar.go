@@ -73,7 +73,7 @@ func NewBarHistogramSet(opts *ChartOptions, hs *histogram.HistogramSet, histName
 		if len(hs.Order) > 0 {
 			histNames = hs.Order
 		} else {
-			histNames = maputil.Keys(hs.HistogramMap)
+			histNames = maputil.Keys(hs.Items)
 		}
 	}
 
@@ -104,7 +104,7 @@ func HistogramSetBarSeriesSlice(hs *histogram.HistogramSet, histNames, binNames 
 		return out, histogram.ErrHistogramSetCannotBeNil
 	}
 	for _, histName := range histNames {
-		if h, ok := hs.HistogramMap[histName]; ok {
+		if h, ok := hs.Items[histName]; ok {
 			if bs, err := HistogramBarSeries(h, binNames, def); err != nil {
 				return out, err
 			} else {
