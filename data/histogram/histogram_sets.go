@@ -1,6 +1,7 @@
 package histogram
 
 import (
+	"slices"
 	"strings"
 
 	"github.com/grokify/mogo/type/maputil"
@@ -9,6 +10,7 @@ import (
 type HistogramSets struct {
 	Name  string
 	Items map[string]*HistogramSet
+	Order []string
 }
 
 func NewHistogramSets(name string) *HistogramSets {
@@ -123,6 +125,15 @@ func (hsets *HistogramSets) Sum() int {
 		}
 	}
 	return sum
+}
+
+func (hsets *HistogramSets) UpdateSetOrders(setOrders map[string][]string) {
+	for k, vs := range setOrders {
+		if hset, ok := hsets.Items[k]; ok {
+			hset.Order = slices.Clone(vs)
+			hsets.Items[k] = hset
+		}
+	}
 }
 
 func (hsets *HistogramSets) Visit(visit func(hsetName, histName, binName string, binCount int)) {
