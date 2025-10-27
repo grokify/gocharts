@@ -7,14 +7,14 @@ toolchain go1.24.5
 require (
 	github.com/go-analyze/charts v0.5.21
 	github.com/go-echarts/go-echarts/v2 v2.6.5
-	github.com/grokify/mogo v0.71.3
+	github.com/grokify/mogo v0.71.7
 	github.com/jessevdk/go-flags v1.6.1
 	github.com/nao1215/markdown v0.8.3
 	github.com/olekukonko/tablewriter v1.1.0
 	github.com/shopspring/decimal v1.4.0
 	github.com/valyala/quicktemplate v1.8.0
 	github.com/xuri/excelize/v2 v2.10.0
-	golang.org/x/exp v0.0.0-20251017212417-90e834f514db
+	golang.org/x/exp v0.0.0-20251023183803-a4bb9ffd2546
 	gonum.org/v1/gonum v0.16.0
 	gonum.org/v1/plot v0.16.0
 )
