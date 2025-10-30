@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/grokify/gocharts/v2/data/table"
+	"github.com/grokify/mogo/time/duration"
 	"github.com/grokify/mogo/time/timeutil"
 )
 
@@ -48,11 +49,11 @@ func UpdateDurations(t *table.Table, toTimeUnit time.Duration, prec int, addSuff
 	return t.FormatColumns(1, -1, func(s string) (string, error) {
 		s = strings.TrimSpace(s)
 		if s == "" {
-			return timeutil.DurationStringUnit(0, toTimeUnit, prec, addSuffix), nil
+			return duration.DurationStringUnit(0, toTimeUnit, prec, addSuffix), nil
 		} else if d, err := time.ParseDuration(s); err != nil {
 			return s, err
 		} else {
-			return timeutil.DurationStringUnit(d, toTimeUnit, prec, addSuffix), nil
+			return duration.DurationStringUnit(d, toTimeUnit, prec, addSuffix), nil
 		}
 	}, true)
 }
