@@ -3,6 +3,7 @@ package table
 import (
 	"errors"
 	"fmt"
+	"io"
 	"strconv"
 	"strings"
 
@@ -118,16 +119,33 @@ func (ts *TableSet) AddRow(tableName string, row []string) {
 	ts.TableMap[tableName] = tbl
 }
 
-func (ts *TableSet) WriteXLSX(filename string) error {
-	names := ts.Order
-	if len(names) == 0 {
-		names = ts.TableNames()
+func ParseTableXLSX(f *excelize.File, sheetName string, headerRowCount uint32, trimSpace bool) (*Table, error) {
+	if f == nil {
+		return nil, excelizeutil.ErrExcelizeFileCannotBeNil
 	}
-	tbls := ts.Tables(names)
-	if err := WriteXLSX(filename, tbls); err != nil {
-		return errorsutil.Wrapf(err, "error in TableSet.WriteXLSX(%s)", filename)
+	xm := excelizeutil.File{File: f}
+	if cols, rows, err := xm.TableData(sheetName, headerRowCount, trimSpace, false); err != nil {
+		return nil, err
 	} else {
-		return nil
+		tbl := NewTable(sheetName)
+		tbl.Columns = cols
+		tbl.Rows = rows
+		return &tbl, nil
+	}
+}
+
+func ParseTableXLSXIndex(f *excelize.File, sheetIdx, headerRowCount uint32, trimSpace bool) (*Table, error) {
+	if f == nil {
+		return nil, excelizeutil.ErrExcelizeFileCannotBeNil
+	}
+	xm := excelizeutil.File{File: f}
+	if cols, rows, err := xm.TableDataIndex(sheetIdx, headerRowCount, trimSpace, false); err != nil {
+		return nil, err
+	} else {
+		tbl := NewTable(f.GetSheetName(int(sheetIdx)))
+		tbl.Columns = cols
+		tbl.Rows = rows
+		return &tbl, nil
 	}
 }
 
@@ -170,32 +188,23 @@ func ReadTableXLSXIndexFile(filename string, sheetIdx, headerRowCount uint32, tr
 	}
 }
 
-func ParseTableXLSX(f *excelize.File, sheetName string, headerRowCount uint32, trimSpace bool) (*Table, error) {
-	if f == nil {
-		return nil, excelizeutil.ErrExcelizeFileCannotBeNil
-	}
-	xm := excelizeutil.File{File: f}
-	if cols, rows, err := xm.TableData(sheetName, headerRowCount, trimSpace, false); err != nil {
+func ReadTableXLSXIndex(r io.Reader, sheetIdx, headerRowCount uint32, trimSpace bool) (*Table, error) {
+	if xf, err := excelize.OpenReader(r); err != nil {
 		return nil, err
 	} else {
-		tbl := NewTable(sheetName)
-		tbl.Columns = cols
-		tbl.Rows = rows
-		return &tbl, nil
+		return ParseTableXLSXIndex(xf, sheetIdx, headerRowCount, trimSpace)
 	}
 }
 
-func ParseTableXLSXIndex(f *excelize.File, sheetIdx, headerRowCount uint32, trimSpace bool) (*Table, error) {
-	if f == nil {
-		return nil, excelizeutil.ErrExcelizeFileCannotBeNil
+func (ts *TableSet) WriteXLSX(filename string) error {
+	names := ts.Order
+	if len(names) == 0 {
+		names = ts.TableNames()
 	}
-	xm := excelizeutil.File{File: f}
-	if cols, rows, err := xm.TableDataIndex(sheetIdx, headerRowCount, trimSpace, false); err != nil {
-		return nil, err
+	tbls := ts.Tables(names)
+	if err := WriteXLSX(filename, tbls); err != nil {
+		return errorsutil.Wrapf(err, "error in TableSet.WriteXLSX(%s)", filename)
 	} else {
-		tbl := NewTable(f.GetSheetName(int(sheetIdx)))
-		tbl.Columns = cols
-		tbl.Rows = rows
-		return &tbl, nil
+		return nil
 	}
 }
