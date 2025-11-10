@@ -76,6 +76,14 @@ func (tbl *Table) FormatterFunc() func(val string, colIdx uint32) (any, error) {
 			} else {
 				return floatVal, nil
 			}
+		case FormatPercent:
+			if strings.TrimSpace(val) == "" {
+				return float64(0), nil
+			} else if floatVal, err := strconv.ParseFloat(val, 64); err != nil {
+				return val, err
+			} else {
+				return floatVal, nil
+			}
 		case FormatInt:
 			if strings.TrimSpace(val) == "" {
 				return int(0), nil
@@ -218,7 +226,16 @@ func WriteXLSX(path string, tbls []*Table) error {
 				cellValue := row[x]
 				cellLocation := sheet.CoordinatesToSheetLocation(x, y+rowBase)
 				if fmtType, ok := tbl.FormatMap[int(x)]; ok {
-					if fmtType == FormatURL {
+					switch fmtType {
+					case FormatPercent:
+						if style, err := f.NewStyle(&excelize.Style{
+							NumFmt: 10, // Excel built-in number format for percentage
+						}); err != nil {
+							return err
+						} else if err := f.SetCellStyle(sheetName, cellLocation, cellLocation, style); err != nil {
+							return err
+						}
+					case FormatURL:
 						txt, lnk := markdown.ParseLink(cellValue)
 						txt = strings.TrimSpace(txt)
 						lnk = strings.TrimSpace(lnk)
@@ -250,7 +267,8 @@ func WriteXLSX(path string, tbls []*Table) error {
 					return errorsutil.Wrap(err, "gocharts/data/tables/write.go/WriteXLSXFormatted.Error.FormatCellValue")
 				} else if err = f.SetCellValue(sheetName, cellLocation, formattedVal); err != nil {
 					return err
-				} else if tbl.FormatAutoLink {
+				}
+				if tbl.FormatAutoLink {
 					if rxURLHTTPOrHTTPS.MatchString(cellValue) {
 						err := f.SetCellHyperLink(sheetName, cellLocation, cellValue, excelizeLinkTypeExternal)
 						if err != nil {
