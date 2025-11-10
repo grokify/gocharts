@@ -6,8 +6,8 @@ toolchain go1.24.5
 
 require (
 	github.com/go-analyze/charts v0.5.21
-	github.com/go-echarts/go-echarts/v2 v2.6.6
-	github.com/grokify/mogo v0.71.7
+	github.com/go-echarts/go-echarts/v2 v2.6.7
+	github.com/grokify/mogo v0.71.8
 	github.com/jessevdk/go-flags v1.6.1
 	github.com/nao1215/markdown v0.8.3
 	github.com/olekukonko/tablewriter v1.1.0
@@ -28,7 +28,7 @@ require (
 	github.com/clipperhouse/stringish v0.1.1 // indirect
 	github.com/clipperhouse/uax29/v2 v2.3.0 // indirect
 	github.com/fatih/color v1.18.0 // indirect
-	github.com/go-analyze/bulk v0.1.0 // indirect
+	github.com/go-analyze/bulk v0.1.1 // indirect
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/grokify/base36 v1.0.5 // indirect
 	github.com/huandu/xstrings v1.5.0 // indirect
@@ -53,6 +53,6 @@ require (
 	golang.org/x/crypto v0.43.0 // indirect
 	golang.org/x/image v0.32.0 // indirect
 	golang.org/x/net v0.46.0 // indirect
-	golang.org/x/sys v0.37.0 // indirect
+	golang.org/x/sys v0.38.0 // indirect
 	golang.org/x/text v0.30.0 // indirect
 )
