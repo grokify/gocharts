@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"slices"
+	"strings"
 )
 
 func (tbl *Table) FilterColumnDistinctFirstTable(colIdx int) (*Table, error) {
@@ -17,7 +18,7 @@ func (tbl *Table) FilterColumnDistinctFirstTable(colIdx int) (*Table, error) {
 		if colIdx >= 0 && colIdx < len(row) {
 			val := row[colIdx]
 			if _, ok := seen[val]; !ok {
-				out.Rows = append(out.Rows, row)
+				out.Rows = append(out.Rows, slices.Clone(row))
 				seen[val] = 1
 			}
 		}
@@ -73,4 +74,22 @@ ROWS:
 		}
 	}
 	return data, nil
+}
+
+func (tbl *Table) FilterNonEmptyRows() (*Table, error) {
+	if tbl.IsFloat64 {
+		return nil, errors.New("cannot filter float table on string values")
+	}
+	out := tbl.Clone(false)
+
+	for _, row := range tbl.Rows {
+		try := strings.Join(row, " ")
+		try = strings.TrimSpace(try)
+		if try == "" {
+			continue
+		} else {
+			out.Rows = append(out.Rows, slices.Clone(row))
+		}
+	}
+	return out, nil
 }
