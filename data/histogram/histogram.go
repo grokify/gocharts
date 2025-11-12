@@ -5,6 +5,7 @@ import (
 	"errors"
 	"io"
 	"os"
+	"slices"
 	"strconv"
 	"strings"
 
@@ -179,6 +180,14 @@ func (hist *Histogram) ItemCount() uint {
 
 func (hist *Histogram) ItemNames() []string {
 	return maputil.Keys(hist.Items)
+}
+
+func (hist *Histogram) ItemNamesOrderOrDefault() []string {
+	if len(hist.Order) > 0 {
+		return slices.Clone(hist.Order)
+	} else {
+		return hist.ItemNames()
+	}
 }
 
 func (hist *Histogram) Map() map[string]int {
