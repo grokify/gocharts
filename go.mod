@@ -14,7 +14,7 @@ require (
 	github.com/shopspring/decimal v1.4.0
 	github.com/valyala/quicktemplate v1.8.0
 	github.com/xuri/excelize/v2 v2.10.0
-	golang.org/x/exp v0.0.0-20251023183803-a4bb9ffd2546
+	golang.org/x/exp v0.0.0-20251113190631-e25ba8c21ef6
 	gonum.org/v1/gonum v0.16.0
 	gonum.org/v1/plot v0.16.0
 )
