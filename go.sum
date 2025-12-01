@@ -32,8 +32,8 @@ github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0/go.mod h1:E/TSTwGw
 github.com/google/gofuzz v1.0.0/go.mod h1:dBl0BpW6vV/+mYPU4Po3pmUjxk6FQPldtuIdl/M65Eg=
 github.com/grokify/base36 v1.0.5 h1:iUgnt40hrPtn3M2gjU4Darow5ikf8xWXrTuMWTLziCk=
 github.com/grokify/base36 v1.0.5/go.mod h1:L+1aaUBGfp5Ctar7KCS5G9uPABo1Ccu1Ct2iQAuhOJ4=
-github.com/grokify/mogo v0.71.10 h1:kz7zJMB9TQ3FbLpqsYnZEoM7WOKxQqE44cAAGzoVZns=
-github.com/grokify/mogo v0.71.10/go.mod h1:H1V+bUspOdTttWwWar1a1eRt/3iJcJKo+bnh2ku3hEE=
+github.com/grokify/mogo v0.72.0 h1:Hf7II5wNDKcE/akypmkhdrQmg2B9pF4i9bfDKflOFqs=
+github.com/grokify/mogo v0.72.0/go.mod h1:BE/1tUa1TGMgXSydNiBJx4c8MgQNnns3/xbQek/HRUY=
 github.com/huandu/xstrings v1.5.0 h1:2ag3IFq9ZDANvthTwTiqSSZLjDc+BedvHPAp5tJy2TI=
 github.com/huandu/xstrings v1.5.0/go.mod h1:y5/lhBue+AyNmUVz9RLU9xbLR0o4KIIExikq4ovT0aE=
 github.com/iancoleman/strcase v0.3.0 h1:nTXanmYxhfFAMjZL34Ov6gkzEsSJZ5DbhxWjvSASxEI=
