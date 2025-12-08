@@ -7,7 +7,7 @@ toolchain go1.24.5
 require (
 	github.com/go-analyze/charts v0.5.21
 	github.com/go-echarts/go-echarts/v2 v2.6.7
-	github.com/grokify/mogo v0.72.0
+	github.com/grokify/mogo v0.72.2
 	github.com/jessevdk/go-flags v1.6.1
 	github.com/nao1215/markdown v0.10.0
 	github.com/olekukonko/tablewriter v1.1.2
