@@ -7,7 +7,7 @@ toolchain go1.24.5
 require (
 	github.com/go-analyze/charts v0.5.22
 	github.com/go-echarts/go-echarts/v2 v2.6.7
-	github.com/grokify/mogo v0.72.5
+	github.com/grokify/mogo v0.72.6
 	github.com/jessevdk/go-flags v1.6.1
 	github.com/nao1215/markdown v0.10.0
 	github.com/olekukonko/tablewriter v1.1.2
@@ -53,6 +53,6 @@ require (
 	golang.org/x/crypto v0.46.0 // indirect
 	golang.org/x/image v0.34.0 // indirect
 	golang.org/x/net v0.48.0 // indirect
-	golang.org/x/sys v0.39.0 // indirect
-	golang.org/x/text v0.32.0 // indirect
+	golang.org/x/sys v0.40.0 // indirect
+	golang.org/x/text v0.33.0 // indirect
 )
