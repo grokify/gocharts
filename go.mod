@@ -5,7 +5,7 @@ go 1.25.0
 require (
 	github.com/go-analyze/charts v0.5.24
 	github.com/go-echarts/go-echarts/v2 v2.6.7
-	github.com/grokify/mogo v0.73.1
+	github.com/grokify/mogo v0.73.2
 	github.com/jessevdk/go-flags v1.6.1
 	github.com/nao1215/markdown v0.10.0
 	github.com/olekukonko/tablewriter v1.1.3
@@ -25,7 +25,6 @@ require (
 	github.com/ajstarks/svgo v0.0.0-20211024235047-1546f124cd8b // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/clipperhouse/displaywidth v0.10.0 // indirect
-	github.com/clipperhouse/stringish v0.1.1 // indirect
 	github.com/clipperhouse/uax29/v2 v2.6.0 // indirect
 	github.com/fatih/color v1.18.0 // indirect
 	github.com/go-analyze/bulk v0.1.3 // indirect
