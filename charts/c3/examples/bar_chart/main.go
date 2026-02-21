@@ -17,7 +17,7 @@ import (
 	// More Info
 )
 
-const repoLink = "https://github.com/grokify/gocharts/tree/master/charts/c3/examples/bar_chart"
+const repoLink = "https://github.com/grokify/gocharts/tree/main/charts/c3/examples/bar_chart"
 
 func getData(numQuarters uint32) []timeseries.TimeItem {
 	timeItems := []timeseries.TimeItem{}
