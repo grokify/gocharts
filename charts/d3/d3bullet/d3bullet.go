@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"path"
+	"path/filepath"
 
 	"github.com/grokify/gocharts/v2/data/bullet"
 )
@@ -115,8 +115,8 @@ func ProjectionToBullet(prjData bullet.ProjectionDataInt, title string, subtitle
 }
 
 func GetJS() []byte {
-	filepath := path.Join(os.Getenv("GOPATH"), "src", JSPath)
-	bytes, err := os.ReadFile(filepath)
+	jsFilePath := filepath.Clean(filepath.Join(os.Getenv("GOPATH"), "src", JSPath))
+	bytes, err := os.ReadFile(jsFilePath) //nolint:gosec // G703: path is constructed from known constant JSPath
 	if err != nil {
 		return []byte("")
 	}

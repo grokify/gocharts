@@ -34,12 +34,12 @@ func main() {
 
 	f, err := os.Create("output.png")
 	if err != nil {
-		slog.Error(err.Error())
+		slog.Error("failed to create output file", "error", err)
 		os.Exit(1)
 	}
 	defer f.Close()
 	if err := graph.Render(chartdraw.PNG, f); err != nil {
-		slog.Error(err.Error())
+		slog.Error("failed to render chart", "error", err)
 		os.Exit(2)
 	}
 	os.Exit(0)

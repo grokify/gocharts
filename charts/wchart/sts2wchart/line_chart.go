@@ -145,13 +145,13 @@ func TimeSeriesSetToLineChart(tset timeseries.TimeSeriesSet, opts *LineChartOpts
 	}
 
 	if opts.Width > 0 && opts.Height > 0 {
-		graph.Width = int(opts.Width)
-		graph.Height = int(opts.Height)
+		graph.Width = int(opts.Width)   //nolint:gosec // G115: chart dimensions are small values
+		graph.Height = int(opts.Height) //nolint:gosec // G115: chart dimensions are small values
 	} else if opts.Width > 0 && opts.AspectRatio > 0 {
-		graph.Width = int(opts.Width)
+		graph.Width = int(opts.Width) //nolint:gosec // G115: chart dimensions are small values
 		graph.Height = int(ratio.WidthToHeight(float64(opts.Width), opts.AspectRatio))
 	} else if opts.Height > 0 && opts.AspectRatio > 0 {
-		graph.Height = int(opts.Height)
+		graph.Height = int(opts.Height) //nolint:gosec // G115: chart dimensions are small values
 		graph.Width = int(ratio.HeightToWidth(float64(opts.Height), opts.AspectRatio))
 	}
 

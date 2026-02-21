@@ -197,7 +197,7 @@ func (opts *ParseOptions) Filter(cols []string, rows [][]string, errorOutOfBound
 			if idx < 0 {
 				wantColNamesNotFound = append(wantColNamesNotFound, wantColName)
 			} else {
-				indicesTry = append(indicesTry, uint(idx))
+				indicesTry = append(indicesTry, uint(idx)) //nolint:gosec // G115: idx is checked >= 0 above
 			}
 		}
 		if len(wantColNamesNotFound) > 0 {
