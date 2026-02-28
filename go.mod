@@ -7,7 +7,7 @@ require (
 	github.com/go-echarts/go-echarts/v2 v2.6.7
 	github.com/grokify/mogo v0.73.2
 	github.com/jessevdk/go-flags v1.6.1
-	github.com/nao1215/markdown v0.10.0
+	github.com/nao1215/markdown v0.13.0
 	github.com/olekukonko/tablewriter v1.1.3
 	github.com/shopspring/decimal v1.4.0
 	github.com/valyala/quicktemplate v1.8.0
