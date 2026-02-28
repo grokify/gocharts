@@ -11,7 +11,7 @@ require (
 	github.com/olekukonko/tablewriter v1.1.3
 	github.com/shopspring/decimal v1.4.0
 	github.com/valyala/quicktemplate v1.8.0
-	github.com/xuri/excelize/v2 v2.10.0
+	github.com/xuri/excelize/v2 v2.10.1
 	golang.org/x/exp v0.0.0-20260218203240-3dfff04db8fa
 	gonum.org/v1/gonum v0.17.0
 	gonum.org/v1/plot v0.16.0
