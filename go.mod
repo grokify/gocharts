@@ -5,7 +5,7 @@ go 1.25.0
 require (
 	github.com/go-analyze/charts v0.5.24
 	github.com/go-echarts/go-echarts/v2 v2.7.0
-	github.com/grokify/mogo v0.73.2
+	github.com/grokify/mogo v0.73.3
 	github.com/jessevdk/go-flags v1.6.1
 	github.com/nao1215/markdown v0.13.0
 	github.com/olekukonko/tablewriter v1.1.3
@@ -50,7 +50,7 @@ require (
 	github.com/xuri/nfp v0.0.2-0.20250530014748-2ddeb826f9a9 // indirect
 	golang.org/x/crypto v0.48.0 // indirect
 	golang.org/x/image v0.36.0 // indirect
-	golang.org/x/net v0.50.0 // indirect
+	golang.org/x/net v0.51.0 // indirect
 	golang.org/x/sys v0.41.0 // indirect
 	golang.org/x/text v0.34.0 // indirect
 )
