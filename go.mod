@@ -3,7 +3,7 @@ module github.com/grokify/gocharts/v2
 go 1.25.0
 
 require (
-	github.com/go-analyze/charts v0.5.24
+	github.com/go-analyze/charts v0.5.25
 	github.com/go-echarts/go-echarts/v2 v2.7.0
 	github.com/grokify/mogo v0.73.2
 	github.com/jessevdk/go-flags v1.6.1
