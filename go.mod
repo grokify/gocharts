@@ -5,7 +5,7 @@ go 1.25.0
 require (
 	github.com/go-analyze/charts v0.5.26
 	github.com/go-echarts/go-echarts/v2 v2.7.0
-	github.com/grokify/mogo v0.73.3
+	github.com/grokify/mogo v0.73.4
 	github.com/jessevdk/go-flags v1.6.1
 	github.com/nao1215/markdown v0.13.0
 	github.com/olekukonko/tablewriter v1.1.3
