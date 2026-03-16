@@ -29,12 +29,12 @@ GoCharts is a library to assist with building charts, by directly working with c
 
 ## Features
 
-- **Data Structures** - Table, TimeSeries, Histogram, Roadmap, and more
-- **Multiple Chart Libraries** - C3, D3, ECharts, Google Charts, Rickshaw, wchart
-- **Excel Integration** - Read/write XLSX files with formatting
-- **Markdown Output** - Generate tables for documentation
-- **Analytics Integration** - Metabase and SimpleKPI support
-- **Text Charts** - Terminal-friendly progress bars and funnel charts
+- 📊 **Data Structures** - Table, TimeSeries, Histogram, Roadmap, and more
+- 📈 **Multiple Chart Libraries** - C3, D3, ECharts, Google Charts, Rickshaw, wchart
+- 📗 **Excel Integration** - Read/write XLSX files with formatting
+- 📝 **Markdown Output** - Generate tables for documentation
+- 🔌 **Analytics Integration** - Metabase and SimpleKPI support
+- 💻 **Text Charts** - Terminal-friendly progress bars and funnel charts
 
 ## Contents
 
