@@ -1,18 +1,27 @@
-name: lint
+name: Go Lint
 permissions:
   contents: read
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**.go'
+      - 'go.mod'
+      - 'go.sum'
+      - '.golangci.yml'
+      - '.github/workflows/go-lint.yaml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '**.go'
+      - 'go.mod'
+      - 'go.sum'
+      - '.golangci.yml'
+      - '.github/workflows/go-lint.yaml'
+  workflow_dispatch:
+
 jobs:
   lint:
-    strategy:
-      matrix:
-        go-version: [1.x]
-        platform: [ubuntu-latest]
-    runs-on: ${{ matrix.platform }}
-    steps:
-    - uses: actions/checkout@v6
-    - name: golangci-lint
-      uses: golangci/golangci-lint-action@v9
-      with:
-        version: latest
-        args: --timeout 3m --max-same-issues 0 --max-issues-per-linter 0 --verbose
+    uses: grokify/.github/.github/workflows/go-lint.yaml@439a05bbe1aef3e1f4b26a5c450d6c92de1b204c
