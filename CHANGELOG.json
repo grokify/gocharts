@@ -1,0 +1,6772 @@
+{
+  "irVersion": "1.0",
+  "project": "gocharts",
+  "repository": "https://github.com/grokify/gocharts",
+  "versioning": "semver",
+  "commitConvention": "conventional",
+  "releases": [
+    {
+      "version": "v2.27.0",
+      "date": "2026-03-16",
+      "highlights": [
+        {
+          "description": "New `chartir` package providing a non-polymorphic intermediate representation for charts, compilable to ECharts, PNG/SVG, and other formats"
+        }
+      ],
+      "added": [
+        {
+          "description": "`charts/chartir` package with ChartIR types: datasets, marks, axes, legend, tooltip, grid",
+          "commit": "2ad92fc"
+        },
+        {
+          "description": "`charts/chartir/wchart` compiler for PNG/SVG output via go-analyze/charts",
+          "commit": "2ad92fc"
+        },
+        {
+          "description": "11 geometry types: line, bar, pie, scatter, area, radar, funnel, gauge, heatmap, treemap, sankey",
+          "commit": "2ad92fc"
+        },
+        {
+          "description": "Typed constants for axis types, positions, column types, and tooltip triggers",
+          "commit": "2ad92fc"
+        }
+      ],
+      "fixed": [
+        {
+          "description": "Resolve gosec lint warnings (G703, G706, G115) with nolint directives and structured logging",
+          "commit": "e644f52"
+        }
+      ],
+      "security": [
+        {
+          "description": "Add permissions to workflow to fix code scanning alert",
+          "commit": "0979654"
+        }
+      ],
+      "documentation": [
+        {
+          "description": "Expand README with features, quick start examples, and output formats table",
+          "commit": "372daca"
+        },
+        {
+          "description": "Update README shields and badges",
+          "commit": "5339ec5"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "Bump github.com/go-echarts/go-echarts/v2 from 2.6.7 to 2.7.0",
+          "commit": "cbf8477"
+        },
+        {
+          "description": "Bump github.com/go-analyze/charts from 0.5.24 to 0.5.26",
+          "commit": "b3e42f1"
+        },
+        {
+          "description": "Bump github.com/grokify/mogo from 0.73.1 to 0.73.4",
+          "commit": "39d9d6b"
+        },
+        {
+          "description": "Bump github.com/xuri/excelize/v2 from 2.10.0 to 2.10.1",
+          "commit": "2d72d20"
+        },
+        {
+          "description": "Bump github.com/nao1215/markdown from 0.10.0 to 0.13.0",
+          "commit": "50052b2"
+        },
+        {
+          "description": "Bump github.com/olekukonko/tablewriter from 1.1.3 to 1.1.4",
+          "commit": "dfb56f0"
+        }
+      ],
+      "internal": [
+        {
+          "description": "Move CI workflows to shared workflows",
+          "commit": "168574c"
+        },
+        {
+          "description": "Rename workflow files for specificity",
+          "commit": "8f8bb4f"
+        },
+        {
+          "description": "Update branch references from master to main",
+          "commit": "5645a3c"
+        },
+        {
+          "description": "Update copyright year in LICENSE",
+          "commit": "7b2bb82"
+        }
+      ]
+    },
+    {
+      "version": "v2.26.9",
+      "date": "2026-02-14",
+      "dependencies": [
+        {
+          "description": "Merge pull request #126 from grokify/dependabot/go_modules/github.com/grokify/mogo-0.73.0",
+          "issue": "126",
+          "commit": "009d572"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump github.com/grokify/mogo from 0.72.7 to 0.73.0",
+          "commit": "2e3d4a3"
+        }
+      ],
+      "internal": [
+        {
+          "description": "`go mod`: update dependencies",
+          "commit": "a35aab0"
+        }
+      ]
+    },
+    {
+      "version": "v2.26.8",
+      "date": "2026-01-30",
+      "dependencies": [
+        {
+          "description": "Merge pull request #125 from grokify/dependabot/go_modules/github.com/go-analyze/charts-0.5.24",
+          "issue": "125",
+          "commit": "5e590ff"
+        },
+        {
+          "description": "Merge pull request #124 from grokify/dependabot/go_modules/github.com/go-analyze/charts-0.5.23",
+          "issue": "124",
+          "commit": "7e30c7a"
+        },
+        {
+          "description": "Merge pull request #123 from grokify/dependabot/go_modules/github.com/olekukonko/tablewriter-1.1.3",
+          "issue": "123",
+          "commit": "58a345c"
+        },
+        {
+          "description": "Merge pull request #122 from grokify/dependabot/go_modules/gonum.org/v1/gonum-0.17.0",
+          "issue": "122",
+          "commit": "1a9bef0"
+        },
+        {
+          "description": "Merge pull request #121 from grokify/dependabot/go_modules/github.com/grokify/mogo-0.72.6",
+          "issue": "121",
+          "commit": "e8687df"
+        },
+        {
+          "description": "Merge pull request #120 from grokify/dependabot/go_modules/github.com/go-analyze/charts-0.5.22",
+          "issue": "120",
+          "commit": "8d6e1f9"
+        },
+        {
+          "description": "Merge pull request #119 from grokify/dependabot/go_modules/github.com/grokify/mogo-0.72.5",
+          "issue": "119",
+          "commit": "746e3ac"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump github.com/go-analyze/charts from 0.5.23 to 0.5.24",
+          "commit": "efab273"
+        },
+        {
+          "description": "bump github.com/go-analyze/charts from 0.5.22 to 0.5.23",
+          "commit": "1f049c3"
+        },
+        {
+          "description": "bump github.com/olekukonko/tablewriter from 1.1.2 to 1.1.3",
+          "commit": "68c06f4"
+        },
+        {
+          "description": "bump gonum.org/v1/gonum from 0.16.0 to 0.17.0",
+          "commit": "e892384"
+        },
+        {
+          "description": "bump github.com/grokify/mogo from 0.72.5 to 0.72.6",
+          "commit": "9ecf352"
+        },
+        {
+          "description": "bump github.com/go-analyze/charts from 0.5.21 to 0.5.22",
+          "commit": "ecf7e76"
+        },
+        {
+          "description": "bump github.com/grokify/mogo from 0.72.3 to 0.72.5",
+          "commit": "5f2d3fd"
+        }
+      ],
+      "internal": [
+        {
+          "description": "`go mod`: update dependencies",
+          "commit": "b57f780"
+        },
+        {
+          "description": "`go mod`: update dependencies",
+          "commit": "198cbbb"
+        }
+      ]
+    },
+    {
+      "version": "v2.26.7",
+      "date": "2025-12-12",
+      "dependencies": [
+        {
+          "description": "Merge pull request #118 from grokify/dependabot/go_modules/github.com/grokify/mogo-0.72.2",
+          "issue": "118",
+          "commit": "76ead06"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump github.com/grokify/mogo from 0.72.0 to 0.72.2",
+          "commit": "d3c6383"
+        }
+      ],
+      "internal": [
+        {
+          "description": "`go mod`: update",
+          "commit": "db1272e"
+        }
+      ]
+    },
+    {
+      "version": "v2.26.6",
+      "date": "2025-11-30",
+      "dependencies": [
+        {
+          "description": "Merge pull request #117 from grokify/dependabot/go_modules/github.com/nao1215/markdown-0.10.0",
+          "issue": "117",
+          "commit": "baa20ef"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump github.com/nao1215/markdown from 0.8.3 to 0.10.0",
+          "commit": "fdd90dc"
+        }
+      ],
+      "internal": [
+        {
+          "description": "`go mod`: update",
+          "commit": "4e5028c"
+        },
+        {
+          "description": "`go mod`: update",
+          "commit": "a13ffe8"
+        }
+      ]
+    },
+    {
+      "version": "v2.26.5",
+      "date": "2025-11-22",
+      "added": [
+        {
+          "description": "`charts/text/progressbarchart`: add `ChartsTextFromHistogram()`, `Tasks.CurrentCountMax()`, `Tasks.SetMaxCountsMax()`",
+          "commit": "f830a7f"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "Merge pull request #115 from grokify/dependabot/github_actions/actions/checkout-6",
+          "issue": "115",
+          "commit": "b56e694"
+        },
+        {
+          "description": "Merge pull request #114 from grokify/dependabot/go_modules/golang.org/x/crypto-0.45.0",
+          "issue": "114",
+          "commit": "1467120"
+        },
+        {
+          "description": "Merge pull request #113 from grokify/dependabot/go_modules/github.com/grokify/mogo-0.71.9",
+          "issue": "113",
+          "commit": "ffa6eec"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump actions/checkout from 5 to 6",
+          "commit": "893d6e1"
+        },
+        {
+          "description": "bump golang.org/x/crypto from 0.44.0 to 0.45.0",
+          "commit": "df36aff"
+        },
+        {
+          "description": "bump github.com/grokify/mogo from 0.71.8 to 0.71.9",
+          "commit": "5d668a2"
+        }
+      ],
+      "internal": [
+        {
+          "description": "`go mod`: update",
+          "commit": "c62f8fd"
+        },
+        {
+          "description": "`go mod`: update",
+          "commit": "f9dc8d1"
+        }
+      ]
+    },
+    {
+      "version": "v2.26.4",
+      "date": "2025-11-12",
+      "added": [
+        {
+          "description": "`charts/text/progressbarchart`: add initial implementation for text-based charts",
+          "commit": "0b3e118"
+        }
+      ]
+    },
+    {
+      "version": "v2.26.3",
+      "date": "2025-11-12",
+      "added": [
+        {
+          "description": "`data/histogram`: add `Histogram.ItemNamesOrderOrDefault()`",
+          "commit": "b090213"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "Merge pull request #112 from grokify/dependabot/go_modules/github.com/olekukonko/tablewriter-1.1.1",
+          "issue": "112",
+          "commit": "1970a3a"
+        },
+        {
+          "description": "Merge pull request #111 from grokify/dependabot/github_actions/golangci/golangci-lint-action-9",
+          "issue": "111",
+          "commit": "ca571bd"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump github.com/olekukonko/tablewriter from 1.1.0 to 1.1.1",
+          "commit": "00da127"
+        },
+        {
+          "description": "bump golangci/golangci-lint-action from 8 to 9",
+          "commit": "ae1371a"
+        }
+      ]
+    },
+    {
+      "version": "v2.26.2",
+      "date": "2025-11-10",
+      "added": [
+        {
+          "description": "`data/table`: add `ReadTableXLSXIndex()`",
+          "commit": "92d17b6"
+        },
+        {
+          "description": "`data/table`: add `Table.FilterNonEmptyRows()`",
+          "commit": "b2eca97"
+        },
+        {
+          "description": "`data/table`: ad `FormatPercent`",
+          "commit": "5e27b32"
+        }
+      ],
+      "changed": [
+        {
+          "description": "`data/table`: add `Table.FormatterFunc()` add `FormatPercent` support",
+          "commit": "48a4384"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "Merge pull request #110 from grokify/dependabot/go_modules/github.com/go-echarts/go-echarts/v2-2.6.6",
+          "issue": "110",
+          "commit": "48131e3"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump github.com/go-echarts/go-echarts/v2",
+          "commit": "8ecde8b"
+        }
+      ],
+      "internal": [
+        {
+          "description": "`go mod`: update",
+          "commit": "b445531"
+        }
+      ]
+    },
+    {
+      "version": "v2.26.1",
+      "date": "2025-10-29",
+      "internal": [
+        {
+          "description": "`go mod`: update",
+          "commit": "97de41d"
+        }
+      ]
+    },
+    {
+      "version": "v2.26.0",
+      "date": "2025-10-19",
+      "added": [
+        {
+          "description": "`data/histogram`: add `HistogramSets.Markdown()`",
+          "commit": "2edee5e"
+        },
+        {
+          "description": "`data/histogram`: add `HistogramSets.Order`, `HistogramSets.UpdateSetOrders()`",
+          "commit": "d1aa2d6"
+        }
+      ],
+      "changed": [
+        {
+          "description": "`charts`|`data`: update to consistent `Items` attribute",
+          "commit": "a64fa3b"
+        },
+        {
+          "description": "`data/histogram`: update to consistent `Items` attribute",
+          "commit": "1ea88d1"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "Merge pull request #108 from grokify/dependabot/go_modules/github.com/go-echarts/go-echarts/v2-2.6.5",
+          "issue": "108",
+          "commit": "9cd877b"
+        },
+        {
+          "description": "Merge pull request #107 from grokify/dependabot/go_modules/github.com/xuri/excelize/v2-2.10.0",
+          "issue": "107",
+          "commit": "f6447a8"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump github.com/go-echarts/go-echarts/v2",
+          "commit": "f9a9e13"
+        },
+        {
+          "description": "bump github.com/xuri/excelize/v2 from 2.9.1 to 2.10.0",
+          "commit": "9edf6b4"
+        }
+      ],
+      "internal": [
+        {
+          "description": "`go mod`: update",
+          "commit": "6c8f24c"
+        }
+      ]
+    },
+    {
+      "version": "v2.25.5",
+      "date": "2025-10-12",
+      "fixed": [
+        {
+          "description": "`data/table`: fix consistent line widths in `Table.Markdown()`",
+          "commit": "e80c5db"
+        }
+      ],
+      "internal": [
+        {
+          "description": "`go mod`: update",
+          "commit": "ca0af17"
+        },
+        {
+          "description": "`go mod`: update",
+          "commit": "987f5a2"
+        }
+      ]
+    },
+    {
+      "version": "v2.25.4",
+      "date": "2025-09-29",
+      "internal": [
+        {
+          "description": "`go mod`: update dependencies",
+          "commit": "c789879"
+        }
+      ]
+    },
+    {
+      "version": "v2.25.3",
+      "date": "2025-09-28",
+      "changed": [
+        {
+          "description": "`data/histogram`: use `MatchType`",
+          "commit": "aca3cc7"
+        }
+      ]
+    },
+    {
+      "version": "v2.25.2",
+      "date": "2025-09-28",
+      "dependencies": [
+        {
+          "description": "Merge pull request #103 from grokify/dependabot/github_actions/actions/setup-go-6",
+          "issue": "103",
+          "commit": "74b3b8c"
+        },
+        {
+          "description": "Merge pull request #106 from grokify/dependabot/go_modules/github.com/olekukonko/tablewriter-1.1.0",
+          "issue": "106",
+          "commit": "0da1415"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump github.com/olekukonko/tablewriter from 1.0.9 to 1.1.0",
+          "commit": "85a4c8e"
+        },
+        {
+          "description": "bump actions/setup-go from 5 to 6",
+          "commit": "553e810"
+        }
+      ],
+      "internal": [
+        {
+          "description": "`go mod`: update",
+          "commit": "05c8518"
+        },
+        {
+          "description": "`go build`: update go versions",
+          "commit": "476ad87"
+        }
+      ]
+    },
+    {
+      "version": "v2.25.1",
+      "date": "2025-09-14",
+      "security": [
+        {
+          "description": "Potential fix for code scanning alert no. 3: Workflow does not contain permissions",
+          "commit": "2d16baf"
+        }
+      ],
+      "fixed": [
+        {
+          "description": "Merge pull request #105 from grokify/alert-autofix-3",
+          "issue": "105",
+          "commit": "8851063"
+        }
+      ]
+    },
+    {
+      "version": "v2.25.0",
+      "date": "2025-09-14",
+      "added": [
+        {
+          "description": "`data/histogram`: add `HistogramSet.TransformBinNamesMapSlice()`",
+          "commit": "9d4c882"
+        },
+        {
+          "description": "`data/histogram`: add `HistogramSet.AddHistogramBulk()`",
+          "commit": "ef09b85"
+        },
+        {
+          "description": "`data/histogram`: add `Histogram.TransformBinNamesMapSlice()`",
+          "commit": "b304338"
+        },
+        {
+          "description": "`charts/google/columnchart`: add",
+          "commit": "91c4fc0"
+        },
+        {
+          "description": "`charts/google`: add `DataTableFromHistogramSet()`",
+          "commit": "65f8224"
+        }
+      ],
+      "changed": [
+        {
+          "description": "Merge pull request #104 from jentfoo/wcharczuk-chart-switch",
+          "issue": "104",
+          "commit": "3660893"
+        },
+        {
+          "description": "go mod tidy",
+          "commit": "42ad62c"
+        },
+        {
+          "description": "Switch from wcharczuk/go-chart to go-analyze/charts",
+          "commit": "fe53034"
+        }
+      ],
+      "internal": [
+        {
+          "description": "`go mod`: update",
+          "commit": "8e523d6"
+        },
+        {
+          "description": "`golangci-lint`: fix various",
+          "commit": "177824d"
+        }
+      ]
+    },
+    {
+      "version": "v2.24.20",
+      "date": "2025-09-07",
+      "dependencies": [
+        {
+          "description": "Merge pull request #100 from grokify/dependabot/go_modules/github.com/nao1215/markdown-0.8.1",
+          "issue": "100",
+          "commit": "be3d9b1"
+        },
+        {
+          "description": "Merge pull request #102 from grokify/dependabot/go_modules/github.com/go-echarts/go-echarts/v2-2.6.2",
+          "issue": "102",
+          "commit": "371ae47"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump github.com/go-echarts/go-echarts/v2",
+          "commit": "1c3a631"
+        },
+        {
+          "description": "bump github.com/nao1215/markdown from 0.8.0 to 0.8.1",
+          "commit": "60200c3"
+        }
+      ],
+      "internal": [
+        {
+          "description": "`go mod`: update",
+          "commit": "b284231"
+        }
+      ]
+    },
+    {
+      "version": "v2.24.19",
+      "date": "2025-08-27",
+      "dependencies": [
+        {
+          "description": "Merge pull request #99 from grokify/dependabot/go_modules/github.com/grokify/mogo-0.70.19",
+          "issue": "99",
+          "commit": "82f43a5"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump github.com/grokify/mogo from 0.70.18 to 0.70.19",
+          "commit": "d564604"
+        }
+      ],
+      "internal": [
+        {
+          "description": "`go mod`: update",
+          "commit": "eef997c"
+        }
+      ]
+    },
+    {
+      "version": "v2.24.18",
+      "date": "2025-08-25",
+      "added": [
+        {
+          "description": "`data/table`: add `FormatMap{}`",
+          "commit": "8742790"
+        },
+        {
+          "description": "`data/table`: add `Table.RowMapAny()`",
+          "commit": "7c03af1"
+        },
+        {
+          "description": "`data/table`: add `Columns.RowMapAny()`",
+          "commit": "d187a35"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "Merge pull request #98 from grokify/dependabot/go_modules/github.com/grokify/mogo-0.70.17",
+          "issue": "98",
+          "commit": "81856b2"
+        },
+        {
+          "description": "Merge pull request #97 from grokify/dependabot/github_actions/actions/checkout-5",
+          "issue": "97",
+          "commit": "4d4de77"
+        },
+        {
+          "description": "Merge pull request #96 from grokify/dependabot/go_modules/github.com/grokify/mogo-0.70.16",
+          "issue": "96",
+          "commit": "d6677a0"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump github.com/grokify/mogo from 0.70.16 to 0.70.17",
+          "commit": "3d91a5e"
+        },
+        {
+          "description": "bump actions/checkout from 4 to 5",
+          "commit": "4080b00"
+        },
+        {
+          "description": "bump github.com/grokify/mogo from 0.70.15 to 0.70.16",
+          "commit": "0b12f4d"
+        }
+      ],
+      "internal": [
+        {
+          "description": "`go mod`: update",
+          "commit": "04901c7"
+        },
+        {
+          "description": "`ci`: update go versions",
+          "commit": "137ebc0"
+        }
+      ]
+    },
+    {
+      "version": "v2.24.17",
+      "date": "2025-08-03",
+      "internal": [
+        {
+          "description": "`go mod`: update",
+          "commit": "66018c7"
+        }
+      ]
+    },
+    {
+      "version": "v2.24.16",
+      "date": "2025-08-03",
+      "added": [
+        {
+          "description": "`data/table`: add `Table.ColumnsValues()`",
+          "commit": "6e8583c"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "Merge pull request #95 from grokify/dependabot/go_modules/github.com/olekukonko/tablewriter-1.0.9",
+          "issue": "95",
+          "commit": "01e69be"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump github.com/olekukonko/tablewriter from 1.0.8 to 1.0.9",
+          "commit": "6892f23"
+        }
+      ],
+      "internal": [
+        {
+          "description": "`go mod`: update",
+          "commit": "c22c884"
+        }
+      ]
+    },
+    {
+      "version": "v2.24.15",
+      "date": "2025-07-19",
+      "internal": [
+        {
+          "description": "`go mod`: update",
+          "commit": "437f436"
+        }
+      ]
+    },
+    {
+      "version": "v2.24.14",
+      "date": "2025-07-18",
+      "fixed": [
+        {
+          "description": "`data/table`: update `Table.FormatterFunc()` to use `time.DateOnly` for `FormatDate`",
+          "commit": "f3f5082"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "Merge pull request #93 from grokify/dependabot/go_modules/github.com/grokify/mogo-0.70.12",
+          "issue": "93",
+          "commit": "5d5b04a"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump github.com/grokify/mogo from 0.70.11 to 0.70.12",
+          "commit": "1495ae5"
+        }
+      ],
+      "internal": [
+        {
+          "description": "`go mod`: update",
+          "commit": "b49e5dd"
+        }
+      ]
+    },
+    {
+      "version": "v2.24.13",
+      "date": "2025-07-13",
+      "added": [
+        {
+          "description": "`data/erd`: add supported constants for `TypeDecimal` and `TypeTimestamp`",
+          "commit": "4e5f8b0"
+        }
+      ],
+      "changed": [
+        {
+          "description": "`data/table`: update `Columns.CellStringByLetters()` error message",
+          "commit": "8557d06"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "Merge pull request #92 from grokify/dependabot/go_modules/github.com/olekukonko/tablewriter-1.0.8",
+          "issue": "92",
+          "commit": "a86ac28"
+        },
+        {
+          "description": "Merge pull request #91 from grokify/dependabot/go_modules/github.com/grokify/mogo-0.70.10",
+          "issue": "91",
+          "commit": "e8efe45"
+        }
+      ],
+      "documentation": [
+        {
+          "description": "`data/erd`: add README",
+          "commit": "ee75113"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump github.com/olekukonko/tablewriter from 1.0.7 to 1.0.8",
+          "commit": "e98acd0"
+        },
+        {
+          "description": "bump github.com/grokify/mogo from 0.70.9 to 0.70.10",
+          "commit": "167ef8a"
+        }
+      ],
+      "internal": [
+        {
+          "description": "`go mod`: update",
+          "commit": "2b65442"
+        }
+      ]
+    },
+    {
+      "version": "v2.24.12",
+      "date": "2025-06-22",
+      "added": [
+        {
+          "description": "`data/erd`: add `Relationship{}`, `Relationships{}`",
+          "commit": "6261009"
+        },
+        {
+          "description": "`data/table`: add `TableSet.ColumnSetByTableName()`",
+          "commit": "cba2743"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "Merge pull request #90 from grokify/dependabot/go_modules/github.com/grokify/mogo-0.70.8",
+          "issue": "90",
+          "commit": "9e3ff6c"
+        },
+        {
+          "description": "Merge pull request #88 from grokify/dependabot/go_modules/github.com/grokify/mogo-0.70.6",
+          "issue": "88",
+          "commit": "6f2c7da"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump github.com/grokify/mogo from 0.70.7 to 0.70.8",
+          "commit": "3918aee"
+        },
+        {
+          "description": "bump github.com/grokify/mogo from 0.70.5 to 0.70.6",
+          "commit": "59ea116"
+        }
+      ],
+      "internal": [
+        {
+          "description": "`go mod`: update",
+          "commit": "f871e4f"
+        },
+        {
+          "description": "`go mod`: update",
+          "commit": "d28bed4"
+        }
+      ]
+    },
+    {
+      "version": "v2.24.11",
+      "date": "2025-06-08",
+      "dependencies": [
+        {
+          "description": "Merge pull request #87 from grokify/dependabot/go_modules/github.com/grokify/mogo-0.70.3",
+          "issue": "87",
+          "commit": "4b20a85"
+        }
+      ],
+      "documentation": [
+        {
+          "description": "`README.md`: cleanup shields",
+          "commit": "3eb70fd"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump github.com/grokify/mogo from 0.70.2 to 0.70.3",
+          "commit": "c4d2a35"
+        }
+      ],
+      "internal": [
+        {
+          "description": "`go.mod`: update",
+          "commit": "0b6ca38"
+        }
+      ]
+    },
+    {
+      "version": "v2.24.10",
+      "date": "2025-06-01",
+      "internal": [
+        {
+          "description": "`go mod`: update",
+          "commit": "5d89ca1"
+        }
+      ]
+    },
+    {
+      "version": "v2.24.9",
+      "date": "2025-06-01",
+      "dependencies": [
+        {
+          "description": "Merge pull request #86 from grokify/dependabot/go_modules/github.com/olekukonko/tablewriter-1.0.7",
+          "issue": "86",
+          "commit": "4c9828d"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump github.com/olekukonko/tablewriter from 1.0.6 to 1.0.7",
+          "commit": "7c88b56"
+        }
+      ],
+      "internal": [
+        {
+          "description": "`go mod`: update",
+          "commit": "94ae68a"
+        },
+        {
+          "description": "`go mod`: update",
+          "commit": "657316a"
+        }
+      ]
+    },
+    {
+      "version": "v2.24.8",
+      "date": "2025-05-18",
+      "dependencies": [
+        {
+          "description": "Merge pull request #83 from grokify/dependabot/go_modules/github.com/xuri/excelize/v2-2.9.1",
+          "issue": "83",
+          "commit": "23534d3"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump github.com/xuri/excelize/v2 from 2.9.0 to 2.9.1",
+          "commit": "3915045"
+        }
+      ],
+      "internal": [
+        {
+          "description": "`go mod`: update",
+          "commit": "947e266"
+        },
+        {
+          "description": "`go mod`: update",
+          "commit": "119db60"
+        }
+      ]
+    },
+    {
+      "version": "v2.24.7",
+      "date": "2025-05-12",
+      "internal": [
+        {
+          "description": "`go mod`: update",
+          "commit": "c7234aa"
+        }
+      ]
+    },
+    {
+      "version": "v2.24.6",
+      "date": "2025-05-11",
+      "internal": [
+        {
+          "description": "`go mod`: update",
+          "commit": "f09a313"
+        }
+      ]
+    },
+    {
+      "version": "v2.24.5",
+      "date": "2025-05-11",
+      "added": [
+        {
+          "description": "`data/table`: add `Columns.Clone()`",
+          "commit": "1244d43"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "Merge pull request #82 from grokify/dependabot/go_modules/github.com/go-echarts/go-echarts/v2-2.5.4",
+          "issue": "82",
+          "commit": "533aec7"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump github.com/go-echarts/go-echarts/v2",
+          "commit": "f65936d"
+        }
+      ],
+      "internal": [
+        {
+          "description": "`go mod`: update",
+          "commit": "93ba8b5"
+        }
+      ]
+    },
+    {
+      "version": "v2.24.4",
+      "date": "2025-05-08",
+      "added": [
+        {
+          "description": "`data/table/sheet`: add `ColLettersToIndex()`",
+          "commit": "37d0143"
+        }
+      ]
+    },
+    {
+      "version": "v2.24.3",
+      "date": "2025-05-08",
+      "internal": [
+        {
+          "description": "`go mod`: update",
+          "commit": "3dda9c8"
+        }
+      ]
+    },
+    {
+      "version": "v2.24.2",
+      "date": "2025-05-08",
+      "added": [
+        {
+          "description": "`data/table`: add `TableSet.Table()`",
+          "commit": "deafebc"
+        },
+        {
+          "description": "`data/table`: add `ReadFileCSV()`",
+          "commit": "749858b"
+        },
+        {
+          "description": "`data/table`: add `Columns.CellStringByLetters()`",
+          "commit": "13e1333"
+        }
+      ],
+      "changed": [
+        {
+          "description": "`data/table/sheet`: rename `TestColLettersToNumber()` from `TestColLettersToIndex()`",
+          "commit": "573efe0"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "Merge pull request #81 from grokify/dependabot/github_actions/golangci/golangci-lint-action-8",
+          "issue": "81",
+          "commit": "770e6e6"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump golangci/golangci-lint-action from 7 to 8",
+          "commit": "df471db"
+        }
+      ],
+      "internal": [
+        {
+          "description": "`go mod`: update",
+          "commit": "285d570"
+        }
+      ]
+    },
+    {
+      "version": "v2.24.1",
+      "date": "2025-05-03",
+      "internal": [
+        {
+          "description": "`go mod`: update",
+          "commit": "aa9f3ae"
+        }
+      ]
+    },
+    {
+      "version": "v2.24.0",
+      "date": "2025-05-03",
+      "added": [
+        {
+          "description": "`data/table`: add `Columns.ModifyNamesColLettersMap()` and supporting letters code",
+          "commit": "d5b4b50"
+        }
+      ],
+      "changed": [
+        {
+          "description": "`data/table`: add `OR` filter for `Table.FilterColumnValuesRows()`, `Table.FilterColumnValuesTable()`",
+          "commit": "354cffa"
+        }
+      ],
+      "documentation": [
+        {
+          "description": "`README.md`: add lint shield",
+          "commit": "3ca356c"
+        }
+      ],
+      "internal": [
+        {
+          "description": "`go mod`: update",
+          "commit": "cd4a238"
+        },
+        {
+          "description": "`golangci-lint`: fix various",
+          "commit": "5d82a2e"
+        },
+        {
+          "description": "`golangic-lint`: fix various",
+          "commit": "2b03110"
+        },
+        {
+          "description": "`golangci-lint`: fix various",
+          "commit": "86ee2fd"
+        }
+      ]
+    },
+    {
+      "version": "v2.23.6",
+      "date": "2025-04-28",
+      "dependencies": [
+        {
+          "description": "Merge pull request #80 from grokify/dependabot/go_modules/github.com/grokify/mogo-0.68.11",
+          "issue": "80",
+          "commit": "00f6c2b"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump github.com/grokify/mogo from 0.68.10 to 0.68.11",
+          "commit": "21ceda1"
+        }
+      ],
+      "internal": [
+        {
+          "description": "go mod: update",
+          "commit": "e5e284e"
+        },
+        {
+          "description": "`golangci-lint`: fix various",
+          "commit": "101c0fc"
+        }
+      ]
+    },
+    {
+      "version": "v2.23.5",
+      "date": "2025-04-21",
+      "internal": [
+        {
+          "description": "go mod: update",
+          "commit": "cb9fa03"
+        }
+      ]
+    },
+    {
+      "version": "v2.23.4",
+      "date": "2025-04-21",
+      "changed": [
+        {
+          "description": "`data/histogram`: update field names",
+          "commit": "4a484aa"
+        }
+      ],
+      "internal": [
+        {
+          "description": "`golangci-lint`: fix various",
+          "commit": "0c875d5"
+        }
+      ]
+    },
+    {
+      "version": "v2.23.3",
+      "date": "2025-04-20",
+      "added": [
+        {
+          "description": "`data/table`: add `Table.Text()`",
+          "commit": "d22f8b0"
+        }
+      ],
+      "changed": [
+        {
+          "description": "`data/histogram`: rename `SetsTablePivotOpts` from `TablePivotOpts`",
+          "commit": "b3de274"
+        },
+        {
+          "description": "`data/histogram`: add percent column and row to `HistogramSet.TablePivot()`",
+          "commit": "500724c"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "Merge pull request #78 from grokify/dependabot/go_modules/github.com/go-echarts/go-echarts/v2-2.5.3",
+          "issue": "78",
+          "commit": "d10ba6e"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump github.com/go-echarts/go-echarts/v2",
+          "commit": "e6642de"
+        }
+      ],
+      "internal": [
+        {
+          "description": "`golangci-lint`: fix various",
+          "commit": "035733e"
+        },
+        {
+          "description": "`golangci-lint`: fix various",
+          "commit": "1e780b7"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "402c603"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "341f1e9"
+        }
+      ]
+    },
+    {
+      "version": "v2.23.2",
+      "date": "2025-04-08",
+      "internal": [
+        {
+          "description": "go mod: update",
+          "commit": "78e7899"
+        }
+      ]
+    },
+    {
+      "version": "v2.23.1",
+      "date": "2025-04-06",
+      "added": [
+        {
+          "description": "`data/histogram`: add `HistogramSets.HistogramSetOneTwo()`, `HistogramSets.HistogramSetOneThree()`",
+          "commit": "020e84b"
+        }
+      ]
+    },
+    {
+      "version": "v2.23.0",
+      "date": "2025-04-06",
+      "added": [
+        {
+          "description": "`data/table`: add `Table.ColumnInsert()`",
+          "commit": "f8f8eee"
+        },
+        {
+          "description": "`data/histogram`: add `HistogramSet.BinsOrder`, `HistogramSet.HistogramOrder()`",
+          "commit": "4626556"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "Merge pull request #77 from grokify/dependabot/go_modules/github.com/grokify/mogo-0.68.4",
+          "issue": "77",
+          "commit": "29a5665"
+        },
+        {
+          "description": "Merge pull request #75 from grokify/dependabot/github_actions/golangci/golangci-lint-action-7",
+          "issue": "75",
+          "commit": "537ebeb"
+        },
+        {
+          "description": "Merge pull request #76 from grokify/dependabot/go_modules/gonum.org/v1/plot-0.16.0",
+          "issue": "76",
+          "commit": "3b95b14"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump github.com/grokify/mogo from 0.68.3 to 0.68.4",
+          "commit": "82c04e0"
+        },
+        {
+          "description": "bump gonum.org/v1/plot from 0.15.2 to 0.16.0",
+          "commit": "79a380f"
+        },
+        {
+          "description": "bump golangci/golangci-lint-action from 6 to 7",
+          "commit": "f711c99"
+        }
+      ],
+      "internal": [
+        {
+          "description": "go mod: update",
+          "commit": "52f376e"
+        },
+        {
+          "description": "`charts/d3`: fix various",
+          "commit": "c0e5c52"
+        },
+        {
+          "description": "`charts/rickshaw`: fix various",
+          "commit": "3af62ca"
+        },
+        {
+          "description": "`golangci-lint`: fix various",
+          "commit": "7a78246"
+        },
+        {
+          "description": "`golangci-lint`: fix various",
+          "commit": "7521bc0"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "0c99f46"
+        },
+        {
+          "description": "`golangci-lint`: disable `staticcheck` `QF1008`",
+          "commit": "d124944"
+        },
+        {
+          "description": "`golangci-lint`: update to v2, action v7",
+          "commit": "732cb66"
+        }
+      ]
+    },
+    {
+      "version": "v2.22.6",
+      "date": "2025-03-23",
+      "internal": [
+        {
+          "description": "go mod: update",
+          "commit": "6962118"
+        }
+      ]
+    },
+    {
+      "version": "v2.22.5",
+      "date": "2025-03-22",
+      "added": [
+        {
+          "description": "`data/table/tabulator`: add constants",
+          "commit": "52bee7e"
+        }
+      ],
+      "internal": [
+        {
+          "description": "`data/table`: fix various",
+          "commit": "e7e7b54"
+        }
+      ]
+    },
+    {
+      "version": "v2.22.4",
+      "date": "2025-03-22",
+      "dependencies": [
+        {
+          "description": "Merge pull request #74 from grokify/dependabot/go_modules/gonum.org/v1/plot-0.15.2",
+          "issue": "74",
+          "commit": "b8fbca0"
+        },
+        {
+          "description": "Merge pull request #73 from grokify/dependabot/go_modules/github.com/go-echarts/go-echarts/v2-2.5.2",
+          "issue": "73",
+          "commit": "1d8923d"
+        }
+      ],
+      "documentation": [
+        {
+          "description": "`README.md`: remove inaccurate badge",
+          "commit": "5d8428d"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump gonum.org/v1/plot from 0.15.1 to 0.15.2",
+          "commit": "3c7b6ea"
+        },
+        {
+          "description": "bump github.com/go-echarts/go-echarts/v2",
+          "commit": "7e77230"
+        }
+      ],
+      "infrastructure": [
+        {
+          "description": "`ci`: rename",
+          "commit": "bb68672"
+        },
+        {
+          "description": "`ci`: rename",
+          "commit": "4f9b609"
+        }
+      ],
+      "internal": [
+        {
+          "description": "`data/tablef64`: update various",
+          "commit": "1a99530"
+        },
+        {
+          "description": "`data`: fix various",
+          "commit": "b24afb7"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "8f82c35"
+        },
+        {
+          "description": "`data/table`: fix various",
+          "commit": "5589896"
+        },
+        {
+          "description": "ci: disable `--max-same-issues`",
+          "commit": "c8cd95f"
+        },
+        {
+          "description": "`data/timeseries`: fix various",
+          "commit": "68f6ff8"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "ec27225"
+        }
+      ]
+    },
+    {
+      "version": "v2.22.3",
+      "date": "2025-03-10",
+      "documentation": [
+        {
+          "description": "`README.md`: update GitHub action badge link for branch",
+          "commit": "24f7dd5"
+        }
+      ],
+      "internal": [
+        {
+          "description": "`data/table`: fix various",
+          "commit": "9fa2bf2"
+        },
+        {
+          "description": "`data/table`: fix various",
+          "commit": "e66a7df"
+        },
+        {
+          "description": "`data/histogram`: fix various",
+          "commit": "0d21e34"
+        },
+        {
+          "description": "`data/table`: fix various",
+          "commit": "e420db8"
+        },
+        {
+          "description": "golangci-lint: add --max-issues-per-linter`; update `--max-same-issues`",
+          "commit": "de5e2be"
+        },
+        {
+          "description": "`golangci-lint`: add arg `--max-same-issues`",
+          "commit": "dc6591d"
+        },
+        {
+          "description": "`data/table`: fix various",
+          "commit": "5f85e5c"
+        },
+        {
+          "description": "`data/table`: fix various",
+          "commit": "462abde"
+        },
+        {
+          "description": "`data/table`: fix various",
+          "commit": "96aa899"
+        },
+        {
+          "description": "`data/timeseries`: fix various",
+          "commit": "00f8d87"
+        },
+        {
+          "description": "`data/table`: fix various",
+          "commit": "8c9b918"
+        },
+        {
+          "description": "`data/table`: fix various",
+          "commit": "9bbd62a"
+        },
+        {
+          "description": "`data/table`: fix various",
+          "commit": "f23b43e"
+        },
+        {
+          "description": "`data/table`: fix various",
+          "commit": "fdc42a1"
+        },
+        {
+          "description": "`data/bullet`: fix various",
+          "commit": "dd2b008"
+        },
+        {
+          "description": "`data/table`: fix various",
+          "commit": "4afebfb"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "0156dfa"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "f406a29"
+        }
+      ]
+    },
+    {
+      "version": "v2.22.2",
+      "date": "2025-02-23",
+      "added": [
+        {
+          "description": "`data/histogram`: add `Histogram.Percentile()`",
+          "commit": "8c87b55"
+        }
+      ],
+      "internal": [
+        {
+          "description": "go mod: update",
+          "commit": "1eb5272"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "73144e8"
+        }
+      ]
+    },
+    {
+      "version": "v2.22.1",
+      "date": "2025-02-16",
+      "added": [
+        {
+          "description": "`data/table`: add `Table.FormatterFuncHTML()`",
+          "commit": "b84fceb"
+        },
+        {
+          "description": "`charts/google`: add `ChartsLoaderJS`",
+          "commit": "2dbaab4"
+        },
+        {
+          "description": "`charts/google/piechart`: add `PieChartMaterialHTML()` support for rendering partial HTML",
+          "commit": "4764f23"
+        }
+      ],
+      "internal": [
+        {
+          "description": "deps: update go versions",
+          "commit": "2ea992e"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "348785a"
+        },
+        {
+          "description": "deps: update go versions",
+          "commit": "6e22ae6"
+        }
+      ]
+    },
+    {
+      "version": "v2.22.0",
+      "date": "2025-02-09",
+      "added": [
+        {
+          "description": "`charts/echarts`: add `NewBarHistogramSet()`, `HistogramSetBarSeriesSlice()`, `HistogramBarSeries()`",
+          "commit": "70c934d"
+        },
+        {
+          "description": "`data/histogram`: add `HistogramSet.Order`",
+          "commit": "d39f449"
+        },
+        {
+          "description": "`data/histogram`: add `Histogram.BinValuesOrDefault()`",
+          "commit": "67d75d5"
+        },
+        {
+          "description": "`data/table`: add `Columns.MustCellIntOrDefault()`, `Columns.MustCellTime()`",
+          "commit": "70b93a9"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "Merge pull request #72 from grokify/dependabot/go_modules/github.com/grokify/mogo-0.67.7",
+          "issue": "72",
+          "commit": "daebc2e"
+        },
+        {
+          "description": "Merge pull request #71 from grokify/dependabot/go_modules/github.com/grokify/mogo-0.67.6",
+          "issue": "71",
+          "commit": "4797e25"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump github.com/grokify/mogo from 0.67.6 to 0.67.7",
+          "commit": "c0b0323"
+        },
+        {
+          "description": "bump github.com/grokify/mogo from 0.67.5 to 0.67.6",
+          "commit": "18cc3e1"
+        }
+      ],
+      "internal": [
+        {
+          "description": "go mod: update",
+          "commit": "818c57d"
+        }
+      ]
+    },
+    {
+      "version": "v2.21.12",
+      "date": "2025-01-13",
+      "added": [
+        {
+          "description": "`data/table`: add `Columns.Unique()`",
+          "commit": "e24fae8"
+        }
+      ],
+      "internal": [
+        {
+          "description": "go mod: update",
+          "commit": "46d80ff"
+        }
+      ]
+    },
+    {
+      "version": "v2.21.11",
+      "date": "2025-01-12",
+      "dependencies": [
+        {
+          "description": "Merge pull request #70 from grokify/dependabot/go_modules/github.com/grokify/mogo-0.67.2",
+          "issue": "70",
+          "commit": "b638a25"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump github.com/grokify/mogo from 0.67.1 to 0.67.2",
+          "commit": "bef4031"
+        }
+      ],
+      "internal": [
+        {
+          "description": "go mod: update",
+          "commit": "9e36897"
+        }
+      ]
+    },
+    {
+      "version": "v2.21.10",
+      "date": "2025-01-07",
+      "changed": [
+        {
+          "description": "chore(license); update years",
+          "commit": "c90a8e7"
+        }
+      ],
+      "internal": [
+        {
+          "description": "go mod: update",
+          "commit": "7cd9f60"
+        }
+      ]
+    },
+    {
+      "version": "v2.21.9",
+      "date": "2025-01-02",
+      "added": [
+        {
+          "description": "`data/histogram`: add `ReadFileHistogramBins()`",
+          "commit": "9c9db4e"
+        }
+      ],
+      "fixed": [
+        {
+          "description": "`data/histogram`: update `ReadFileHistogramBins()`",
+          "commit": "03fa2b5"
+        }
+      ],
+      "internal": [
+        {
+          "description": "go mod: update",
+          "commit": "bee9907"
+        }
+      ]
+    },
+    {
+      "version": "v2.21.8",
+      "date": "2024-12-30",
+      "internal": [
+        {
+          "description": "go mod: update",
+          "commit": "4aef832"
+        }
+      ]
+    },
+    {
+      "version": "v2.21.7",
+      "date": "2024-12-26",
+      "added": [
+        {
+          "description": "`data/table`: add `Table.AddColumnLineNumber()`",
+          "commit": "857423a"
+        }
+      ],
+      "changed": [
+        {
+          "description": "`data/table`: move `Table.AddColumnLineNumber()` to inplace editing for performance",
+          "commit": "f76ca1c"
+        }
+      ],
+      "fixed": [
+        {
+          "description": "`data/table`: update `Table.Clone()`",
+          "commit": "2bc9787"
+        }
+      ]
+    },
+    {
+      "version": "v2.21.6",
+      "date": "2024-12-25",
+      "added": [
+        {
+          "description": "`data/table`: add `TableSet.LensOrdered()`",
+          "commit": "e98784d"
+        }
+      ]
+    },
+    {
+      "version": "v2.21.5",
+      "date": "2024-12-24",
+      "added": [
+        {
+          "description": "`data/histogram`: add `Histogram.ItemValuesOrdered()`",
+          "commit": "bbe5f73"
+        }
+      ],
+      "internal": [
+        {
+          "description": "go mod: update",
+          "commit": "c6f7099"
+        }
+      ]
+    },
+    {
+      "version": "v2.21.4",
+      "date": "2024-12-24",
+      "dependencies": [
+        {
+          "description": "Merge pull request #69 from grokify/dependabot/go_modules/github.com/grokify/mogo-0.66.4",
+          "issue": "69",
+          "commit": "fea7ba6"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump github.com/grokify/mogo from 0.66.3 to 0.66.4",
+          "commit": "43d1252"
+        }
+      ]
+    },
+    {
+      "version": "v2.21.3",
+      "date": "2024-12-22",
+      "internal": [
+        {
+          "description": "go mod: update",
+          "commit": "c37bcb4"
+        }
+      ]
+    },
+    {
+      "version": "v2.21.2",
+      "date": "2024-12-15",
+      "changed": [
+        {
+          "description": "`data/table`: add `ColumnDefinitions{}`; rename `ColumnDefinitionSet{}`",
+          "commit": "6a63ab0"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "8404389"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "3550b38"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "4ac9e0f"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "Merge pull request #68 from grokify/dependabot/go_modules/golang.org/x/crypto-0.31.0",
+          "issue": "68",
+          "commit": "7099f99"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump golang.org/x/crypto from 0.30.0 to 0.31.0",
+          "commit": "cf7dc58"
+        }
+      ]
+    },
+    {
+      "version": "v2.21.1",
+      "date": "2024-12-02",
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "5cff95d"
+        },
+        {
+          "description": "`data/table`: simplify code",
+          "commit": "bb1b193"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "Merge pull request #67 from grokify/dependabot/go_modules/github.com/grokify/mogo-0.65.7",
+          "issue": "67",
+          "commit": "943fd3a"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump github.com/grokify/mogo from 0.65.5 to 0.65.7",
+          "commit": "ec46888"
+        }
+      ]
+    },
+    {
+      "version": "v2.21.0",
+      "date": "2024-11-20"
+    },
+    {
+      "version": "v2.20.7",
+      "date": "2024-11-20",
+      "added": [
+        {
+          "description": "`data/table`: add `Table.Clone()`",
+          "commit": "2fb8756"
+        }
+      ],
+      "changed": [
+        {
+          "description": "`data/table`: update error handling for `Table.FilterColumnDistinctFirstTable()`, `Table.FilterColumnValuesTable()`",
+          "commit": "7f8b29a"
+        }
+      ],
+      "fixed": [
+        {
+          "description": "`data/table`: fix #65 by removing functions from JSON for marshaling",
+          "issue": "65",
+          "commit": "fa03852"
+        }
+      ]
+    },
+    {
+      "version": "v2.20.6",
+      "date": "2024-11-20",
+      "added": [
+        {
+          "description": "`data/table`: add `ReadFileJSON()`, `Table.WriteJSONObjects()`",
+          "commit": "9b656b5"
+        }
+      ],
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "56a9b7d"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "93c5ede"
+        }
+      ]
+    },
+    {
+      "version": "v2.20.5",
+      "date": "2024-11-10",
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "36b6d25"
+        }
+      ]
+    },
+    {
+      "version": "v2.20.4",
+      "date": "2024-11-04",
+      "added": [
+        {
+          "description": "`data/table`: add `BuildColumnDefinitions()`, `Table.ColumnDefinitions()`",
+          "commit": "e5dee56"
+        }
+      ],
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "71d8d99"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "c6e3d14"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "Merge pull request #64 from grokify/dependabot/go_modules/gonum.org/v1/plot-0.15.0",
+          "issue": "64",
+          "commit": "3569a19"
+        },
+        {
+          "description": "Merge pull request #63 from grokify/dependabot/go_modules/github.com/xuri/excelize/v2-2.9.0",
+          "issue": "63",
+          "commit": "814ac4b"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump gonum.org/v1/plot from 0.14.0 to 0.15.0",
+          "commit": "77c04fb"
+        },
+        {
+          "description": "bump github.com/xuri/excelize/v2 from 2.8.1 to 2.9.0",
+          "commit": "c5e5ace"
+        }
+      ]
+    },
+    {
+      "version": "v2.20.3",
+      "date": "2024-10-14",
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "c46ac1c"
+        }
+      ]
+    },
+    {
+      "version": "v2.20.2",
+      "date": "2024-10-06",
+      "added": [
+        {
+          "description": "`data/histogram`: add `HistogramSet.String()`",
+          "commit": "da10ae0"
+        },
+        {
+          "description": "`data/histogram`: add `Histogram.MapToHistogramSet()`",
+          "commit": "ff167d9"
+        },
+        {
+          "description": "`data/table: add `Table.RowsModify()`",
+          "commit": "ef4d8da"
+        }
+      ],
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "11fd39f"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "f383bf3"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "7b8cf00"
+        },
+        {
+          "description": "`charts/google`: rename `Chart.WriteFilePageHTML()` from `Chart.WriteFilePage()` for explicit format",
+          "commit": "e61f2ec"
+        }
+      ]
+    },
+    {
+      "version": "v2.20.1",
+      "date": "2024-09-09",
+      "added": [
+        {
+          "description": "`data/histogram`: add ability to sort rows in `Histogram.TableMap()`",
+          "commit": "ed6a8f8"
+        }
+      ],
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "a4e8e80"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "ec39363"
+        }
+      ]
+    },
+    {
+      "version": "v2.20.0",
+      "date": "2024-09-02",
+      "added": [
+        {
+          "description": "`data/histogram`: add `HistogramSets.BinValue()`",
+          "commit": "4757ed5"
+        },
+        {
+          "description": "`charts/google`: add `DataTableFromHistogram()`, `DataTableFromTimeSeriesSet()`",
+          "commit": "233b67a"
+        },
+        {
+          "description": "`data/histogram`: add `HistogramSet.BinValue()`",
+          "commit": "ad6fa2b"
+        },
+        {
+          "description": "`charts/google/linechart`: add non-material support",
+          "commit": "b4adda6"
+        },
+        {
+          "description": "`charts/google`: update interface `Chart{}`",
+          "commit": "ae94b98"
+        },
+        {
+          "description": "`data/histogram`: add `Histogram.BinNamesMore()`",
+          "commit": "2c5f661"
+        },
+        {
+          "description": "`data/uptime`: add `Data{}`, `Datum{}`, `Decimals{}`, etc.",
+          "commit": "0cb1692"
+        },
+        {
+          "description": "`data/histogram`: add `Histogram.Order`, `Histogram.OrderOrDefault()`, `Histogram.GetOrDefault()`",
+          "commit": "288d447"
+        }
+      ],
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "5fa18ea"
+        },
+        {
+          "description": "`data/histogram`: update func names to `Histogram.BinValue()`, `Histogram.BinValueOrDefault()`",
+          "commit": "7292570"
+        },
+        {
+          "description": "`data/histogram`: remove `unnecessary trailing newline (whitespace)`",
+          "commit": "082e145"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "6fcaffe"
+        },
+        {
+          "description": "`charts/google/linechart`: update Material chart for consistency",
+          "commit": "6ea21a3"
+        },
+        {
+          "description": "`charts/google/barchart`: refactor to use `google.Chart` interface",
+          "commit": "e117c70"
+        },
+        {
+          "description": "`charts/google/piechart`: refactor to use `google.Chart` interface",
+          "commit": "0bffd67"
+        },
+        {
+          "description": "`data/uptime`: remove commented code",
+          "commit": "8327ba0"
+        },
+        {
+          "description": "`data/uptime`: remove floats due to rounding issues",
+          "commit": "606f07e"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "b449cca"
+        },
+        {
+          "description": "`charts/google`: simplify filenames",
+          "commit": "f243eac"
+        },
+        {
+          "description": "`charts`: rename `charts/google/*`",
+          "commit": "6f27986"
+        }
+      ],
+      "infrastructure": [
+        {
+          "description": "go test: update go versions",
+          "commit": "dffbea7"
+        }
+      ]
+    },
+    {
+      "version": "v2.19.8",
+      "date": "2024-08-17",
+      "changed": [
+        {
+          "description": "`data/table`: update `Table.FormatterFunc()`",
+          "commit": "7fe3fd8"
+        },
+        {
+          "description": "`apps/tableau`: simplify example",
+          "commit": "416ea3d"
+        },
+        {
+          "description": "`apps/tableau`: remove \"unnecessary trailing newline (whitespace)\"",
+          "commit": "7484c0e"
+        },
+        {
+          "description": "`apps/dynatrace`: handle errors",
+          "commit": "22f3d3d"
+        }
+      ]
+    },
+    {
+      "version": "v2.19.7",
+      "date": "2024-08-17",
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "9cdd722"
+        }
+      ]
+    },
+    {
+      "version": "v2.19.6",
+      "date": "2024-08-10",
+      "added": [
+        {
+          "description": "`charts/google`: add `barchart`",
+          "commit": "b8ec419"
+        },
+        {
+          "description": "`datatimeseries`: add `TimeSeriesSet.MapOfMapFloat64()`, `TimeSeriesSet.MapOfMapInt64()`",
+          "commit": "a2a1ae7"
+        },
+        {
+          "description": "`data/timeseries`: add `TimeSeries.MapFloat64()`, `TimeSeries.MapInt64()`",
+          "commit": "30f3ed2"
+        }
+      ],
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "ef06f5b"
+        },
+        {
+          "description": "`charts/google`: refolder `linechart` and `piechart`",
+          "commit": "64e1e64"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "7dba721"
+        },
+        {
+          "description": "`data/timeseries`: create `/time_series_info.go` file",
+          "commit": "726631c"
+        }
+      ],
+      "internal": [
+        {
+          "description": "`data/timeseries`: update `TimeSeriesSet.LinearRegressionYearProjection()`",
+          "commit": "100060c"
+        }
+      ]
+    },
+    {
+      "version": "v2.19.5",
+      "date": "2024-07-14",
+      "added": [
+        {
+          "description": "`tableau`: add wchart support",
+          "commit": "c0bb6c8"
+        },
+        {
+          "description": "`tableau`: add example reader",
+          "commit": "f7af0ba"
+        }
+      ],
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "856c6ea"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "44c46a6"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "Merge pull request #62 from grokify/dependabot/go_modules/github.com/valyala/quicktemplate-1.8.0",
+          "issue": "62",
+          "commit": "1939cb3"
+        },
+        {
+          "description": "Merge pull request #61 from grokify/dependabot/go_modules/golang.org/x/image-0.18.0",
+          "issue": "61",
+          "commit": "aaeb909"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump github.com/valyala/quicktemplate from 1.7.0 to 1.8.0",
+          "commit": "e3e3bfb"
+        },
+        {
+          "description": "bump golang.org/x/image from 0.17.0 to 0.18.0",
+          "commit": "dcc0f9d"
+        }
+      ]
+    },
+    {
+      "version": "v2.19.4",
+      "date": "2024-06-16",
+      "documentation": [
+        {
+          "description": "`README.md`: add Apps section",
+          "commit": "3ace057"
+        }
+      ]
+    },
+    {
+      "version": "v2.19.3",
+      "date": "2024-06-16",
+      "added": [
+        {
+          "description": "`apps/dynatrace`: add `ReadCSVTimeDurations()`, `UpdateTimes()`, `UpdateDurations()`",
+          "commit": "043bd16"
+        },
+        {
+          "description": "`data/table`: add `FormatColumn()`, `FormatColumns()`",
+          "commit": "0fc79b5"
+        },
+        {
+          "description": "`data/table`: add `ReadTableSimple()`",
+          "commit": "987e042"
+        },
+        {
+          "description": "`data/table`: add `ErrTableCannotBeNil`",
+          "commit": "58ed2f6"
+        }
+      ],
+      "changed": [
+        {
+          "description": "`apps/dynatrace`: update `UpdateDurations()`",
+          "commit": "8509231"
+        },
+        {
+          "description": "go nod: update",
+          "commit": "3f49596"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "Merge pull request #60 from grokify/dependabot/go_modules/github.com/grokify/mogo-0.64.4",
+          "issue": "60",
+          "commit": "f8ea267"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump github.com/grokify/mogo from 0.64.3 to 0.64.4",
+          "commit": "cc25580"
+        }
+      ],
+      "internal": [
+        {
+          "description": "`apps/dynatrace`: use `Table.FormatColumns()`",
+          "commit": "fb6ca87"
+        }
+      ]
+    },
+    {
+      "version": "v2.19.2",
+      "date": "2024-06-03",
+      "added": [
+        {
+          "description": "`collections/cryptocurency`: add `TableToTimeSeriesSet()`",
+          "commit": "610ca9e"
+        }
+      ],
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "7f435de"
+        },
+        {
+          "description": "`data/timeseries`: update `ParseTableTimeSeriesSetMatrixColumns()`",
+          "commit": "fe1672a"
+        }
+      ],
+      "documentation": [
+        {
+          "description": "`README.md`: add mentions",
+          "commit": "905313e"
+        }
+      ]
+    },
+    {
+      "version": "v2.19.1",
+      "date": "2024-05-28",
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "74bd555"
+        }
+      ]
+    },
+    {
+      "version": "v2.19.0",
+      "date": "2024-05-26",
+      "added": [
+        {
+          "description": "`data/table/excelizeutil`: add `StyleBackgroundColorSimple()`",
+          "commit": "5cb23cb"
+        },
+        {
+          "description": "`apps/tableau`: add `ReadFileCrosstabXLSX()`, `WriteFileLineChartCrosstabXLSX()`",
+          "commit": "994864e"
+        },
+        {
+          "description": "`charts/google`: add `TimeSeriesSetToLineChartMaterial()`",
+          "commit": "a1fd5d1"
+        },
+        {
+          "description": "`data/timeseries`: add `TimeSeriesSet.GetInt64WithDefault()`, `TimeSeriesSet.SetInterval()`",
+          "commit": "df5b397"
+        },
+        {
+          "description": "`charts/google`: add `TextStyle{}`",
+          "commit": "a6161a6"
+        },
+        {
+          "description": "`charts/google`: add `NewLineChartMaterial()`, `LineChartMaterial.LoadTimeSeriesSetMonth()`, `LineChartMaterial.PageHMTL()`, `LineChartMaterial.WriteFilePage()`",
+          "commit": "96f826d"
+        },
+        {
+          "description": "`charts/google`: add support for `PieChartMaterial{}`",
+          "commit": "4bd7dad"
+        },
+        {
+          "description": "`data/piechart`: init support with `PieChartData{}`, `PieChartDatum{}`",
+          "commit": "65836cc"
+        },
+        {
+          "description": "`charts/google`: add `Columns{}`",
+          "commit": "41bdd60"
+        },
+        {
+          "description": "`data/table`: add `Table.ColumnValuesCountsByName()`",
+          "commit": "3544896"
+        }
+      ],
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "1786f8d"
+        },
+        {
+          "description": "golangci: add error checking",
+          "commit": "09b6893"
+        },
+        {
+          "description": "golangci: fix various",
+          "commit": "f1a9b3d"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "8b4174b"
+        }
+      ]
+    },
+    {
+      "version": "v2.18.7",
+      "date": "2024-05-10",
+      "added": [
+        {
+          "description": "`data/table`: add `TableSet.Add()`",
+          "commit": "af6744e"
+        }
+      ],
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "702bf28"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "d948080"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "Merge pull request #59 from grokify/dependabot/github_actions/golangci/golangci-lint-action-6",
+          "issue": "59",
+          "commit": "be621c5"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump golangci/golangci-lint-action from 5 to 6",
+          "commit": "f4c3440"
+        }
+      ],
+      "internal": [
+        {
+          "description": "`data/table`: streamline",
+          "commit": "8f74272"
+        }
+      ]
+    },
+    {
+      "version": "v2.18.6",
+      "date": "2024-04-30",
+      "changed": [
+        {
+          "description": "go mod: update toolchain",
+          "commit": "321d215"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "9ddca9e"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "Merge pull request #58 from grokify/dependabot/go_modules/github.com/grokify/mogo-0.63.10",
+          "issue": "58",
+          "commit": "a6387c3"
+        },
+        {
+          "description": "Merge pull request #57 from grokify/dependabot/github_actions/golangci/golangci-lint-action-5",
+          "issue": "57",
+          "commit": "ce8880e"
+        },
+        {
+          "description": "Merge pull request #56 from grokify/dependabot/go_modules/github.com/grokify/mogo-0.63.9",
+          "issue": "56",
+          "commit": "9c050fc"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump github.com/grokify/mogo from 0.63.9 to 0.63.10",
+          "commit": "fe969cb"
+        },
+        {
+          "description": "bump golangci/golangci-lint-action from 4 to 5",
+          "commit": "1a4a487"
+        },
+        {
+          "description": "bump github.com/grokify/mogo from 0.63.8 to 0.63.9",
+          "commit": "f65d4c1"
+        }
+      ]
+    },
+    {
+      "version": "v2.18.5",
+      "date": "2024-04-14",
+      "added": [
+        {
+          "description": "`data/timeseries`: add `ParseTableTimeSeriesSetMatrixRows()`",
+          "commit": "44527df"
+        },
+        {
+          "description": "`data/table/excelizeutil`: add `ReadFile()`, `File.TableDataIndex()`",
+          "commit": "c9d44e6"
+        },
+        {
+          "description": "`data/table`: add `ParseTableXSLXIndex()`, `ReadTableXSLXFile()`, `ReadTableXSLXIndexFile()`",
+          "commit": "d6ee559"
+        }
+      ],
+      "changed": [
+        {
+          "description": "`data/table`: fix func names for `ParseTableXLSX()`, `ParseTableXLSXIndex()`, `ReadTableXLSXFile()`, `ReadTableXLSXIndexFile()`",
+          "commit": "4d71b57"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "4e52604"
+        }
+      ]
+    },
+    {
+      "version": "v2.18.4",
+      "date": "2024-04-07",
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "f6081f5"
+        }
+      ]
+    },
+    {
+      "version": "v2.18.3",
+      "date": "2024-04-07",
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "64ce462"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "ddff538"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "Merge pull request #54 from grokify/dependabot/go_modules/github.com/grokify/mogo-0.63.5",
+          "issue": "54",
+          "commit": "b037d66"
+        },
+        {
+          "description": "Merge pull request #53 from grokify/dependabot/go_modules/github.com/grokify/mogo-0.63.3",
+          "issue": "53",
+          "commit": "872e355"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump github.com/grokify/mogo from 0.63.3 to 0.63.5",
+          "commit": "abc5f16"
+        },
+        {
+          "description": "bump github.com/grokify/mogo from 0.63.2 to 0.63.3",
+          "commit": "fdd62d2"
+        }
+      ]
+    },
+    {
+      "version": "v2.18.2",
+      "date": "2024-03-10",
+      "changed": [
+        {
+          "description": "`data/histogram`: update `HistogramSet.TablePivot{}` to support `addColumnTotalLeft`, `addColumnTotalRight`, `addRowTotalTop`, `addRowTotalBottom`",
+          "commit": "2c3fcae"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "7c72c7c"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "8cdf6e1"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "Merge pull request #51 from grokify/dependabot/go_modules/github.com/xuri/excelize/v2-2.8.1",
+          "issue": "51",
+          "commit": "3f07fee"
+        },
+        {
+          "description": "Merge pull request #50 from grokify/dependabot/github_actions/golangci/golangci-lint-action-4",
+          "issue": "50",
+          "commit": "ea1ed3d"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump github.com/xuri/excelize/v2 from 2.8.0 to 2.8.1",
+          "commit": "853843c"
+        },
+        {
+          "description": "bump golangci/golangci-lint-action from 3 to 4",
+          "commit": "de80488"
+        }
+      ],
+      "infrastructure": [
+        {
+          "description": "go test: update go versions",
+          "commit": "07072fd"
+        },
+        {
+          "description": "go test: update go versions",
+          "commit": "0d6ec6d"
+        },
+        {
+          "description": "go test: update go versions",
+          "commit": "20de549"
+        },
+        {
+          "description": "go test: update go versions",
+          "commit": "43d12e9"
+        },
+        {
+          "description": "go test: update go versions",
+          "commit": "b67197f"
+        },
+        {
+          "description": "golangci: add go v1.22",
+          "commit": "5d9503c"
+        }
+      ]
+    },
+    {
+      "version": "v2.18.1",
+      "date": "2024-02-04",
+      "added": [
+        {
+          "description": "`charts/wchart`: add `Table.ScatterPlotWritePNG()`",
+          "commit": "e1fc835"
+        }
+      ],
+      "changed": [
+        {
+          "description": "`data/histogram`: split code to `histogram_sets_table.go`",
+          "commit": "30882ee"
+        }
+      ]
+    },
+    {
+      "version": "v2.18.0",
+      "date": "2024-02-02",
+      "added": [
+        {
+          "description": "`charts/wchart`: add `Table{}`",
+          "commit": "23ab58b"
+        },
+        {
+          "description": "`data/tablef64`: init `Table{}`",
+          "commit": "8351b3c"
+        },
+        {
+          "description": "`data/point`: add `PointXY{}`, `PointXYs{}`",
+          "commit": "ab0a99c"
+        }
+      ],
+      "changed": [
+        {
+          "description": "golangci: fix various",
+          "commit": "81a2240"
+        },
+        {
+          "description": "update years",
+          "commit": "f84b4ce"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "ef3d524"
+        },
+        {
+          "description": "`data/histogram`: update `HistogramSets.TablePivot()`, `HistogramSets.WriteXLSXPivot()` to support bin ordering",
+          "commit": "d7d93a1"
+        }
+      ]
+    },
+    {
+      "version": "v2.17.1",
+      "date": "2024-01-20",
+      "added": [
+        {
+          "description": "`data/table`: add `Table.RowsFloat64`, `Table.BuildFloat64()`",
+          "commit": "2b8e9b7"
+        }
+      ],
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "2af63b3"
+        }
+      ],
+      "internal": [
+        {
+          "description": "`data/table`: streamline `Table.IsWellFormed()`",
+          "commit": "a11d2fa"
+        }
+      ]
+    },
+    {
+      "version": "v2.17.0",
+      "date": "2024-01-13",
+      "added": [
+        {
+          "description": "`data/histogram.HistogramSets{}`: add `FilterHsetNames()`, `TransformBinNamesMap()`, `TransformNames()`",
+          "commit": "1ed2174"
+        },
+        {
+          "description": "`data/histogram.HistogramSet`: add `FilterHistogramNames()`, `TransformBinNames()`, `TransformNames()`, `TransformBinNamesMap()`",
+          "commit": "c114667"
+        }
+      ],
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "087887d"
+        },
+        {
+          "description": "`data/histogram`: rename `*.TablePivot()` from `*.TableMatrix()`",
+          "commit": "2387c26"
+        },
+        {
+          "description": "`data/histogram`: rename `Histogram.MapKeysReduce()`, `Histogram.MapKeysFlattenSingle()`",
+          "commit": "56f35c7"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "d9d3023"
+        }
+      ]
+    },
+    {
+      "version": "v2.16.2",
+      "date": "2023-12-24",
+      "added": [
+        {
+          "description": "`data/table`: add `Histogram.TableSetMap{}`; reorig code to files",
+          "commit": "5a72a58"
+        }
+      ],
+      "changed": [
+        {
+          "description": "`data/histogram`: move to `golang.org/x/exp/slices` from `slices`",
+          "commit": "8f8fb41"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "ba12f32"
+        },
+        {
+          "description": "`data/table`: udpate `TableSet.WriteXLSX()` error messaging",
+          "commit": "c52d0ec"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "0a3a1a6"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "Merge pull request #48 from grokify/dependabot/go_modules/golang.org/x/crypto-0.17.0",
+          "issue": "48",
+          "commit": "b8cf8c3"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump golang.org/x/crypto from 0.16.0 to 0.17.0",
+          "commit": "c107511"
+        }
+      ],
+      "internal": [
+        {
+          "description": "`data/table`: update comments formatting",
+          "commit": "7e358d4"
+        }
+      ]
+    },
+    {
+      "version": "v2.16.1",
+      "date": "2023-12-11",
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "3ef3213"
+        }
+      ]
+    },
+    {
+      "version": "v2.16.0",
+      "date": "2023-12-09",
+      "added": [
+        {
+          "description": "`data/timeseries`: add `TimeSeries.XoXInfoMulti()`",
+          "commit": "ac7bb38"
+        },
+        {
+          "description": "`data/timeseries`: add `TimeSeries.AddTable()`",
+          "commit": "8d9fa2e"
+        },
+        {
+          "description": "`data/roadmap2`: add `NewItem()`, `Items.FilterByMeta()`, `ItemsFromTable()`, etc.",
+          "commit": "f4279aa"
+        },
+        {
+          "description": "`data/histogram`: add `HistogramSets.Map()`, `HistogramSets.MapAdd()`",
+          "commit": "d1d9472"
+        },
+        {
+          "description": "`data/histogram`: add `HistogramSet.BinParentCounts()`, `HistogramSet.Map()`, `HistogramSet.MapAdd()`",
+          "commit": "68a942c"
+        },
+        {
+          "description": "`data/histogram`: add `Histogram.Map()` `Histogram.MapAdd()`",
+          "commit": "3d8dcec"
+        },
+        {
+          "description": "`data/table/excelizeutil`: add `File.SheetColumnNames()`",
+          "commit": "a3bc444"
+        }
+      ],
+      "changed": [
+        {
+          "description": "`data/timeseries`: remove unneeded files",
+          "commit": "aa226a4"
+        },
+        {
+          "description": "golangci: fix `unnecessary trailing newline (whitespace)`",
+          "commit": "ae65f5e"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "3065d87"
+        },
+        {
+          "description": "golangci: remove unneeded slice initialization",
+          "commit": "256b19b"
+        },
+        {
+          "description": "`data/table/sheet`: remove unneeded code",
+          "commit": "e23d7d8"
+        },
+        {
+          "description": "`data/table`: add optional default valus to various `Columns{}` funcs",
+          "commit": "344270d"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "Merge pull request #47 from grokify/dependabot/github_actions/actions/setup-go-5",
+          "issue": "47",
+          "commit": "83de00c"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump actions/setup-go from 4 to 5",
+          "commit": "f6847d9"
+        }
+      ],
+      "internal": [
+        {
+          "description": "`data/timeseries`: update slice initialization",
+          "commit": "904c64e"
+        }
+      ]
+    },
+    {
+      "version": "v2.15.2",
+      "date": "2023-11-25",
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "55172cf"
+        }
+      ]
+    },
+    {
+      "version": "v2.15.1",
+      "date": "2023-11-04",
+      "added": [
+        {
+          "description": "`data/histogram`: add `HistogramSet.Table()`",
+          "commit": "e6bb82a"
+        }
+      ]
+    },
+    {
+      "version": "v2.15.0",
+      "date": "2023-11-04",
+      "added": [
+        {
+          "description": "`data/table`: add `Columns.CellUint()`",
+          "commit": "5478220"
+        },
+        {
+          "description": "`data/table/excelizeutil`: add `ExcelizeMore{}`",
+          "commit": "4d5f1bf"
+        }
+      ],
+      "changed": [
+        {
+          "description": "`data/table`: update error message",
+          "commit": "d7b9ad8"
+        },
+        {
+          "description": "`data/table/excelizeutil`: update `File{}`",
+          "commit": "df2538b"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "1418572"
+        },
+        {
+          "description": "`data/table`: update `Table.FormatterFunc()` for date rendering",
+          "commit": "dce52c9"
+        },
+        {
+          "description": "`data/table`: update `Table.RowCellCounts()` to strict `map[uint]uint` return value",
+          "commit": "e9b916d"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "91d976d"
+        }
+      ],
+      "documentation": [
+        {
+          "description": "`data/table`: add comments for `ReadFileXLSX()`",
+          "commit": "edc3448"
+        }
+      ],
+      "internal": [
+        {
+          "description": "`data/table`: add consistent error messaging",
+          "commit": "464df7d"
+        },
+        {
+          "description": "`data/table/excelizeutil`: update `NewFile()`",
+          "commit": "e26876f"
+        }
+      ]
+    },
+    {
+      "version": "v2.14.1",
+      "date": "2023-10-28",
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "efb4bcb"
+        }
+      ]
+    },
+    {
+      "version": "v2.14.0",
+      "date": "2023-10-28",
+      "added": [
+        {
+          "description": "`data/table`: add `ReadFileXLSX()`, `XSLXGetSheetTable()`",
+          "commit": "5c53c2f"
+        },
+        {
+          "description": "`data/table`: add `Table.ColumnValuesName()`",
+          "commit": "7ec87f1"
+        },
+        {
+          "description": "`data/histogram`: add `Histogram.FlattenMapSingleKey()`, `Histogram.FilterMapKeys()`",
+          "commit": "77b4437"
+        }
+      ],
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "0a440fd"
+        },
+        {
+          "description": "`data/table`: move const and vars",
+          "commit": "0e6f46d"
+        }
+      ],
+      "internal": [
+        {
+          "description": "`data/table`: update comments",
+          "commit": "31a56f9"
+        }
+      ]
+    },
+    {
+      "version": "v2.13.0",
+      "date": "2023-10-16",
+      "added": [
+        {
+          "description": "`data/histogram`: add `Histogram.BinCount()`, `Histogram.BinCountOrDefault()`",
+          "commit": "5874b91"
+        }
+      ],
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "d170416"
+        },
+        {
+          "description": "`data/table`: housekeeping to add comments, remove unneeded code, update style, etc.",
+          "commit": "31258c1"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "Merge pull request #45 from grokify/dependabot/go_modules/golang.org/x/net-0.17.0",
+          "issue": "45",
+          "commit": "446c6aa"
+        },
+        {
+          "description": "Merge pull request #44 from grokify/dependabot/go_modules/github.com/grokify/mogo-0.56.0",
+          "issue": "44",
+          "commit": "4832624"
+        },
+        {
+          "description": "Merge pull request #43 from grokify/dependabot/github_actions/actions/checkout-4",
+          "issue": "43",
+          "commit": "a57de7b"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump golang.org/x/net from 0.15.0 to 0.17.0",
+          "commit": "0ee5378"
+        },
+        {
+          "description": "bump github.com/grokify/mogo from 0.55.0 to 0.56.0",
+          "commit": "5395a4c"
+        },
+        {
+          "description": "bump actions/checkout from 3 to 4",
+          "commit": "e3d2371"
+        }
+      ]
+    },
+    {
+      "version": "v2.12.0",
+      "date": "2023-09-03",
+      "added": [
+        {
+          "description": "`data/table`: add `Table.RowsToMSS()`",
+          "commit": "4b3c1d5"
+        },
+        {
+          "description": "`data/histogram`: add `HistogramAny.BinNames()`, `HistogramAny.ItemNames()`",
+          "commit": "4aab13c"
+        }
+      ],
+      "changed": [
+        {
+          "description": "`data/table`: rename `Table.RowsToMap()` from `Table.RowsToMSS()`",
+          "commit": "b519bb5"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "0800fa7"
+        }
+      ],
+      "infrastructure": [
+        {
+          "description": "go test: update naming",
+          "commit": "e062d6e"
+        }
+      ],
+      "internal": [
+        {
+          "description": "`data/table`: simplify conditional code",
+          "commit": "d76c8ef"
+        }
+      ]
+    },
+    {
+      "version": "v2.11.2",
+      "date": "2023-08-27",
+      "added": [
+        {
+          "description": "`data/histogram`: add `HistogramAny.ItemCount()` interface and `Histogram.ItemCount()`",
+          "commit": "ae64aa8"
+        }
+      ],
+      "changed": [
+        {
+          "description": "`data/histogram`: remove unneeded code",
+          "commit": "1717468"
+        }
+      ]
+    },
+    {
+      "version": "v2.11.1",
+      "date": "2023-08-27",
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "ba1ea12"
+        }
+      ]
+    },
+    {
+      "version": "v2.11.0",
+      "date": "2023-08-26",
+      "added": [
+        {
+          "description": "`data/histogram`: add `HistogramAny` interface",
+          "commit": "0f1e4fb"
+        },
+        {
+          "description": "`data/table`: add `Table.ColumnValuesCounts()`",
+          "commit": "98dd1fc"
+        },
+        {
+          "description": "`data/table/excelizeutil`: add `GetTable()`, `GetCellValue()`, `ColumnsCollapse()`",
+          "commit": "5da0b9a"
+        }
+      ],
+      "changed": [
+        {
+          "description": "`data/histogram`: remove unneeded code",
+          "commit": "04daadd"
+        },
+        {
+          "description": "update",
+          "commit": "442d7b6"
+        },
+        {
+          "description": "golangci: `gofmt -s`",
+          "commit": "3a8cbd2"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "11feed5"
+        },
+        {
+          "description": "`data/table`: move to `uint` from `uint32`",
+          "commit": "0f4c757"
+        },
+        {
+          "description": "`data/table/sheet`: move to `uint` from `uint32`",
+          "commit": "7591da6"
+        },
+        {
+          "description": "`data/table/excelizeutil`: move from `data/table/sheet`",
+          "commit": "b026455"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "`data/histogram`: use external `MapStringString.Subset()`",
+          "commit": "99595a9"
+        }
+      ],
+      "internal": [
+        {
+          "description": "update to `any` from `interface{}`",
+          "commit": "d41bd45"
+        }
+      ]
+    },
+    {
+      "version": "v2.10.0",
+      "date": "2023-08-20",
+      "added": [
+        {
+          "description": "`data/histogram`: add overloaded `map[string]string` key/table support",
+          "commit": "0db0d10"
+        },
+        {
+          "description": "`data/table`: add `ColumnDefinitions{}`, `ColumnDefinition{}`",
+          "commit": "e527fc7"
+        },
+        {
+          "description": "`data/table`: add XSLX hyperlink support, XLSX table name collision error, `NewTableMapStringInt()` func",
+          "commit": "9cce932"
+        },
+        {
+          "description": "`data/histogram`: add `Histogram.BinSum()`, `HistogramSet.BinSum()`",
+          "commit": "0679518"
+        },
+        {
+          "description": "`data/histogram`: add `HistogramSets.BinSum()`, `HistogramSets.BinSumsByHset()`, `HistogramSets.ItemCount()`",
+          "commit": "a9ee7b1"
+        },
+        {
+          "description": "`data/table`: add `SimpleHTMLPage()`",
+          "commit": "429b0f7"
+        }
+      ],
+      "changed": [
+        {
+          "description": "add `BinSum()` to `Histogram{}`, `HistogramSet{}`, `HistogramSets{}`",
+          "commit": "193edbe"
+        },
+        {
+          "description": "`data/histogram`: update for `Histogram{}`",
+          "commit": "ae97fec"
+        },
+        {
+          "description": "`data/table`: add for `Table.LoadColumnDefinitions()`",
+          "commit": "55c6665"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "79cb819"
+        },
+        {
+          "description": "init",
+          "commit": "78f9aa5"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "ced5223"
+        },
+        {
+          "description": "`data/table`: extract constants to separate file",
+          "commit": "8e734b6"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "5eb8dd5"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "Merge pull request #42 from grokify/dependabot/go_modules/github.com/grokify/mogo-0.52.0",
+          "issue": "42",
+          "commit": "06ab59a"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump github.com/grokify/mogo from 0.51.0 to 0.52.0",
+          "commit": "faa8ab8"
+        }
+      ],
+      "infrastructure": [
+        {
+          "description": "go build: add Go `v1.21.x`",
+          "commit": "ce3cd2d"
+        }
+      ],
+      "internal": [
+        {
+          "description": "`data/table`: update `WriteXLSX()` to use slice",
+          "commit": "c3b5693"
+        },
+        {
+          "description": "`data/table`: use consistent receiver for `Table{}`",
+          "commit": "6e682b5"
+        }
+      ]
+    },
+    {
+      "version": "v2.9.1",
+      "date": "2023-06-13",
+      "changed": [
+        {
+          "description": "golangci: update gh action",
+          "commit": "cc0ea60"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "a863aba"
+        },
+        {
+          "description": "update years",
+          "commit": "19caec7"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "a19706b"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "Merge pull request #41 from grokify/dependabot/go_modules/gonum.org/v1/gonum-0.13.0",
+          "issue": "41",
+          "commit": "4348a1b"
+        },
+        {
+          "description": "Merge pull request #40 from grokify/dependabot/go_modules/github.com/xuri/excelize/v2-2.7.1",
+          "issue": "40",
+          "commit": "2ffc46c"
+        },
+        {
+          "description": "Merge pull request #39 from grokify/dependabot/github_actions/actions/setup-go-4",
+          "issue": "39",
+          "commit": "0b036f3"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump gonum.org/v1/gonum from 0.12.0 to 0.13.0",
+          "commit": "a36305a"
+        },
+        {
+          "description": "bump github.com/xuri/excelize/v2 from 2.7.0 to 2.7.1",
+          "commit": "704444f"
+        },
+        {
+          "description": "bump actions/setup-go from 3 to 4",
+          "commit": "3b316aa"
+        }
+      ],
+      "infrastructure": [
+        {
+          "description": "lint: add 3m timeout",
+          "commit": "fedc69c"
+        },
+        {
+          "description": "build: rename from `test`",
+          "commit": "bd72d4f"
+        },
+        {
+          "description": "lint: update to `latest` golangci-lint version",
+          "commit": "8c236ae"
+        }
+      ]
+    },
+    {
+      "version": "v2.9.0",
+      "date": "2023-03-28"
+    },
+    {
+      "version": "v2.8.11",
+      "date": "2023-03-28",
+      "added": [
+        {
+          "description": "`data/table/tabulator`: add formatting support",
+          "commit": "1f2e80c"
+        },
+        {
+          "description": "`data/table`: add `SimpleTablePreescaped()`",
+          "commit": "c3ea690"
+        },
+        {
+          "description": "`data/table/tabulator`: add `Columns{}`, `NewColumnSetSimple()`, `Columns.TabulatorColumnSet()`",
+          "commit": "0eb126a"
+        },
+        {
+          "description": "`data/table`: add `Table.Markdown()`, `Table.WriteMarkdown()`'",
+          "commit": "cd66733"
+        }
+      ],
+      "changed": [
+        {
+          "description": "golangci: disable due to `typecheck` false positives: golangci/golangci-lint#2912",
+          "issue": "2912",
+          "commit": "da4baac"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "ca0ba4e"
+        },
+        {
+          "description": "`data/table`: add `Table.FormatterFunc()` support for `FormatDate`",
+          "commit": "0ffaac7"
+        },
+        {
+          "description": "`data/table`: update receiver, comments",
+          "commit": "c9157d1"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "ed5cd48"
+        }
+      ]
+    },
+    {
+      "version": "v2.8.10",
+      "date": "2023-02-20",
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "c85d8ae"
+        }
+      ],
+      "infrastructure": [
+        {
+          "description": "gh actions: add go `v1.20.x`",
+          "commit": "41d9330"
+        }
+      ]
+    },
+    {
+      "version": "v2.8.9",
+      "date": "2023-01-28",
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "783310f"
+        }
+      ]
+    },
+    {
+      "version": "v2.8.8",
+      "date": "2023-01-14",
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "ae1255c"
+        }
+      ]
+    },
+    {
+      "version": "v2.8.7",
+      "date": "2022-12-26",
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "039f813"
+        }
+      ]
+    },
+    {
+      "version": "v2.8.6",
+      "date": "2022-12-14",
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "932b72b"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "4b57243"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "e9d1391"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "Merge pull request #32 from grokify/dependabot/go_modules/github.com/grokify/mogo-0.41.6",
+          "issue": "32",
+          "commit": "b51de33"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump github.com/grokify/mogo from 0.41.5 to 0.41.6",
+          "commit": "e23262f"
+        }
+      ]
+    },
+    {
+      "version": "v2.8.5",
+      "date": "2022-11-28",
+      "changed": [
+        {
+          "description": "golangci: add import alias",
+          "commit": "60c487c"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "6b40fce"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "c1118eb"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "Merge pull request #29 from grokify/dependabot/go_modules/github.com/grokify/mogo-0.41.2",
+          "issue": "29",
+          "commit": "148956b"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump github.com/grokify/mogo from 0.41.1 to 0.41.2",
+          "commit": "b70b2fa"
+        }
+      ]
+    },
+    {
+      "version": "v2.8.4",
+      "date": "2022-11-13",
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "ecc2efd"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "2f87790"
+        }
+      ]
+    },
+    {
+      "version": "v2.8.3",
+      "date": "2022-10-29",
+      "changed": [
+        {
+          "description": "golangci: fix various",
+          "commit": "d7b1c91"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "878bc9f"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "7d8da43"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "caefb43"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "af55994"
+        },
+        {
+          "description": "golangci: update go versions",
+          "commit": "15528a4"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "Merge pull request #27 from grokify/dependabot/go_modules/github.com/grokify/mogo-0.40.10",
+          "issue": "27",
+          "commit": "c279a03"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump github.com/grokify/mogo from 0.40.9 to 0.40.10",
+          "commit": "a71c537"
+        }
+      ]
+    },
+    {
+      "version": "v2.8.2",
+      "date": "2022-10-17",
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "a38d3c9"
+        }
+      ]
+    },
+    {
+      "version": "v2.8.1",
+      "date": "2022-09-08",
+      "added": [
+        {
+          "description": "table: add `TableSet.WriteXLSX()`, `TableSet.Tables()`",
+          "commit": "e3fb0d5"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "Merge pull request #24 from grokify/dependabot/go_modules/gonum.org/v1/gonum-0.12.0",
+          "issue": "24",
+          "commit": "0adb330"
+        },
+        {
+          "description": "Merge pull request #23 from grokify/dependabot/go_modules/github.com/xuri/excelize/v2-2.6.1",
+          "issue": "23",
+          "commit": "2d13edc"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump gonum.org/v1/gonum from 0.11.0 to 0.12.0",
+          "commit": "d27da60"
+        },
+        {
+          "description": "bump github.com/xuri/excelize/v2 from 2.6.0 to 2.6.1",
+          "commit": "ade7c08"
+        }
+      ]
+    },
+    {
+      "version": "v2.8.0",
+      "date": "2022-08-20",
+      "added": [
+        {
+          "description": "comments; collections/roadmap: add description for example roadmap",
+          "commit": "f513998"
+        },
+        {
+          "description": "collections/roadmap: add example roadmap",
+          "commit": "10cd65d"
+        },
+        {
+          "description": "data/roadmap2: add `Roadmap` and related structs/funcs",
+          "commit": "f2ad75e"
+        }
+      ],
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "a2b361d"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "06e281b"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "9866200"
+        }
+      ],
+      "infrastructure": [
+        {
+          "description": "gh actions: add `workflow_dispatch`",
+          "commit": "68d1b1c"
+        },
+        {
+          "description": "gh actions: update go versions",
+          "commit": "9662365"
+        }
+      ],
+      "internal": [
+        {
+          "description": "data/table: change param capitalization",
+          "commit": "036bd9b"
+        }
+      ]
+    },
+    {
+      "version": "v2.7.4",
+      "date": "2022-06-10",
+      "dependencies": [
+        {
+          "description": "Merge pull request #21 from grokify/dependabot/go_modules/github.com/grokify/mogo-0.39.8",
+          "issue": "21",
+          "commit": "d250706"
+        },
+        {
+          "description": "Merge pull request #20 from grokify/dependabot/go_modules/github.com/grokify/mogo-0.39.6",
+          "issue": "20",
+          "commit": "d2129c4"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump github.com/grokify/mogo from 0.39.6 to 0.39.8",
+          "commit": "f3738d6"
+        },
+        {
+          "description": "bump github.com/grokify/mogo from 0.39.4 to 0.39.6",
+          "commit": "658297f"
+        }
+      ]
+    },
+    {
+      "version": "v2.7.3",
+      "date": "2022-05-24",
+      "added": [
+        {
+          "description": "data/timeseries: add `TimeSeriesSet.TableActualTarget()` to compare actual and target figures",
+          "commit": "9462829"
+        },
+        {
+          "description": "data/timeseries: add `TimeSeries.TimeUpdateIntervalStart()`",
+          "commit": "b993fa0"
+        },
+        {
+          "description": "data/timeseries: add `TimeSeries.Clone()`",
+          "commit": "d1275ee"
+        }
+      ],
+      "changed": [
+        {
+          "description": "data/timeseries: `TimeSeries.TimeUpdateIntervalStart()` add `timeutil.Month` interval",
+          "commit": "d8b3d0e"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "3e1de61"
+        },
+        {
+          "description": "data/timeseries: add error vars",
+          "commit": "b894b86"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "60c03f1"
+        },
+        {
+          "description": "data/timeseries: update `TimeSeries.ToMonth` param name to `addZeroValueMonths` for clarity",
+          "commit": "eac67a1"
+        },
+        {
+          "description": "data/timeseries: update `TimeSeries.LinearRegression()` to support interval `timeutil.Month`",
+          "commit": "a2d5dea"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "Merge pull request #19 from grokify/dependabot/go_modules/github.com/grokify/mogo-0.39.4",
+          "issue": "19",
+          "commit": "e475617"
+        }
+      ],
+      "documentation": [
+        {
+          "description": "README.md: update charts links",
+          "commit": "fa9f6be"
+        },
+        {
+          "description": "README.md: add note on `collections` package.",
+          "commit": "295d9b3"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump github.com/grokify/mogo from 0.39.3 to 0.39.4",
+          "commit": "cfa1ed5"
+        }
+      ]
+    },
+    {
+      "version": "v2.7.2",
+      "date": "2022-05-09",
+      "changed": [
+        {
+          "description": "charts/google: enhance `LineChartMaterialFromTimeSeriesSet` with year string type",
+          "commit": "fbf867d"
+        }
+      ]
+    },
+    {
+      "version": "v2.7.1",
+      "date": "2022-05-08",
+      "added": [
+        {
+          "description": "charts/google: add `LineChartMaterialFromTimeSeriesSet()`",
+          "commit": "4321e22"
+        }
+      ],
+      "changed": [
+        {
+          "description": "charts/google: add `LineChartMaterialFromTimeSeriesSet()` error handling",
+          "commit": "921452a"
+        },
+        {
+          "description": "charts/google: fix demo typo",
+          "commit": "3c2443f"
+        }
+      ]
+    },
+    {
+      "version": "v2.7.0",
+      "date": "2022-05-08",
+      "added": [
+        {
+          "description": "charts/google: add Google Material Line Chart support",
+          "commit": "1da8ca2"
+        }
+      ]
+    },
+    {
+      "version": "v2.6.3",
+      "date": "2022-05-08",
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "02c0658"
+        },
+        {
+          "description": "rickshaw: update",
+          "commit": "2673622"
+        },
+        {
+          "description": "data/table/format: remove `FormatStringRemoveControls()` in favor of `ConvertRemoveControls()`",
+          "commit": "f9409e8"
+        },
+        {
+          "description": "data/table: update for `Table.FormatRows()`",
+          "commit": "6cf8a01"
+        },
+        {
+          "description": "data/table/format: convert funcs: rename `ConvertRemoveControls()`; simplify `ConvertDecommify()`",
+          "commit": "463d2bb"
+        },
+        {
+          "description": "golangci: remove unnecessary conversion",
+          "commit": "37171d1"
+        },
+        {
+          "description": "data/table: improve ease of use for `Table.FormatRows`",
+          "commit": "3b6419a"
+        },
+        {
+          "description": "data/timeseries: rename file `time_series_set_regression.go`",
+          "commit": "a6413a9"
+        },
+        {
+          "description": "data/timeseries: rename file `time_series_regression.go`",
+          "commit": "5eff362"
+        },
+        {
+          "description": "timeseries: enhance",
+          "commit": "0f6b72b"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "Merge pull request #18 from grokify/dependabot/go_modules/github.com/grokify/mogo-0.39.1",
+          "issue": "18",
+          "commit": "5474225"
+        }
+      ],
+      "documentation": [
+        {
+          "description": "data/table: `Table.FormatRows()` add `format.FormatStringRemoveControls()`",
+          "commit": "510018d"
+        },
+        {
+          "description": "shield: add for `data/timeseries/README.md`",
+          "commit": "47d928e"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump github.com/grokify/mogo from 0.38.7 to 0.39.1",
+          "commit": "103cc64"
+        }
+      ]
+    },
+    {
+      "version": "v2.6.2",
+      "date": "2022-04-17",
+      "changed": [
+        {
+          "description": "`charts/wchart`: add `wcharczuk` image examples",
+          "commit": "970cfd9"
+        },
+        {
+          "description": "go mod: migrate elasticsearch code to `github.com/grokify/elastirad-go`",
+          "commit": "9394a93"
+        }
+      ]
+    },
+    {
+      "version": "v2.6.1",
+      "date": "2022-04-16",
+      "added": [
+        {
+          "description": "data/timeseries: add `TimeSeriesSet.ToYear()`",
+          "commit": "1fa7e79"
+        },
+        {
+          "description": "data/timeseries: add `TimeSeriesSet.TableYearYOY()`",
+          "commit": "4f2a6d7"
+        },
+        {
+          "description": "data/timeseries: add `TimeSeriesSet.LinearRegressionYearProjection()`",
+          "commit": "fd635a6"
+        },
+        {
+          "description": "data/timeseries: add `TimeSeries.TableYearYOY()`",
+          "commit": "498f7f3"
+        },
+        {
+          "description": "data/timeseries: add `TimeSeries.TimeSeriesYearYOY()`",
+          "commit": "c899870"
+        },
+        {
+          "description": "data/timeseries: add `TimeSeries.LinearRegressionYear()`, `TimeSeries.LinearRegressionYearProjection()`",
+          "commit": "7dd2424"
+        },
+        {
+          "description": "data/table/format: add `ParseTimeJanuary2006()`",
+          "commit": "03a21d8"
+        },
+        {
+          "description": "data/table/format: add `FormatStringRemoveControls()`",
+          "commit": "22f660c"
+        },
+        {
+          "description": "data/timeseries: add `TimeSeries.ToYear()`",
+          "commit": "8b8fdf0"
+        }
+      ],
+      "changed": [
+        {
+          "description": "data/timeseries: add validation for `TimeSeriesSet.TimeSlice()`",
+          "commit": "c108476"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "54ac434"
+        },
+        {
+          "description": "data/timeseries: add Year support to `TimeSeriesSet.TimeSlice()`",
+          "commit": "f092918"
+        },
+        {
+          "description": "data/timeseries: add `monthsFilter` param for `TimeSeriesSet.ToMonth()`",
+          "commit": "9cb8c8b"
+        },
+        {
+          "description": "data/timeseries: improve `ParseTableTimeSeriesSetFlat()` with `TimeSeriesSet.Name` and better error messages",
+          "commit": "d36974d"
+        },
+        {
+          "description": "data/timeseries: add `monthsFilter` param for `TimeSeries.ToMonth()`",
+          "commit": "ad5b8a9"
+        }
+      ]
+    },
+    {
+      "version": "v2.6.0",
+      "date": "2022-04-16",
+      "added": [
+        {
+          "description": "yahoohistorical: add `HistoricalData.TimeSeriesSet()`",
+          "commit": "857ec46"
+        },
+        {
+          "description": "timeseries: add `TimeSeries.ConvertFloat64()`, `TimeSeries.ConvertInt64()`",
+          "commit": "7dba4d5"
+        },
+        {
+          "description": "timeseries: add `TableMonthXOXOpts{}`",
+          "commit": "b446504"
+        },
+        {
+          "description": "collections: add parse example",
+          "commit": "80808ab"
+        },
+        {
+          "description": "collections: add example BTC and ETH data",
+          "commit": "09cc658"
+        },
+        {
+          "description": "data/yahoohistorical: add `collections/cryptocurrency` example data",
+          "commit": "c1fd742"
+        }
+      ],
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "5634335"
+        },
+        {
+          "description": "golangci: fix odd goimports issue",
+          "commit": "e7248df"
+        },
+        {
+          "description": "data/timeseries/interval: check error for `TimeSeriesSet.Inflate()`",
+          "commit": "cddfaea"
+        },
+        {
+          "description": "data/yahoohistorical: populate `TimeSeriesSet.Name`",
+          "commit": "3544975"
+        },
+        {
+          "description": "data/yahoohistorical: check error for `TimeSeriesSet.AddSeries()`",
+          "commit": "1fec964"
+        },
+        {
+          "description": "collectors/cryptocurrency: add example charts",
+          "commit": "6d97342"
+        },
+        {
+          "description": "charts/wchart/sts2wchart: add default opts to `TimeSeriesSetToLineChart()`",
+          "commit": "fb30c90"
+        },
+        {
+          "description": "data/yahoohistorical: rename to `HistoricalData{}`",
+          "commit": "750e041"
+        },
+        {
+          "description": "data/yahoohistorical: simplify `ReadFileHistoricalDataYahoo()`",
+          "commit": "211b736"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "d65d7cd"
+        }
+      ],
+      "fixed": [
+        {
+          "description": "data/table: `formatRowsTry()` do not change underlying row data without `exec`",
+          "commit": "1ed2de1"
+        }
+      ]
+    },
+    {
+      "version": "v2.5.1",
+      "date": "2022-04-13",
+      "changed": [
+        {
+          "description": "go mod: fix",
+          "commit": "617dc48"
+        },
+        {
+          "description": "charts/c3: readd `C3ChartForEsAggregationSimple()`",
+          "commit": "6f52f5e"
+        }
+      ]
+    },
+    {
+      "version": "v2.5.0",
+      "date": "2022-04-13"
+    },
+    {
+      "version": "v2.4.2",
+      "date": "2022-04-13",
+      "added": [
+        {
+          "description": "data/timeseries: add `ParseTableTimeSeriesSetMatrix()`",
+          "commit": "341fbf0"
+        },
+        {
+          "description": "table: add `Table.Transpose()`",
+          "commit": "ff42202"
+        },
+        {
+          "description": "table: add `Table.FormatRows()`",
+          "commit": "4f17912"
+        },
+        {
+          "description": "table: add `Table.TrimColumnsRight()`",
+          "commit": "2a649fb"
+        }
+      ],
+      "changed": [
+        {
+          "description": "data/timeseries/interval: readd `EsAggsToTimeSeriesSet()`",
+          "commit": "771cfae"
+        },
+        {
+          "description": "golangci: try to use go `v1.18`",
+          "commit": "97a5819"
+        },
+        {
+          "description": "golangci: fix",
+          "commit": "8383f56"
+        },
+        {
+          "description": "downgrade to `golangci/golangci-lint-action@v2`",
+          "commit": "66a0774"
+        },
+        {
+          "description": "golangci: update `.golangci.yaml`",
+          "commit": "35dc438"
+        },
+        {
+          "description": "Merge branch 'master' of https://github.com/grokify/gocharts",
+          "commit": "2880e49"
+        }
+      ],
+      "fixed": [
+        {
+          "description": "table: `Table.FormatRows()`",
+          "commit": "5926129"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "Merge pull request #14 from grokify/dependabot/github_actions/golangci/golangci-lint-action-3",
+          "issue": "14",
+          "commit": "1a89cc2"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump golangci/golangci-lint-action from 2 to 3",
+          "commit": "8cfd3ed"
+        }
+      ],
+      "internal": [
+        {
+          "description": "charts/wchart: use constants",
+          "commit": "ab0f448"
+        },
+        {
+          "description": "charts/wchart: use constants",
+          "commit": "5236aeb"
+        },
+        {
+          "description": "table: single line comment",
+          "commit": "d89c5bd"
+        }
+      ]
+    },
+    {
+      "version": "v2.4.1",
+      "date": "2022-04-12",
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "2468e8b"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "Merge pull request #16 from grokify/dependabot/github_actions/actions/setup-go-3",
+          "issue": "16",
+          "commit": "f0be35f"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump actions/setup-go from 2 to 3",
+          "commit": "cb5a546"
+        }
+      ]
+    },
+    {
+      "version": "v2.4.0",
+      "date": "2022-04-05",
+      "changed": [
+        {
+          "description": "data/slot: move from `data`",
+          "commit": "9147bba"
+        }
+      ]
+    },
+    {
+      "version": "v2.3.2",
+      "date": "2022-04-05",
+      "changed": [
+        {
+          "description": "golangci: fix `typecheck`",
+          "commit": "5adf32d"
+        },
+        {
+          "description": "data/table: `TimeSeriesSet.Table()`",
+          "commit": "9df5a1e"
+        }
+      ]
+    },
+    {
+      "version": "v2.3.1",
+      "date": "2022-04-05",
+      "changed": [
+        {
+          "description": "data/timeseries: renmae `ParseTableTimeSeriesSet()` for consistency",
+          "commit": "e67caf9"
+        }
+      ],
+      "documentation": [
+        {
+          "description": "data/timeseries: add comments",
+          "commit": "ef696cd"
+        }
+      ]
+    },
+    {
+      "version": "v2.3.0",
+      "date": "2022-04-04",
+      "added": [
+        {
+          "description": "data/timeseries: add `TimeSeries.TableMonthXOX()`",
+          "commit": "274dcf4"
+        },
+        {
+          "description": "data/timeseries: add `TimeSeries.TimeSeriesMonthXOX()`",
+          "commit": "8b886c7"
+        },
+        {
+          "description": "data/timeseries: add `ParseTimeSeriesSetTable()`",
+          "commit": "4358a6f"
+        }
+      ],
+      "changed": [
+        {
+          "description": "data/timeseries: add `TimeSeriesMonthMOM()`",
+          "commit": "d7377db"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "dde8ba5"
+        },
+        {
+          "description": "table: update `Table.ColumnExpandPivot()`",
+          "commit": "c096e7a"
+        },
+        {
+          "description": "table: use `SliceDedupe()` from `mogo`",
+          "commit": "ad26203"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "Merge pull request #13 from grokify/dependabot/go_modules/github.com/grokify/mogo-0.37.16",
+          "issue": "13",
+          "commit": "6f19feb"
+        }
+      ],
+      "documentation": [
+        {
+          "description": "README.md: update",
+          "commit": "068446e"
+        },
+        {
+          "description": "README.md: update for `v2`",
+          "commit": "ff49e9f"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump github.com/grokify/mogo from 0.37.15 to 0.37.16",
+          "commit": "fb2f98b"
+        }
+      ]
+    },
+    {
+      "version": "v2.2.0",
+      "date": "2022-03-29",
+      "changed": [
+        {
+          "description": "update to v2.x due to dependabot",
+          "commit": "4641fbc"
+        }
+      ]
+    },
+    {
+      "version": "v1.18.2",
+      "date": "2022-03-29",
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "4275762"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "Merge pull request #11 from grokify/dependabot/go_modules/github.com/grokify/mogo-0.37.12",
+          "issue": "11",
+          "commit": "aeea5a9"
+        },
+        {
+          "description": "Merge pull request #10 from grokify/dependabot/go_modules/github.com/grokify/mogo-0.37.11",
+          "issue": "10",
+          "commit": "62e69d9"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump github.com/grokify/mogo from 0.37.11 to 0.37.12",
+          "commit": "a3cdff4"
+        },
+        {
+          "description": "bump github.com/grokify/mogo from 0.37.8 to 0.37.11",
+          "commit": "9f84a49"
+        }
+      ]
+    },
+    {
+      "version": "v1.18.1",
+      "date": "2022-03-22",
+      "changed": [
+        {
+          "description": "golangci: downgrade to action `v2` due to bugs in `v3.1.0`",
+          "commit": "c1ad61c"
+        },
+        {
+          "description": "data/timeseries: remove var assignment",
+          "commit": "ecf9744"
+        },
+        {
+          "description": "golangci: add `run.go` version",
+          "commit": "4958ad4"
+        },
+        {
+          "description": "golangci: update to `golangci/golangci-lint-action@v3.1.0`",
+          "commit": "6b30367"
+        },
+        {
+          "description": "rename file with `.yaml` extension",
+          "commit": "f9ad988"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "3f8d785"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "7d87357"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "Merge pull request #8 from grokify/dependabot/go_modules/github.com/grokify/mogo-0.37.8",
+          "issue": "8",
+          "commit": "8c6acf7"
+        },
+        {
+          "description": "Merge pull request #6 from grokify/dependabot/go_modules/github.com/grokify/mogo-0.37.4",
+          "issue": "6",
+          "commit": "1893559"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump github.com/grokify/mogo from 0.37.4 to 0.37.8",
+          "commit": "d385b08"
+        },
+        {
+          "description": "bump github.com/grokify/mogo from 0.37.1 to 0.37.4",
+          "commit": "a14062c"
+        }
+      ],
+      "infrastructure": [
+        {
+          "description": "gh actions: update go versions",
+          "commit": "1ca6c38"
+        },
+        {
+          "description": "gh actions: rename test",
+          "commit": "79bb798"
+        },
+        {
+          "description": "gh actions: rename files/tests",
+          "commit": "9bbd79d"
+        }
+      ],
+      "internal": [
+        {
+          "description": "data/timeseries: update param names",
+          "commit": "909ab4c"
+        },
+        {
+          "description": "file: rename `.golangci.yaml` from `.golangci.yml`",
+          "commit": "23871f3"
+        }
+      ]
+    },
+    {
+      "version": "v1.18.0",
+      "date": "2022-03-07",
+      "changed": [
+        {
+          "description": "golangci: downgrade to `golangci/golangci-lint-action@v2` due to false positive on `v3.1.0`",
+          "commit": "6e59967"
+        },
+        {
+          "description": "golangci: update go versions",
+          "commit": "c7a0bae"
+        },
+        {
+          "description": "golangci: update go versions",
+          "commit": "f955ba6"
+        },
+        {
+          "description": "init",
+          "commit": "9dbf64f"
+        },
+        {
+          "description": "golangci: fix",
+          "commit": "0ca94d0"
+        },
+        {
+          "description": "golangci: fix",
+          "commit": "d13635f"
+        },
+        {
+          "description": "golangci: fix",
+          "commit": "4894c56"
+        },
+        {
+          "description": "golangci: fix",
+          "commit": "e77e49f"
+        },
+        {
+          "description": "golangci: fix",
+          "commit": "1db1f65"
+        },
+        {
+          "description": "golangci: fix",
+          "commit": "49ee1e6"
+        },
+        {
+          "description": "golangci: fix",
+          "commit": "fbd6d69"
+        },
+        {
+          "description": "golangci: fix",
+          "commit": "eb923b8"
+        },
+        {
+          "description": "golangci: fix",
+          "commit": "e304ad9"
+        },
+        {
+          "description": "golangci: init",
+          "commit": "8575061"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "26ce19e"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "25c1862"
+        },
+        {
+          "description": "table: add colName prefix to `Table.ColumnExpand()`",
+          "commit": "1bd246c"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "Merge pull request #3 from grokify/dependabot/github_actions/golangci/golangci-lint-action-3.1.0",
+          "issue": "3",
+          "commit": "ae388a5"
+        },
+        {
+          "description": "Merge pull request #2 from grokify/dependabot/github_actions/actions/checkout-3",
+          "issue": "2",
+          "commit": "54ab33d"
+        },
+        {
+          "description": "Merge pull request #1 from grokify/dependabot/go_modules/github.com/grokify/mogo-0.36.5",
+          "issue": "1",
+          "commit": "ef3ede5"
+        }
+      ],
+      "documentation": [
+        {
+          "description": "shields: add sloc",
+          "commit": "093ea2d"
+        }
+      ],
+      "build": [
+        {
+          "description": "bump golangci/golangci-lint-action from 2 to 3.1.0",
+          "commit": "f01fbc3"
+        },
+        {
+          "description": "bump actions/checkout from 2 to 3",
+          "commit": "f5480cb"
+        },
+        {
+          "description": "bump github.com/grokify/mogo from 0.36.2 to 0.36.5",
+          "commit": "fb156f3"
+        }
+      ]
+    },
+    {
+      "version": "v1.17.1",
+      "date": "2022-02-20"
+    },
+    {
+      "version": "v1.17.0",
+      "date": "2022-02-20",
+      "added": [
+        {
+          "description": "table: add `Table.ColumnExpand()`",
+          "commit": "836e405"
+        },
+        {
+          "description": "table: add `Table.ColumnValuesSplit()`",
+          "commit": "4dc6073"
+        }
+      ],
+      "changed": [
+        {
+          "description": "go mod: update to reduce dependencies",
+          "commit": "17ffa9b"
+        },
+        {
+          "description": "table: `Table.IsWellFormed` to return mismatch row indexes",
+          "commit": "a19130e"
+        }
+      ]
+    },
+    {
+      "version": "v1.16.11",
+      "date": "2022-02-10",
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "d6971e0"
+        }
+      ]
+    },
+    {
+      "version": "v1.16.10",
+      "date": "2022-01-31",
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "e65f075"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "5cf05d9"
+        }
+      ]
+    },
+    {
+      "version": "v1.16.9",
+      "date": "2022-01-12",
+      "changed": [
+        {
+          "description": "go mod: upgrade `github.com/wcharczuk/go-chart`",
+          "commit": "0e8436f"
+        }
+      ]
+    },
+    {
+      "version": "v1.16.8",
+      "date": "2022-01-11",
+      "changed": [
+        {
+          "description": "update",
+          "commit": "ce5b97a"
+        },
+        {
+          "description": "go mod: update excelize",
+          "commit": "08ed417"
+        }
+      ]
+    },
+    {
+      "version": "v1.16.7",
+      "date": "2022-01-11",
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "0be1e7c"
+        },
+        {
+          "description": "go mod: reduce dependencies",
+          "commit": "f8d1bfa"
+        }
+      ]
+    },
+    {
+      "version": "v1.16.6",
+      "date": "2022-01-11",
+      "changed": [
+        {
+          "description": "go mod: update, remove dependencies",
+          "commit": "2fb94c2"
+        }
+      ]
+    },
+    {
+      "version": "v1.16.5",
+      "date": "2022-01-11",
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "c86e636"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "c4fafd5"
+        }
+      ]
+    },
+    {
+      "version": "v1.16.4",
+      "date": "2021-12-29",
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "5773140"
+        }
+      ]
+    },
+    {
+      "version": "v1.16.3",
+      "date": "2021-12-13",
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "9c9abf5"
+        }
+      ]
+    },
+    {
+      "version": "v1.16.2",
+      "date": "2021-12-12",
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "8b7a376"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "4806d57"
+        },
+        {
+          "description": "table: move folder to `cmd`",
+          "commit": "f7d7273"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "74536fc"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "049ea27"
+        }
+      ],
+      "documentation": [
+        {
+          "description": "README.md: update",
+          "commit": "4366f23"
+        },
+        {
+          "description": "shields: reorder",
+          "commit": "7868272"
+        }
+      ]
+    },
+    {
+      "version": "v1.16.1",
+      "date": "2021-08-23",
+      "added": [
+        {
+          "description": "table: add `ParseReadSeeker()`",
+          "commit": "33430c5"
+        }
+      ],
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "2bf37da"
+        }
+      ],
+      "infrastructure": [
+        {
+          "description": "gh actions: add Go 1.17",
+          "commit": "ff6e38b"
+        }
+      ]
+    },
+    {
+      "version": "v1.16.0",
+      "date": "2021-08-20",
+      "added": [
+        {
+          "description": "timeseries/xoxconv: add ability get MoM/QoQ/YoY by month",
+          "commit": "ec0da2d"
+        },
+        {
+          "description": "table/tblconv: add `TableToTimeSeries()`",
+          "commit": "43aa12e"
+        },
+        {
+          "description": "timeseries: add `TimeSeries.Get()`",
+          "commit": "49929cb"
+        }
+      ],
+      "changed": [
+        {
+          "description": "timeseries: cnvert to `TimeItem.Int64()` and `TimeItem.Float64()`",
+          "commit": "7733591"
+        },
+        {
+          "description": "wchart/sts2wchart: remove magic default",
+          "commit": "69cbd2c"
+        },
+        {
+          "description": "sts2wchart: update variable names",
+          "commit": "cbd2a64"
+        }
+      ]
+    },
+    {
+      "version": "v1.15.3",
+      "date": "2021-08-20",
+      "added": [
+        {
+          "description": "timeseries: add `ReadFileTimeSeriesSet()`",
+          "commit": "738783a"
+        }
+      ],
+      "changed": [
+        {
+          "description": "sts2wchart: update `DefaultLineChartOpts`",
+          "commit": "feb4432"
+        }
+      ]
+    },
+    {
+      "version": "v1.15.2",
+      "date": "2021-08-20",
+      "added": [
+        {
+          "description": "sts2wchart: add `WriteLineChartTimeSeries()`",
+          "commit": "9f56827"
+        },
+        {
+          "description": "timeseries: add `ReadFileTimeSeries()`",
+          "commit": "cbad593"
+        }
+      ],
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "cacafe4"
+        },
+        {
+          "description": "table: move format functions to `table/format`",
+          "commit": "5ce1765"
+        }
+      ]
+    },
+    {
+      "version": "v1.15.1",
+      "date": "2021-08-19",
+      "added": [
+        {
+          "description": "timeseries: add `*.WriteJSON()`",
+          "commit": "0587ef7"
+        }
+      ],
+      "changed": [
+        {
+          "description": "table: improve error message",
+          "commit": "3b7b6bd"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "76c2519"
+        },
+        {
+          "description": "table: remove unneeded defer",
+          "commit": "ebbfc1e"
+        },
+        {
+          "description": "table: ineffassign",
+          "commit": "16eba3e"
+        }
+      ],
+      "documentation": [
+        {
+          "description": "table: add comments",
+          "commit": "3f65d11"
+        }
+      ]
+    },
+    {
+      "version": "v1.15.0",
+      "date": "2021-08-13",
+      "added": [
+        {
+          "description": "table: add `Table.FormatColumn()`",
+          "commit": "f13d362"
+        }
+      ],
+      "changed": [
+        {
+          "description": "table: enable `Table.Pivot()` to add `Columns`",
+          "commit": "c1058ff"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "6304986"
+        },
+        {
+          "description": "table: add `Table.String()`",
+          "commit": "dd2c0d2"
+        },
+        {
+          "description": "table: rename `ReadFile()`",
+          "commit": "d7753c3"
+        },
+        {
+          "description": "table: add",
+          "commit": "b1ceef8"
+        }
+      ],
+      "fixed": [
+        {
+          "description": "table: `ReadTable()` set csvReader.FieldsPerRecord to -1 when NoHeader`",
+          "commit": "73cc072"
+        }
+      ]
+    },
+    {
+      "version": "v1.14.6",
+      "date": "2021-08-08",
+      "added": [
+        {
+          "description": "table: add `ReadTable()` `TrimSpace` option",
+          "commit": "d776699"
+        }
+      ],
+      "changed": [
+        {
+          "description": "table: use default `ParseOptions`",
+          "commit": "a233494"
+        },
+        {
+          "description": "table: remove unneeded code",
+          "commit": "14c08e0"
+        },
+        {
+          "description": "timeseries: combine `TimeSeriesSet.ToMonth()`, `TimeSeriesSet.ToMonthCumulative()`",
+          "commit": "4a7b1fc"
+        }
+      ]
+    },
+    {
+      "version": "v1.14.5",
+      "date": "2021-07-25",
+      "changed": [
+        {
+          "description": "timeseries: update for `NewTimeSeries(name string)`",
+          "commit": "96148d5"
+        },
+        {
+          "description": "timeseries: add `name` to `NewTimeSeries(name string)`",
+          "commit": "563b9bb"
+        }
+      ]
+    },
+    {
+      "version": "v1.14.4",
+      "date": "2021-07-25",
+      "changed": [
+        {
+          "description": "`table`: `Columns` cell functions",
+          "commit": "acf2a90"
+        }
+      ]
+    },
+    {
+      "version": "v1.14.3",
+      "date": "2021-07-25",
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "27e2791"
+        }
+      ]
+    },
+    {
+      "version": "v1.14.2",
+      "date": "2021-07-25",
+      "changed": [
+        {
+          "description": "timeseries: update `TimeSeriesSet.ToSetTimesRangeUpper()`",
+          "commit": "a56d483"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "45d2a54"
+        }
+      ]
+    },
+    {
+      "version": "v1.14.1",
+      "date": "2021-07-25",
+      "added": [
+        {
+          "description": "timeseries: add `TimeSeriesSet.NewTimesUpperBound()`",
+          "commit": "f187e16"
+        }
+      ],
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "132a079"
+        },
+        {
+          "description": "timeseries: add `TimeSeriesSets.SeriesNames()`",
+          "commit": "53abeed"
+        },
+        {
+          "description": "data/timeseries: add comments",
+          "commit": "b0f69de"
+        }
+      ]
+    },
+    {
+      "version": "v1.14.0",
+      "date": "2021-07-25",
+      "added": [
+        {
+          "description": "timeseries: add `TimeSeriesSet.SplitTimesLowerBound()`",
+          "commit": "d856dd7"
+        }
+      ],
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "4a24de3"
+        }
+      ]
+    },
+    {
+      "version": "v1.13.0",
+      "date": "2021-07-16",
+      "changed": [
+        {
+          "description": "`table`: internalize `ColumnValuesDistinct`",
+          "commit": "7235d56"
+        },
+        {
+          "description": "`table`: error message",
+          "commit": "99e50a6"
+        },
+        {
+          "description": "`table`: combine `ReadFiles()` and `ReadFile()`",
+          "commit": "b077c01"
+        }
+      ]
+    },
+    {
+      "version": "v1.12.1",
+      "date": "2021-07-16",
+      "changed": [
+        {
+          "description": "data/table/tabulator: reorg folders",
+          "commit": "551c3c8"
+        }
+      ]
+    },
+    {
+      "version": "v1.12.0",
+      "date": "2021-07-14",
+      "added": [
+        {
+          "description": "data/table: add `table.ParseOptions`",
+          "commit": "e521a2c"
+        }
+      ],
+      "changed": [
+        {
+          "description": "`table`: `ReadCSVFile(s)SingleColumnValuesString` in favor of `ParseOptions`",
+          "commit": "6f275f9"
+        },
+        {
+          "description": "`table`: simplify `ReadFile`",
+          "commit": "817149d"
+        },
+        {
+          "description": "data/table/sheet: move spreadsheet related functionality",
+          "commit": "fa0636a"
+        },
+        {
+          "description": "data/bullet: move `projection_data.go` to `data/bullet`",
+          "commit": "ebc09d2"
+        },
+        {
+          "description": "data/histogram: rename to `HistogramSets.Visit()`",
+          "commit": "e1ea15c"
+        }
+      ]
+    },
+    {
+      "version": "v1.11.1",
+      "date": "2021-07-13",
+      "changed": [
+        {
+          "description": "data/histogram: update param names",
+          "commit": "28e3bf0"
+        },
+        {
+          "description": "data/histogram: update param names",
+          "commit": "87d5fe5"
+        },
+        {
+          "description": "sourcegraph: add",
+          "commit": "c9f19e7"
+        }
+      ]
+    },
+    {
+      "version": "v1.11.0",
+      "date": "2021-07-12",
+      "added": [
+        {
+          "description": "data/histogram: add `HistogramSets.Table()|TableMatrix()|WriteXLSX()|WriteXLSXMatrix()`",
+          "commit": "ab259f0"
+        }
+      ],
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "ae1d353"
+        },
+        {
+          "description": "data/histogram: rename `Histogram.Table()`",
+          "commit": "d78a3b8"
+        }
+      ]
+    },
+    {
+      "version": "v1.10.0",
+      "date": "2021-07-12",
+      "changed": [
+        {
+          "description": "go mod: require go 1.16",
+          "commit": "a6e2886"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "6e2c2e0"
+        },
+        {
+          "description": "data/histogram: add `NewHistogramSets()` name to constructor; update for `NewTable()` name param",
+          "commit": "00f4fbb"
+        },
+        {
+          "description": "data/table: add `NewTableSet()` and enhance `NewTable()` with `name`",
+          "commit": "12cfd91"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "ab38420"
+        }
+      ],
+      "internal": [
+        {
+          "description": "gh actions: update trailing spaces",
+          "commit": "387670d"
+        },
+        {
+          "description": "data/timeseries: update internal variable names",
+          "commit": "481b8b5"
+        }
+      ]
+    },
+    {
+      "version": "v1.9.0",
+      "date": "2021-06-27",
+      "changed": [
+        {
+          "description": "data/histogram: reduce functions",
+          "commit": "4f8a441"
+        },
+        {
+          "description": "data/timeseries: canonicalize `AddItems()` function",
+          "commit": "1e99486"
+        },
+        {
+          "description": "data/table: rename `TimeSeriesSetTableOpts`",
+          "commit": "fcb92fc"
+        }
+      ],
+      "documentation": [
+        {
+          "description": "improve grammar",
+          "commit": "8fc11e1"
+        },
+        {
+          "description": "data/histogram: add comments",
+          "commit": "d520d5f"
+        }
+      ],
+      "internal": [
+        {
+          "description": "data:histogram: improve readability",
+          "commit": "a584e4b"
+        }
+      ]
+    },
+    {
+      "version": "v1.8.0",
+      "date": "2021-06-22",
+      "added": [
+        {
+          "description": "data/histogram: add `HistogramSet.TableMatrix()`; add `HistogramSet.WriteXLSXMatrix()`",
+          "commit": "0250631"
+        }
+      ],
+      "internal": [
+        {
+          "description": "data/timeseries: improve consistency",
+          "commit": "e6bdb05"
+        }
+      ]
+    },
+    {
+      "version": "v1.7.4",
+      "date": "2021-06-22",
+      "changed": [
+        {
+          "description": "data/timeseries: privatize function",
+          "commit": "3ba23ac"
+        },
+        {
+          "description": "data/timeseries: rename `TimeSeriesSets` from `TimeSeriesSet2`",
+          "commit": "6a77120"
+        }
+      ],
+      "documentation": [
+        {
+          "description": "update: references to importers",
+          "commit": "ec03c4c"
+        }
+      ]
+    },
+    {
+      "version": "v1.7.3",
+      "date": "2021-06-17",
+      "changed": [
+        {
+          "description": "data/timeseries: `DeleteTime`",
+          "commit": "1349d6d"
+        },
+        {
+          "description": "data/timeseries",
+          "commit": "7ee8656"
+        }
+      ]
+    },
+    {
+      "version": "v1.7.2",
+      "date": "2021-06-15",
+      "changed": [
+        {
+          "description": "data/histogram: update functions",
+          "commit": "e1207c7"
+        }
+      ]
+    },
+    {
+      "version": "v1.7.1",
+      "date": "2021-06-15",
+      "changed": [
+        {
+          "description": "c3: to `AddTimeSeriesSet` to align with `timeseries`",
+          "commit": "5f6fb86"
+        },
+        {
+          "description": "data/timeseries: update function and parameter names",
+          "commit": "27592be"
+        }
+      ],
+      "documentation": [
+        {
+          "description": "update",
+          "commit": "422133d"
+        },
+        {
+          "description": "update",
+          "commit": "e970956"
+        },
+        {
+          "description": "update",
+          "commit": "b2516a1"
+        }
+      ]
+    },
+    {
+      "version": "v1.7.0",
+      "date": "2021-06-15",
+      "changed": [
+        {
+          "description": "timeseries: `TssTableOpts` from `DssTableOpts`",
+          "commit": "d1d7ed2"
+        },
+        {
+          "description": "timeseries: rename file",
+          "commit": "5b47529"
+        },
+        {
+          "description": "timeseries: update",
+          "commit": "f41aa6d"
+        },
+        {
+          "description": "timeseries: `TimeSeries` from `DataSeries`",
+          "commit": "fa6c56f"
+        },
+        {
+          "description": "timeseries: `TimeItem` from `DataItem`",
+          "commit": "9436941"
+        },
+        {
+          "description": "data/timeseries: rename from `data/statictimeseries`",
+          "commit": "6dfc38b"
+        },
+        {
+          "description": "data/table",
+          "commit": "1ff6087"
+        },
+        {
+          "description": "data/statictimeseries: use consistent references",
+          "commit": "912762e"
+        },
+        {
+          "description": "data/table: support `Columns.RowValTime` timeFormat param",
+          "commit": "eb59a61"
+        },
+        {
+          "description": "data/statictimeseries",
+          "commit": "df9d4c0"
+        },
+        {
+          "description": "data/statictimeseries: update `DataSeriesSet.ToTable()`",
+          "commit": "5231563"
+        }
+      ],
+      "fixed": [
+        {
+          "description": "goreportcard: fix ineffassign and misspell",
+          "commit": "6c02508"
+        }
+      ],
+      "documentation": [
+        {
+          "description": "timeseries: update",
+          "commit": "0e0b631"
+        },
+        {
+          "description": "update links",
+          "commit": "c3baeaa"
+        }
+      ]
+    },
+    {
+      "version": "v1.6.6",
+      "date": "2021-06-14",
+      "changed": [
+        {
+          "description": "data/statictimeseries: adjust report percentage for 0",
+          "commit": "04ccca3"
+        },
+        {
+          "description": "data/table",
+          "commit": "2b43eec"
+        }
+      ]
+    },
+    {
+      "version": "v1.6.5",
+      "date": "2021-06-14",
+      "changed": [
+        {
+          "description": "data/table: better handle int conversion",
+          "commit": "1948603"
+        }
+      ]
+    },
+    {
+      "version": "v1.6.4",
+      "date": "2021-06-14",
+      "changed": [
+        {
+          "description": "data/statictimeseries: add `Table.FormatMap` to `DataSeriesSet.ToTable()`",
+          "commit": "3563447"
+        },
+        {
+          "description": "data/histogram",
+          "commit": "8dfa439"
+        }
+      ]
+    },
+    {
+      "version": "v1.6.3",
+      "date": "2021-06-13",
+      "changed": [
+        {
+          "description": "data/statictimeseries: add style consistency",
+          "commit": "72ce08c"
+        }
+      ],
+      "internal": [
+        {
+          "description": "data/statictimeseries: update",
+          "commit": "8cfe64a"
+        }
+      ]
+    },
+    {
+      "version": "v1.6.2",
+      "date": "2021-06-13",
+      "changed": [
+        {
+          "description": "statictimeseries: add `DataSeries.ToMonth(inflate)`",
+          "commit": "904639e"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "7ced065"
+        },
+        {
+          "description": "data/table: remove commented out code",
+          "commit": "71a5c8c"
+        }
+      ]
+    },
+    {
+      "version": "v1.6.1",
+      "date": "2021-06-12",
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "6416c37"
+        },
+        {
+          "description": "simplego: update",
+          "commit": "3195363"
+        },
+        {
+          "description": "simplego: update",
+          "commit": "e26c440"
+        },
+        {
+          "description": "data/table: add comments",
+          "commit": "de09993"
+        }
+      ]
+    },
+    {
+      "version": "v1.6.0",
+      "date": "2021-06-11",
+      "changed": [
+        {
+          "description": "data/table: simplify interface",
+          "commit": "cea8501"
+        },
+        {
+          "description": "data/table: remove legacy comments",
+          "commit": "426c72d"
+        },
+        {
+          "description": "data/table: remove legacy comments",
+          "commit": "9a9a3d9"
+        },
+        {
+          "description": "data/table: `Table.Rows` from `Table.Records`",
+          "commit": "817b9ea"
+        },
+        {
+          "description": "data/table: remove explicit BOM handling",
+          "commit": "a3784ed"
+        },
+        {
+          "description": "data/table: move `ToDocuments()` and `ToHTML()`",
+          "commit": "579e9ab"
+        },
+        {
+          "description": "data/table: migrate to `Table.Columns`",
+          "commit": "fe44d72"
+        }
+      ]
+    },
+    {
+      "version": "v1.5.0",
+      "date": "2021-06-02",
+      "added": [
+        {
+          "description": "data/table: add `ReadFiles()`",
+          "commit": "5ff395f"
+        },
+        {
+          "description": "data/table: add `Table.ColumnValuesForColumnName()`",
+          "commit": "6c858fb"
+        },
+        {
+          "description": "data/histogram: `HistogramSet.TransformHistogramNames()`, `HistogramSet.TransformHistogramNamesExactMatch()`, `HistogramSet.TransformHistogramNamesByPrefix()`",
+          "commit": "0ff598c"
+        },
+        {
+          "description": "data/histogram: add `Histogram.BinNameExists()`, `HistogramSet.BinNameExists()`",
+          "commit": "b5f9900"
+        },
+        {
+          "description": "data/table: add `Columns.RowVals()`",
+          "commit": "54c691a"
+        },
+        {
+          "description": "data/histogram: add `HistogramSet.ItemCounts()`, `HistogramSet.ItemNames()`",
+          "commit": "801a0fc"
+        },
+        {
+          "description": "data/table: add `Columns.RowValFloat64()`, `Columns.RowValInt()`, `Columns.RowValTime()`",
+          "commit": "f541c15"
+        },
+        {
+          "description": "data/histogram: add `H.ItemCount()`, `HSet.ItemCount()`, `HSets.ItemCount()`",
+          "commit": "7ce3af0"
+        },
+        {
+          "description": "data/histogram: add `HistogramSet.HistogramNameExists()`",
+          "commit": "7f2d152"
+        },
+        {
+          "description": "data/table: add `Columns.RowMap()`",
+          "commit": "9659d42"
+        },
+        {
+          "description": "data/table: add `Columns{}`",
+          "commit": "6c0a547"
+        },
+        {
+          "description": "data/histogram: add `Histogram.ToTable()`, `Histogram.WriteXLSX()`",
+          "commit": "a9f7d2e"
+        }
+      ],
+      "changed": [
+        {
+          "description": "data/table: add comment",
+          "commit": "10933c8"
+        },
+        {
+          "description": "data/table: add comment",
+          "commit": "8e5f7ff"
+        },
+        {
+          "description": "data/table: move `Table.ColumnIndex()` to `Table.Columns.Index()`",
+          "commit": "439e6dd"
+        },
+        {
+          "description": "data/histogram: rename `HistogramSet.HistogramBinNames()`",
+          "commit": "de68147"
+        },
+        {
+          "description": "data/histogram: rename `Histogram.BinNames()`",
+          "commit": "dc59761"
+        },
+        {
+          "description": "data/histogram: combine files",
+          "commit": "92a4062"
+        },
+        {
+          "description": "update",
+          "commit": "a050061"
+        },
+        {
+          "description": "remove unneeded file",
+          "commit": "d1fdb75"
+        },
+        {
+          "description": "data/histogram: phase 2: combine frequency and histogram",
+          "commit": "ae6cfe3"
+        },
+        {
+          "description": "data/histogram: phase 1: combine frequency and histogram",
+          "commit": "fabb655"
+        }
+      ],
+      "documentation": [
+        {
+          "description": "update",
+          "commit": "31e09c0"
+        }
+      ],
+      "internal": [
+        {
+          "description": "data/histogram: update var names",
+          "commit": "12f619f"
+        },
+        {
+          "description": "data/histogram: resolve `Unnecessary guard around map access`",
+          "commit": "5725ef9"
+        },
+        {
+          "description": "data/histogram: rename variable names",
+          "commit": "0c16915"
+        },
+        {
+          "description": "data/histogram: rename variable names",
+          "commit": "5402c4f"
+        }
+      ]
+    },
+    {
+      "version": "v1.4.1",
+      "date": "2021-05-27",
+      "added": [
+        {
+          "description": "data/histogram: add `TransformBinNamesExactMatch()`",
+          "commit": "75f810e"
+        }
+      ],
+      "changed": [
+        {
+          "description": "data/histogram: add auto `Inflate()` to `TransformBinNames()`",
+          "commit": "908b4d5"
+        }
+      ]
+    },
+    {
+      "version": "v1.4.0",
+      "date": "2021-05-27",
+      "added": [
+        {
+          "description": "data/histogram: add `ParseFileCSV()`, `ParseTable(), `TransformBinNames()`, `TransformBinNamesByPrefix()`",
+          "commit": "4c28118"
+        },
+        {
+          "description": "frequency: add `FrequencyStats.Percentages`, `FrequencyStats.Sum`",
+          "commit": "c303356"
+        }
+      ],
+      "internal": [
+        {
+          "description": "table: update self reference",
+          "commit": "1f73d22"
+        },
+        {
+          "description": "table: update self reference to `tbl` for consistency",
+          "commit": "2041597"
+        },
+        {
+          "description": "table: update self reference to `tbl` for consistency",
+          "commit": "bc5e6d8"
+        }
+      ]
+    },
+    {
+      "version": "v1.3.0",
+      "date": "2021-04-21"
+    },
+    {
+      "version": "v0.0.6",
+      "date": "2021-03-16",
+      "added": [
+        {
+          "description": "data/table: AutoLink URLs",
+          "commit": "591819d"
+        }
+      ],
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "90c7949"
+        }
+      ],
+      "fixed": [
+        {
+          "description": "openapi/table: AutoLink regexp",
+          "commit": "ac6db48"
+        }
+      ]
+    },
+    {
+      "version": "v0.0.5",
+      "date": "2021-03-07",
+      "added": [
+        {
+          "description": "frequency: add FrequencyStats.ItemCounts(), FrequencyStats.WriteTableASCII()",
+          "commit": "3aeed55"
+        }
+      ],
+      "infrastructure": [
+        {
+          "description": "gh actions: add Go 1.16.x; remove Go 1.13.x",
+          "commit": "46e9192"
+        }
+      ]
+    },
+    {
+      "version": "v0.0.4",
+      "date": "2021-03-07",
+      "added": [
+        {
+          "description": "table: add TabulatorColumnSet.ColumnsJSON()",
+          "commit": "45e5fe4"
+        },
+        {
+          "description": "table: add Column{}, ColumnSet{}, TabulatorColumn{}, TabulatorColumnSet{}",
+          "commit": "f1d4242"
+        }
+      ]
+    },
+    {
+      "version": "v0.0.3",
+      "date": "2021-02-26",
+      "added": [
+        {
+          "description": "frequency: add FrequencySet.WriteXLSX",
+          "commit": "06bd991"
+        }
+      ],
+      "changed": [
+        {
+          "description": "go mod: update",
+          "commit": "a4ff9bc"
+        },
+        {
+          "description": "update",
+          "commit": "d9c95be"
+        },
+        {
+          "description": "go mod: update",
+          "commit": "2cae695"
+        },
+        {
+          "description": "frequency: FrequencyStats.AddStringMore efficiency",
+          "commit": "78316a8"
+        },
+        {
+          "description": "table: remove unneeded code",
+          "commit": "7cdd7f7"
+        },
+        {
+          "description": "table: rename `query_column.go` to `column.go`",
+          "commit": "36377e4"
+        }
+      ],
+      "infrastructure": [
+        {
+          "description": "travis ci: remove .travis.yml",
+          "commit": "8a34ae8"
+        },
+        {
+          "description": "gh actions: rename",
+          "commit": "23ea11d"
+        }
+      ],
+      "internal": [
+        {
+          "description": "frequency: fix ineffassign",
+          "commit": "94f1982"
+        },
+        {
+          "description": "frequency: rename this reference",
+          "commit": "f960e84"
+        }
+      ]
+    },
+    {
+      "version": "v0.0.2",
+      "date": "2021-01-12",
+      "changed": [
+        {
+          "description": "logrus: remove",
+          "commit": "1dfad25"
+        }
+      ],
+      "infrastructure": [
+        {
+          "description": "gh actions: update",
+          "commit": "787e77e"
+        }
+      ],
+      "internal": [
+        {
+          "description": "tablee: update var name",
+          "commit": "86a6954"
+        }
+      ]
+    },
+    {
+      "version": "v0.0.1",
+      "date": "2020-12-29",
+      "added": [
+        {
+          "description": "table: add FormatStraightToTabular()",
+          "commit": "0515891"
+        },
+        {
+          "description": "table.Table{}: add IsWellFormed() function",
+          "commit": "a2e546e"
+        },
+        {
+          "description": "statictimeseries: add DataSeries.LastItem()",
+          "commit": "2558929"
+        },
+        {
+          "description": "table: add Table.NewTableFilterColDistinctFirst(); add Table.SumColFloat64()",
+          "commit": "578a099"
+        },
+        {
+          "description": "frequency: add FrequencySet.TotalCount()",
+          "commit": "46a1a18"
+        },
+        {
+          "description": "table: add ParseBytes(); add ParseReader()",
+          "commit": "9d05638"
+        },
+        {
+          "description": "statictimeseries: add DataSeries.OneItemMaxValue()",
+          "commit": "227b7e3"
+        },
+        {
+          "description": "table: add Table.UpsertRowColValue()",
+          "commit": "0b51320"
+        },
+        {
+          "description": "table: add table.Unmarshal()",
+          "commit": "2943bf4"
+        },
+        {
+          "description": "enhance (breaking): RowFloat64.Flatten() add prefix values, for XoX data",
+          "commit": "3545ad9"
+        },
+        {
+          "description": "refactor (breaking): tables: move `tables` to `charts/c3/c3sts`; add example `charts/c3/examples/funnel_chart`",
+          "commit": "8734f1b"
+        },
+        {
+          "description": "table: add ToDocuments()",
+          "commit": "bed7c03"
+        },
+        {
+          "description": "table: add ToHTML()",
+          "commit": "8b42d0f"
+        },
+        {
+          "description": "statictimeseries: add DataSeries.Stats()",
+          "commit": "8d7d586"
+        },
+        {
+          "description": "refactor: add data/table/read.go, migrate from gotilla to adjust dependencies",
+          "commit": "d663b28"
+        },
+        {
+          "description": "data/frequency: add FrequencyStats.Stats(); add FrequencyStats.TotalCount()",
+          "commit": "7a7a050"
+        },
+        {
+          "description": "add table.TableFormatter.FormatterFunc() `float` and `time`",
+          "commit": "c59ede3"
+        },
+        {
+          "description": "add table.TableFormatter.FormatterFunc(), .FormatMap",
+          "commit": "9bdc766"
+        },
+        {
+          "description": "add FrequencySet.AddDateUidCount(), FrequencySet.ToDataSeriesDistinct()",
+          "commit": "946c894"
+        },
+        {
+          "description": "add additional sts2wchart Y-axis formatters",
+          "commit": "3aff735"
+        },
+        {
+          "description": "add sts2wchart.DataSeriesToLineChart non-percentile float64 Y-axis ticks, float64 Now/XAgo annotations",
+          "commit": "4c506f7"
+        },
+        {
+          "description": "add DataItem.ValueInt64(); add DataItem.ValueFloat64()",
+          "commit": "e4231d2"
+        },
+        {
+          "description": "add LineChartOpts.XAxisTickInterval, LineChartOpts.XAxisGridInterval",
+          "commit": "f32b694"
+        },
+        {
+          "description": "DataSeries.ToQuarter(), DataSeries.WriteXLSX()",
+          "commit": "9d749a2"
+        },
+        {
+          "description": "add table.WriteXLSXInterface(), table.SheetData{}",
+          "commit": "41d02e2"
+        },
+        {
+          "description": "add sts2wchart.GetDefaultLineChartOpts(), use of default opts",
+          "commit": "0c4e97b"
+        },
+        {
+          "description": "DataSeriesSet.ToMonthCumulative(popLast(popLast);GetTimeSlice();PopLast();DeleteItemByTime(), DataSeries.DeleteByTime()",
+          "commit": "d64e766"
+        },
+        {
+          "description": "sts2wchart.MsiToValues()",
+          "commit": "2fa9541"
+        },
+        {
+          "description": "major: breaking: wchart DataSeriesSet multi-line chart; statictimeseries.DataSeriesSet.ToMonthCumulative()",
+          "commit": "19d15a3"
+        },
+        {
+          "description": "statictimeseries.DataSeries.ToMonth()",
+          "commit": "7bb80ce"
+        },
+        {
+          "description": "add DataSeriesSlice functions",
+          "commit": "730f48e"
+        },
+        {
+          "description": "add NewFrequencySetsCSVs CSV column match check",
+          "commit": "a166f65"
+        },
+        {
+          "description": "add comment",
+          "commit": "ce8a003"
+        },
+        {
+          "description": "add more FrequencySetsCounts",
+          "commit": "b2e6494"
+        },
+        {
+          "description": "add FrequencySetsCounts",
+          "commit": "aefe67c"
+        },
+        {
+          "description": "add sts2wchart.LineChartOpts.YAxisTickFunc",
+          "commit": "bae74d9"
+        },
+        {
+          "description": "add wchart left Y axis option",
+          "commit": "8e77435"
+        },
+        {
+          "description": "add FrequencySet to table and XLSX",
+          "commit": "ce924a6"
+        },
+        {
+          "description": "add sts2wchart.LineChartOpts.TitleSuffixCurrentValueFunc",
+          "commit": "01c44f9"
+        },
+        {
+          "description": "add DataSeries to TableData and XLSX",
+          "commit": "9d9490d"
+        },
+        {
+          "description": "add FrequencySet and FrequencyStats.AddStringMore()",
+          "commit": "d54dfe7"
+        },
+        {
+          "description": "add quarter interval",
+          "commit": "70be025"
+        },
+        {
+          "description": "add DataSeries.Interval",
+          "commit": "66f623d"
+        },
+        {
+          "description": "add table.TableSet",
+          "commit": "777ec1f"
+        },
+        {
+          "description": "add table.WriteXLSXFormatted()",
+          "commit": "1158894"
+        },
+        {
+          "description": "add statictimeseries.DS3ToTable()",
+          "commit": "b749a06"
+        },
+        {
+          "description": "add wchart linear regression option",
+          "commit": "2f8f5f9"
+        },
+        {
+          "description": "add roadmap times",
+          "commit": "611ecd3"
+        },
+        {
+          "description": "add comments",
+          "commit": "c260ceb"
+        },
+        {
+          "description": "add wchart line xox annotations",
+          "commit": "aa9c336"
+        },
+        {
+          "description": "refactor sts2wchart, add linechart",
+          "commit": "9063dd3"
+        },
+        {
+          "description": "add default Sheet name since no sheet name causes an error",
+          "commit": "c3c9da6"
+        },
+        {
+          "description": "add Go 1.14 to CI",
+          "commit": "b19e7c2"
+        },
+        {
+          "description": "add wchart demos",
+          "commit": "3ac280c"
+        },
+        {
+          "description": "add data/frequency",
+          "commit": "32bf3e6"
+        },
+        {
+          "description": "add wchart/bar_chart",
+          "commit": "936541d"
+        },
+        {
+          "description": "add wchart/continuous_series",
+          "commit": "9e6889a"
+        },
+        {
+          "description": "add statictimeseries.DataSeriesMapMinMaxTimes|DataSeriesMapMinMaxValues",
+          "commit": "f6c782d"
+        },
+        {
+          "description": "add xoxPoint.MNowValue",
+          "commit": "ac43ae7"
+        },
+        {
+          "description": "add ability to write multiple XLSX sheets",
+          "commit": "da61058"
+        },
+        {
+          "description": "add TableData.Name",
+          "commit": "b19feef"
+        },
+        {
+          "description": "add statictimeseries.NewXoXDSMonth()",
+          "commit": "44ade95"
+        },
+        {
+          "description": "Add Ticks and GridLines functions",
+          "commit": "ba92eca"
+        },
+        {
+          "description": "update wchart and add DataSeries functions",
+          "commit": "467f85a"
+        },
+        {
+          "description": "add inital support for github.com/wcharczuk/go-chart",
+          "commit": "275c10e"
+        },
+        {
+          "description": "add DataSeries time functions",
+          "commit": "3b490aa"
+        },
+        {
+          "description": "add data/table/WriteXLSX()",
+          "commit": "d3afafd"
+        },
+        {
+          "description": "add SheetLocation by indexes",
+          "commit": "09e5b25"
+        },
+        {
+          "description": "add tests",
+          "commit": "2fc2a11"
+        },
+        {
+          "description": "add DataSeries.MinMaxTimes()",
+          "commit": "ce47b71"
+        },
+        {
+          "description": "add textbox fore/background colors",
+          "commit": "10bb3aa"
+        },
+        {
+          "description": "add Go 1.12 and 1.13 to Travis CI",
+          "commit": "20e4c82"
+        },
+        {
+          "description": "add wip function",
+          "commit": "54c8e8a"
+        },
+        {
+          "description": "add modifiers to Canvas.AddItem() and move Item to separate file",
+          "commit": "7cc8339"
+        },
+        {
+          "description": "add table.WriteCSVSimple()",
+          "commit": "12bd8b3"
+        },
+        {
+          "description": "add statictimeseries.DataSeriesSetSimple.Name",
+          "commit": "6322f8e"
+        },
+        {
+          "description": "add statictimeseries.DataSeriesSetSimpleSet",
+          "commit": "26e7180"
+        },
+        {
+          "description": "add comment",
+          "commit": "6695571"
+        },
+        {
+          "description": "add comments to C3 Bar example",
+          "commit": "468c207"
+        },
+        {
+          "description": "add report link to C3 template file",
+          "commit": "e42bff7"
+        },
+        {
+          "description": "add C3 Bar Chart example additional info",
+          "commit": "edaf871"
+        },
+        {
+          "description": "add DataSeriesSetSimple.AddItems()",
+          "commit": "b9883a3"
+        },
+        {
+          "description": "add DataSeriesSetSimple.AddItems()",
+          "commit": "105734c"
+        },
+        {
+          "description": "add c3 Bar Chart example",
+          "commit": "de9fc42"
+        },
+        {
+          "description": "add data/histogram/HistogramSet",
+          "commit": "6f9f163"
+        },
+        {
+          "description": "add data/http/EndpointFromMethodAndURL()",
+          "commit": "7e7a19e"
+        },
+        {
+          "description": "add data/histogram",
+          "commit": "f255fa1"
+        },
+        {
+          "description": "add comments",
+          "commit": "57631fd"
+        },
+        {
+          "description": "add table JSON output support",
+          "commit": "192e163"
+        },
+        {
+          "description": "add data/http/Endpoints",
+          "commit": "1b1ee8f"
+        },
+        {
+          "description": "add TableData.RecordValueOrEmpty()",
+          "commit": "d0afc81"
+        },
+        {
+          "description": "add data.table.WriteCSV() and NewTableData()",
+          "commit": "e6c1776"
+        },
+        {
+          "description": "add data.table.NewTableDataFileCSV",
+          "commit": "c9433ed"
+        },
+        {
+          "description": "add data.table.NewTableFiltered()",
+          "commit": "1d9d3af"
+        },
+        {
+          "description": "add data/table/tableData.FilterRecords",
+          "commit": "93ac8b3"
+        },
+        {
+          "description": "add data/table and statictimeseries.TimeStats",
+          "commit": "f2b652b"
+        },
+        {
+          "description": "add tables.DataRowsToTableRows",
+          "commit": "7f8583a"
+        },
+        {
+          "description": "add simple table support",
+          "commit": "09fb65f"
+        },
+        {
+          "description": "add links",
+          "commit": "59a1d07"
+        },
+        {
+          "description": "add OpenAPI spec draft",
+          "commit": "1f3c8ff"
+        },
+        {
+          "description": "add C3.categorized support",
+          "commit": "2f9e040"
+        },
+        {
+          "description": "add data/statictimeseries/report_data_simple.go",
+          "commit": "ef27278"
+        },
+        {
+          "description": "add hard max to bar chart",
+          "commit": "169334a"
+        },
+        {
+          "description": "add buckets",
+          "commit": "4218ee6"
+        },
+        {
+          "description": "add Go 1.11.x to CI",
+          "commit": "6ca1ef1"
+        },
+        {
+          "description": "add D3 bullet example",
+          "commit": "1fa81f4"
+        },
+        {
+          "description": "add .travis.yml",
+          "commit": "d5b908e"
+        },
+        {
+          "description": "add D3BulletChartBuilder",
+          "commit": "40cf3cf"
+        },
+        {
+          "description": "add bullet.AddTimeCurrent",
+          "commit": "d1815b7"
+        },
+        {
+          "description": "add c3.timeseries",
+          "commit": "b8f58e9"
+        },
+        {
+          "description": "add roadmap",
+          "commit": "8af9548"
+        },
+        {
+          "description": "add data.ProjectStraightLineInt64 and bullet.ProjectionToBullet",
+          "commit": "8932728"
+        },
+        {
+          "description": "add D3 bullet chart",
+          "commit": "d90a4d0"
+        },
+        {
+          "description": "add more generic extensions report",
+          "commit": "f5f3ba9"
+        },
+        {
+          "description": "add table totals",
+          "commit": "fc4f895"
+        },
+        {
+          "description": "add generic slot data",
+          "commit": "e1b7ed1"
+        },
+        {
+          "description": "add comments",
+          "commit": "157822b"
+        },
+        {
+          "description": "add shields and report header",
+          "commit": "f65487a"
+        },
+        {
+          "description": "add report data",
+          "commit": "20e4019"
+        }
+      ],
+      "changed": [
+        {
+          "description": "update for `simplego`",
+          "commit": "96a25eb"
+        },
+        {
+          "description": "update for `simplego`",
+          "commit": "32d561a"
+        },
+        {
+          "description": "table.ReadFile(): make header handling optional",
+          "commit": "d97dc19"
+        },
+        {
+          "description": "go mod: update to go 1.15 and gotilla 1.3.0",
+          "commit": "6c74b11"
+        },
+        {
+          "description": "table: update Column query functions to use `colIdx`",
+          "commit": "5a079da"
+        },
+        {
+          "description": "table: add ColumnSumFloat64 query by colName",
+          "commit": "096a185"
+        },
+        {
+          "description": "update go.mod, go.sum",
+          "commit": "f8be216"
+        },
+        {
+          "description": "table",
+          "commit": "c45aa0e"
+        },
+        {
+          "description": "frequency: remove old PointSet code",
+          "commit": "381ff7c"
+        },
+        {
+          "description": "update Go modules",
+          "commit": "ad11c11"
+        },
+        {
+          "description": "update for repackaging/pathing",
+          "commit": "8511c20"
+        },
+        {
+          "description": "data/table: add Table HTML support properties",
+          "commit": "7520b15"
+        },
+        {
+          "description": "table: rename `ReadFileCSV()` to `ReadFile()`",
+          "commit": "f0d287f"
+        },
+        {
+          "description": "table: rename `NewTableFileCSV()` to `ReadFileCSV()`",
+          "commit": "22addd9"
+        },
+        {
+          "description": "rename (breaking): table: rename `TableData` to `Table`",
+          "commit": "d057bd5"
+        },
+        {
+          "description": "add go.mod, go.sum",
+          "commit": "fee163f"
+        },
+        {
+          "description": "remove go.mod, go.sum, due to semver",
+          "commit": "fe66554"
+        },
+        {
+          "description": "add go.mod, go.sum",
+          "commit": "97bf578"
+        },
+        {
+          "description": "table: better fallback handling for ToDocuments()",
+          "commit": "f021bb6"
+        },
+        {
+          "description": "data/point: extract code from data/frequency",
+          "commit": "a076f3f"
+        },
+        {
+          "description": "update for data/frequency",
+          "commit": "31f5ff2"
+        },
+        {
+          "description": "table: TableData.FormatterFunc handle empty string index format",
+          "commit": "36c01f0"
+        },
+        {
+          "description": "table: supporrt TableData.FormatMap default format",
+          "commit": "3a1e950"
+        },
+        {
+          "description": "breaking: table: remove TableFormatter",
+          "commit": "e8164c8"
+        },
+        {
+          "description": "data/table: add DataTable.FormatMap; add DataTable.Formatter; add DataTable.FormatterFunc(); update WriteXLSX()",
+          "commit": "b2a51bb"
+        },
+        {
+          "description": "simplify code",
+          "commit": "a454f2d"
+        },
+        {
+          "description": "rename variable `wantColValues` to `wantColNameValues`",
+          "commit": "65d7e15"
+        },
+        {
+          "description": "rename files",
+          "commit": "3481c1c"
+        },
+        {
+          "description": "unbreak: DataSeriesSet.Inflate()",
+          "commit": "e54dfb3"
+        },
+        {
+          "description": "extract sts2wchart.AxesCreator to separate file",
+          "commit": "bc64ebe"
+        },
+        {
+          "description": "bugfix: breaking: DataSeriesSet.AddItem() fix; .AddDataSeries enhance; .Inflate() enhance, breaking",
+          "commit": "375987a"
+        },
+        {
+          "description": "move example image",
+          "commit": "bc4ed13"
+        },
+        {
+          "description": "breaking: remove DataSeries.SortedItems() duplicate in favor of DataSeries.ItemsSorted()",
+          "commit": "99aebae"
+        },
+        {
+          "description": "simplify code",
+          "commit": "b4da94c"
+        },
+        {
+          "description": "breaking: add time2string format function",
+          "commit": "68c32f4"
+        },
+        {
+          "description": "breaking: table.ColValuesByColName()",
+          "commit": "cf9efa1"
+        },
+        {
+          "description": "add TableData.ColIndex()|ValuesByConName()",
+          "commit": "39dc0a4"
+        },
+        {
+          "description": "break: statictimeseries.DataSeriesToTable(),DataSeriesWriteXLSX()",
+          "commit": "ba7554d"
+        },
+        {
+          "description": "statictimeseries.NewDataSeriesSetSimple() to NewDataSeriesSet()",
+          "commit": "80928b3"
+        },
+        {
+          "description": "rename statictimeseries.DataSeriesSetSimple{} to DataSeriesSet{}",
+          "commit": "0c9a851"
+        },
+        {
+          "description": "extract TimeSeriesSimple to time_series.go",
+          "commit": "cd3a2f7"
+        },
+        {
+          "description": "new package for statictimeseries/interval",
+          "commit": "47df00c"
+        },
+        {
+          "description": "statictimeseries.DataSeriesSet",
+          "commit": "edcb763"
+        },
+        {
+          "description": "streamline code",
+          "commit": "24c83e2"
+        },
+        {
+          "description": "update formatting",
+          "commit": "1511cc8"
+        },
+        {
+          "description": "update frequency.FrequencySetTimeKeyCountWriteXLSX to table.FormatTimeAndInts",
+          "commit": "55e8f4d"
+        },
+        {
+          "description": "rename var",
+          "commit": "41a72ca"
+        },
+        {
+          "description": "refactor, migrate code to gotilla/encoding/csvutil",
+          "commit": "b373cb1"
+        },
+        {
+          "description": "support multiple CSVs in NewFrequencySetsCSVs",
+          "commit": "dd15073"
+        },
+        {
+          "description": "update comment",
+          "commit": "db105c5"
+        },
+        {
+          "description": "make counts safer",
+          "commit": "8d8b261"
+        },
+        {
+          "description": "cleanup",
+          "commit": "cd16af4"
+        },
+        {
+          "description": "read FrequencySets from CSV and Table",
+          "commit": "7dee395"
+        },
+        {
+          "description": "support float values",
+          "commit": "0932810"
+        },
+        {
+          "description": "refactor and update for dependencies",
+          "commit": "bfcd6ad"
+        },
+        {
+          "description": "update ticks type",
+          "commit": "46cd496"
+        },
+        {
+          "description": "add generic image size handling",
+          "commit": "e2f4f25"
+        },
+        {
+          "description": "rename files",
+          "commit": "d51259e"
+        },
+        {
+          "description": "abbreviate year in DataSeries table output",
+          "commit": "4ff5302"
+        },
+        {
+          "description": "update quarter report charts",
+          "commit": "c1da0e7"
+        },
+        {
+          "description": "update TableFormatter.Formatter to support error, move WriteJSON function",
+          "commit": "c90dbf6"
+        },
+        {
+          "description": "update for dependency",
+          "commit": "0cf3df9"
+        },
+        {
+          "description": "support wchart SVG color names",
+          "commit": "afec7b6"
+        },
+        {
+          "description": "update wchart formatting",
+          "commit": "c56bacb"
+        },
+        {
+          "description": "update example",
+          "commit": "f7000b6"
+        },
+        {
+          "description": "update wchart.WritePNG() to use interface",
+          "commit": "a397842"
+        },
+        {
+          "description": "update data/table default XLSX sheet names",
+          "commit": "764f0b2"
+        },
+        {
+          "description": "update table.WriteXLSX() interface",
+          "commit": "de75910"
+        },
+        {
+          "description": "enhance frequency.FrequencyStats",
+          "commit": "7c7c88b"
+        },
+        {
+          "description": "streamline code",
+          "commit": "4195f11"
+        },
+        {
+          "description": "restore data_series_set_simple_set.go and update for dependencies",
+          "commit": "62dac6f"
+        },
+        {
+          "description": "streamline DataSeries.MinMaxTimes()",
+          "commit": "47a2b05"
+        },
+        {
+          "description": "refactor",
+          "commit": "1eaffe8"
+        },
+        {
+          "description": "refactor data/table/WriteCSV",
+          "commit": "f6660d8"
+        },
+        {
+          "description": "update tests",
+          "commit": "25d8232"
+        },
+        {
+          "description": "privatize functions",
+          "commit": "e054ade"
+        },
+        {
+          "description": "covert x,y coordinates eto sheet location",
+          "commit": "0080957"
+        },
+        {
+          "description": "update formatting",
+          "commit": "698d416"
+        },
+        {
+          "description": "support Item.NameShort",
+          "commit": "3aaf67b"
+        },
+        {
+          "description": "Merge branch 'master' of https://github.com/grokify/gocharts",
+          "commit": "0ac737b"
+        },
+        {
+          "description": "update data/http",
+          "commit": "6dafbf0"
+        },
+        {
+          "description": "make writing columns conditional to existence",
+          "commit": "c6da2eb"
+        },
+        {
+          "description": "comment out debugging code",
+          "commit": "3c070d7"
+        },
+        {
+          "description": "change to legacy gotilla/mathutil for Go pre 1.11",
+          "commit": "49ad439"
+        },
+        {
+          "description": "consolidate templates",
+          "commit": "af11995"
+        },
+        {
+          "description": "update C3 Bar Chart example",
+          "commit": "a2357d9"
+        },
+        {
+          "description": "update Bar Chart example style",
+          "commit": "e7f4516"
+        },
+        {
+          "description": "move QoQ and Funnel Charts from demo to core",
+          "commit": "a1c37c2"
+        },
+        {
+          "description": "streamline C3 Bar example",
+          "commit": "de587fa"
+        },
+        {
+          "description": "update C3 bar chart example",
+          "commit": "aef4d49"
+        },
+        {
+          "description": "simplify code",
+          "commit": "698f532"
+        },
+        {
+          "description": "simplify code",
+          "commit": "90952a2"
+        },
+        {
+          "description": "update style",
+          "commit": "953cce7"
+        },
+        {
+          "description": "update CHANGELOG",
+          "commit": "e19d054"
+        },
+        {
+          "description": "update style",
+          "commit": "debe937"
+        },
+        {
+          "description": "update style",
+          "commit": "c71fb23"
+        },
+        {
+          "description": "update examples",
+          "commit": "e004d68"
+        },
+        {
+          "description": "simplify code",
+          "commit": "b9e6c83"
+        },
+        {
+          "description": "simplify code",
+          "commit": "e50bf3d"
+        },
+        {
+          "description": "update histogram property names",
+          "commit": "6c92f18"
+        },
+        {
+          "description": "move table.NewTableDataFileCSV() to gotilla/encoding/csvutil",
+          "commit": "ac06839"
+        },
+        {
+          "description": "simplify code",
+          "commit": "d95a48f"
+        },
+        {
+          "description": "update LICENSE",
+          "commit": "e6a9839"
+        },
+        {
+          "description": "rename file",
+          "commit": "9c47a4b"
+        },
+        {
+          "description": "streamline code",
+          "commit": "6635cd4"
+        },
+        {
+          "description": "update example location",
+          "commit": "0f581dd"
+        },
+        {
+          "description": "Update C3 charts and table support",
+          "commit": "f7a35b0"
+        },
+        {
+          "description": "gofmt -s simple table example",
+          "commit": "a9c0b1c"
+        },
+        {
+          "description": "update comments",
+          "commit": "7642f07"
+        },
+        {
+          "description": "update travis versions",
+          "commit": "706233d"
+        },
+        {
+          "description": "update w/ statictimeseries/report_data_simple.go",
+          "commit": "786e0db"
+        },
+        {
+          "description": "support C3 bar charts",
+          "commit": "edc78a6"
+        },
+        {
+          "description": "update constant",
+          "commit": "5fc3c66"
+        },
+        {
+          "description": "update travis",
+          "commit": "a209ed4"
+        },
+        {
+          "description": "update travis",
+          "commit": "153d6bf"
+        },
+        {
+          "description": "gofmt -s",
+          "commit": "c8c16c6"
+        },
+        {
+          "description": "update roadmap",
+          "commit": "7275763"
+        },
+        {
+          "description": "update bullet chart",
+          "commit": "63e678c"
+        },
+        {
+          "description": "update report_data.go",
+          "commit": "31f12c3"
+        },
+        {
+          "description": "refactor",
+          "commit": "ceb5c8c"
+        },
+        {
+          "description": "refactor",
+          "commit": "998bee7"
+        },
+        {
+          "description": "update example to support elasticsearch",
+          "commit": "fed0d1e"
+        },
+        {
+          "description": "update style",
+          "commit": "7a11b9b"
+        },
+        {
+          "description": "update link",
+          "commit": "d70d784"
+        },
+        {
+          "description": "update shield",
+          "commit": "ba55f95"
+        },
+        {
+          "description": "refactor",
+          "commit": "0340867"
+        },
+        {
+          "description": "initial commit",
+          "commit": "a1ea3ba"
+        }
+      ],
+      "removed": [
+        {
+          "description": "remove CHANGELOG.md, update LICENSE",
+          "commit": "d6c018b"
+        },
+        {
+          "description": "remove Go 1.8,1.7 due to requirement for strings.Builder in excelize",
+          "commit": "354019f"
+        },
+        {
+          "description": "remove test code",
+          "commit": "8eb2895"
+        },
+        {
+          "description": "remove goveralls",
+          "commit": "d9cc7ae"
+        },
+        {
+          "description": "delete unreachable code",
+          "commit": "35479eb"
+        },
+        {
+          "description": "remove interval_over_interval/interval.go",
+          "commit": "a9adcac"
+        }
+      ],
+      "fixed": [
+        {
+          "description": "add FrequencySet.ToDataSeriesDistinct() DataItem.SeriesName",
+          "commit": "0aeffb4"
+        },
+        {
+          "description": "update example after refactoring",
+          "commit": "b77381d"
+        },
+        {
+          "description": "ineffassign statictimeseries/data_series.go L201,L202",
+          "commit": "5059c83"
+        },
+        {
+          "description": "rename update",
+          "commit": "2642e65"
+        },
+        {
+          "description": "refactor update",
+          "commit": "4b82627"
+        },
+        {
+          "description": "fix golint",
+          "commit": "c09e868"
+        },
+        {
+          "description": "fix CHANGELOG.md",
+          "commit": "5a262af"
+        },
+        {
+          "description": "fix goreportcard",
+          "commit": "00ba79a"
+        }
+      ],
+      "documentation": [
+        {
+          "description": "shields: update for pkg.go.dev docs",
+          "commit": "9244ac6"
+        },
+        {
+          "description": "update comments",
+          "commit": "e5c2337"
+        },
+        {
+          "description": "update docs",
+          "commit": "919c949"
+        },
+        {
+          "description": "update docs",
+          "commit": "e3959b9"
+        },
+        {
+          "description": "update docs",
+          "commit": "89fcabd"
+        },
+        {
+          "description": "update docs",
+          "commit": "0f37195"
+        },
+        {
+          "description": "update docs",
+          "commit": "b6b4758"
+        },
+        {
+          "description": "update docs",
+          "commit": "1d25018"
+        },
+        {
+          "description": "update docs",
+          "commit": "df310e4"
+        },
+        {
+          "description": "update docs",
+          "commit": "3ec1271"
+        },
+        {
+          "description": "update docs",
+          "commit": "c217719"
+        },
+        {
+          "description": "update docs",
+          "commit": "3f5c8ce"
+        }
+      ],
+      "infrastructure": [
+        {
+          "description": "update shield links",
+          "commit": "650e12c"
+        },
+        {
+          "description": "gh actions: remove tests to see if builds complete better",
+          "commit": "db5a505"
+        },
+        {
+          "description": "gh actions: remove tests to see if builds complete better",
+          "commit": "67bc3ea"
+        },
+        {
+          "description": "gh actions: add GitHub actions",
+          "commit": "e255070"
+        }
+      ],
+      "internal": [
+        {
+          "description": "table: simplify code style",
+          "commit": "2cb75e0"
+        },
+        {
+          "description": "fix for linter",
+          "commit": "59b2574"
+        },
+        {
+          "description": "update code style",
+          "commit": "b329831"
+        },
+        {
+          "description": "gofmt -s",
+          "commit": "f12394c"
+        }
+      ]
+    }
+  ],
+  "maintainers": [
+    "grokify",
+    "johncwang@gmail.com"
+  ],
+  "bots": [
+    "dependabot[bot]"
+  ]
+}
