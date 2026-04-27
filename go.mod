@@ -4,7 +4,7 @@ go 1.26.0
 
 require (
 	github.com/go-analyze/charts v0.5.27
-	github.com/go-echarts/go-echarts/v2 v2.7.1
+	github.com/go-echarts/go-echarts/v2 v2.7.2
 	github.com/grokify/mogo v0.74.2
 	github.com/jessevdk/go-flags v1.6.1
 	github.com/nao1215/markdown v0.13.0
