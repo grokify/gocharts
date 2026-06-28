@@ -3,7 +3,7 @@ module github.com/grokify/gocharts/v2
 go 1.26.0
 
 require (
-	github.com/go-analyze/charts v0.5.27
+	github.com/go-analyze/charts v0.6.0
 	github.com/go-echarts/go-echarts/v2 v2.7.2
 	github.com/grokify/mogo v0.74.6
 	github.com/jessevdk/go-flags v1.6.1
@@ -27,7 +27,7 @@ require (
 	github.com/clipperhouse/displaywidth v0.11.0 // indirect
 	github.com/clipperhouse/uax29/v2 v2.7.0 // indirect
 	github.com/fatih/color v1.18.0 // indirect
-	github.com/go-analyze/bulk v0.1.3 // indirect
+	github.com/go-analyze/bulk v0.1.4 // indirect
 	github.com/goccy/go-json v0.10.6 // indirect
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/grokify/base36 v1.0.5 // indirect
@@ -47,8 +47,8 @@ require (
 	github.com/xuri/efp v0.0.1 // indirect
 	github.com/xuri/nfp v0.0.2-0.20250530014748-2ddeb826f9a9 // indirect
 	golang.org/x/crypto v0.52.0 // indirect
-	golang.org/x/image v0.41.0 // indirect
+	golang.org/x/image v0.43.0 // indirect
 	golang.org/x/net v0.55.0 // indirect
 	golang.org/x/sys v0.45.0 // indirect
-	golang.org/x/text v0.37.0 // indirect
+	golang.org/x/text v0.38.0 // indirect
 )
