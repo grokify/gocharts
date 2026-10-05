@@ -5,7 +5,7 @@ go 1.26.0
 require (
 	github.com/go-analyze/charts v0.6.1
 	github.com/go-echarts/go-echarts/v2 v2.7.2
-	github.com/grokify/mogo v0.74.9
+	github.com/grokify/mogo v0.75.0
 	github.com/jessevdk/go-flags v1.6.1
 	github.com/nao1215/markdown v1.1.0
 	github.com/olekukonko/tablewriter v1.1.5
@@ -31,7 +31,7 @@ require (
 	github.com/goccy/go-json v0.10.6 // indirect
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/grokify/base36 v1.0.5 // indirect
-	github.com/huandu/xstrings v1.6.0 // indirect
+	github.com/huandu/xstrings v1.6.1 // indirect
 	github.com/iancoleman/strcase v0.3.0 // indirect
 	github.com/karrick/godirwalk v1.17.0 // indirect
 	github.com/mattn/go-colorable v0.1.15 // indirect
