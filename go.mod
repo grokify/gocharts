@@ -9,7 +9,7 @@ require (
 	github.com/jessevdk/go-flags v1.6.1
 	github.com/nao1215/markdown v1.1.0
 	github.com/olekukonko/tablewriter v1.1.5
-	github.com/shopspring/decimal v1.4.0
+	github.com/shopspring/decimal v1.5.0
 	github.com/valyala/quicktemplate v1.8.0
 	github.com/xuri/excelize/v2 v2.11.0
 	golang.org/x/exp v0.0.0-20260908205506-85c1c2202aba
