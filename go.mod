@@ -3,7 +3,7 @@ module github.com/grokify/gocharts/v2
 go 1.26.0
 
 require (
-	github.com/go-analyze/charts v0.6.1
+	github.com/go-analyze/charts v0.6.2
 	github.com/go-echarts/go-echarts/v2 v2.7.2
 	github.com/grokify/mogo v0.74.9
 	github.com/jessevdk/go-flags v1.6.1
@@ -27,7 +27,6 @@ require (
 	github.com/clipperhouse/displaywidth v0.11.0 // indirect
 	github.com/clipperhouse/uax29/v2 v2.7.0 // indirect
 	github.com/fatih/color v1.19.0 // indirect
-	github.com/go-analyze/bulk v0.1.5 // indirect
 	github.com/goccy/go-json v0.10.6 // indirect
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/grokify/base36 v1.0.5 // indirect
