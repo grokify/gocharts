@@ -3,9 +3,9 @@ module github.com/grokify/gocharts/v2
 go 1.26.0
 
 require (
-	github.com/go-analyze/charts v0.6.2
-	github.com/go-echarts/go-echarts/v2 v2.7.2
-	github.com/grokify/mogo v0.75.0
+	github.com/go-analyze/charts v0.6.1
+	github.com/go-echarts/go-echarts/v2 v2.7.3
+	github.com/grokify/mogo v0.74.9
 	github.com/jessevdk/go-flags v1.6.1
 	github.com/nao1215/markdown v1.1.1
 	github.com/olekukonko/tablewriter v1.1.5
